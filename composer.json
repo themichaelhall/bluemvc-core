@@ -1,6 +1,6 @@
 {
   "name": "michaelhall/bluemvc-core",
-  "description": "BlueMvc PHP MVC Framework",
+  "description": "Core functionality for the BlueMvc PHP framework",
   "homepage": "https://github.com/themichaelhall/bluemvc-core",
   "license": "MIT",
   "keywords": [
@@ -18,7 +18,7 @@
   ],
   "require": {
     "php": ">=5.6",
-    "michaelhall/datatypes": "dev-master"
+    "michaelhall/datatypes": "dev-create-url-class"
   },
   "require-dev": {
     "phpunit/phpunit": ">=4.0"
