@@ -1,4 +1,4 @@
-# BlueMvc PHP MVC Framework
+# BlueMvc Core
 
 [![Build Status](https://travis-ci.org/themichaelhall/bluemvc-core.svg?branch=master)](https://travis-ci.org/themichaelhall/bluemvc-core)
 [![Code Climate](https://codeclimate.com/github/themichaelhall/bluemvc-core/badges/gpa.svg)](https://codeclimate.com/github/themichaelhall/bluemvc-core)
