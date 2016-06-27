@@ -2,12 +2,13 @@
 
 namespace BlueMvc\Core;
 
+use BlueMvc\Core\Interfaces\RequestInterface;
 use DataTypes\Url;
 
 /**
  * Class representing a web request.
  */
-class Request
+class Request implements RequestInterface
 {
     /**
      * Constructs the request.
