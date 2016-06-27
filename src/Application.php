@@ -2,12 +2,12 @@
 
 namespace BlueMvc\Core;
 
-use BlueMvc\Core\Interfaces\ApplicationInterface;
+use BlueMvc\Core\Base\AbstractApplication;
 
 /**
  * BlueMvc main application.
  */
-class Application implements ApplicationInterface
+class Application extends AbstractApplication
 {
     /**
      * Constructs the application.
@@ -16,19 +16,6 @@ class Application implements ApplicationInterface
      */
     public function __construct(array $serverVars)
     {
-        $this->myDocumentRoot = $serverVars['DOCUMENT_ROOT'];
+        parent::__construct($serverVars['DOCUMENT_ROOT']);
     }
-
-    /**
-     * @return string The document root.
-     */
-    public function getDocumentRoot()
-    {
-        return $this->myDocumentRoot;
-    }
-
-    /**
-     * @var string My document root.
-     */
-    private $myDocumentRoot;
 }
