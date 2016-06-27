@@ -2,10 +2,12 @@
 
 namespace BlueMvc\Core;
 
+use BlueMvc\Core\Interfaces\ApplicationInterface;
+
 /**
  * BlueMvc main application.
  */
-class Application
+class Application implements ApplicationInterface
 {
     /**
      * Constructs the application.
