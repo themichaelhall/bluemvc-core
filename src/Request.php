@@ -2,13 +2,13 @@
 
 namespace BlueMvc\Core;
 
-use BlueMvc\Core\Interfaces\RequestInterface;
+use BlueMvc\Core\Base\AbstractRequest;
 use DataTypes\Url;
 
 /**
  * Class representing a web request.
  */
-class Request implements RequestInterface
+class Request extends AbstractRequest
 {
     /**
      * Constructs the request.
@@ -17,15 +17,7 @@ class Request implements RequestInterface
      */
     public function __construct(array $serverVars)
     {
-        $this->myUrl = static::createUrl($serverVars);
-    }
-
-    /**
-     * @return \DataTypes\Interfaces\UrlInterface The url.
-     */
-    public function getUrl()
-    {
-        return $this->myUrl;
+        parent::__construct(static::createUrl($serverVars));
     }
 
     /**
@@ -42,9 +34,4 @@ class Request implements RequestInterface
         return Url::parse('http' . (isset($serverVars['HTTPS']) && $serverVars['HTTPS'] !== '' ? 's' : '') . '://' . $serverVars['HTTP_HOST'] . ':' . $serverVars['SERVER_PORT'] .
             $serverVars['REQUEST_URI']);
     }
-
-    /**
-     * @var \DataTypes\Interfaces\UrlInterface My url.
-     */
-    private $myUrl;
 }
