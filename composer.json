@@ -1,7 +1,7 @@
 {
-  "name": "michaelhall/bluemvc-core",
+  "name": "bluemvc/bluemvc-core",
   "description": "Core functionality for the BlueMvc PHP framework",
-  "homepage": "https://github.com/themichaelhall/bluemvc-core",
+  "homepage": "https://bluemvc.com/",
   "license": "MIT",
   "keywords": [
     "blue",
