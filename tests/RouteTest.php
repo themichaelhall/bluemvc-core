@@ -2,6 +2,8 @@
 
 use BlueMvc\Core\Route;
 
+require_once __DIR__ . '/Helpers/TestControllers/BasicTestController.php';
+
 /**
  * Test Route class.
  */
@@ -12,9 +14,9 @@ class RouteTest extends PHPUnit_Framework_TestCase
      */
     public function testGetPath()
     {
-        $this->assertSame('', (new Route(''))->getPath());
-        $this->assertSame('foo', (new Route('foo'))->getPath());
-        $this->assertSame('foo-bar_baz.1', (new Route('foo-bar_baz.1'))->getPath());
+        $this->assertSame('', (new Route('', BasicTestController::class))->getPath());
+        $this->assertSame('foo', (new Route('foo', BasicTestController::class))->getPath());
+        $this->assertSame('foo-bar_baz.1', (new Route('foo-bar_baz.1', BasicTestController::class))->getPath());
     }
 
     /**
@@ -25,6 +27,15 @@ class RouteTest extends PHPUnit_Framework_TestCase
      */
     public function testInvalidPathIsInvalid()
     {
-        new Route('Foo/Bar');
+        new Route('Foo/Bar', BasicTestController::class);
+    }
+
+    /**
+     * Test getControllerClass method.
+     */
+    public function testGetControllerClass()
+    {
+        $route = new Route('', BasicTestController::class);
+        $this->assertSame(BasicTestController::class, $route->getControllerClass());
     }
 }

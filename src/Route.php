@@ -12,18 +12,29 @@ class Route
     /**
      * Constructs a route.
      *
-     * @param string $path The path.
+     * @param string $path            The path.
+     * @param string $controllerClass The controller class.
      *
      * @throws RouteInvalidArgumentException If the $path parameter is invalid.
      */
-    public function __construct($path)
+    public function __construct($path, $controllerClass)
     {
         assert(is_string($path));
+        assert(is_string($controllerClass));
 
         // Validate path.
         $this->myValidatePath($path);
 
         $this->myPath = $path;
+        $this->myControllerClass = $controllerClass;
+    }
+
+    /**
+     * @return string The controller class.
+     */
+    public function getControllerClass()
+    {
+        return $this->myControllerClass;
     }
 
     /**
@@ -52,4 +63,9 @@ class Route
      * @var string My path.
      */
     private $myPath;
+
+    /**
+     * @var string My controller class.
+     */
+    private $myControllerClass;
 }

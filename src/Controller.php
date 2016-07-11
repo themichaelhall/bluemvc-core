@@ -7,6 +7,6 @@ use BlueMvc\Core\Interfaces\ControllerInterface;
 /**
  * Class representing a standard controller.
  */
-class Controller implements ControllerInterface
+abstract class Controller implements ControllerInterface
 {
 }
