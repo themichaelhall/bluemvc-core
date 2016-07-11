@@ -36,6 +36,28 @@ class RouteTest extends PHPUnit_Framework_TestCase
     public function testGetControllerClass()
     {
         $route = new Route('', BasicTestController::class);
-        $this->assertSame(BasicTestController::class, $route->getControllerClass());
+        $this->assertSame(BasicTestController::class, $route->getControllerClass()->getName());
+    }
+
+    /**
+     * Test that non existing controller class name is invalid.
+     *
+     * @expectedException BlueMvc\Core\Exceptions\RouteInvalidArgumentException
+     * @expectedExceptionMessage Controller class "NonExistingClassName" does not exist.
+     */
+    public function testNonExistingControllerClassNameIsInvalid()
+    {
+        new Route('', 'NonExistingClassName');
+    }
+
+    /**
+     * Test that class not implementing ControllerInterface is invalid.
+     *
+     * @expectedException BlueMvc\Core\Exceptions\RouteInvalidArgumentException
+     * @expectedExceptionMessage Controller class "RouteTest" does not implement "BlueMvc\Core\Interfaces\ControllerInterface".
+     */
+    public function testControllerClassNotImplementingControllerInterfaceIsInvalid()
+    {
+        new Route('', self::class);
     }
 }

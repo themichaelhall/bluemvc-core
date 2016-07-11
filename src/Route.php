@@ -3,6 +3,7 @@
 namespace BlueMvc\Core;
 
 use BlueMvc\Core\Exceptions\RouteInvalidArgumentException;
+use BlueMvc\Core\Interfaces\ControllerInterface;
 
 /**
  * Class representing a route.
@@ -12,25 +13,26 @@ class Route
     /**
      * Constructs a route.
      *
-     * @param string $path            The path.
-     * @param string $controllerClass The controller class.
+     * @param string $path                The path.
+     * @param string $controllerClassName The controller class name.
      *
-     * @throws RouteInvalidArgumentException If the $path parameter is invalid.
+     * @throws RouteInvalidArgumentException If any of the parameters are invalid.
      */
-    public function __construct($path, $controllerClass)
+    public function __construct($path, $controllerClassName)
     {
         assert(is_string($path));
-        assert(is_string($controllerClass));
+        assert(is_string($controllerClassName));
 
         // Validate path.
-        $this->myValidatePath($path);
-
+        self::myValidatePath($path);
         $this->myPath = $path;
-        $this->myControllerClass = $controllerClass;
+
+        // Validate controller class name and save the corresponding controller class.
+        $this->myControllerClass = self::myValidateControllerClassName($controllerClassName);
     }
 
     /**
-     * @return string The controller class.
+     * @return \ReflectionClass The controller class.
      */
     public function getControllerClass()
     {
@@ -52,11 +54,35 @@ class Route
      *
      * @throws RouteInvalidArgumentException If the $path parameter is invalid.
      */
-    private function myValidatePath($path)
+    private static function myValidatePath($path)
     {
         if (preg_match('/[^a-zA-Z0-9._-]/', $path, $matches)) {
             throw new RouteInvalidArgumentException('Path "' . $path . '" contains invalid character "' . $matches[0] . '".');
         }
+    }
+
+    /**
+     * Validates the controller class.
+     *
+     * @param string $controllerClassName The controller class name.
+     *
+     * @throws RouteInvalidArgumentException If the $controllerClass parameter is invalid.
+     *
+     * @return \ReflectionClass The controller class.
+     */
+    private static function myValidateControllerClassName($controllerClassName)
+    {
+        try {
+            $controllerClass = new \ReflectionClass($controllerClassName);
+
+            if (!$controllerClass->implementsInterface(ControllerInterface::class)) {
+                throw new RouteInvalidArgumentException('Controller class "' . $controllerClassName . '" does not implement "' . ControllerInterface::class . '".');
+            }
+        } catch (\ReflectionException $e) {
+            throw new RouteInvalidArgumentException('Controller class "' . $controllerClassName . '" does not exist.');
+        }
+
+        return $controllerClass;
     }
 
     /**
@@ -65,7 +91,7 @@ class Route
     private $myPath;
 
     /**
-     * @var string My controller class.
+     * @var \ReflectionClass My controller class.
      */
     private $myControllerClass;
 }

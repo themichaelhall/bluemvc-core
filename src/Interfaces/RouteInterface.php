@@ -8,7 +8,7 @@ namespace BlueMvc\Core\Interfaces;
 interface RouteInterface
 {
     /**
-     * @return string The controller class.
+     * @return \ReflectionClass The controller class.
      */
     public function getControllerClass();
 }
