@@ -4,11 +4,13 @@ namespace BlueMvc\Core;
 
 use BlueMvc\Core\Exceptions\RouteInvalidArgumentException;
 use BlueMvc\Core\Interfaces\ControllerInterface;
+use BlueMvc\Core\Interfaces\RequestInterface;
+use BlueMvc\Core\Interfaces\RouteInterface;
 
 /**
  * Class representing a route.
  */
-class Route
+class Route implements RouteInterface
 {
     /**
      * Constructs a route.
@@ -45,6 +47,33 @@ class Route
     public function getPath()
     {
         return $this->myPath;
+    }
+
+    /**
+     * Check if a route matches a request.
+     *
+     * @param RequestInterface $request The request.
+     *
+     * @return \BlueMvc\Core\Interfaces\RouteMatchInterface|null The route match if rout matches request, false otherwise.
+     */
+    public function matches(RequestInterface $request)
+    {
+        $path = $request->getUrl()->getPath();
+        $directoryParts = $path->getDirectoryParts();
+
+        if (count($directoryParts) === 0) {
+            // Root path, e.g. "/" or "/foo"
+            if ($this->myPath === '') {
+                return new RouteMatch();
+            }
+        } else {
+            // Subdirectory, e.g. "/foo/" or "/foo/bar/"
+            if ($directoryParts[0] === $this->myPath) {
+                return new RouteMatch();
+            }
+        }
+
+        return null;
     }
 
     /**

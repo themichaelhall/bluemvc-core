@@ -1,5 +1,6 @@
 <?php
 
+use BlueMvc\Core\Request;
 use BlueMvc\Core\Route;
 
 require_once __DIR__ . '/Helpers/TestControllers/BasicTestController.php';
@@ -59,5 +60,47 @@ class RouteTest extends PHPUnit_Framework_TestCase
     public function testControllerClassNotImplementingControllerInterfaceIsInvalid()
     {
         new Route('', self::class);
+    }
+
+    /**
+     * Test url matches for empty path.
+     */
+    public function testUrlMatchesForEmptyPath()
+    {
+        $route = new Route('', BasicTestController::class);
+
+        $this->assertNotNull($route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/'])));
+        $this->assertNotNull($route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo'])));
+        $this->assertNull($route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo/'])));
+        $this->assertNull($route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo/bar'])));
+        $this->assertNull($route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo/bar/'])));
+    }
+
+    /**
+     * Test url matches for non-empty path.
+     */
+    public function testUrlMatchesForNonEmptyPath()
+    {
+        $route = new Route('foo', BasicTestController::class);
+
+        $this->assertNull($route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/'])));
+        $this->assertNull($route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo'])));
+        $this->assertNotNull($route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo/'])));
+        $this->assertNotNull($route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo/bar'])));
+        $this->assertNotNull($route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo/bar/'])));
+    }
+
+    /**
+     * Test url matches for non-matching path.
+     */
+    public function testUrlMatchesForNonMatchingPath()
+    {
+        $route = new Route('bar', BasicTestController::class);
+
+        $this->assertNull($route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/'])));
+        $this->assertNull($route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo'])));
+        $this->assertNull($route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo/'])));
+        $this->assertNull($route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo/bar'])));
+        $this->assertNull($route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo/bar/'])));
     }
 }
