@@ -29,16 +29,15 @@ class Route implements RouteInterface
         self::myValidatePath($path);
         $this->myPath = $path;
 
-        // Validate controller class name and save the corresponding controller class.
-        $this->myControllerClass = self::myValidateControllerClassName($controllerClassName);
+        $this->myControllerClassName = $controllerClassName;
     }
 
     /**
-     * @return \ReflectionClass The controller class.
+     * @return string The controller class name.
      */
-    public function getControllerClass()
+    public function getControllerClassName()
     {
-        return $this->myControllerClass;
+        return $this->myControllerClassName;
     }
 
     /**
@@ -66,20 +65,24 @@ class Route implements RouteInterface
             if ($this->myPath === '') {
                 $action = $path->getFilename() !== null ? $path->getFilename() : '';
 
-                return new RouteMatch($this->myControllerClass->newInstance(), $action);
+                return new RouteMatch(static::myCreateController($this->myControllerClassName), $action);
             }
         } else {
             // Subdirectory, e.g. "/foo/" or "/foo/bar/"
             if ($directoryParts[0] === $this->myPath) {
                 if (count($directoryParts) > 1) {
+                    // Path is more than one level, e.g. "/foo/bar/" or "/foo/bar/baz".
+                    // This means that the first level directory is the action and the rest, including file name, are the parameters.
                     $action = $directoryParts[1];
                     $parameters = array_merge(array_slice($directoryParts, 2), [$path->getFilename() !== null ? $path->getFilename() : '']);
                 } else {
+                    // Path is one level, e.g. "/foo/" or "/foo/bar".
+                    // This means that the file name is the action and there are no parameters.
                     $action = $path->getFilename() !== null ? $path->getFilename() : '';
                     $parameters = [];
                 }
 
-                return new RouteMatch($this->myControllerClass->newInstance(), $action, $parameters);
+                return new RouteMatch(static::myCreateController($this->myControllerClassName), $action, $parameters);
             }
         }
 
@@ -101,15 +104,15 @@ class Route implements RouteInterface
     }
 
     /**
-     * Validates the controller class.
+     * Creates a controller class.
      *
      * @param string $controllerClassName The controller class name.
      *
      * @throws RouteInvalidArgumentException If the $controllerClass parameter is invalid.
      *
-     * @return \ReflectionClass The controller class.
+     * @return ControllerInterface The controller class.
      */
-    private static function myValidateControllerClassName($controllerClassName)
+    private static function myCreateController($controllerClassName)
     {
         try {
             $controllerClass = new \ReflectionClass($controllerClassName);
@@ -121,16 +124,17 @@ class Route implements RouteInterface
             throw new RouteInvalidArgumentException('Controller class "' . $controllerClassName . '" does not exist.');
         }
 
-        return $controllerClass;
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        return $controllerClass->newInstance();
     }
+
+    /**
+     * @var string My controller class name.
+     */
+    private $myControllerClassName;
 
     /**
      * @var string My path.
      */
     private $myPath;
-
-    /**
-     * @var \ReflectionClass My controller class.
-     */
-    private $myControllerClass;
 }

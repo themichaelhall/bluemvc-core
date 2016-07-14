@@ -32,12 +32,12 @@ class RouteTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test getControllerClass method.
+     * Test getControllerClassName method.
      */
-    public function testGetControllerClass()
+    public function testGetControllerClassName()
     {
         $route = new Route('', BasicTestController::class);
-        $this->assertSame(BasicTestController::class, $route->getControllerClass()->getName());
+        $this->assertSame(BasicTestController::class, $route->getControllerClassName());
     }
 
     /**
@@ -48,7 +48,8 @@ class RouteTest extends PHPUnit_Framework_TestCase
      */
     public function testNonExistingControllerClassNameIsInvalid()
     {
-        new Route('', 'NonExistingClassName');
+        $route = new Route('', 'NonExistingClassName');
+        $route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/']));
     }
 
     /**
@@ -59,7 +60,8 @@ class RouteTest extends PHPUnit_Framework_TestCase
      */
     public function testControllerClassNotImplementingControllerInterfaceIsInvalid()
     {
-        new Route('', self::class);
+        $route = new Route('', self::class);
+        $route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/']));
     }
 
     /**
