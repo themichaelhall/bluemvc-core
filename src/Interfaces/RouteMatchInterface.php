@@ -16,4 +16,9 @@ interface RouteMatchInterface
      * @return ControllerInterface The controller.
      */
     public function getController();
+
+    /**
+     * @return string[] The parameters.
+     */
+    public function getParameters();
 }

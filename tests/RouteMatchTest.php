@@ -28,4 +28,14 @@ class RouteMatchTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame('foo', $routeMatch->getAction());
     }
+
+    /**
+     * Test getParameters method.
+     */
+    public function testGetParameters()
+    {
+        $routeMatch = new RouteMatch(new BasicTestController(), '', ['foo', 'bar']);
+
+        $this->assertSame(['foo', 'bar'], $routeMatch->getParameters());
+    }
 }
