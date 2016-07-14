@@ -103,4 +103,95 @@ class RouteTest extends PHPUnit_Framework_TestCase
         $this->assertNull($route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo/bar'])));
         $this->assertNull($route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo/bar/'])));
     }
+
+    /**
+     * Test route match result for index page on index controller.
+     */
+    public function testRouteMatchResultForIndexPageOnIndexController()
+    {
+        $route = new Route('', BasicTestController::class);
+        $routeMatch = $route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/']));
+
+        $this->assertInstanceOf(BasicTestController::class, $routeMatch->getController());
+        $this->assertSame('', $routeMatch->getAction());
+        $this->assertSame([], $routeMatch->getParameters());
+    }
+
+    /**
+     * Test route match result for root page on index controller.
+     */
+    public function testRouteMatchResultForRootPageOnIndexController()
+    {
+        $route = new Route('', BasicTestController::class);
+        $routeMatch = $route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo']));
+
+        $this->assertInstanceOf(BasicTestController::class, $routeMatch->getController());
+        $this->assertSame('foo', $routeMatch->getAction());
+        $this->assertSame([], $routeMatch->getParameters());
+    }
+
+    /**
+     * Test route match result for first level index on path controller.
+     */
+    public function testRouteMatchResultForFirstLevelIndexOnPathController()
+    {
+        $route = new Route('foo', BasicTestController::class);
+        $routeMatch = $route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo/']));
+
+        $this->assertInstanceOf(BasicTestController::class, $routeMatch->getController());
+        $this->assertSame('', $routeMatch->getAction());
+        $this->assertSame([], $routeMatch->getParameters());
+    }
+
+    /**
+     * Test route match result for first level page on path controller.
+     */
+    public function testRouteMatchResultForFirstLevelPageOnPathController()
+    {
+        $route = new Route('foo', BasicTestController::class);
+        $routeMatch = $route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo/bar']));
+
+        $this->assertInstanceOf(BasicTestController::class, $routeMatch->getController());
+        $this->assertSame('bar', $routeMatch->getAction());
+        $this->assertSame([], $routeMatch->getParameters());
+    }
+
+    /**
+     * Test route match result for second level index on path controller.
+     */
+    public function testRouteMatchResultForSecondLevelIndexOnPathController()
+    {
+        $route = new Route('foo', BasicTestController::class);
+        $routeMatch = $route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo/bar/']));
+
+        $this->assertInstanceOf(BasicTestController::class, $routeMatch->getController());
+        $this->assertSame('bar', $routeMatch->getAction());
+        $this->assertSame([''], $routeMatch->getParameters());
+    }
+
+    /**
+     * Test route match result for second level page on path controller.
+     */
+    public function testRouteMatchResultForSecondLevelPageOnPathController()
+    {
+        $route = new Route('foo', BasicTestController::class);
+        $routeMatch = $route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo/bar/baz']));
+
+        $this->assertInstanceOf(BasicTestController::class, $routeMatch->getController());
+        $this->assertSame('bar', $routeMatch->getAction());
+        $this->assertSame(['baz'], $routeMatch->getParameters());
+    }
+
+    /**
+     * Test route match result for third level index on path controller.
+     */
+    public function testRouteMatchResultForThirdLevelIndexOnPathController()
+    {
+        $route = new Route('foo', BasicTestController::class);
+        $routeMatch = $route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo/bar/baz/']));
+
+        $this->assertInstanceOf(BasicTestController::class, $routeMatch->getController());
+        $this->assertSame('bar', $routeMatch->getAction());
+        $this->assertSame(['baz', ''], $routeMatch->getParameters());
+    }
 }
