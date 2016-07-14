@@ -2,15 +2,14 @@
 
 namespace BlueMvc\Core;
 
+use BlueMvc\Core\Base\AbstractRoute;
 use BlueMvc\Core\Exceptions\RouteInvalidArgumentException;
-use BlueMvc\Core\Interfaces\ControllerInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
-use BlueMvc\Core\Interfaces\RouteInterface;
 
 /**
  * Class representing a route.
  */
-class Route implements RouteInterface
+class Route extends AbstractRoute
 {
     /**
      * Constructs a route.
@@ -65,7 +64,7 @@ class Route implements RouteInterface
             if ($this->myPath === '') {
                 $action = $path->getFilename() !== null ? $path->getFilename() : '';
 
-                return new RouteMatch(static::myCreateController($this->myControllerClassName), $action);
+                return new RouteMatch(static::tryCreateController($this->myControllerClassName), $action);
             }
         } else {
             // Subdirectory, e.g. "/foo/" or "/foo/bar/"
@@ -82,7 +81,7 @@ class Route implements RouteInterface
                     $parameters = [];
                 }
 
-                return new RouteMatch(static::myCreateController($this->myControllerClassName), $action, $parameters);
+                return new RouteMatch(static::tryCreateController($this->myControllerClassName), $action, $parameters);
             }
         }
 
@@ -101,31 +100,6 @@ class Route implements RouteInterface
         if (preg_match('/[^a-zA-Z0-9._-]/', $path, $matches)) {
             throw new RouteInvalidArgumentException('Path "' . $path . '" contains invalid character "' . $matches[0] . '".');
         }
-    }
-
-    /**
-     * Creates a controller class.
-     *
-     * @param string $controllerClassName The controller class name.
-     *
-     * @throws RouteInvalidArgumentException If the $controllerClass parameter is invalid.
-     *
-     * @return ControllerInterface The controller class.
-     */
-    private static function myCreateController($controllerClassName)
-    {
-        try {
-            $controllerClass = new \ReflectionClass($controllerClassName);
-
-            if (!$controllerClass->implementsInterface(ControllerInterface::class)) {
-                throw new RouteInvalidArgumentException('Controller class "' . $controllerClassName . '" does not implement "' . ControllerInterface::class . '".');
-            }
-        } catch (\ReflectionException $e) {
-            throw new RouteInvalidArgumentException('Controller class "' . $controllerClassName . '" does not exist.');
-        }
-
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $controllerClass->newInstance();
     }
 
     /**

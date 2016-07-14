@@ -2,15 +2,14 @@
 
 namespace BlueMvc\Core;
 
+use BlueMvc\Core\Base\AbstractRoute;
 use BlueMvc\Core\Exceptions\RouteInvalidArgumentException;
-use BlueMvc\Core\Interfaces\ControllerInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
-use BlueMvc\Core\Interfaces\RouteInterface;
 
 /**
  * Class representing a default route.
  */
-class DefaultRoute implements RouteInterface
+class DefaultRoute extends AbstractRoute
 {
     /**
      * Constructs a default route.
@@ -55,32 +54,7 @@ class DefaultRoute implements RouteInterface
             $parameters = array_merge(array_slice($directoryParts, 1), [$filename]);
         }
 
-        return new RouteMatch(static::myCreateController($this->myControllerClassName), $action, $parameters);
-    }
-
-    /**
-     * Creates a controller class.
-     *
-     * @param string $controllerClassName The controller class name.
-     *
-     * @throws RouteInvalidArgumentException If the $controllerClass parameter is invalid.
-     *
-     * @return ControllerInterface The controller class.
-     */
-    private static function myCreateController($controllerClassName)
-    {
-        try {
-            $controllerClass = new \ReflectionClass($controllerClassName);
-
-            if (!$controllerClass->implementsInterface(ControllerInterface::class)) {
-                throw new RouteInvalidArgumentException('Controller class "' . $controllerClassName . '" does not implement "' . ControllerInterface::class . '".');
-            }
-        } catch (\ReflectionException $e) {
-            throw new RouteInvalidArgumentException('Controller class "' . $controllerClassName . '" does not exist.');
-        }
-
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $controllerClass->newInstance();
+        return new RouteMatch(static::tryCreateController($this->myControllerClassName), $action, $parameters);
     }
 
     /**
