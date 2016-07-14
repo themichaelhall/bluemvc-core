@@ -14,10 +14,20 @@ class RouteMatch implements RouteMatchInterface
      * Constructs a route match.
      *
      * @param ControllerInterface $controller The controller.
+     * @param string              $action     The action.
      */
-    public function __construct(ControllerInterface $controller)
+    public function __construct(ControllerInterface $controller, $action = '')
     {
         $this->myController = $controller;
+        $this->myAction = $action;
+    }
+
+    /**
+     * @return string The action.
+     */
+    public function getAction()
+    {
+        return $this->myAction;
     }
 
     /**
@@ -27,6 +37,11 @@ class RouteMatch implements RouteMatchInterface
     {
         return $this->myController;
     }
+
+    /**
+     * @var string My action.
+     */
+    private $myAction;
 
     /**
      * @var ControllerInterface My controller.

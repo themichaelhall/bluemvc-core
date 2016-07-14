@@ -8,6 +8,11 @@ namespace BlueMvc\Core\Interfaces;
 interface RouteMatchInterface
 {
     /**
+     * @return string The action.
+     */
+    public function getAction();
+
+    /**
      * @return ControllerInterface The controller.
      */
     public function getController();

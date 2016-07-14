@@ -18,4 +18,14 @@ class RouteMatchTest extends PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(BasicTestController::class, $routeMatch->getController());
     }
+
+    /**
+     * Test getAction method.
+     */
+    public function testGetAction()
+    {
+        $routeMatch = new RouteMatch(new BasicTestController(), 'foo');
+
+        $this->assertSame('foo', $routeMatch->getAction());
+    }
 }
