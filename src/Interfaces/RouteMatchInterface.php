@@ -7,4 +7,8 @@ namespace BlueMvc\Core\Interfaces;
  */
 interface RouteMatchInterface
 {
+    /**
+     * @return ControllerInterface The controller.
+     */
+    public function getController();
 }

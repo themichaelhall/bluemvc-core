@@ -64,12 +64,12 @@ class Route implements RouteInterface
         if (count($directoryParts) === 0) {
             // Root path, e.g. "/" or "/foo"
             if ($this->myPath === '') {
-                return new RouteMatch();
+                return new RouteMatch($this->myControllerClass->newInstance());
             }
         } else {
             // Subdirectory, e.g. "/foo/" or "/foo/bar/"
             if ($directoryParts[0] === $this->myPath) {
-                return new RouteMatch();
+                return new RouteMatch($this->myControllerClass->newInstance());
             }
         }
 
