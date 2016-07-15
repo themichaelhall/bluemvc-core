@@ -8,6 +8,11 @@ namespace BlueMvc\Core\Interfaces;
 interface ResponseInterface
 {
     /**
+     * @return string The content.
+     */
+    public function getContent();
+
+    /**
      * @return RequestInterface The request.
      */
     public function getRequest();

@@ -18,4 +18,15 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame($request, $response->getRequest());
     }
+
+    /**
+     * Test get empty response.
+     */
+    public function testGetEmptyResponse()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/']);
+        $response = new Response($request);
+
+        $this->assertSame('', $response->getContent());
+    }
 }

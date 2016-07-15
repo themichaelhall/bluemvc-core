@@ -18,6 +18,15 @@ abstract class AbstractResponse implements ResponseInterface
     public function __construct(RequestInterface $request)
     {
         $this->myRequest = $request;
+        $this->myContent = '';
+    }
+
+    /**
+     * @return string The content.
+     */
+    public function getContent()
+    {
+        return $this->myContent;
     }
 
     /**
@@ -27,6 +36,11 @@ abstract class AbstractResponse implements ResponseInterface
     {
         return $this->myRequest;
     }
+
+    /**
+     * @var string My content.
+     */
+    private $myContent;
 
     /**
      * @var RequestInterface My request.
