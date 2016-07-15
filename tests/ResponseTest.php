@@ -20,13 +20,25 @@ class ResponseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test get empty response.
+     * Test getContent method.
      */
-    public function testGetEmptyResponse()
+    public function testGetContent()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/']);
         $response = new Response($request);
 
         $this->assertSame('', $response->getContent());
+    }
+
+    /**
+     * Test setContent method.
+     */
+    public function testSetContent()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/']);
+        $response = new Response($request);
+        $response->setContent('Hello world!');
+
+        $this->assertSame('Hello world!', $response->getContent());
     }
 }

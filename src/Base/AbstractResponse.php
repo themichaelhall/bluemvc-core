@@ -38,6 +38,16 @@ abstract class AbstractResponse implements ResponseInterface
     }
 
     /**
+     * Sets the content.
+     *
+     * @param string $content The content.
+     */
+    public function setContent($content)
+    {
+        $this->myContent = $content;
+    }
+
+    /**
      * @var string My content.
      */
     private $myContent;

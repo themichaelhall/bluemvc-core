@@ -16,4 +16,11 @@ interface ResponseInterface
      * @return RequestInterface The request.
      */
     public function getRequest();
+
+    /**
+     * Sets the content.
+     *
+     * @param string $content The content.
+     */
+    public function setContent($content);
 }
