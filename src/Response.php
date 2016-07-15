@@ -2,13 +2,13 @@
 
 namespace BlueMvc\Core;
 
+use BlueMvc\Core\Base\AbstractResponse;
 use BlueMvc\Core\Interfaces\RequestInterface;
-use BlueMvc\Core\Interfaces\ResponseInterface;
 
 /**
  * Class representing a web response.
  */
-class Response implements ResponseInterface
+class Response extends AbstractResponse
 {
     /**
      * Constructs a response.
@@ -17,19 +17,6 @@ class Response implements ResponseInterface
      */
     public function __construct(RequestInterface $request)
     {
-        $this->myRequest = $request;
+        parent::__construct($request);
     }
-
-    /**
-     * @return RequestInterface The request.
-     */
-    public function getRequest()
-    {
-        return $this->myRequest;
-    }
-
-    /**
-     * @var RequestInterface My request.
-     */
-    private $myRequest;
 }
