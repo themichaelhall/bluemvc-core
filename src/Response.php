@@ -19,4 +19,12 @@ class Response extends AbstractResponse
     {
         parent::__construct($request);
     }
+
+    /**
+     * Outputs the content.
+     */
+    public function output()
+    {
+        echo $this->getContent();
+    }
 }

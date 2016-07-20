@@ -23,4 +23,9 @@ interface ResponseInterface
      * @param string $content The content.
      */
     public function setContent($content);
+
+    /**
+     * Outputs the content.
+     */
+    public function output();
 }

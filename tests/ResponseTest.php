@@ -41,4 +41,21 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame('Hello world!', $response->getContent());
     }
+
+    /**
+     * Test output method.
+     */
+    public function testOutput()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/']);
+        $response = new Response($request);
+        $response->setContent('Hello world!');
+
+        ob_start();
+        $response->output();
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        $this->assertSame('Hello world!', $responseOutput);
+    }
 }
