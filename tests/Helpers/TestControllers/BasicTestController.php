@@ -7,4 +7,13 @@ use BlueMvc\Core\Controller;
  */
 class BasicTestController extends Controller
 {
+    /**
+     * Index action.
+     *
+     * @return string The result.
+     */
+    public function indexAction()
+    {
+        return 'Hello World!';
+    }
 }

@@ -2,8 +2,8 @@
 
 namespace BlueMvc\Core;
 
+use BlueMvc\Core\Base\AbstractController;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
-use BlueMvc\Core\Interfaces\ControllerInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
 use BlueMvc\Core\Interfaces\RouteMatchInterface;
@@ -11,7 +11,7 @@ use BlueMvc\Core\Interfaces\RouteMatchInterface;
 /**
  * Class representing a standard controller.
  */
-abstract class Controller implements ControllerInterface
+abstract class Controller extends AbstractController
 {
     /**
      * Processes a request.
@@ -25,8 +25,17 @@ abstract class Controller implements ControllerInterface
      */
     public function processRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, RouteMatchInterface $routeMatch)
     {
-        $response->setContent('Hello World!');
+        $action = $routeMatch->getAction();
+        if ($action === '') {
+            $action = 'index';
+        }
 
-        return true;
+        if ($this->tryInvokeActionMethod($action, [], $result)) {
+            $response->setContent($result);
+
+            return true;
+        }
+
+        return false;
     }
 }

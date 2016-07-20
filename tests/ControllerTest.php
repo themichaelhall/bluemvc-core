@@ -27,4 +27,20 @@ class Controller extends PHPUnit_Framework_TestCase
         $this->assertTrue($isProcessed);
         $this->assertSame('Hello World!', $response->getContent());
     }
+
+    /**
+     * Test processRequest method for non existing path.
+     */
+    public function testProcessRequestForNonExistingPath()
+    {
+        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/notfound']);
+        $response = new Response($request);
+        $controller = new BasicTestController();
+        $routeMatch = new RouteMatch($controller, 'notfound');
+        $isProcessed = $controller->processRequest($application, $request, $response, $routeMatch);
+
+        $this->assertFalse($isProcessed);
+        $this->assertSame('', $response->getContent());
+    }
 }
