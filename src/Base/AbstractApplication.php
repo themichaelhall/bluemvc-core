@@ -3,6 +3,8 @@
 namespace BlueMvc\Core\Base;
 
 use BlueMvc\Core\Interfaces\ApplicationInterface;
+use BlueMvc\Core\Interfaces\RequestInterface;
+use BlueMvc\Core\Interfaces\ResponseInterface;
 use BlueMvc\Core\Interfaces\RouteInterface;
 
 /**
@@ -37,6 +39,26 @@ abstract class AbstractApplication implements ApplicationInterface
     public function getDocumentRoot()
     {
         return $this->myDocumentRoot;
+    }
+
+    /**
+     * Runs a request in the application.
+     *
+     * @param RequestInterface  $request  The request.
+     * @param ResponseInterface $response The response.
+     */
+    public function run(RequestInterface $request, ResponseInterface $response)
+    {
+        foreach ($this->myRoutes as $route) {
+            $routeMatch = $route->matches($request);
+
+            if ($routeMatch !== null) {
+                $controller = $routeMatch->getController();
+                $controller->processRequest($this, $request, $response, $routeMatch);
+            }
+        }
+
+        $response->output();
     }
 
     /**

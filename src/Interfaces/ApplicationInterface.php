@@ -18,4 +18,12 @@ interface ApplicationInterface
      * @return string The document root.
      */
     public function getDocumentRoot();
+
+    /**
+     * Runs a request in the application.
+     *
+     * @param RequestInterface  $request  The request.
+     * @param ResponseInterface $response The response.
+     */
+    public function run(RequestInterface $request, ResponseInterface $response);
 }
