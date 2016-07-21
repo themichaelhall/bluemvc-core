@@ -7,6 +7,7 @@ use BlueMvc\Core\Interfaces\ControllerInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
 use BlueMvc\Core\Interfaces\RouteMatchInterface;
+use BlueMvc\Core\Request;
 
 /**
  * Abstract class representing a controller.
@@ -22,6 +23,14 @@ abstract class AbstractController implements ControllerInterface
     }
 
     /**
+     * @return RequestInterface|null The request if controller is processing, null otherwise.
+     */
+    public function getRequest()
+    {
+        return $this->myRequest;
+    }
+
+    /**
      * Processes a request.
      *
      * @param ApplicationInterface $application The application.
@@ -34,6 +43,7 @@ abstract class AbstractController implements ControllerInterface
     public function processRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, RouteMatchInterface $routeMatch)
     {
         $this->myApplication = $application;
+        $this->myRequest = $request;
     }
 
     /**
@@ -64,4 +74,9 @@ abstract class AbstractController implements ControllerInterface
      * @var ApplicationInterface|null My application.
      */
     private $myApplication;
+
+    /**
+     * @var RequestInterface|null My request.
+     */
+    private $myRequest;
 }
