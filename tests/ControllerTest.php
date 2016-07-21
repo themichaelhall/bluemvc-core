@@ -44,6 +44,21 @@ class Controller extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test getResponse method.
+     */
+    public function testGetResponse()
+    {
+        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/']);
+        $response = new Response($request);
+        $controller = new BasicTestController();
+        $routeMatch = new RouteMatch($controller);
+        $controller->processRequest($application, $request, $response, $routeMatch);
+
+        $this->assertSame($response, $controller->getResponse());
+    }
+
+    /**
      * Test processRequest method for index path.
      */
     public function testProcessRequestForIndexPath()
