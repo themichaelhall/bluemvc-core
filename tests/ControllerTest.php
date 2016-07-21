@@ -1,6 +1,7 @@
 <?php
 
 use BlueMvc\Core\Application;
+use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Request;
 use BlueMvc\Core\Response;
 use BlueMvc\Core\RouteMatch;
@@ -26,6 +27,7 @@ class Controller extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($isProcessed);
         $this->assertSame('Hello World!', $response->getContent());
+        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -42,5 +44,6 @@ class Controller extends PHPUnit_Framework_TestCase
 
         $this->assertFalse($isProcessed);
         $this->assertSame('', $response->getContent());
+        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 }
