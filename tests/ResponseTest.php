@@ -1,5 +1,6 @@
 <?php
 
+use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Request;
 use BlueMvc\Core\Response;
 
@@ -40,6 +41,17 @@ class ResponseTest extends PHPUnit_Framework_TestCase
         $response->setContent('Hello world!');
 
         $this->assertSame('Hello world!', $response->getContent());
+    }
+
+    /**
+     * Test getStatusCode method.
+     */
+    public function testGetStatusCode()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/']);
+        $response = new Response($request);
+
+        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
     /**

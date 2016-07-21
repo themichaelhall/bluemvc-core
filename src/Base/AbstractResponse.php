@@ -2,6 +2,8 @@
 
 namespace BlueMvc\Core\Base;
 
+use BlueMvc\Core\Http\StatusCode;
+use BlueMvc\Core\Interfaces\Http\StatusCodeInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
 
@@ -19,6 +21,7 @@ abstract class AbstractResponse implements ResponseInterface
     {
         $this->myRequest = $request;
         $this->myContent = '';
+        $this->myStatusCode = new StatusCode(StatusCode::OK);
     }
 
     /**
@@ -35,6 +38,14 @@ abstract class AbstractResponse implements ResponseInterface
     public function getRequest()
     {
         return $this->myRequest;
+    }
+
+    /**
+     * @return StatusCodeInterface The status code.
+     */
+    public function getStatusCode()
+    {
+        return $this->myStatusCode;
     }
 
     /**
@@ -56,4 +67,9 @@ abstract class AbstractResponse implements ResponseInterface
      * @var RequestInterface My request.
      */
     private $myRequest;
+
+    /**
+     * @var StatusCodeInterface My status code.
+     */
+    private $myStatusCode;
 }

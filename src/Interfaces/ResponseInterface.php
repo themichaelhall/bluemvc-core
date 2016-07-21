@@ -2,6 +2,8 @@
 
 namespace BlueMvc\Core\Interfaces;
 
+use BlueMvc\Core\Interfaces\Http\StatusCodeInterface;
+
 /**
  * Interface for Response class.
  */
@@ -16,6 +18,11 @@ interface ResponseInterface
      * @return RequestInterface The request.
      */
     public function getRequest();
+
+    /**
+     * @return StatusCodeInterface The status code.
+     */
+    public function getStatusCode();
 
     /**
      * Sets the content.
