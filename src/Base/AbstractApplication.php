@@ -2,6 +2,7 @@
 
 namespace BlueMvc\Core\Base;
 
+use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
@@ -49,13 +50,21 @@ abstract class AbstractApplication implements ApplicationInterface
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
+        $requestIsProcessed = false;
+
         foreach ($this->myRoutes as $route) {
             $routeMatch = $route->matches($request);
 
             if ($routeMatch !== null) {
                 $controller = $routeMatch->getController();
-                $controller->processRequest($this, $request, $response, $routeMatch);
+                $requestIsProcessed = $controller->processRequest($this, $request, $response, $routeMatch);
+
+                break;
             }
+        }
+
+        if (!$requestIsProcessed) {
+            $response->setStatusCode(new StatusCode(StatusCode::NOT_FOUND));
         }
 
         $response->output();
