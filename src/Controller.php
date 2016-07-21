@@ -25,6 +25,8 @@ abstract class Controller extends AbstractController
      */
     public function processRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, RouteMatchInterface $routeMatch)
     {
+        parent::processRequest($application, $request, $response, $routeMatch);
+
         $action = $routeMatch->getAction();
         if ($action === '') {
             $action = 'index';

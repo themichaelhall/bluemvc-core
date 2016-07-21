@@ -14,6 +14,21 @@ require_once __DIR__ . '/Helpers/TestControllers/BasicTestController.php';
 class Controller extends PHPUnit_Framework_TestCase
 {
     /**
+     * Test getApplication method.
+     */
+    public function testGetApplication()
+    {
+        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/']);
+        $response = new Response($request);
+        $controller = new BasicTestController();
+        $routeMatch = new RouteMatch($controller);
+        $controller->processRequest($application, $request, $response, $routeMatch);
+
+        $this->assertSame($application, $controller->getApplication());
+    }
+
+    /**
      * Test processRequest method for index path.
      */
     public function testProcessRequestForIndexPath()

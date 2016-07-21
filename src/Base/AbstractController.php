@@ -2,13 +2,40 @@
 
 namespace BlueMvc\Core\Base;
 
+use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\ControllerInterface;
+use BlueMvc\Core\Interfaces\RequestInterface;
+use BlueMvc\Core\Interfaces\ResponseInterface;
+use BlueMvc\Core\Interfaces\RouteMatchInterface;
 
 /**
  * Abstract class representing a controller.
  */
 abstract class AbstractController implements ControllerInterface
 {
+    /**
+     * @return ApplicationInterface|null The application if controller is processing, null otherwise.
+     */
+    public function getApplication()
+    {
+        return $this->myApplication;
+    }
+
+    /**
+     * Processes a request.
+     *
+     * @param ApplicationInterface $application The application.
+     * @param RequestInterface     $request     The request.
+     * @param ResponseInterface    $response    The response.
+     * @param RouteMatchInterface  $routeMatch  The route match.
+     *
+     * @return bool True if request was actually processed, false otherwise.
+     */
+    public function processRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, RouteMatchInterface $routeMatch)
+    {
+        $this->myApplication = $application;
+    }
+
     /**
      * Try to invoke an action method.
      *
@@ -32,4 +59,9 @@ abstract class AbstractController implements ControllerInterface
 
         return true;
     }
+
+    /**
+     * @var ApplicationInterface|null My application.
+     */
+    private $myApplication;
 }
