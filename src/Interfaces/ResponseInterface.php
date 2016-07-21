@@ -32,6 +32,13 @@ interface ResponseInterface
     public function setContent($content);
 
     /**
+     * Sets the status code.
+     *
+     * @param StatusCodeInterface $statusCode The status code.
+     */
+    public function setStatusCode(StatusCodeInterface $statusCode);
+
+    /**
      * Outputs the content.
      */
     public function output();

@@ -55,6 +55,18 @@ class ResponseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test setStatusCode method.
+     */
+    public function testSetStatusCode()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/']);
+        $response = new Response($request);
+        $response->setStatusCode(new StatusCode(StatusCode::INTERNAL_SERVER_ERROR));
+
+        $this->assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
+    }
+
+    /**
      * Test output method.
      */
     public function testOutput()

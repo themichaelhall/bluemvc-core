@@ -59,6 +59,16 @@ abstract class AbstractResponse implements ResponseInterface
     }
 
     /**
+     * Sets the status code.
+     *
+     * @param StatusCodeInterface $statusCode The status code.
+     */
+    public function setStatusCode(StatusCodeInterface $statusCode)
+    {
+        $this->myStatusCode = $statusCode;
+    }
+
+    /**
      * @var string My content.
      */
     private $myContent;
