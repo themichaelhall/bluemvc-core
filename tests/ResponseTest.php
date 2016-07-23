@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/Helpers/Fakes/FakeHeaders.php';
+
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Request;
 use BlueMvc\Core\Response;
@@ -67,9 +69,9 @@ class ResponseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test output method.
+     * Test output method for valid request.
      */
-    public function testOutput()
+    public function testOutputForValidRequest()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/']);
         $response = new Response($request);
@@ -80,6 +82,42 @@ class ResponseTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
+        $this->assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
         $this->assertSame('Hello world!', $responseOutput);
+    }
+
+    /**
+     * Test output method for invalid request.
+     */
+    public function testOutputForInvalidRequest()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/']);
+        $response = new Response($request);
+        $response->setContent('Hello world!');
+        $response->setStatusCode(new StatusCode(StatusCode::CONFLICT));
+
+        ob_start();
+        $response->output();
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        $this->assertSame(['HTTP/1.1 409 Conflict'], FakeHeaders::get());
+        $this->assertSame('Hello world!', $responseOutput);
+    }
+
+    /**
+     * Set up.
+     */
+    public function setUp()
+    {
+        FakeHeaders::enable();
+    }
+
+    /**
+     * Tear down.
+     */
+    public function tearDown()
+    {
+        FakeHeaders::disable();
     }
 }

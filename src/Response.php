@@ -25,6 +25,7 @@ class Response extends AbstractResponse
      */
     public function output()
     {
+        header('HTTP/1.1 ' . $this->getStatusCode());
         echo $this->getContent();
     }
 }
