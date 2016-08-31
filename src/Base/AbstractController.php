@@ -52,6 +52,8 @@ abstract class AbstractController implements ControllerInterface
         $this->myApplication = $application;
         $this->myRequest = $request;
         $this->myResponse = $response;
+
+        return false;
     }
 
     /**
