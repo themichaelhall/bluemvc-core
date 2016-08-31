@@ -2,6 +2,8 @@
 
 namespace BlueMvc\Core\Interfaces;
 
+use DataTypes\Interfaces\FilePathInterface;
+
 /**
  * Interface for Application class.
  */
@@ -15,7 +17,7 @@ interface ApplicationInterface
     public function addRoute(RouteInterface $route);
 
     /**
-     * @return string The document root.
+     * @return FilePathInterface The document root.
      */
     public function getDocumentRoot();
 

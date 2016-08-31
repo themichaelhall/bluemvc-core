@@ -3,6 +3,7 @@
 namespace BlueMvc\Core;
 
 use BlueMvc\Core\Base\AbstractApplication;
+use DataTypes\FilePath;
 
 /**
  * BlueMvc main application.
@@ -16,6 +17,6 @@ class Application extends AbstractApplication
      */
     public function __construct(array $serverVars)
     {
-        parent::__construct($serverVars['DOCUMENT_ROOT']);
+        parent::__construct(FilePath::parse($serverVars['DOCUMENT_ROOT']));
     }
 }

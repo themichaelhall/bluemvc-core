@@ -14,10 +14,10 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
     {
         $application = new Application(
             [
-                'DOCUMENT_ROOT' => '/var/www/',
+                'DOCUMENT_ROOT' => DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR . 'www' . DIRECTORY_SEPARATOR,
             ]
         );
 
-        $this->assertSame('/var/www/', $application->getDocumentRoot());
+        $this->assertSame(DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR . 'www' . DIRECTORY_SEPARATOR, $application->getDocumentRoot()->__toString());
     }
 }

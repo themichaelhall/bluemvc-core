@@ -7,6 +7,7 @@ use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
 use BlueMvc\Core\Interfaces\RouteInterface;
+use DataTypes\Interfaces\FilePathInterface;
 
 /**
  * Abstract class representing a BlueMvc main application.
@@ -16,9 +17,9 @@ abstract class AbstractApplication implements ApplicationInterface
     /**
      * Constructs the application.
      *
-     * @param string $documentRoot The document root.
+     * @param FilePathInterface $documentRoot The document root.
      */
-    public function __construct($documentRoot)
+    public function __construct(FilePathInterface $documentRoot)
     {
         $this->myDocumentRoot = $documentRoot;
         $this->myRoutes = [];
@@ -35,7 +36,7 @@ abstract class AbstractApplication implements ApplicationInterface
     }
 
     /**
-     * @return string The document root.
+     * @return FilePathInterface The document root.
      */
     public function getDocumentRoot()
     {
@@ -71,7 +72,7 @@ abstract class AbstractApplication implements ApplicationInterface
     }
 
     /**
-     * @var string My document root.
+     * @var FilePathInterface My document root.
      */
     private $myDocumentRoot;
 
