@@ -14,7 +14,7 @@ class Application extends AbstractApplication
     /**
      * Constructs the application.
      *
-     * @param array|null $serverVars The $_SERVER array or null to use the global $_SERVER array.
+     * @param array|null $serverVars The server array or null to use the global $_SERVER array.
      */
     public function __construct(array $serverVars = null)
     {
@@ -36,7 +36,7 @@ class Application extends AbstractApplication
     }
 
     /**
-     * @var array My $_SERVER array.
+     * @var array My server array.
      */
     private $myServerVars;
 }
