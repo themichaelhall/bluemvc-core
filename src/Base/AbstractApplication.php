@@ -16,12 +16,10 @@ abstract class AbstractApplication implements ApplicationInterface
 {
     /**
      * Constructs the application.
-     *
-     * @param FilePathInterface $documentRoot The document root.
      */
-    public function __construct(FilePathInterface $documentRoot)
+    public function __construct()
     {
-        $this->myDocumentRoot = $documentRoot;
+        $this->myDocumentRoot = null;
         $this->myRoutes = [];
     }
 
@@ -36,7 +34,7 @@ abstract class AbstractApplication implements ApplicationInterface
     }
 
     /**
-     * @return FilePathInterface The document root.
+     * @return FilePathInterface|null The document root.
      */
     public function getDocumentRoot()
     {
@@ -72,7 +70,17 @@ abstract class AbstractApplication implements ApplicationInterface
     }
 
     /**
-     * @var FilePathInterface My document root.
+     * Sets the document root.
+     *
+     * @param FilePathInterface $documentRoot The document root.
+     */
+    protected function setDocumentRoot(FilePathInterface $documentRoot)
+    {
+        $this->myDocumentRoot = $documentRoot;
+    }
+
+    /**
+     * @var FilePathInterface|null My document root.
      */
     private $myDocumentRoot;
 

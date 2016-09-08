@@ -12,12 +12,14 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
      */
     public function testGetDocumentRoot()
     {
+        $DS = DIRECTORY_SEPARATOR;
+
         $application = new Application(
             [
-                'DOCUMENT_ROOT' => DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR . 'www' . DIRECTORY_SEPARATOR,
+                'DOCUMENT_ROOT' => $DS . 'var' . $DS . 'www',
             ]
         );
 
-        $this->assertSame(DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR . 'www' . DIRECTORY_SEPARATOR, $application->getDocumentRoot()->__toString());
+        $this->assertSame($DS . 'var' . $DS . 'www' . $DS, $application->getDocumentRoot()->__toString());
     }
 }
