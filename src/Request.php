@@ -3,6 +3,7 @@
 namespace BlueMvc\Core;
 
 use BlueMvc\Core\Base\AbstractRequest;
+use DataTypes\Interfaces\UrlInterface;
 use DataTypes\Url;
 
 /**
@@ -13,25 +14,33 @@ class Request extends AbstractRequest
     /**
      * Constructs the request.
      *
-     * @param array $serverVars The $_SERVER array.
+     * @param array|null $serverVars The server array or null to use the global $_SERVER array.
      */
     public function __construct(array $serverVars)
     {
-        parent::__construct(static::createUrl($serverVars));
+        parent::__construct();
+
+        $this->myServerVars = $serverVars !== null ? $serverVars : $_SERVER;
     }
 
     /**
-     * Creates a url from $_SERVER array.
-     *
-     * @param array $serverVars The $_SERVER array.
-     *
-     * @return \DataTypes\Interfaces\UrlInterface The url.
+     * @return UrlInterface The url.
      */
-    private static function createUrl(array $serverVars)
+    public function getUrl()
     {
-        // fixme: Use fromParts method for Url
-        // fixme: Handle query string
-        return Url::parse('http' . (isset($serverVars['HTTPS']) && $serverVars['HTTPS'] !== '' ? 's' : '') . '://' . $serverVars['HTTP_HOST'] . ':' . $serverVars['SERVER_PORT'] .
-            $serverVars['REQUEST_URI']);
+        if (parent::getUrl() === null) {
+            // fixme: Use fromParts method for Url
+            // fixme: Handle query string
+            parent::setUrl(
+                Url::parse('http' . (isset($this->myServerVars['HTTPS']) && $this->myServerVars['HTTPS'] !== '' ? 's' : '') . '://' . $this->myServerVars['HTTP_HOST'] . ':' . $this->myServerVars['SERVER_PORT'] . $this->myServerVars['REQUEST_URI'])
+            );
+        }
+
+        return parent::getUrl();
     }
+
+    /**
+     * @var array My server array.
+     */
+    private $myServerVars;
 }

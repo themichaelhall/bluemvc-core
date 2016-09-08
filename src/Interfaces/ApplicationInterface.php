@@ -17,7 +17,7 @@ interface ApplicationInterface
     public function addRoute(RouteInterface $route);
 
     /**
-     * @return FilePathInterface The document root.
+     * @return FilePathInterface|null The document root.
      */
     public function getDocumentRoot();
 

@@ -12,16 +12,14 @@ abstract class AbstractRequest implements RequestInterface
 {
     /**
      * Constructs the request.
-     *
-     * @param UrlInterface $url The url.
      */
-    public function __construct(UrlInterface $url)
+    public function __construct()
     {
-        $this->myUrl = $url;
+        $this->myUrl = null;
     }
 
     /**
-     * @return UrlInterface The url.
+     * @return UrlInterface|null The url.
      */
     public function getUrl()
     {
@@ -29,7 +27,17 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
-     * @var UrlInterface My url.
+     * Sets the url.
+     *
+     * @param UrlInterface $url The url.
+     */
+    protected function setUrl(UrlInterface $url)
+    {
+        $this->myUrl = $url;
+    }
+
+    /**
+     * @var UrlInterface|null My url.
      */
     private $myUrl;
 }

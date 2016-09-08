@@ -2,13 +2,15 @@
 
 namespace BlueMvc\Core\Interfaces;
 
+use DataTypes\Interfaces\UrlInterface;
+
 /**
  * Interface for Request class.
  */
 interface RequestInterface
 {
     /**
-     * @return \DataTypes\Interfaces\UrlInterface The url.
+     * @return UrlInterface|null The url.
      */
     public function getUrl();
 }
