@@ -16,7 +16,7 @@ class Request extends AbstractRequest
      *
      * @param array|null $serverVars The server array or null to use the global $_SERVER array.
      */
-    public function __construct(array $serverVars)
+    public function __construct(array $serverVars = null)
     {
         parent::__construct();
 
