@@ -13,22 +13,22 @@ interface MethodInterface
     public function getName();
 
     /**
-     * @return True if this is a DELETE method, false otherwise.
+     * @return true if this is a DELETE method, false otherwise.
      */
     public function isDelete();
 
     /**
-     * @return True if this is a GET method, false otherwise.
+     * @return true if this is a GET method, false otherwise.
      */
     public function isGet();
 
     /**
-     * @return True if this is a POST method, false otherwise.
+     * @return true if this is a POST method, false otherwise.
      */
     public function isPost();
 
     /**
-     * @return True if this is a PUT method, false otherwise.
+     * @return true if this is a PUT method, false otherwise.
      */
     public function isPut();
 

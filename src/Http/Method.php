@@ -31,7 +31,7 @@ class Method implements MethodInterface
     }
 
     /**
-     * @return True if this is a DELETE method, false otherwise.
+     * @return true if this is a DELETE method, false otherwise.
      */
     public function isDelete()
     {
@@ -39,7 +39,7 @@ class Method implements MethodInterface
     }
 
     /**
-     * @return True if this is a GET method, false otherwise.
+     * @return true if this is a GET method, false otherwise.
      */
     public function isGet()
     {
@@ -47,7 +47,7 @@ class Method implements MethodInterface
     }
 
     /**
-     * @return True if this is a POST method, false otherwise.
+     * @return true if this is a POST method, false otherwise.
      */
     public function isPost()
     {
@@ -55,7 +55,7 @@ class Method implements MethodInterface
     }
 
     /**
-     * @return True if this is a PUT method, false otherwise.
+     * @return true if this is a PUT method, false otherwise.
      */
     public function isPut()
     {
