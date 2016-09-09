@@ -3,6 +3,8 @@
 namespace BlueMvc\Core;
 
 use BlueMvc\Core\Base\AbstractRequest;
+use BlueMvc\Core\Http\Method;
+use BlueMvc\Core\Interfaces\Http\MethodInterface;
 use DataTypes\Interfaces\UrlInterface;
 use DataTypes\Url;
 
@@ -37,6 +39,18 @@ class Request extends AbstractRequest
         }
 
         return parent::getUrl();
+    }
+
+    /**
+     * @return MethodInterface The http method.
+     */
+    public function getMethod()
+    {
+        if (parent::getMethod() === null) {
+            parent::setMethod(new Method($this->myServerVars['REQUEST_METHOD']));
+        }
+
+        return parent::getMethod();
     }
 
     /**

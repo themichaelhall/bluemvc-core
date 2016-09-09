@@ -2,6 +2,7 @@
 
 namespace BlueMvc\Core\Interfaces;
 
+use BlueMvc\Core\Interfaces\Http\MethodInterface;
 use DataTypes\Interfaces\UrlInterface;
 
 /**
@@ -9,6 +10,11 @@ use DataTypes\Interfaces\UrlInterface;
  */
 interface RequestInterface
 {
+    /**
+     * @return MethodInterface|null The http method.
+     */
+    public function getMethod();
+
     /**
      * @return UrlInterface|null The url.
      */

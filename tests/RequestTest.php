@@ -39,4 +39,18 @@ class RequestTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame('https://www.domain.com/foo/bar', $request->getUrl()->__toString());
     }
+
+    /**
+     * Test getMethod method.
+     */
+    public function testGetMethod()
+    {
+        $request = new Request(
+            [
+                'REQUEST_METHOD' => 'POST',
+            ]
+        );
+
+        $this->assertSame('POST', $request->getMethod()->__toString());
+    }
 }
