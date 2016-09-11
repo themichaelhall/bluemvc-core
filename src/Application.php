@@ -17,9 +17,9 @@ class Application extends AbstractApplication
      */
     public function __construct(array $serverVars = null)
     {
-        parent::__construct(FilePath::parse($serverVars['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR));
-
         $this->myServerVars = $serverVars !== null ? $serverVars : $_SERVER;
+
+        parent::__construct(FilePath::parse($this->myServerVars['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR));
     }
 
     /**

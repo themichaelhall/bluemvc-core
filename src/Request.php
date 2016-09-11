@@ -18,11 +18,11 @@ class Request extends AbstractRequest
      */
     public function __construct(array $serverVars = null)
     {
+        $this->myServerVars = $serverVars !== null ? $serverVars : $_SERVER;
+
         // fixme: Use fromParts method for Url
         // fixme: Handle query string
-        parent::__construct(Url::parse('http' . (isset($serverVars['HTTPS']) && $serverVars['HTTPS'] !== '' ? 's' : '') . '://' . $serverVars['HTTP_HOST'] . ':' . $serverVars['SERVER_PORT'] . $serverVars['REQUEST_URI']), new Method($serverVars['REQUEST_METHOD']));
-
-        $this->myServerVars = $serverVars !== null ? $serverVars : $_SERVER;
+        parent::__construct(Url::parse('http' . (isset($this->myServerVars['HTTPS']) && $this->myServerVars['HTTPS'] !== '' ? 's' : '') . '://' . $this->myServerVars['HTTP_HOST'] . ':' . $this->myServerVars['SERVER_PORT'] . $this->myServerVars['REQUEST_URI']), new Method($this->myServerVars['REQUEST_METHOD']));
     }
 
     /**
