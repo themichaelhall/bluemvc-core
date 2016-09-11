@@ -4,7 +4,6 @@ namespace BlueMvc\Core;
 
 use BlueMvc\Core\Base\AbstractApplication;
 use DataTypes\FilePath;
-use DataTypes\Interfaces\FilePathInterface;
 
 /**
  * BlueMvc main application.
@@ -18,21 +17,9 @@ class Application extends AbstractApplication
      */
     public function __construct(array $serverVars = null)
     {
-        parent::__construct();
+        parent::__construct(FilePath::parse($serverVars['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR));
 
         $this->myServerVars = $serverVars !== null ? $serverVars : $_SERVER;
-    }
-
-    /**
-     * @return FilePathInterface The document root.
-     */
-    public function getDocumentRoot()
-    {
-        if (parent::getDocumentRoot() === null) {
-            parent::setDocumentRoot(FilePath::parse($this->myServerVars['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR));
-        }
-
-        return parent::getDocumentRoot();
     }
 
     /**

@@ -16,10 +16,12 @@ abstract class AbstractApplication implements ApplicationInterface
 {
     /**
      * Constructs the application.
+     *
+     * @param FilePathInterface $documentRoot The document root.
      */
-    public function __construct()
+    public function __construct(FilePathInterface $documentRoot)
     {
-        $this->myDocumentRoot = null;
+        $this->setDocumentRoot($documentRoot);
         $this->myRoutes = [];
     }
 
