@@ -2,7 +2,6 @@
 
 namespace BlueMvc\Core\Base;
 
-use BlueMvc\Core\Http\Method;
 use BlueMvc\Core\Interfaces\Http\MethodInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use DataTypes\Interfaces\UrlInterface;
@@ -15,10 +14,10 @@ abstract class AbstractRequest implements RequestInterface
     /**
      * Constructs the request.
      *
-     * @param UrlInterface $url    The url.
-     * @param Method       $method The method.
+     * @param UrlInterface    $url    The url.
+     * @param MethodInterface $method The method.
      */
-    public function __construct(UrlInterface $url, Method $method)
+    public function __construct(UrlInterface $url, MethodInterface $method)
     {
         $this->setUrl($url);
         $this->setMethod($method);
