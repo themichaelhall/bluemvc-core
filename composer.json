@@ -28,5 +28,7 @@
     "psr-4": {
       "BlueMvc\\Core\\": "src"
     }
-  }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }
