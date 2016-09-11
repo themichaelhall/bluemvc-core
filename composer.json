@@ -21,8 +21,7 @@
     "datatypes/datatypes": "dev-master"
   },
   "require-dev": {
-    "phpunit/phpunit": ">=4.0",
-    "bluemvc/bluemvc-fakes": "dev-master"
+    "phpunit/phpunit": ">=4.0"
   },
   "autoload": {
     "psr-4": {

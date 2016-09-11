@@ -3,9 +3,8 @@
 require_once __DIR__ . '/Helpers/Fakes/FakeHeaders.php';
 
 use BlueMvc\Core\Http\StatusCode;
+use BlueMvc\Core\Request;
 use BlueMvc\Core\Response;
-use BlueMvc\Fakes\FakeRequest;
-use DataTypes\Url;
 
 /**
  * Test Response class.
@@ -17,7 +16,7 @@ class ResponseTest extends PHPUnit_Framework_TestCase
      */
     public function testGetRequest()
     {
-        $request = new FakeRequest(Url::parse('http://www.domain.com/'));
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
 
         $this->assertSame($request, $response->getRequest());
@@ -28,7 +27,7 @@ class ResponseTest extends PHPUnit_Framework_TestCase
      */
     public function testGetContent()
     {
-        $request = new FakeRequest(Url::parse('http://www.domain.com/'));
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
 
         $this->assertSame('', $response->getContent());
@@ -39,7 +38,7 @@ class ResponseTest extends PHPUnit_Framework_TestCase
      */
     public function testSetContent()
     {
-        $request = new FakeRequest(Url::parse('http://www.domain.com/'));
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $response->setContent('Hello world!');
 
@@ -51,7 +50,7 @@ class ResponseTest extends PHPUnit_Framework_TestCase
      */
     public function testGetStatusCode()
     {
-        $request = new FakeRequest(Url::parse('http://www.domain.com/'));
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
 
         $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
@@ -62,7 +61,7 @@ class ResponseTest extends PHPUnit_Framework_TestCase
      */
     public function testSetStatusCode()
     {
-        $request = new FakeRequest(Url::parse('http://www.domain.com/'));
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $response->setStatusCode(new StatusCode(StatusCode::INTERNAL_SERVER_ERROR));
 
@@ -74,7 +73,7 @@ class ResponseTest extends PHPUnit_Framework_TestCase
      */
     public function testOutputForValidRequest()
     {
-        $request = new FakeRequest(Url::parse('http://www.domain.com/'));
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $response->setContent('Hello world!');
 
@@ -92,7 +91,7 @@ class ResponseTest extends PHPUnit_Framework_TestCase
      */
     public function testOutputForInvalidRequest()
     {
-        $request = new FakeRequest(Url::parse('http://www.domain.com/'));
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $response->setContent('Hello world!');
         $response->setStatusCode(new StatusCode(StatusCode::CONFLICT));

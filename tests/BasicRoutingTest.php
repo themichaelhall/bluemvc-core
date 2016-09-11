@@ -1,11 +1,10 @@
 <?php
 
+use BlueMvc\Core\Application;
 use BlueMvc\Core\Http\StatusCode;
+use BlueMvc\Core\Request;
 use BlueMvc\Core\Response;
 use BlueMvc\Core\Route;
-use BlueMvc\Fakes\FakeApplication;
-use BlueMvc\Fakes\FakeRequest;
-use DataTypes\Url;
 
 require_once __DIR__ . '/Helpers/Fakes/FakeHeaders.php';
 require_once __DIR__ . '/Helpers/TestControllers/BasicTestController.php';
@@ -21,7 +20,7 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
      */
     public function testGetIndexPage()
     {
-        $request = new FakeRequest(Url::parse('http://www.domain.com/'));
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         ob_start();
         $this->application->run($request, $response);
@@ -39,7 +38,7 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
      */
     public function testGetNonExistingAction()
     {
-        $request = new FakeRequest(Url::parse('http://www.domain.com/notfound'));
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/notfound', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         ob_start();
         $this->application->run($request, $response);
@@ -57,7 +56,7 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
      */
     public function testGetNonExistingController()
     {
-        $request = new FakeRequest(Url::parse('http://www.domain.com/non-existing-controller/action'));
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/non-existing-controller/action', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         ob_start();
         $this->application->run($request, $response);
@@ -75,7 +74,7 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
      */
     public function testGetServerErrorPage()
     {
-        $request = new FakeRequest(Url::parse('http://www.domain.com/serverError'));
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/serverError', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         ob_start();
         $this->application->run($request, $response);
@@ -94,7 +93,7 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         FakeHeaders::enable();
-        $this->application = new FakeApplication();
+        $this->application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $this->application->addRoute(new Route('', BasicTestController::class));
     }
 
@@ -108,7 +107,7 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @var FakeApplication My application.
+     * @var Application My application.
      */
     private $application;
 }
