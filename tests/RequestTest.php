@@ -14,9 +14,10 @@ class RequestTest extends PHPUnit_Framework_TestCase
     {
         $request = new Request(
             [
-                'HTTP_HOST'   => 'www.domain.com',
-                'SERVER_PORT' => '8080',
-                'REQUEST_URI' => '/foo/bar',
+                'HTTP_HOST'      => 'www.domain.com',
+                'SERVER_PORT'    => '8080',
+                'REQUEST_URI'    => '/foo/bar',
+                'REQUEST_METHOD' => 'GET',
             ]
         );
 
@@ -30,10 +31,11 @@ class RequestTest extends PHPUnit_Framework_TestCase
     {
         $request = new Request(
             [
-                'HTTPS'       => 'On',
-                'HTTP_HOST'   => 'www.domain.com',
-                'SERVER_PORT' => '443',
-                'REQUEST_URI' => '/foo/bar',
+                'HTTPS'          => 'On',
+                'HTTP_HOST'      => 'www.domain.com',
+                'SERVER_PORT'    => '443',
+                'REQUEST_URI'    => '/foo/bar',
+                'REQUEST_METHOD' => 'GET',
             ]
         );
 
@@ -47,6 +49,9 @@ class RequestTest extends PHPUnit_Framework_TestCase
     {
         $request = new Request(
             [
+                'HTTP_HOST'      => 'www.domain.com',
+                'SERVER_PORT'    => '80',
+                'REQUEST_URI'    => '/foo/bar',
                 'REQUEST_METHOD' => 'POST',
             ]
         );

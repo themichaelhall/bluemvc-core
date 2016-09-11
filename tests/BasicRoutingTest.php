@@ -20,7 +20,7 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
      */
     public function testGetIndexPage()
     {
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         ob_start();
         $this->application->run($request, $response);
@@ -38,7 +38,7 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
      */
     public function testGetNonExistingAction()
     {
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/notfound']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/notfound', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         ob_start();
         $this->application->run($request, $response);
@@ -56,7 +56,7 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
      */
     public function testGetNonExistingController()
     {
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/non-existing-controller/action']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/non-existing-controller/action', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         ob_start();
         $this->application->run($request, $response);
@@ -74,7 +74,7 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
      */
     public function testGetServerErrorPage()
     {
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/serverError']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/serverError', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         ob_start();
         $this->application->run($request, $response);

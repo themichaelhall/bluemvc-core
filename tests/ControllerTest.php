@@ -19,7 +19,7 @@ class Controller extends PHPUnit_Framework_TestCase
     public function testGetApplication()
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $controller = new BasicTestController();
         $routeMatch = new RouteMatch($controller);
@@ -34,7 +34,7 @@ class Controller extends PHPUnit_Framework_TestCase
     public function testGetRequest()
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $controller = new BasicTestController();
         $routeMatch = new RouteMatch($controller);
@@ -49,7 +49,7 @@ class Controller extends PHPUnit_Framework_TestCase
     public function testGetResponse()
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $controller = new BasicTestController();
         $routeMatch = new RouteMatch($controller);
@@ -64,7 +64,7 @@ class Controller extends PHPUnit_Framework_TestCase
     public function testProcessRequestForIndexPath()
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $controller = new BasicTestController();
         $routeMatch = new RouteMatch($controller);
@@ -81,7 +81,7 @@ class Controller extends PHPUnit_Framework_TestCase
     public function testProcessRequestForNonExistingPath()
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/notfound']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/notfound', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $controller = new BasicTestController();
         $routeMatch = new RouteMatch($controller, 'notfound');
