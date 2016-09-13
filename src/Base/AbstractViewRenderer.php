@@ -1,15 +1,16 @@
 <?php
 
-namespace BlueMvc\Core\Interfaces;
+namespace BlueMvc\Core\Base;
 
+use BlueMvc\Core\Interfaces\ViewRendererInterface;
 use DataTypes\Interfaces\FilePathInterface;
 
 /**
- * Interface for ViewRenderer class.
+ * Abstract class representing a view renderer.
  *
  * @since 1.0.0
  */
-interface ViewRendererInterface
+abstract class AbstractViewRenderer implements ViewRendererInterface
 {
     /**
      * Renders the view.
@@ -22,5 +23,5 @@ interface ViewRendererInterface
      *
      * @return string The rendered view.
      */
-    public function renderView(FilePathInterface $viewsDirectory, FilePathInterface $viewFile, $model = null);
+    abstract public function renderView(FilePathInterface $viewsDirectory, FilePathInterface $viewFile, $model = null);
 }
