@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * This file is a part of the bluemvc-core package.
+ *
+ * Read more at https://bluemvc.com/
+ */
 namespace BlueMvc\Core\Base;
 
 use BlueMvc\Core\Interfaces\ApplicationInterface;
@@ -10,10 +14,16 @@ use BlueMvc\Core\Interfaces\RouteMatchInterface;
 
 /**
  * Abstract class representing a controller.
+ *
+ * @since 1.0.0
  */
 abstract class AbstractController implements ControllerInterface
 {
     /**
+     * Returns the application if controller is processing, null otherwise.
+     *
+     * @since 1.0.0
+     *
      * @return ApplicationInterface|null The application if controller is processing, null otherwise.
      */
     public function getApplication()
@@ -22,6 +32,10 @@ abstract class AbstractController implements ControllerInterface
     }
 
     /**
+     * Returns the request if controller is processing, null otherwise.
+     *
+     * @since 1.0.0
+     *
      * @return RequestInterface|null The request if controller is processing, null otherwise.
      */
     public function getRequest()
@@ -30,6 +44,10 @@ abstract class AbstractController implements ControllerInterface
     }
 
     /**
+     * Returns the response if controller is processing, null otherwise.
+     *
+     * @since 1.0.0
+     *
      * @return ResponseInterface|null The response if controller is processing, null otherwise.
      */
     public function getResponse()
@@ -39,6 +57,8 @@ abstract class AbstractController implements ControllerInterface
 
     /**
      * Processes a request.
+     *
+     * @since 1.0.0
      *
      * @param ApplicationInterface $application The application.
      * @param RequestInterface     $request     The request.
@@ -58,6 +78,8 @@ abstract class AbstractController implements ControllerInterface
 
     /**
      * Try to invoke an action method.
+     *
+     * @since 1.0.0
      *
      * @param string $action     The action.
      * @param array  $parameters The parameters.

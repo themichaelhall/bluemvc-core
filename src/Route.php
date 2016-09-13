@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * This file is a part of the bluemvc-core package.
+ *
+ * Read more at https://bluemvc.com/
+ */
 namespace BlueMvc\Core;
 
 use BlueMvc\Core\Base\AbstractRoute;
@@ -8,11 +12,15 @@ use BlueMvc\Core\Interfaces\RequestInterface;
 
 /**
  * Class representing a route.
+ *
+ * @since 1.0.0
  */
 class Route extends AbstractRoute
 {
     /**
      * Constructs a route.
+     *
+     * @since 1.0.0
      *
      * @param string $path                The path.
      * @param string $controllerClassName The controller class name.
@@ -32,6 +40,10 @@ class Route extends AbstractRoute
     }
 
     /**
+     * Returns the controller class name.
+     *
+     * @since 1.0.0
+     *
      * @return string The controller class name.
      */
     public function getControllerClassName()
@@ -40,6 +52,10 @@ class Route extends AbstractRoute
     }
 
     /**
+     * Return the path.
+     *
+     * @since 1.0.0
+     *
      * @return string The path.
      */
     public function getPath()
@@ -49,6 +65,8 @@ class Route extends AbstractRoute
 
     /**
      * Check if a route matches a request.
+     *
+     * @since 1.0.0
      *
      * @param RequestInterface $request The request.
      *

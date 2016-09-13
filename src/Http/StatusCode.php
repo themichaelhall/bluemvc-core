@@ -1,306 +1,430 @@
 <?php
-
+/**
+ * This file is a part of the bluemvc-core package.
+ *
+ * Read more at https://bluemvc.com/
+ */
 namespace BlueMvc\Core\Http;
 
 use BlueMvc\Core\Interfaces\Http\StatusCodeInterface;
 
 /**
  * Class representing a http status code.
+ *
+ * @since 1.0.0
  */
 class StatusCode implements StatusCodeInterface
 {
     /**
      * Continue status code.
+     *
+     * @since 1.0.0
      */
     const CONTINUE_ = 100;
 
     /**
      * Switching Protocols status code.
+     *
+     * @since 1.0.0
      */
     const SWITCHING_PROTOCOLS = 101;
 
     /**
      * Processing status code.
+     *
+     * @since 1.0.0
      */
     const PROCESSING = 102;
 
     /**
      * OK status code.
+     *
+     * @since 1.0.0
      */
     const OK = 200;
 
     /**
      * Created status code.
+     *
+     * @since 1.0.0
      */
     const CREATED = 201;
 
     /**
      * Accepted status code.
+     *
+     * @since 1.0.0
      */
     const ACCEPTED = 202;
 
     /**
      * Non-Authoritative Information status code.
+     *
+     * @since 1.0.0
      */
     const NON_AUTHORITATIVE_INFORMATION = 203;
 
     /**
      * No Content status code.
+     *
+     * @since 1.0.0
      */
     const NO_CONTENT = 204;
 
     /**
      * Reset Content status code.
+     *
+     * @since 1.0.0
      */
     const RESET_CONTENT = 205;
 
     /**
      * Partial Content status code.
+     *
+     * @since 1.0.0
      */
     const PARTIAL_CONTENT = 206;
 
     /**
      * Multi Status status code.
+     *
+     * @since 1.0.0
      */
     const MULTI_STATUS = 207;
 
     /**
      * Already Reported status code.
+     *
+     * @since 1.0.0
      */
     const ALREADY_REPORTED = 208;
 
     /**
      * IM Used status code.
+     *
+     * @since 1.0.0
      */
     const IM_USED = 226;
 
     /**
      * Multiple Choices status code.
+     *
+     * @since 1.0.0
      */
     const MULTIPLE_CHOICES = 300;
 
     /**
      * Moved Permanently status code.
+     *
+     * @since 1.0.0
      */
     const MOVED_PERMANENTLY = 301;
 
     /**
      * Found status code.
+     *
+     * @since 1.0.0
      */
     const FOUND = 302;
 
     /**
      * See Other status code.
+     *
+     * @since 1.0.0
      */
     const SEE_OTHER = 303;
 
     /**
      * Not Modified status code.
+     *
+     * @since 1.0.0
      */
     const NOT_MODIFIED = 304;
 
     /**
      * Use Proxy status code.
+     *
+     * @since 1.0.0
      */
     const USE_PROXY = 305;
 
     /**
      * Temporary Redirect status code.
+     *
+     * @since 1.0.0
      */
     const TEMPORARY_REDIRECT = 307;
 
     /**
      * Permanent Redirect status code.
+     *
+     * @since 1.0.0
      */
     const PERMANENT_REDIRECT = 308;
 
     /**
      * Bad Request status code.
+     *
+     * @since 1.0.0
      */
     const BAD_REQUEST = 400;
 
     /**
      * Unauthorized status code.
+     *
+     * @since 1.0.0
      */
     const UNAUTHORIZED = 401;
 
     /**
      * Payment Required status code.
+     *
+     * @since 1.0.0
      */
     const PAYMENT_REQUIRED = 402;
 
     /**
      * Forbidden status code.
+     *
+     * @since 1.0.0
      */
     const FORBIDDEN = 403;
 
     /**
      * Not Found status code.
+     *
+     * @since 1.0.0
      */
     const NOT_FOUND = 404;
 
     /**
      * Method Not Allowed status code.
+     *
+     * @since 1.0.0
      */
     const METHOD_NOT_ALLOWED = 405;
 
     /**
      * Not Acceptable status code.
+     *
+     * @since 1.0.0
      */
     const NOT_ACCEPTABLE = 406;
 
     /**
      * Proxy Authentication Required status code.
+     *
+     * @since 1.0.0
      */
     const PROXY_AUTHENTICATION_REQUIRED = 407;
 
     /**
      * Request Timeout status code.
+     *
+     * @since 1.0.0
      */
     const REQUEST_TIMEOUT = 408;
 
     /**
      * Conflict status code.
+     *
+     * @since 1.0.0
      */
     const CONFLICT = 409;
 
     /**
      * Gone status code.
+     *
+     * @since 1.0.0
      */
     const GONE = 410;
 
     /**
      * Length Required status code.
+     *
+     * @since 1.0.0
      */
     const LENGTH_REQUIRED = 411;
 
     /**
      * Precondition Failed status code.
+     *
+     * @since 1.0.0
      */
     const PRECONDITION_FAILED = 412;
 
     /**
      * Payload Too Large status code.
+     *
+     * @since 1.0.0
      */
     const PAYLOAD_TOO_LARGE = 413;
 
     /**
      * URI Too Long status code.
+     *
+     * @since 1.0.0
      */
     const URI_TOO_LONG = 414;
 
     /**
      * Unsupported Media Type status code.
+     *
+     * @since 1.0.0
      */
     const UNSUPPORTED_MEDIA_TYPE = 415;
 
     /**
      * Range Not Satisfiable status code.
+     *
+     * @since 1.0.0
      */
     const RANGE_NOT_SATISFIABLE = 416;
 
     /**
      * Expectation Failed status code.
+     *
+     * @since 1.0.0
      */
     const EXPECTATION_FAILED = 417;
 
     /**
      * Misdirected Request status code.
+     *
+     * @since 1.0.0
      */
     const MISDIRECTED_REQUEST = 421;
 
     /**
      * Unprocessable Entity status code.
+     *
+     * @since 1.0.0
      */
     const UNPROCESSABLE_ENTITY = 422;
 
     /**
      * Locked status code.
+     *
+     * @since 1.0.0
      */
     const LOCKED = 423;
 
     /**
      * Failed Dependency status code.
+     *
+     * @since 1.0.0
      */
     const FAILED_DEPENDENCY = 424;
 
     /**
      * Upgrade Required status code.
+     *
+     * @since 1.0.0
      */
     const UPGRADE_REQUIRED = 426;
 
     /**
      * Precondition Required status code.
+     *
+     * @since 1.0.0
      */
     const PRECONDITION_REQUIRED = 428;
 
     /**
      * Too Many Requests status code.
+     *
+     * @since 1.0.0
      */
     const TOO_MANY_REQUESTS = 429;
 
     /**
      * Request Header Fields Too Large status code.
+     *
+     * @since 1.0.0
      */
     const REQUEST_HEADER_FIELDS_TOO_LARGE = 431;
 
     /**
      * Internal Server Error status code.
+     *
+     * @since 1.0.0
      */
     const INTERNAL_SERVER_ERROR = 500;
 
     /**
      * Not Implemented status code.
+     *
+     * @since 1.0.0
      */
     const NOT_IMPLEMENTED = 501;
 
     /**
      * Bad Gateway status code.
+     *
+     * @since 1.0.0
      */
     const BAD_GATEWAY = 502;
 
     /**
      * Service Unavailable status code.
+     *
+     * @since 1.0.0
      */
     const SERVICE_UNAVAILABLE = 503;
 
     /**
      * Gateway Timeout status code.
+     *
+     * @since 1.0.0
      */
     const GATEWAY_TIMEOUT = 504;
 
     /**
      * HTTP Version Not Supported status code.
+     *
+     * @since 1.0.0
      */
     const HTTP_VERSION_NOT_SUPPORTED = 505;
 
     /**
      * Variant Also Negotiates status code.
+     *
+     * @since 1.0.0
      */
     const VARIANT_ALSO_NEGOTIATES = 506;
 
     /**
      * Insufficient Storage status code.
+     *
+     * @since 1.0.0
      */
     const INSUFFICIENT_STORAGE = 507;
 
     /**
      * Loop Detected status code.
+     *
+     * @since 1.0.0
      */
     const LOOP_DETECTED = 508;
 
     /**
      * Not Extended status code.
+     *
+     * @since 1.0.0
      */
     const NOT_EXTENDED = 510;
 
     /**
      * Network Authentication Required status code.
+     *
+     * @since 1.0.0
      */
     const NETWORK_AUTHENTICATION_REQUIRED = 511;
 
     /**
      * Constructs a status code.
+     *
+     * @since 1.0.0
      *
      * @param int $code The code.
      */
@@ -314,6 +438,10 @@ class StatusCode implements StatusCodeInterface
     }
 
     /**
+     * Returns the code.
+     *
+     * @since 1.0.0
+     *
      * @return int The code.
      */
     public function getCode()
@@ -322,6 +450,10 @@ class StatusCode implements StatusCodeInterface
     }
 
     /**
+     * Returns the description.
+     *
+     * @since 1.0.0
+     *
      * @return string The description.
      */
     public function getDescription()
@@ -330,6 +462,10 @@ class StatusCode implements StatusCodeInterface
     }
 
     /**
+     * Returns the status code as as string.
+     *
+     * @since 1.0.0
+     *
      * @return string The status code as a string.
      */
     public function __toString()

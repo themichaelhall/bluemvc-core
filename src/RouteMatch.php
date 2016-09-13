@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * This file is a part of the bluemvc-core package.
+ *
+ * Read more at https://bluemvc.com/
+ */
 namespace BlueMvc\Core;
 
 use BlueMvc\Core\Interfaces\ControllerInterface;
@@ -7,11 +11,15 @@ use BlueMvc\Core\Interfaces\RouteMatchInterface;
 
 /**
  * Class representing a route match.
+ *
+ * @since 1.0.0
  */
 class RouteMatch implements RouteMatchInterface
 {
     /**
      * Constructs a route match.
+     *
+     * @since 1.0.0
      *
      * @param ControllerInterface $controller The controller.
      * @param string              $action     The action.
@@ -27,6 +35,10 @@ class RouteMatch implements RouteMatchInterface
     }
 
     /**
+     * Returns the action.
+     *
+     * @since 1.0.0
+     *
      * @return string The action.
      */
     public function getAction()
@@ -35,6 +47,10 @@ class RouteMatch implements RouteMatchInterface
     }
 
     /**
+     * Returns the controller.
+     *
+     * @since 1.0.0
+     *
      * @return ControllerInterface The controller.
      */
     public function getController()
@@ -43,6 +59,10 @@ class RouteMatch implements RouteMatchInterface
     }
 
     /**
+     * Returns the parameters.
+     *
+     * @since 1.0.0
+     *
      * @return string[] The parameters.
      */
     public function getParameters()

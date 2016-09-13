@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * This file is a part of the bluemvc-core package.
+ *
+ * Read more at https://bluemvc.com/
+ */
 namespace BlueMvc\Core;
 
 use BlueMvc\Core\Base\AbstractController;
@@ -10,11 +14,15 @@ use BlueMvc\Core\Interfaces\RouteMatchInterface;
 
 /**
  * Class representing a standard controller.
+ *
+ * @since 1.0.0
  */
 abstract class Controller extends AbstractController
 {
     /**
      * Processes a request.
+     *
+     * @since 1.0.0
      *
      * @param ApplicationInterface $application The application.
      * @param RequestInterface     $request     The request.

@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * This file is a part of the bluemvc-core package.
+ *
+ * Read more at https://bluemvc.com/
+ */
 namespace BlueMvc\Core\Base;
 
 use BlueMvc\Core\Http\StatusCode;
@@ -12,11 +16,15 @@ use DataTypes\Interfaces\FilePathInterface;
 
 /**
  * Abstract class representing a BlueMvc main application.
+ *
+ * @since 1.0.0
  */
 abstract class AbstractApplication implements ApplicationInterface
 {
     /**
      * Constructs the application.
+     *
+     * @since 1.0.0
      *
      * @param FilePathInterface $documentRoot The document root.
      */
@@ -30,6 +38,8 @@ abstract class AbstractApplication implements ApplicationInterface
     /**
      * Adds a route to the application.
      *
+     * @since 1.0.0
+     *
      * @param RouteInterface $route The route.
      */
     public function addRoute(RouteInterface $route)
@@ -40,7 +50,7 @@ abstract class AbstractApplication implements ApplicationInterface
     /**
      * Adds a view renderer to the application.
      *
-     * @version 1.0.0
+     * @since 1.0.0
      *
      * @param ViewRendererInterface $viewRenderer The view renderer.
      */
@@ -50,7 +60,11 @@ abstract class AbstractApplication implements ApplicationInterface
     }
 
     /**
-     * @return FilePathInterface|null The document root.
+     * Returns the document root or null if no document root is set.
+     *
+     * @since 1.0.0
+     *
+     * @return FilePathInterface|null The document root or null if no document root is set.
      */
     public function getDocumentRoot()
     {
@@ -58,7 +72,9 @@ abstract class AbstractApplication implements ApplicationInterface
     }
 
     /**
-     * @version 1.0.0
+     * Returns the view renderers.
+     *
+     * @since 1.0.0
      *
      * @return ViewRendererInterface[] The view renderers.
      */
@@ -69,6 +85,8 @@ abstract class AbstractApplication implements ApplicationInterface
 
     /**
      * Runs a request in the application.
+     *
+     * @since 1.0.0
      *
      * @param RequestInterface  $request  The request.
      * @param ResponseInterface $response The response.
@@ -97,6 +115,8 @@ abstract class AbstractApplication implements ApplicationInterface
 
     /**
      * Sets the document root.
+     *
+     * @since 1.0.0
      *
      * @param FilePathInterface $documentRoot The document root.
      */

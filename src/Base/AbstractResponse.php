@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * This file is a part of the bluemvc-core package.
+ *
+ * Read more at https://bluemvc.com/
+ */
 namespace BlueMvc\Core\Base;
 
 use BlueMvc\Core\Http\StatusCode;
@@ -9,11 +13,15 @@ use BlueMvc\Core\Interfaces\ResponseInterface;
 
 /**
  * Abstract class representing a web response.
+ *
+ * @since 1.0.0
  */
 abstract class AbstractResponse implements ResponseInterface
 {
     /**
      * Constructs a response.
+     *
+     * @since 1.0.0
      *
      * @param RequestInterface $request The request.
      */
@@ -25,6 +33,10 @@ abstract class AbstractResponse implements ResponseInterface
     }
 
     /**
+     * Returns the content.
+     *
+     * @since 1.0.0
+     *
      * @return string The content.
      */
     public function getContent()
@@ -33,6 +45,10 @@ abstract class AbstractResponse implements ResponseInterface
     }
 
     /**
+     * Returns the request.
+     *
+     * @since 1.0.0
+     *
      * @return RequestInterface The request.
      */
     public function getRequest()
@@ -41,6 +57,10 @@ abstract class AbstractResponse implements ResponseInterface
     }
 
     /**
+     * Returns the status code.
+     *
+     * @since 1.0.0
+     *
      * @return StatusCodeInterface The status code.
      */
     public function getStatusCode()
@@ -51,6 +71,8 @@ abstract class AbstractResponse implements ResponseInterface
     /**
      * Sets the content.
      *
+     * @since 1.0.0
+     *
      * @param string $content The content.
      */
     public function setContent($content)
@@ -60,6 +82,8 @@ abstract class AbstractResponse implements ResponseInterface
 
     /**
      * Sets the status code.
+     *
+     * @since 1.0.0
      *
      * @param StatusCodeInterface $statusCode The status code.
      */

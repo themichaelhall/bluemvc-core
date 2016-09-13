@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * This file is a part of the bluemvc-core package.
+ *
+ * Read more at https://bluemvc.com/
+ */
 namespace BlueMvc\Core;
 
 use BlueMvc\Core\Base\AbstractRequest;
@@ -8,11 +12,15 @@ use DataTypes\Url;
 
 /**
  * Class representing a web request.
+ *
+ * @since 1.0.0
  */
 class Request extends AbstractRequest
 {
     /**
      * Constructs the request.
+     *
+     * @since 1.0.0
      *
      * @param array|null $serverVars The server array or null to use the global $_SERVER array.
      */

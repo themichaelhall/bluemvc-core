@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * This file is a part of the bluemvc-core package.
+ *
+ * Read more at https://bluemvc.com/
+ */
 namespace BlueMvc\Core\Base;
 
 use BlueMvc\Core\Exceptions\RouteInvalidArgumentException;
@@ -8,11 +12,15 @@ use BlueMvc\Core\Interfaces\RouteInterface;
 
 /**
  * Abstract class representing a route.
+ *
+ * @since 1.0.0
  */
 abstract class AbstractRoute implements RouteInterface
 {
     /**
      * Try to create a controller class.
+     *
+     * @since 1.0.0
      *
      * @param string $controllerClassName The controller class name.
      *

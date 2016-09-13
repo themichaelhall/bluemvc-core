@@ -1,16 +1,24 @@
 <?php
-
+/**
+ * This file is a part of the bluemvc-core package.
+ *
+ * Read more at https://bluemvc.com/
+ */
 namespace BlueMvc\Core\Http;
 
 use BlueMvc\Core\Interfaces\Http\MethodInterface;
 
 /**
  * Class representing a http method.
+ *
+ * @since 1.0.0
  */
 class Method implements MethodInterface
 {
     /**
      * Method constructor.
+     *
+     * @since 1.0.0
      *
      * @param string $name The method name.
      */
@@ -23,6 +31,10 @@ class Method implements MethodInterface
     }
 
     /**
+     * Returns the method name.
+     *
+     * @since 1.0.0
+     *
      * @return string The method name.
      */
     public function getName()
@@ -31,7 +43,11 @@ class Method implements MethodInterface
     }
 
     /**
-     * @return true if this is a DELETE method, false otherwise.
+     * Returns true if this is a DELETE method, false otherwise.
+     *
+     * @since 1.0.0
+     *
+     * @return bool True if this is a DELETE method, false otherwise.
      */
     public function isDelete()
     {
@@ -39,7 +55,11 @@ class Method implements MethodInterface
     }
 
     /**
-     * @return true if this is a GET method, false otherwise.
+     * Returns true if this is a GET method, false otherwise.
+     *
+     * @since 1.0.0
+     *
+     * @return bool True if this is a GET method, false otherwise.
      */
     public function isGet()
     {
@@ -47,7 +67,11 @@ class Method implements MethodInterface
     }
 
     /**
-     * @return true if this is a POST method, false otherwise.
+     * Returns true if this is a POST method, false otherwise.
+     *
+     * @since 1.0.0
+     *
+     * @return bool True if this is a POST method, false otherwise.
      */
     public function isPost()
     {
@@ -55,7 +79,11 @@ class Method implements MethodInterface
     }
 
     /**
-     * @return true if this is a PUT method, false otherwise.
+     * Returns true if this is a PUT method, false otherwise.
+     *
+     * @since 1.0.0
+     *
+     * @return bool True if this is a PUT method, false otherwise.
      */
     public function isPut()
     {
@@ -63,6 +91,10 @@ class Method implements MethodInterface
     }
 
     /**
+     * Returns the method as a string.
+     *
+     * @since 1.0.0
+     *
      * @return string The method as a string.
      */
     public function __toString()

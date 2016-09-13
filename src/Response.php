@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * This file is a part of the bluemvc-core package.
+ *
+ * Read more at https://bluemvc.com/
+ */
 namespace BlueMvc\Core;
 
 use BlueMvc\Core\Base\AbstractResponse;
@@ -7,11 +11,15 @@ use BlueMvc\Core\Interfaces\RequestInterface;
 
 /**
  * Class representing a web response.
+ *
+ * @since 1.0.0
  */
 class Response extends AbstractResponse
 {
     /**
      * Constructs a response.
+     *
+     * @since 1.0.0
      *
      * @param RequestInterface $request The request.
      */
@@ -22,6 +30,8 @@ class Response extends AbstractResponse
 
     /**
      * Outputs the content.
+     *
+     * @since 1.0.0
      */
     public function output()
     {
