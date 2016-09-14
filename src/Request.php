@@ -35,7 +35,7 @@ class Request extends AbstractRequest
             Url::fromParts(
                 Scheme::parse('http' . (isset($this->myServerVars['HTTPS']) && $this->myServerVars['HTTPS'] !== '' ? 's' : '')),
                 Host::parse($this->myServerVars['HTTP_HOST']),
-                (int)$this->myServerVars['SERVER_PORT'],
+                intval($this->myServerVars['SERVER_PORT']),
                 UrlPath::parse($this->myServerVars['REQUEST_URI']),
                 isset($this->myServerVars['QUERY_STRING']) ? $this->myServerVars['QUERY_STRING'] : null),
             new Method($this->myServerVars['REQUEST_METHOD'])
