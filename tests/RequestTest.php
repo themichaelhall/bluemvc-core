@@ -43,6 +43,24 @@ class RequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test getUrl method with query string.
+     */
+    public function testGetUrlWithQueryString()
+    {
+        $request = new Request(
+            [
+                'HTTP_HOST'      => 'www.domain.com',
+                'SERVER_PORT'    => '8080',
+                'REQUEST_URI'    => '/foo/bar',
+                'REQUEST_METHOD' => 'GET',
+                'QUERY_STRING'   => 'baz=true',
+            ]
+        );
+
+        $this->assertSame('http://www.domain.com:8080/foo/bar?baz=true', $request->getUrl()->__toString());
+    }
+
+    /**
      * Test getMethod method.
      */
     public function testGetMethod()

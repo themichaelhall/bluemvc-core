@@ -8,7 +8,10 @@ namespace BlueMvc\Core;
 
 use BlueMvc\Core\Base\AbstractRequest;
 use BlueMvc\Core\Http\Method;
+use DataTypes\Host;
+use DataTypes\Scheme;
 use DataTypes\Url;
+use DataTypes\UrlPath;
 
 /**
  * Class representing a web request.
@@ -28,9 +31,15 @@ class Request extends AbstractRequest
     {
         $this->myServerVars = $serverVars !== null ? $serverVars : $_SERVER;
 
-        // fixme: Use fromParts method for Url
-        // fixme: Handle query string
-        parent::__construct(Url::parse('http' . (isset($this->myServerVars['HTTPS']) && $this->myServerVars['HTTPS'] !== '' ? 's' : '') . '://' . $this->myServerVars['HTTP_HOST'] . ':' . $this->myServerVars['SERVER_PORT'] . $this->myServerVars['REQUEST_URI']), new Method($this->myServerVars['REQUEST_METHOD']));
+        parent::__construct(
+            Url::fromParts(
+                Scheme::parse('http' . (isset($this->myServerVars['HTTPS']) && $this->myServerVars['HTTPS'] !== '' ? 's' : '')),
+                Host::parse($this->myServerVars['HTTP_HOST']),
+                (int)$this->myServerVars['SERVER_PORT'],
+                UrlPath::parse($this->myServerVars['REQUEST_URI']),
+                isset($this->myServerVars['QUERY_STRING']) ? $this->myServerVars['QUERY_STRING'] : null),
+            new Method($this->myServerVars['REQUEST_METHOD'])
+        );
     }
 
     /**
