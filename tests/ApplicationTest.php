@@ -31,6 +31,16 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test getViewPath method.
+     */
+    public function testGetViewPath()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+
+        $this->assertSame($DS . 'var' . $DS . 'www' . $DS, $this->myApplication->getViewPath()->__toString());
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
