@@ -12,11 +12,35 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
     /**
      * Test getViewPath method.
      */
-    public function testGetViewPathMethod()
+    public function testGetViewPath()
     {
         $DS = DIRECTORY_SEPARATOR;
 
         $this->assertSame($DS . 'var' . $DS . 'www' . $DS, $this->myApplication->getViewPath()->__toString());
+    }
+
+    /**
+     * Test setViewPath method with absolute path.
+     */
+    public function testSetViewPathWithAbsolutePath()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+
+        $this->myApplication->setViewPath(FilePath::parse($DS . 'bluemvc' . $DS . 'html' . $DS));
+
+        $this->assertSame($DS . 'bluemvc' . $DS . 'html' . $DS, $this->myApplication->getViewPath()->__toString());
+    }
+
+    /**
+     * Test setViewPath method with relative path.
+     */
+    public function testSetViewPathWithRelativePath()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+
+        $this->myApplication->setViewPath(FilePath::parse('..' . $DS . 'bluemvc' . $DS . 'html' . $DS));
+
+        $this->assertSame($DS . 'var' . $DS . 'bluemvc' . $DS . 'html' . $DS, $this->myApplication->getViewPath()->__toString());
     }
 
     /**

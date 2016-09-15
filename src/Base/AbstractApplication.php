@@ -33,6 +33,7 @@ abstract class AbstractApplication implements ApplicationInterface
         $this->setDocumentRoot($documentRoot);
         $this->myRoutes = [];
         $this->myViewRenderers = [];
+        $this->myViewPath = null;
     }
 
     /**
@@ -72,6 +73,22 @@ abstract class AbstractApplication implements ApplicationInterface
     }
 
     /**
+     * Returns The view files path.
+     *
+     * @since 1.0.0
+     *
+     * @return FilePathInterface The view files path.
+     */
+    public function getViewPath()
+    {
+        if ($this->myViewPath === null) {
+            return $this->myDocumentRoot;
+        }
+
+        return $this->myViewPath;
+    }
+
+    /**
      * Returns the view renderers.
      *
      * @since 1.0.0
@@ -84,15 +101,15 @@ abstract class AbstractApplication implements ApplicationInterface
     }
 
     /**
-     * Returns The view files path.
+     * Sets the view files path.
      *
      * @since 1.0.0
      *
-     * @return FilePathInterface The view files path.
+     * @param FilePathInterface $viewPath The view files path.
      */
-    public function getViewPath()
+    public function setViewPath(FilePathInterface $viewPath)
     {
-        return $this->myDocumentRoot;
+        $this->myViewPath = $this->myDocumentRoot->withFilePath($viewPath);
     }
 
     /**
@@ -146,6 +163,11 @@ abstract class AbstractApplication implements ApplicationInterface
      * @var RouteInterface[] My routes.
      */
     private $myRoutes;
+
+    /**
+     * @var FilePathInterface My view files path.
+     */
+    private $myViewPath;
 
     /**
      * @var ViewRendererInterface[] My view renderers.

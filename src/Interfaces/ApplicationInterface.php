@@ -69,4 +69,13 @@ interface ApplicationInterface
      * @param ResponseInterface $response The response.
      */
     public function run(RequestInterface $request, ResponseInterface $response);
+
+    /**
+     * Sets the view files path.
+     *
+     * @since 1.0.0
+     *
+     * @param FilePathInterface $viewPath The view files path.
+     */
+    public function setViewPath(FilePathInterface $viewPath);
 }
