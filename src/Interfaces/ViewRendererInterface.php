@@ -27,4 +27,13 @@ interface ViewRendererInterface
      * @return string The rendered view.
      */
     public function renderView(FilePathInterface $viewsDirectory, FilePathInterface $viewFile, $model = null);
+
+    /**
+     * Returns the file extension for views compatible with this renderer.
+     *
+     * @since 1.0.0
+     *
+     * @return string The file extension for views compatible with this renderer.
+     */
+    public function getViewFileExtension();
 }

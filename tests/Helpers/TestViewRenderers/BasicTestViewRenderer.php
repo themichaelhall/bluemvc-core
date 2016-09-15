@@ -9,6 +9,14 @@ use DataTypes\Interfaces\FilePathInterface;
 class BasicTestViewRenderer extends AbstractViewRenderer
 {
     /**
+     * Constructs the view renderer.
+     */
+    public function __construct()
+    {
+        parent::__construct('view');
+    }
+
+    /**
      * Renders the view.
      *
      * @param FilePathInterface $viewsDirectory The views directory.

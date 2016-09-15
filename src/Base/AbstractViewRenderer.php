@@ -17,6 +17,31 @@ use DataTypes\Interfaces\FilePathInterface;
 abstract class AbstractViewRenderer implements ViewRendererInterface
 {
     /**
+     * Constructs the view renderer.
+     *
+     * @since 1.0.0
+     *
+     * @param string $viewFileExtension The view file extension for views compatible with this renderer.
+     */
+    public function __construct($viewFileExtension)
+    {
+        // fixme: Validate $getViewFileExtension
+        $this->myViewFileExtension = $viewFileExtension;
+    }
+
+    /**
+     * Returns the file extension for views compatible with this renderer.
+     *
+     * @since 1.0.0
+     *
+     * @return string The file extension for views compatible with this renderer.
+     */
+    public function getViewFileExtension()
+    {
+        return $this->myViewFileExtension;
+    }
+
+    /**
      * Renders the view.
      *
      * @since 1.0.0
@@ -28,4 +53,9 @@ abstract class AbstractViewRenderer implements ViewRendererInterface
      * @return string The rendered view.
      */
     abstract public function renderView(FilePathInterface $viewsDirectory, FilePathInterface $viewFile, $model = null);
+
+    /**
+     * @var string My file extension for views compatible with this renderer.
+     */
+    private $myViewFileExtension;
 }
