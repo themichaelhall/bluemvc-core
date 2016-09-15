@@ -52,6 +52,15 @@ interface ApplicationInterface
     public function getViewRenderers();
 
     /**
+     * Returns The view files path.
+     *
+     * @since 1.0.0
+     *
+     * @return FilePathInterface The view files path.
+     */
+    public function getViewPath();
+
+    /**
      * Runs a request in the application.
      *
      * @since 1.0.0
