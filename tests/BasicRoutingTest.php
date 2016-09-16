@@ -127,6 +127,24 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test get view with view data page.
+     */
+    public function testGetViewWithViewDataPage()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/view/withviewdata', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        $this->assertSame('<html><body><h1>With model and view data</h1><p>This is the model.</p><i>This is the view data.</i></body></html>', $responseOutput);
+        $this->assertSame('<html><body><h1>With model and view data</h1><p>This is the model.</p><i>This is the view data.</i></body></html>', $response->getContent());
+        $this->assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
+        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

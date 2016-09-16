@@ -27,4 +27,16 @@ class ViewTestController extends Controller
     {
         return new View('This is the model.');
     }
+
+    /**
+     * Action with view data.
+     *
+     * @return View The view.
+     */
+    public function withviewdataAction()
+    {
+        $this->setViewData('Foo', 'This is the view data.');
+
+        return new View('This is the model.');
+    }
 }

@@ -22,11 +22,12 @@ interface ViewRendererInterface
      *
      * @param FilePathInterface $viewsDirectory The views directory.
      * @param FilePathInterface $viewFile       The view file.
-     * @param mixed|null        $model          The model or null if there is no model.
+     * @param mixed             $model          The model or null if there is no model.
+     * @param mixed             $viewData       The view data or null if there is no view data.
      *
      * @return string The rendered view.
      */
-    public function renderView(FilePathInterface $viewsDirectory, FilePathInterface $viewFile, $model = null);
+    public function renderView(FilePathInterface $viewsDirectory, FilePathInterface $viewFile, $model = null, $viewData = null);
 
     /**
      * Returns the file extension for views compatible with this renderer.

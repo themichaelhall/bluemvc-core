@@ -89,7 +89,7 @@ abstract class Controller extends AbstractController
                     $fullViewFile = $application->getViewPath()->withFilePath($viewFile);
 
                     if (file_exists($fullViewFile->__toString())) {
-                        $response->setContent($viewRenderer->renderView($application->getViewPath(), $viewFile, $result->getModel()));
+                        $response->setContent($viewRenderer->renderView($application->getViewPath(), $viewFile, $result->getModel(), $this->myViewData));
 
                         break;
                     }
