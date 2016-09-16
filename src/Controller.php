@@ -22,6 +22,16 @@ use DataTypes\FilePath;
 abstract class Controller extends AbstractController
 {
     /**
+     * Constructs the controller.
+     *
+     * @since 1.0.0
+     */
+    public function __construct()
+    {
+        $this->myViewData = [];
+    }
+
+    /**
      * Returns the view data for a key or null if view data for the key is not set.
      *
      * @since 1.0.0
@@ -32,7 +42,13 @@ abstract class Controller extends AbstractController
      */
     public function getViewData($key)
     {
-        return null;
+        assert(is_string($key), '$key is not a string');
+
+        if (!isset($this->myViewData[$key])) {
+            return null;
+        }
+
+        return $this->myViewData[$key];
     }
 
     /**
@@ -87,4 +103,24 @@ abstract class Controller extends AbstractController
 
         return false;
     }
+
+    /**
+     * Sets the view data for a key.
+     *
+     * @since 1.0.0
+     *
+     * @param string $key   The key.
+     * @param mixed  $value The value.
+     */
+    public function setViewData($key, $value)
+    {
+        assert(is_string($key), '$key is not a string');
+
+        $this->myViewData[$key] = $value;
+    }
+
+    /**
+     * @var array My view data.
+     */
+    private $myViewData;
 }

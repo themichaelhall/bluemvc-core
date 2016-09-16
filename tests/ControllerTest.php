@@ -102,4 +102,16 @@ class Controller extends PHPUnit_Framework_TestCase
         $this->assertNull($controller->getViewData('Foo'));
         $this->assertNull($controller->getViewData('Bar'));
     }
+
+    /**
+     * Test setViewData method.
+     */
+    public function testSetViewData()
+    {
+        $controller = new BasicTestController();
+        $controller->setViewData('Foo', 42);
+
+        $this->assertSame(42, $controller->getViewData('Foo'));
+        $this->assertNull($controller->getViewData('Bar'));
+    }
 }
