@@ -11,6 +11,8 @@ use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
 use BlueMvc\Core\Interfaces\RouteMatchInterface;
+use BlueMvc\Core\Interfaces\ViewInterface;
+use DataTypes\FilePath;
 
 /**
  * Class representing a standard controller.
@@ -41,7 +43,30 @@ abstract class Controller extends AbstractController
         }
 
         if ($this->tryInvokeActionMethod($action, [], $result)) {
-            $response->setContent($result);
+            if ($result instanceof ViewInterface) {
+                // A view was returned. Figure out the path to the view file(s) to try.
+                $controllerName = (new \ReflectionClass($this))->getShortName();
+                if (strlen($controllerName) > 10 && substr(strtolower($controllerName), -10) === 'controller') {
+                    $controllerName = substr($controllerName, 0, -10);
+                }
+
+                $actionName = $action; // fixme: validate characters
+
+                // Try the view renderers until a match is found.
+                // fixme: Exception if no view renderers are found.
+                foreach ($application->getViewRenderers() as $viewRenderer) {
+                    $viewFile = FilePath::parse($controllerName . DIRECTORY_SEPARATOR . $actionName . '.' . $viewRenderer->getViewFileExtension());
+                    $fullViewFile = $application->getViewPath()->withFilePath($viewFile);
+
+                    if (file_exists($fullViewFile->__toString())) {
+                        $response->setContent($viewRenderer->renderView($application->getViewPath(), $viewFile, $result->getModel()));
+
+                        break;
+                    }
+                }
+            } else {
+                $response->setContent($result);
+            }
 
             return true;
         }

@@ -17,24 +17,24 @@ class ViewRendererTest extends PHPUnit_Framework_TestCase
         $viewRenderer = new BasicTestViewRenderer();
         $result = $viewRenderer->renderView(
             FilePath::parse(__DIR__ . DIRECTORY_SEPARATOR . 'Helpers' . DIRECTORY_SEPARATOR . 'TestViews' . DIRECTORY_SEPARATOR),
-            FilePath::parse('basic.view')
+            FilePath::parse('ViewTest' . DIRECTORY_SEPARATOR . 'index.view')
         );
 
-        $this->assertSame('<html><body><h1></h1></body></html>', $result);
+        $this->assertSame('<html><body><h1>Index</h1></body></html>', $result);
     }
 
     /**
      * Test renderView method with model.
      */
-    public function testRenderViewEmptyModel()
+    public function testRenderViewWithModel()
     {
         $viewRenderer = new BasicTestViewRenderer();
         $result = $viewRenderer->renderView(
             FilePath::parse(__DIR__ . DIRECTORY_SEPARATOR . 'Helpers' . DIRECTORY_SEPARATOR . 'TestViews' . DIRECTORY_SEPARATOR),
-            FilePath::parse('basic.view'),
-            'This is the model'
+            FilePath::parse('ViewTest' . DIRECTORY_SEPARATOR . 'withmodel.view'),
+            'This is the model.'
         );
 
-        $this->assertSame('<html><body><h1>This is the model</h1></body></html>', $result);
+        $this->assertSame('<html><body><h1>With model</h1><p>This is the model.</p></body></html>', $result);
     }
 }
