@@ -22,6 +22,20 @@ use DataTypes\FilePath;
 abstract class Controller extends AbstractController
 {
     /**
+     * Returns the view data for a key or null if view data for the key is not set.
+     *
+     * @since 1.0.0
+     *
+     * @param string $key The key.
+     *
+     * @return mixed The view data for a key or null if view data for the key is not set.
+     */
+    public function getViewData($key)
+    {
+        return null;
+    }
+
+    /**
      * Processes a request.
      *
      * @since 1.0.0

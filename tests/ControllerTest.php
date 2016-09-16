@@ -91,4 +91,15 @@ class Controller extends PHPUnit_Framework_TestCase
         $this->assertSame('', $response->getContent());
         $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
+
+    /**
+     * Test getViewData method.
+     */
+    public function testGetViewData()
+    {
+        $controller = new BasicTestController();
+
+        $this->assertNull($controller->getViewData('Foo'));
+        $this->assertNull($controller->getViewData('Bar'));
+    }
 }
