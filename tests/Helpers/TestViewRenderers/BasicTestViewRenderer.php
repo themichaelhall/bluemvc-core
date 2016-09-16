@@ -36,7 +36,7 @@ class BasicTestViewRenderer extends AbstractViewRenderer
             ],
             [
                 $model !== null ? $model : '',
-                $viewData !== null ? (is_array($viewData) ? join(',', $viewData) : $viewData) : '',
+                $viewData !== null ? (is_array($viewData) ? implode(',', $viewData) : $viewData) : '',
             ], $fileContent);
 
         return $result;
