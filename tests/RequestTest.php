@@ -43,6 +43,23 @@ class RequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test getUrl method with empty query string.
+     */
+    public function testGetUrlWithEmptyQueryString()
+    {
+        $request = new Request(
+            [
+                'HTTP_HOST'      => 'www.domain.com',
+                'SERVER_PORT'    => '8080',
+                'REQUEST_URI'    => '/foo/bar?',
+                'REQUEST_METHOD' => 'GET',
+            ]
+        );
+
+        $this->assertSame('http://www.domain.com:8080/foo/bar?', $request->getUrl()->__toString());
+    }
+
+    /**
      * Test getUrl method with query string.
      */
     public function testGetUrlWithQueryString()
@@ -51,9 +68,8 @@ class RequestTest extends PHPUnit_Framework_TestCase
             [
                 'HTTP_HOST'      => 'www.domain.com',
                 'SERVER_PORT'    => '8080',
-                'REQUEST_URI'    => '/foo/bar',
+                'REQUEST_URI'    => '/foo/bar?baz=true',
                 'REQUEST_METHOD' => 'GET',
-                'QUERY_STRING'   => 'baz=true',
             ]
         );
 

@@ -31,13 +31,15 @@ class Request extends AbstractRequest
     {
         $this->myServerVars = $serverVars !== null ? $serverVars : $_SERVER;
 
+        $uriParts = explode('?', $this->myServerVars['REQUEST_URI'], 2);
+
         parent::__construct(
             Url::fromParts(
                 Scheme::parse('http' . (isset($this->myServerVars['HTTPS']) && $this->myServerVars['HTTPS'] !== '' ? 's' : '')),
                 Host::parse($this->myServerVars['HTTP_HOST']),
                 intval($this->myServerVars['SERVER_PORT']),
-                UrlPath::parse($this->myServerVars['REQUEST_URI']),
-                isset($this->myServerVars['QUERY_STRING']) ? $this->myServerVars['QUERY_STRING'] : null),
+                UrlPath::parse($uriParts[0]),
+                count($uriParts) > 1 ? $uriParts[1] : null),
             new Method($this->myServerVars['REQUEST_METHOD'])
         );
     }
