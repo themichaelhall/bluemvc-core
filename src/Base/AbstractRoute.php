@@ -6,7 +6,7 @@
  */
 namespace BlueMvc\Core\Base;
 
-use BlueMvc\Core\Exceptions\RouteInvalidArgumentException;
+use BlueMvc\Core\Exceptions\InvalidControllerClassException;
 use BlueMvc\Core\Interfaces\ControllerInterface;
 use BlueMvc\Core\Interfaces\RouteInterface;
 
@@ -24,7 +24,7 @@ abstract class AbstractRoute implements RouteInterface
      *
      * @param string $controllerClassName The controller class name.
      *
-     * @throws RouteInvalidArgumentException If the $controllerClassName parameter is invalid.
+     * @throws InvalidControllerClassException If the $controllerClassName parameter is invalid.
      *
      * @return ControllerInterface The controller class.
      */
@@ -34,10 +34,10 @@ abstract class AbstractRoute implements RouteInterface
             $controllerClass = new \ReflectionClass($controllerClassName);
 
             if (!$controllerClass->implementsInterface(ControllerInterface::class)) {
-                throw new RouteInvalidArgumentException('Controller class "' . $controllerClassName . '" does not implement "' . ControllerInterface::class . '".');
+                throw new InvalidControllerClassException('Controller class "' . $controllerClassName . '" does not implement "' . ControllerInterface::class . '".');
             }
         } catch (\ReflectionException $e) {
-            throw new RouteInvalidArgumentException('Controller class "' . $controllerClassName . '" does not exist.');
+            throw new InvalidControllerClassException('Controller class "' . $controllerClassName . '" does not exist.');
         }
 
         /** @noinspection PhpIncompatibleReturnTypeInspection */

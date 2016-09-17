@@ -22,7 +22,7 @@ class DefaultRouteTest extends PHPUnit_Framework_TestCase
     /**
      * Test that non existing controller class name is invalid.
      *
-     * @expectedException BlueMvc\Core\Exceptions\RouteInvalidArgumentException
+     * @expectedException BlueMvc\Core\Exceptions\InvalidControllerClassException
      * @expectedExceptionMessage Controller class "NonExistingClassName" does not exist.
      */
     public function testNonExistingControllerClassNameIsInvalid()
@@ -34,7 +34,7 @@ class DefaultRouteTest extends PHPUnit_Framework_TestCase
     /**
      * Test that class not implementing ControllerInterface is invalid.
      *
-     * @expectedException BlueMvc\Core\Exceptions\RouteInvalidArgumentException
+     * @expectedException BlueMvc\Core\Exceptions\InvalidControllerClassException
      * @expectedExceptionMessage Controller class "DefaultRouteTest" does not implement "BlueMvc\Core\Interfaces\ControllerInterface".
      */
     public function testControllerClassNotImplementingControllerInterfaceIsInvalid()

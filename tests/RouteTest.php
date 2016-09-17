@@ -23,7 +23,7 @@ class RouteTest extends PHPUnit_Framework_TestCase
     /**
      * Test that invalid path is invalid.
      *
-     * @expectedException BlueMvc\Core\Exceptions\RouteInvalidArgumentException
+     * @expectedException BlueMvc\Core\Exceptions\InvalidRoutePathException
      * @expectedExceptionMessage Path "Foo/Bar" contains invalid character "/".
      */
     public function testInvalidPathIsInvalid()
@@ -43,7 +43,7 @@ class RouteTest extends PHPUnit_Framework_TestCase
     /**
      * Test that non existing controller class name is invalid.
      *
-     * @expectedException BlueMvc\Core\Exceptions\RouteInvalidArgumentException
+     * @expectedException BlueMvc\Core\Exceptions\InvalidControllerClassException
      * @expectedExceptionMessage Controller class "NonExistingClassName" does not exist.
      */
     public function testNonExistingControllerClassNameIsInvalid()
@@ -55,7 +55,7 @@ class RouteTest extends PHPUnit_Framework_TestCase
     /**
      * Test that class not implementing ControllerInterface is invalid.
      *
-     * @expectedException BlueMvc\Core\Exceptions\RouteInvalidArgumentException
+     * @expectedException BlueMvc\Core\Exceptions\InvalidControllerClassException
      * @expectedExceptionMessage Controller class "RouteTest" does not implement "BlueMvc\Core\Interfaces\ControllerInterface".
      */
     public function testControllerClassNotImplementingControllerInterfaceIsInvalid()

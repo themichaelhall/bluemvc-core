@@ -7,7 +7,8 @@
 namespace BlueMvc\Core;
 
 use BlueMvc\Core\Base\AbstractRoute;
-use BlueMvc\Core\Exceptions\RouteInvalidArgumentException;
+use BlueMvc\Core\Exceptions\InvalidControllerClassException;
+use BlueMvc\Core\Exceptions\InvalidRoutePathException;
 use BlueMvc\Core\Interfaces\RequestInterface;
 
 /**
@@ -25,7 +26,8 @@ class Route extends AbstractRoute
      * @param string $path                The path.
      * @param string $controllerClassName The controller class name.
      *
-     * @throws RouteInvalidArgumentException If any of the parameters are invalid.
+     * @throws InvalidControllerClassException If the controller class name is invalid.
+     * @throws InvalidRoutePathException If the path is invalid.
      */
     public function __construct($path, $controllerClassName)
     {
@@ -111,12 +113,12 @@ class Route extends AbstractRoute
      *
      * @param string $path The path.
      *
-     * @throws RouteInvalidArgumentException If the $path parameter is invalid.
+     * @throws InvalidRoutePathException If the $path parameter is invalid.
      */
     private static function myValidatePath($path)
     {
         if (preg_match('/[^a-zA-Z0-9._-]/', $path, $matches)) {
-            throw new RouteInvalidArgumentException('Path "' . $path . '" contains invalid character "' . $matches[0] . '".');
+            throw new InvalidRoutePathException('Path "' . $path . '" contains invalid character "' . $matches[0] . '".');
         }
     }
 

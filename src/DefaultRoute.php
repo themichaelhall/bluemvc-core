@@ -7,7 +7,7 @@
 namespace BlueMvc\Core;
 
 use BlueMvc\Core\Base\AbstractRoute;
-use BlueMvc\Core\Exceptions\RouteInvalidArgumentException;
+use BlueMvc\Core\Exceptions\InvalidControllerClassException;
 use BlueMvc\Core\Interfaces\RequestInterface;
 
 /**
@@ -24,7 +24,7 @@ class DefaultRoute extends AbstractRoute
      *
      * @param string $controllerClassName The controller class name.
      *
-     * @throws RouteInvalidArgumentException If any of the parameters are invalid.
+     * @throws InvalidControllerClassException If the controller class name is invalid.
      */
     public function __construct($controllerClassName)
     {
