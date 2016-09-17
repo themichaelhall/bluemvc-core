@@ -7,6 +7,7 @@
 namespace BlueMvc\Core;
 
 use BlueMvc\Core\Base\AbstractController;
+use BlueMvc\Core\Exceptions\ViewFileNotFoundException;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
@@ -61,6 +62,8 @@ abstract class Controller extends AbstractController
      * @param ResponseInterface    $response    The response.
      * @param RouteMatchInterface  $routeMatch  The route match.
      *
+     * @throws ViewFileNotFoundException If no suitable view file was found.
+     *
      * @return bool True if request was actually processed, false otherwise.
      */
     public function processRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, RouteMatchInterface $routeMatch)
@@ -83,6 +86,9 @@ abstract class Controller extends AbstractController
                 $actionName = $action; // fixme: validate characters
 
                 // Try the view renderers until a match is found.
+                $hasFoundView = false;
+                $testedViewFiles = [];
+
                 // fixme: Exception if no view renderers are found.
                 foreach ($application->getViewRenderers() as $viewRenderer) {
                     $viewFile = FilePath::parse($controllerName . DIRECTORY_SEPARATOR . $actionName . '.' . $viewRenderer->getViewFileExtension());
@@ -90,9 +96,16 @@ abstract class Controller extends AbstractController
 
                     if (file_exists($fullViewFile->__toString())) {
                         $response->setContent($viewRenderer->renderView($application->getViewPath(), $viewFile, $result->getModel(), $this->myViewData));
+                        $hasFoundView = true;
 
                         break;
                     }
+
+                    $testedViewFiles[] = '"' . $fullViewFile->__toString() . '"';
+                }
+
+                if (!$hasFoundView) {
+                    throw new ViewFileNotFoundException('Could not find view file ' . implode(' or ', $testedViewFiles));
                 }
             } else {
                 $response->setContent($result);

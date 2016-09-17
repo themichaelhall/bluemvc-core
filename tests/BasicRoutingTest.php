@@ -1,6 +1,7 @@
 <?php
 
 use BlueMvc\Core\Application;
+use BlueMvc\Core\Exceptions\ViewFileNotFoundException;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Request;
 use BlueMvc\Core\Response;
@@ -142,6 +143,29 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $this->assertSame('<html><body><h1>With model and view data</h1><p>This is the model.</p><i>This is the view data.</i></body></html>', $response->getContent());
         $this->assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
         $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Test get view with non-existing view file page.
+     */
+    public function testGetViewWithNonExistingViewFilePage()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+        $exceptionMessage = '';
+
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/view/withnoviewfile', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        ob_start();
+
+        try {
+            $this->application->run($request, $response);
+        } catch (ViewFileNotFoundException $e) {
+            $exceptionMessage = $e->getMessage();
+        }
+
+        ob_end_clean();
+
+        $this->assertSame('Could not find view file "' . $this->application->getViewPath() . 'ViewTest' . $DS . 'withnoviewfile.view"', $exceptionMessage);
     }
 
     /**
