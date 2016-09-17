@@ -27,7 +27,7 @@ class Route extends AbstractRoute
      * @param string $controllerClassName The controller class name.
      *
      * @throws InvalidControllerClassException If the controller class name is invalid.
-     * @throws InvalidRoutePathException If the path is invalid.
+     * @throws InvalidRoutePathException       If the path is invalid.
      */
     public function __construct($path, $controllerClassName)
     {
