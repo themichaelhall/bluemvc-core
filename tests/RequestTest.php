@@ -15,13 +15,12 @@ class RequestTest extends PHPUnit_Framework_TestCase
         $request = new Request(
             [
                 'HTTP_HOST'      => 'www.domain.com',
-                'SERVER_PORT'    => '8080',
                 'REQUEST_URI'    => '/foo/bar',
                 'REQUEST_METHOD' => 'GET',
             ]
         );
 
-        $this->assertSame('http://www.domain.com:8080/foo/bar', $request->getUrl()->__toString());
+        $this->assertSame('http://www.domain.com/foo/bar', $request->getUrl()->__toString());
     }
 
     /**
@@ -33,13 +32,28 @@ class RequestTest extends PHPUnit_Framework_TestCase
             [
                 'HTTPS'          => 'On',
                 'HTTP_HOST'      => 'www.domain.com',
-                'SERVER_PORT'    => '443',
                 'REQUEST_URI'    => '/foo/bar',
                 'REQUEST_METHOD' => 'GET',
             ]
         );
 
         $this->assertSame('https://www.domain.com/foo/bar', $request->getUrl()->__toString());
+    }
+
+    /**
+     * Test getUrl method with port.
+     */
+    public function testGetUrlWithPort()
+    {
+        $request = new Request(
+            [
+                'HTTP_HOST'      => 'www.domain.com:8080',
+                'REQUEST_URI'    => '/foo/bar',
+                'REQUEST_METHOD' => 'GET',
+            ]
+        );
+
+        $this->assertSame('http://www.domain.com:8080/foo/bar', $request->getUrl()->__toString());
     }
 
     /**
@@ -50,13 +64,12 @@ class RequestTest extends PHPUnit_Framework_TestCase
         $request = new Request(
             [
                 'HTTP_HOST'      => 'www.domain.com',
-                'SERVER_PORT'    => '8080',
                 'REQUEST_URI'    => '/foo/bar?',
                 'REQUEST_METHOD' => 'GET',
             ]
         );
 
-        $this->assertSame('http://www.domain.com:8080/foo/bar?', $request->getUrl()->__toString());
+        $this->assertSame('http://www.domain.com/foo/bar?', $request->getUrl()->__toString());
     }
 
     /**
@@ -67,13 +80,12 @@ class RequestTest extends PHPUnit_Framework_TestCase
         $request = new Request(
             [
                 'HTTP_HOST'      => 'www.domain.com',
-                'SERVER_PORT'    => '8080',
                 'REQUEST_URI'    => '/foo/bar?baz=true',
                 'REQUEST_METHOD' => 'GET',
             ]
         );
 
-        $this->assertSame('http://www.domain.com:8080/foo/bar?baz=true', $request->getUrl()->__toString());
+        $this->assertSame('http://www.domain.com/foo/bar?baz=true', $request->getUrl()->__toString());
     }
 
     /**
@@ -84,7 +96,6 @@ class RequestTest extends PHPUnit_Framework_TestCase
         $request = new Request(
             [
                 'HTTP_HOST'      => 'www.domain.com',
-                'SERVER_PORT'    => '80',
                 'REQUEST_URI'    => '/foo/bar',
                 'REQUEST_METHOD' => 'POST',
             ]
