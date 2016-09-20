@@ -16,24 +16,6 @@ use DataTypes\Interfaces\FilePathInterface;
 interface ApplicationInterface
 {
     /**
-     * Adds a route to the application.
-     *
-     * @since 1.0.0
-     *
-     * @param RouteInterface $route The route.
-     */
-    public function addRoute(RouteInterface $route);
-
-    /**
-     * Adds a view renderer to the application.
-     *
-     * @since 1.0.0
-     *
-     * @param ViewRendererInterface $viewRenderer The view renderer.
-     */
-    public function addViewRenderer(ViewRendererInterface $viewRenderer);
-
-    /**
      * Returns the document root or null if no document root is set.
      *
      * @since 1.0.0
@@ -61,7 +43,7 @@ interface ApplicationInterface
     public function getViewPath();
 
     /**
-     * Runs a request in the application.
+     * Runs a request.
      *
      * @since 1.0.0
      *
@@ -69,13 +51,4 @@ interface ApplicationInterface
      * @param ResponseInterface $response The response.
      */
     public function run(RequestInterface $request, ResponseInterface $response);
-
-    /**
-     * Sets the view files path.
-     *
-     * @since 1.0.0
-     *
-     * @param FilePathInterface $viewPath The view files path.
-     */
-    public function setViewPath(FilePathInterface $viewPath);
 }

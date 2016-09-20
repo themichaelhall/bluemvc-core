@@ -37,30 +37,6 @@ abstract class AbstractApplication implements ApplicationInterface
     }
 
     /**
-     * Adds a route to the application.
-     *
-     * @since 1.0.0
-     *
-     * @param RouteInterface $route The route.
-     */
-    public function addRoute(RouteInterface $route)
-    {
-        $this->myRoutes[] = $route;
-    }
-
-    /**
-     * Adds a view renderer to the application.
-     *
-     * @since 1.0.0
-     *
-     * @param ViewRendererInterface $viewRenderer The view renderer.
-     */
-    public function addViewRenderer(ViewRendererInterface $viewRenderer)
-    {
-        $this->myViewRenderers[] = $viewRenderer;
-    }
-
-    /**
      * Returns the document root or null if no document root is set.
      *
      * @since 1.0.0
@@ -70,6 +46,18 @@ abstract class AbstractApplication implements ApplicationInterface
     public function getDocumentRoot()
     {
         return $this->myDocumentRoot;
+    }
+
+    /**
+     * Returns the view renderers.
+     *
+     * @since 1.0.0
+     *
+     * @return ViewRendererInterface[] The view renderers.
+     */
+    public function getViewRenderers()
+    {
+        return $this->myViewRenderers;
     }
 
     /**
@@ -89,31 +77,7 @@ abstract class AbstractApplication implements ApplicationInterface
     }
 
     /**
-     * Returns the view renderers.
-     *
-     * @since 1.0.0
-     *
-     * @return ViewRendererInterface[] The view renderers.
-     */
-    public function getViewRenderers()
-    {
-        return $this->myViewRenderers;
-    }
-
-    /**
-     * Sets the view files path.
-     *
-     * @since 1.0.0
-     *
-     * @param FilePathInterface $viewPath The view files path.
-     */
-    public function setViewPath(FilePathInterface $viewPath)
-    {
-        $this->myViewPath = $this->myDocumentRoot->withFilePath($viewPath);
-    }
-
-    /**
-     * Runs a request in the application.
+     * Runs a request.
      *
      * @since 1.0.0
      *
@@ -143,6 +107,42 @@ abstract class AbstractApplication implements ApplicationInterface
     }
 
     /**
+     * Adds a route.
+     *
+     * @since 1.0.0
+     *
+     * @param RouteInterface $route The route.
+     */
+    protected function addRoute(RouteInterface $route)
+    {
+        $this->myRoutes[] = $route;
+    }
+
+    /**
+     * Adds a view renderer.
+     *
+     * @since 1.0.0
+     *
+     * @param ViewRendererInterface $viewRenderer The view renderer.
+     */
+    protected function addViewRenderer(ViewRendererInterface $viewRenderer)
+    {
+        $this->myViewRenderers[] = $viewRenderer;
+    }
+
+    /**
+     * Returns the routes.
+     *
+     * @since 1.0.0
+     *
+     * @return RouteInterface[] The routes.
+     */
+    protected function getRoutes()
+    {
+        return $this->myRoutes;
+    }
+
+    /**
      * Sets the document root.
      *
      * @since 1.0.0
@@ -152,6 +152,18 @@ abstract class AbstractApplication implements ApplicationInterface
     protected function setDocumentRoot(FilePathInterface $documentRoot)
     {
         $this->myDocumentRoot = $documentRoot;
+    }
+
+    /**
+     * Sets the view files path.
+     *
+     * @since 1.0.0
+     *
+     * @param FilePathInterface $viewPath The view files path.
+     */
+    protected function setViewPath(FilePathInterface $viewPath)
+    {
+        $this->myViewPath = $this->myDocumentRoot->withFilePath($viewPath);
     }
 
     /**

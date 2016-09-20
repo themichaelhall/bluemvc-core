@@ -2,7 +2,9 @@
 
 require_once __DIR__ . '/../Helpers/TestApplications/BasicTestApplication.php';
 require_once __DIR__ . '/../Helpers/TestViewRenderers/BasicTestViewRenderer.php';
+require_once __DIR__ . '/../Helpers/TestControllers/BasicTestController.php';
 
+use BlueMvc\Core\Route;
 use DataTypes\FilePath;
 
 /**
@@ -42,6 +44,16 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test getRoutes method.
+     */
+    public function testGetRoutes()
+    {
+        $routes = $this->myApplication->getRoutes();
+
+        $this->assertSame(1, count($routes));
+    }
+
+    /**
      * Test setViewPath method with absolute path.
      */
     public function testSetViewPathWithAbsolutePath()
@@ -74,6 +86,7 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
 
         $this->myApplication = new BasicTestApplication(FilePath::parse($DS . 'var' . $DS . 'www' . $DS));
         $this->myApplication->addViewRenderer(new BasicTestViewRenderer());
+        $this->myApplication->addRoute(new Route('', BasicTestController::class));
     }
 
     /**

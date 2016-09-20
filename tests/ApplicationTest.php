@@ -1,8 +1,11 @@
 <?php
 
 use BlueMvc\Core\Application;
+use BlueMvc\Core\Route;
+use DataTypes\FilePath;
 
 require_once __DIR__ . '/Helpers/TestViewRenderers/BasicTestViewRenderer.php';
+require_once __DIR__ . '/Helpers/TestControllers/BasicTestController.php';
 
 /**
  * Test Application class.
@@ -37,7 +40,17 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
-        $this->assertSame($DS . 'var' . $DS . 'www' . $DS, $this->myApplication->getViewPath()->__toString());
+        $this->assertSame($DS . 'var' . $DS . 'www' . $DS . 'views' . $DS, $this->myApplication->getViewPath()->__toString());
+    }
+
+    /**
+     * Test getRoutes method.
+     */
+    public function testGetRoutes()
+    {
+        $routes = $this->myApplication->getRoutes();
+
+        $this->assertSame(1, count($routes));
     }
 
     /**
@@ -52,7 +65,10 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
                 'DOCUMENT_ROOT' => $DS . 'var' . $DS . 'www',
             ]
         );
+
+        $this->myApplication->setViewPath(FilePath::parse('views' . $DS));
         $this->myApplication->addViewRenderer(new BasicTestViewRenderer());
+        $this->myApplication->addRoute(new Route('', BasicTestController::class));
     }
 
     /**
