@@ -6,6 +6,7 @@
  */
 namespace BlueMvc\Core\Base;
 
+use BlueMvc\Core\Exceptions\InvalidFilePathException;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
@@ -148,9 +149,19 @@ abstract class AbstractApplication implements ApplicationInterface
      * @since 1.0.0
      *
      * @param FilePathInterface $documentRoot The document root.
+     *
+     * @throws InvalidFilePathException If the $documentRoot parameter is invalid.
      */
     protected function setDocumentRoot(FilePathInterface $documentRoot)
     {
+        if (!$documentRoot->isDirectory()) {
+            throw new InvalidFilePathException('Document root "' . $documentRoot . '" is not a directory.');
+        }
+
+        if (!$documentRoot->isAbsolute()) {
+            throw new InvalidFilePathException('Document root "' . $documentRoot . '" is not an absolute path.');
+        }
+
         $this->myDocumentRoot = $documentRoot;
     }
 

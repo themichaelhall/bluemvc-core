@@ -4,11 +4,12 @@ require_once __DIR__ . '/../Helpers/TestApplications/BasicTestApplication.php';
 require_once __DIR__ . '/../Helpers/TestViewRenderers/BasicTestViewRenderer.php';
 require_once __DIR__ . '/../Helpers/TestControllers/BasicTestController.php';
 
+use BlueMvc\Core\Exceptions\InvalidFilePathException;
 use BlueMvc\Core\Route;
 use DataTypes\FilePath;
 
 /**
- * Test AbstractApplication class.
+ * Test AbstractApplication class (via derived test class).
  */
 class AbstractApplicationTest extends PHPUnit_Framework_TestCase
 {
@@ -75,6 +76,74 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
         $this->myApplication->setViewPath(FilePath::parse('..' . $DS . 'bluemvc' . $DS . 'html' . $DS));
 
         $this->assertSame($DS . 'var' . $DS . 'bluemvc' . $DS . 'html' . $DS, $this->myApplication->getViewPath()->__toString());
+    }
+
+    /**
+     * Test that creating an application with a path to file throws exception.
+     */
+    public function testCreateWithFileAsDocumentRootThrowsException()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+        $exceptionMessage = '';
+
+        try {
+            new BasicTestApplication(FilePath::parse($DS . 'var' . $DS . 'www' . $DS . 'file.txt'));
+        } catch (InvalidFilePathException $e) {
+            $exceptionMessage = $e->getMessage();
+        }
+
+        $this->assertSame('Document root "' . $DS . 'var' . $DS . 'www' . $DS . 'file.txt" is not a directory.', $exceptionMessage);
+    }
+
+    /**
+     * Test that calling setDocumentRoot method with a path to file throws exception.
+     */
+    public function testSetDocumentRootWithFileAsDocumentRootThrowsException()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+        $exceptionMessage = '';
+
+        try {
+            $this->myApplication->setDocumentRoot(FilePath::parse($DS . 'var' . $DS . 'www' . $DS . 'file.txt'));
+        } catch (InvalidFilePathException $e) {
+            $exceptionMessage = $e->getMessage();
+        }
+
+        $this->assertSame('Document root "' . $DS . 'var' . $DS . 'www' . $DS . 'file.txt" is not a directory.', $exceptionMessage);
+    }
+
+    /**
+     * Test that creating an application with a relative path throws exception.
+     */
+    public function testCreateWithRelativePathAsDocumentRootThrowsException()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+        $exceptionMessage = '';
+
+        try {
+            new BasicTestApplication(FilePath::parse('var' . $DS . 'www' . $DS));
+        } catch (InvalidFilePathException $e) {
+            $exceptionMessage = $e->getMessage();
+        }
+
+        $this->assertSame('Document root "var' . $DS . 'www' . $DS . '" is not an absolute path.', $exceptionMessage);
+    }
+
+    /**
+     * Test that calling setDocumentRoot with a relative path throws exception.
+     */
+    public function testSetDocumentRootWithRelativePathAsDocumentRootThrowsException()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+        $exceptionMessage = '';
+
+        try {
+            $this->myApplication->setDocumentRoot(FilePath::parse('var' . $DS . 'www' . $DS));
+        } catch (InvalidFilePathException $e) {
+            $exceptionMessage = $e->getMessage();
+        }
+
+        $this->assertSame('Document root "var' . $DS . 'www' . $DS . '" is not an absolute path.', $exceptionMessage);
     }
 
     /**

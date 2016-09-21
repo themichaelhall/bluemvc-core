@@ -1,6 +1,7 @@
 <?php
 
 use BlueMvc\Core\Application;
+use BlueMvc\Core\Exceptions\InvalidFilePathException;
 use BlueMvc\Core\Route;
 use DataTypes\FilePath;
 
@@ -51,6 +52,27 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
         $routes = $this->myApplication->getRoutes();
 
         $this->assertSame(1, count($routes));
+    }
+
+    /**
+     * Test that creating an application with a relative path throws exception.
+     */
+    public function testCreateWithRelativePathAsDocumentRootThrowsException()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+        $exceptionMessage = '';
+
+        try {
+            new Application(
+                [
+                    'DOCUMENT_ROOT' => 'var' . $DS . 'www',
+                ]
+            );
+        } catch (InvalidFilePathException $e) {
+            $exceptionMessage = $e->getMessage();
+        }
+
+        $this->assertSame('Document root "var' . $DS . 'www' . $DS . '" is not an absolute path.', $exceptionMessage);
     }
 
     /**
