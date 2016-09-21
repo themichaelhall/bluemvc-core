@@ -76,6 +76,40 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test that calling setViewPath with a path to file throws exception.
+     */
+    public function testSetViewPathWithFileAsViewPathThrowsException()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+        $exceptionMessage = '';
+
+        try {
+            $this->myApplication->setViewPath(FilePath::parse($DS . 'views' . $DS . 'file.txt'));
+        } catch (InvalidFilePathException $e) {
+            $exceptionMessage = $e->getMessage();
+        }
+
+        $this->assertSame('View path "' . $DS . 'views' . $DS . 'file.txt" is not a directory.', $exceptionMessage);
+    }
+
+    /**
+     * Test that calling setViewPath with a path that can not be combined with document root throws exception.
+     */
+    public function testSetViewPathWithViewPathThatCanNotBeCombinedWithDocumentRootThrowsException()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+        $exceptionMessage = '';
+
+        try {
+            $this->myApplication->setViewPath(FilePath::parse('..' . $DS . '..' . $DS . '..' . $DS . 'views' . $DS));
+        } catch (InvalidFilePathException $e) {
+            $exceptionMessage = $e->getMessage();
+        }
+
+        $this->assertSame('File path "' . $DS . 'var' . $DS . 'www' . $DS . '" can not be combined with file path "..' . $DS . '..' . $DS . '..' . $DS . 'views' . $DS . '": Absolute path is above root level.', $exceptionMessage);
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

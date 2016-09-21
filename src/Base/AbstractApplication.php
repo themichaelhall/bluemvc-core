@@ -13,6 +13,7 @@ use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
 use BlueMvc\Core\Interfaces\RouteInterface;
 use BlueMvc\Core\Interfaces\ViewRendererInterface;
+use DataTypes\Exceptions\FilePathLogicException;
 use DataTypes\Interfaces\FilePathInterface;
 
 /**
@@ -171,10 +172,20 @@ abstract class AbstractApplication implements ApplicationInterface
      * @since 1.0.0
      *
      * @param FilePathInterface $viewPath The view files path.
+     *
+     * @throws InvalidFilePathException If the $viewPath parameter is invalid.
      */
     protected function setViewPath(FilePathInterface $viewPath)
     {
-        $this->myViewPath = $this->myDocumentRoot->withFilePath($viewPath);
+        if (!$viewPath->isDirectory()) {
+            throw new InvalidFilePathException('View path "' . $viewPath . '" is not a directory.');
+        }
+
+        try {
+            $this->myViewPath = $this->myDocumentRoot->withFilePath($viewPath);
+        } catch (FilePathLogicException $e) {
+            throw new InvalidFilePathException($e->getMessage());
+        }
     }
 
     /**
