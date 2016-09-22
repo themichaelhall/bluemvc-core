@@ -14,6 +14,7 @@ use BlueMvc\Core\Interfaces\ResponseInterface;
 use BlueMvc\Core\Interfaces\RouteInterface;
 use BlueMvc\Core\Interfaces\ViewRendererInterface;
 use DataTypes\Exceptions\FilePathLogicException;
+use DataTypes\FilePath;
 use DataTypes\Interfaces\FilePathInterface;
 
 /**
@@ -34,20 +35,41 @@ abstract class AbstractApplication implements ApplicationInterface
     {
         $this->setDocumentRoot($documentRoot);
         $this->myRoutes = [];
+        $this->myTempDirectory = null;
         $this->myViewRenderers = [];
         $this->myViewPath = null;
     }
 
     /**
-     * Returns the document root or null if no document root is set.
+     * Returns the document root.
      *
      * @since 1.0.0
      *
-     * @return FilePathInterface|null The document root or null if no document root is set.
+     * @return FilePathInterface The document root.
      */
     public function getDocumentRoot()
     {
         return $this->myDocumentRoot;
+    }
+
+    /**
+     * Returns the path to the application-specific temporary directory.
+     *
+     * @since 1.0.0
+     *
+     * @return FilePathInterface The path to the application-specific temporary directory.
+     */
+    public function getTempDirectory()
+    {
+        if ($this->myTempDirectory === null) {
+            // Generate a default temporary directory by document root.
+            $tempDirectory = FilePath::parse(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'bluemvc' . DIRECTORY_SEPARATOR . sha1($this->myDocumentRoot->__toString()) . DIRECTORY_SEPARATOR);
+            self::ensureDirectoryExists($tempDirectory);
+
+            return $tempDirectory;
+        }
+
+        return $this->myTempDirectory;
     }
 
     /**
@@ -189,7 +211,19 @@ abstract class AbstractApplication implements ApplicationInterface
     }
 
     /**
-     * @var FilePathInterface|null My document root.
+     * Ensures that a specified directory exists.
+     *
+     * @param FilePathInterface $directory The directory.
+     */
+    private static function ensureDirectoryExists(FilePathInterface $directory)
+    {
+        if (!is_dir($directory->__toString())) {
+            mkdir($directory->__toString(), 0700, true);
+        }
+    }
+
+    /**
+     * @var FilePathInterface My document root.
      */
     private $myDocumentRoot;
 
@@ -197,6 +231,11 @@ abstract class AbstractApplication implements ApplicationInterface
      * @var RouteInterface[] My routes.
      */
     private $myRoutes;
+
+    /**
+     * @var FilePathInterface path to the application-specific temporary directory.
+     */
+    private $myTempDirectory;
 
     /**
      * @var FilePathInterface My view files path.

@@ -16,13 +16,22 @@ use DataTypes\Interfaces\FilePathInterface;
 interface ApplicationInterface
 {
     /**
-     * Returns the document root or null if no document root is set.
+     * Returns the document root.
      *
      * @since 1.0.0
      *
-     * @return FilePathInterface|null The document root or null if no document root is set.
+     * @return FilePathInterface The document root.
      */
     public function getDocumentRoot();
+
+    /**
+     * Returns the path to the application-specific temporary directory.
+     *
+     * @since 1.0.0
+     *
+     * @return FilePathInterface The path to the application-specific temporary directory.
+     */
+    public function getTempDirectory();
 
     /**
      * Returns the view renderers.
