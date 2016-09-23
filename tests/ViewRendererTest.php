@@ -3,6 +3,7 @@
 use DataTypes\FilePath;
 
 require_once __DIR__ . '/Helpers/TestViewRenderers/BasicTestViewRenderer.php';
+require_once __DIR__ . '/Helpers/TestApplications/BasicTestApplication.php';
 
 /**
  * Test ViewRenderer class.
@@ -14,10 +15,13 @@ class ViewRendererTest extends PHPUnit_Framework_TestCase
      */
     public function testRenderViewWithEmptyModel()
     {
+        $DS = DIRECTORY_SEPARATOR;
+
         $viewRenderer = new BasicTestViewRenderer();
         $result = $viewRenderer->renderView(
-            FilePath::parse(__DIR__ . DIRECTORY_SEPARATOR . 'Helpers' . DIRECTORY_SEPARATOR . 'TestViews' . DIRECTORY_SEPARATOR),
-            FilePath::parse('ViewTest' . DIRECTORY_SEPARATOR . 'index.view')
+            new BasicTestApplication(FilePath::parse($DS . 'var' . $DS . 'www' . $DS)),
+            FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS),
+            FilePath::parse('ViewTest' . $DS . 'index.view')
         );
 
         $this->assertSame('<html><body><h1>Index</h1></body></html>', $result);
@@ -28,10 +32,13 @@ class ViewRendererTest extends PHPUnit_Framework_TestCase
      */
     public function testRenderViewWithModel()
     {
+        $DS = DIRECTORY_SEPARATOR;
+
         $viewRenderer = new BasicTestViewRenderer();
         $result = $viewRenderer->renderView(
-            FilePath::parse(__DIR__ . DIRECTORY_SEPARATOR . 'Helpers' . DIRECTORY_SEPARATOR . 'TestViews' . DIRECTORY_SEPARATOR),
-            FilePath::parse('ViewTest' . DIRECTORY_SEPARATOR . 'withmodel.view'),
+            new BasicTestApplication(FilePath::parse($DS . 'var' . $DS . 'www' . $DS)),
+            FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS),
+            FilePath::parse('ViewTest' . $DS . 'withmodel.view'),
             'This is the model.'
         );
 
@@ -43,10 +50,13 @@ class ViewRendererTest extends PHPUnit_Framework_TestCase
      */
     public function testRenderViewWithViewData()
     {
+        $DS = DIRECTORY_SEPARATOR;
+
         $viewRenderer = new BasicTestViewRenderer();
         $result = $viewRenderer->renderView(
-            FilePath::parse(__DIR__ . DIRECTORY_SEPARATOR . 'Helpers' . DIRECTORY_SEPARATOR . 'TestViews' . DIRECTORY_SEPARATOR),
-            FilePath::parse('ViewTest' . DIRECTORY_SEPARATOR . 'withviewdata.view'),
+            new BasicTestApplication(FilePath::parse($DS . 'var' . $DS . 'www' . $DS)),
+            FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS),
+            FilePath::parse('ViewTest' . $DS . 'withviewdata.view'),
             'This is the model.',
             'This is the view data.'
         );
