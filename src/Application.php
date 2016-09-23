@@ -70,6 +70,18 @@ class Application extends AbstractApplication
     }
 
     /**
+     * Sets the path to the application-specific temporary directory.
+     *
+     * @since 1.0.0
+     *
+     * @param FilePathInterface $tempPath The path.
+     */
+    public function setTempPath(FilePathInterface $tempPath)
+    {
+        parent::setTempPath($tempPath);
+    }
+
+    /**
      * Sets the view files path.
      *
      * @since 1.0.0
