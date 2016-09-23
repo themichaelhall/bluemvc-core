@@ -189,6 +189,28 @@ abstract class AbstractApplication implements ApplicationInterface
     }
 
     /**
+     * Sets the path to the application-specific temporary directory.
+     *
+     * @since 1.0.0
+     *
+     * @param FilePathInterface $tempPath The path to the application-specific temporary directory.
+     *
+     * @throws InvalidFilePathException If the $tempPath parameter is invalid.
+     */
+    protected function setTempPath(FilePathInterface $tempPath)
+    {
+        if (!$tempPath->isDirectory()) {
+            throw new InvalidFilePathException('Temp path "' . $tempPath . '" is not a directory.');
+        }
+
+        try {
+            $this->myTempPath = $this->myDocumentRoot->withFilePath($tempPath);
+        } catch (FilePathLogicException $e) {
+            throw new InvalidFilePathException($e->getMessage());
+        }
+    }
+
+    /**
      * Sets the view files path.
      *
      * @since 1.0.0

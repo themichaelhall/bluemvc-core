@@ -191,6 +191,64 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test setTempPath method with absolute path.
+     */
+    public function testSetTempPathWithAbsolutePath()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+
+        $this->myApplication->setTempPath(FilePath::parse($DS . 'tmp' . $DS . 'bluemvc' . $DS));
+
+        $this->assertSame($DS . 'tmp' . $DS . 'bluemvc' . $DS, $this->myApplication->getTempPath()->__toString());
+    }
+
+    /**
+     * Test setTempPath method with relative path.
+     */
+    public function testSetTempPathWithRelativePath()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+
+        $this->myApplication->setTempPath(FilePath::parse('tmp' . $DS . 'bluemvc' . $DS));
+
+        $this->assertSame($DS . 'var' . $DS . 'www' . $DS . 'tmp' . $DS . 'bluemvc' . $DS, $this->myApplication->getTempPath()->__toString());
+    }
+
+    /**
+     * Test that calling setTempPath with a path to file throws exception.
+     */
+    public function testSetTempPathWithFileAsTempPathThrowsException()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+        $exceptionMessage = '';
+
+        try {
+            $this->myApplication->setTempPath(FilePath::parse($DS . 'tmp' . $DS . 'file.txt'));
+        } catch (InvalidFilePathException $e) {
+            $exceptionMessage = $e->getMessage();
+        }
+
+        $this->assertSame('Temp path "' . $DS . 'tmp' . $DS . 'file.txt" is not a directory.', $exceptionMessage);
+    }
+
+    /**
+     * Test that calling setTempPath with a path that can not be combined with document root throws exception.
+     */
+    public function testSetTempPathWithTempPathThatCanNotBeCombinedWithDocumentRootThrowsException()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+        $exceptionMessage = '';
+
+        try {
+            $this->myApplication->setTempPath(FilePath::parse('..' . $DS . '..' . $DS . '..' . $DS . 'tmp' . $DS));
+        } catch (InvalidFilePathException $e) {
+            $exceptionMessage = $e->getMessage();
+        }
+
+        $this->assertSame('File path "' . $DS . 'var' . $DS . 'www' . $DS . '" can not be combined with file path "..' . $DS . '..' . $DS . '..' . $DS . 'tmp' . $DS . '": Absolute path is above root level.', $exceptionMessage);
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
@@ -200,6 +258,7 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
         $this->myApplication = new BasicTestApplication(FilePath::parse($DS . 'var' . $DS . 'www' . $DS));
         $this->myApplication->addViewRenderer(new BasicTestViewRenderer());
         $this->myApplication->addRoute(new Route('', BasicTestController::class));
+        rmdir($this->myApplication->getTempPath());
     }
 
     /**
@@ -207,7 +266,6 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
      */
     public function tearDown()
     {
-        rmdir($this->myApplication->getTempPath());
         $this->myApplication = null;
     }
 

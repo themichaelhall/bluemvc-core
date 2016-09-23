@@ -23,8 +23,6 @@ class BasicTestApplication extends AbstractApplication
     /**
      * Adds a route.
      *
-     * @since 1.0.0
-     *
      * @param RouteInterface $route The route.
      */
     public function addRoute(RouteInterface $route)
@@ -34,8 +32,6 @@ class BasicTestApplication extends AbstractApplication
 
     /**
      * Adds a view renderer.
-     *
-     * @since 1.0.0
      *
      * @param ViewRendererInterface $viewRenderer The view renderer.
      */
@@ -47,8 +43,6 @@ class BasicTestApplication extends AbstractApplication
     /**
      * Returns the routes.
      *
-     * @since 1.0.0
-     *
      * @return RouteInterface[] The routes.
      */
     public function getRoutes()
@@ -59,8 +53,6 @@ class BasicTestApplication extends AbstractApplication
     /**
      * Sets the document root.
      *
-     * @since 1.0.0
-     *
      * @param FilePathInterface $documentRoot The document root.
      */
     public function setDocumentRoot(FilePathInterface $documentRoot)
@@ -69,9 +61,17 @@ class BasicTestApplication extends AbstractApplication
     }
 
     /**
-     * Sets the view files path.
+     * Sets the path to the application-specific temporary directory.
      *
-     * @since 1.0.0
+     * @param FilePathInterface $tempPath The path.
+     */
+    public function setTempPath(FilePathInterface $tempPath)
+    {
+        parent::setTempPath($tempPath);
+    }
+
+    /**
+     * Sets the view files path.
      *
      * @param FilePathInterface $viewPath The view files path.
      */
