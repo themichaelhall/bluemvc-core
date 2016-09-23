@@ -31,7 +31,7 @@ interface ApplicationInterface
      *
      * @return FilePathInterface The path to the application-specific temporary directory.
      */
-    public function getTempDirectory();
+    public function getTempPath();
 
     /**
      * Returns the view renderers.

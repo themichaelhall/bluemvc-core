@@ -35,7 +35,7 @@ abstract class AbstractApplication implements ApplicationInterface
     {
         $this->setDocumentRoot($documentRoot);
         $this->myRoutes = [];
-        $this->myTempDirectory = null;
+        $this->myTempPath = null;
         $this->myViewRenderers = [];
         $this->myViewPath = null;
     }
@@ -59,17 +59,17 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @return FilePathInterface The path to the application-specific temporary directory.
      */
-    public function getTempDirectory()
+    public function getTempPath()
     {
-        if ($this->myTempDirectory === null) {
+        if ($this->myTempPath === null) {
             // Generate a default temporary directory by document root.
-            $tempDirectory = FilePath::parse(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'bluemvc' . DIRECTORY_SEPARATOR . sha1($this->myDocumentRoot->__toString()) . DIRECTORY_SEPARATOR);
-            self::ensureDirectoryExists($tempDirectory);
+            $tempPath = FilePath::parse(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'bluemvc' . DIRECTORY_SEPARATOR . sha1($this->myDocumentRoot->__toString()) . DIRECTORY_SEPARATOR);
+            self::ensureDirectoryExists($tempPath);
 
-            return $tempDirectory;
+            return $tempPath;
         }
 
-        return $this->myTempDirectory;
+        return $this->myTempPath;
     }
 
     /**
@@ -235,7 +235,7 @@ abstract class AbstractApplication implements ApplicationInterface
     /**
      * @var FilePathInterface path to the application-specific temporary directory.
      */
-    private $myTempDirectory;
+    private $myTempPath;
 
     /**
      * @var FilePathInterface My view files path.

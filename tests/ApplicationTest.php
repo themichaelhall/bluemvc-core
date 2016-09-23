@@ -110,13 +110,13 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test getTempDirectory method.
+     * Test getTempPath method.
      */
-    public function testGetTempDirectory()
+    public function testGetTempPath()
     {
         $DS = DIRECTORY_SEPARATOR;
 
-        $this->assertSame(sys_get_temp_dir() . $DS . 'bluemvc' . $DS . sha1($this->myApplication->getDocumentRoot()->__toString()) . $DS, $this->myApplication->getTempDirectory()->__toString());
+        $this->assertSame(sys_get_temp_dir() . $DS . 'bluemvc' . $DS . sha1($this->myApplication->getDocumentRoot()->__toString()) . $DS, $this->myApplication->getTempPath()->__toString());
     }
 
     /**
@@ -142,7 +142,7 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
      */
     public function tearDown()
     {
-        rmdir($this->myApplication->getTempDirectory());
+        rmdir($this->myApplication->getTempPath());
         $this->myApplication = null;
     }
 
