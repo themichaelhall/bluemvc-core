@@ -32,11 +32,11 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
-     * Returns the http method or null if no http method is set.
+     * Returns the http method.
      *
      * @since 1.0.0
      *
-     * @return MethodInterface|null The http method or null if no http method is set.
+     * @return MethodInterface The http method.
      */
     public function getMethod()
     {
@@ -44,11 +44,11 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
-     * Returns the url or null of no url is set.
+     * Returns the url.
      *
      * @since 1.0.0
      *
-     * @return UrlInterface|null The url or null of no url is set.
+     * @return UrlInterface The url.
      */
     public function getUrl()
     {
@@ -80,12 +80,12 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
-     * @var MethodInterface|null My method.
+     * @var MethodInterface My method.
      */
     private $myMethod;
 
     /**
-     * @var UrlInterface|null My url.
+     * @var UrlInterface My url.
      */
     private $myUrl;
 }
