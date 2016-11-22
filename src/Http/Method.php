@@ -6,6 +6,7 @@
  */
 namespace BlueMvc\Core\Http;
 
+use BlueMvc\Core\Exceptions\Http\InvalidMethodNameException;
 use BlueMvc\Core\Interfaces\Http\MethodInterface;
 
 /**
@@ -21,13 +22,18 @@ class Method implements MethodInterface
      * @since 1.0.0
      *
      * @param string $name The method name.
+     *
+     * @throws InvalidMethodNameException If the method name is invalid.
      */
     public function __construct($name)
     {
         assert(is_string($name));
 
+        if (preg_match('/[^a-zA-Z0-9]/', $name, $matches)) {
+            throw new InvalidMethodNameException('Method "' . $name . '" contains invalid character "' . $matches[0] . '".');
+        }
+
         $this->myName = $name;
-        // fixme: handle invalid name
     }
 
     /**

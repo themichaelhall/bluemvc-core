@@ -74,4 +74,15 @@ class MethodTest extends PHPUnit_Framework_TestCase
         $this->assertTrue((new Method('DELETE'))->isDelete());
         $this->assertFalse((new Method('delete'))->isDelete());
     }
+
+    /**
+     * Test that invalid character in method name is invalid.
+     *
+     * @expectedException BlueMvc\Core\Exceptions\Http\InvalidMethodNameException
+     * @expectedExceptionMessage Method "FOO{BAR" contains invalid character "{".
+     */
+    public function testInvalidCharacterInMethodNameIsInvalid()
+    {
+        new Method('FOO{BAR');
+    }
 }
