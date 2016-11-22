@@ -77,6 +77,17 @@ class StatusCodeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test that an invalid status code is invalid.
+     *
+     * @expectedException \BlueMvc\Core\Exceptions\Http\InvalidStatusCodeException
+     * @expectedExceptionMessage Status code 99 is invalid.
+     */
+    public function testInvalidStatusCodeIsInvalid()
+    {
+        new StatusCode(99);
+    }
+
+    /**
      * Data provider for status code tests.
      *
      * @return array The data.

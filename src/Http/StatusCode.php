@@ -6,6 +6,7 @@
  */
 namespace BlueMvc\Core\Http;
 
+use BlueMvc\Core\Exceptions\Http\InvalidStatusCodeException;
 use BlueMvc\Core\Interfaces\Http\StatusCodeInterface;
 
 /**
@@ -427,14 +428,19 @@ class StatusCode implements StatusCodeInterface
      * @since 1.0.0
      *
      * @param int $code The code.
+     *
+     * @throws InvalidStatusCodeException If the code is invalid.
      */
     public function __construct($code)
     {
         assert(is_int($code));
 
+        if (!isset(self::$myDescriptions[$code])) {
+            throw new InvalidStatusCodeException('Status code ' . $code . ' is invalid.');
+        }
+
         $this->myCode = $code;
         $this->myDescription = self::$myDescriptions[$code];
-        // fixme: handle invalid code
     }
 
     /**
