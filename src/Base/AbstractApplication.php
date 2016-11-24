@@ -41,6 +41,30 @@ abstract class AbstractApplication implements ApplicationInterface
     }
 
     /**
+     * Adds a route.
+     *
+     * @since 1.0.0
+     *
+     * @param RouteInterface $route The route.
+     */
+    public function addRoute(RouteInterface $route)
+    {
+        $this->myRoutes[] = $route;
+    }
+
+    /**
+     * Adds a view renderer.
+     *
+     * @since 1.0.0
+     *
+     * @param ViewRendererInterface $viewRenderer The view renderer.
+     */
+    public function addViewRenderer(ViewRendererInterface $viewRenderer)
+    {
+        $this->myViewRenderers[] = $viewRenderer;
+    }
+
+    /**
      * Returns the document root.
      *
      * @since 1.0.0
@@ -50,6 +74,18 @@ abstract class AbstractApplication implements ApplicationInterface
     public function getDocumentRoot()
     {
         return $this->myDocumentRoot;
+    }
+
+    /**
+     * Returns the routes.
+     *
+     * @since 1.0.0
+     *
+     * @return RouteInterface[] The routes.
+     */
+    public function getRoutes()
+    {
+        return $this->myRoutes;
     }
 
     /**
@@ -73,18 +109,6 @@ abstract class AbstractApplication implements ApplicationInterface
     }
 
     /**
-     * Returns the view renderers.
-     *
-     * @since 1.0.0
-     *
-     * @return ViewRendererInterface[] The view renderers.
-     */
-    public function getViewRenderers()
-    {
-        return $this->myViewRenderers;
-    }
-
-    /**
      * Returns The view files path.
      *
      * @since 1.0.0
@@ -98,6 +122,18 @@ abstract class AbstractApplication implements ApplicationInterface
         }
 
         return $this->myViewPath;
+    }
+
+    /**
+     * Returns the view renderers.
+     *
+     * @since 1.0.0
+     *
+     * @return ViewRendererInterface[] The view renderers.
+     */
+    public function getViewRenderers()
+    {
+        return $this->myViewRenderers;
     }
 
     /**
@@ -131,39 +167,47 @@ abstract class AbstractApplication implements ApplicationInterface
     }
 
     /**
-     * Adds a route.
+     * Sets the path to the application-specific temporary directory.
      *
      * @since 1.0.0
      *
-     * @param RouteInterface $route The route.
+     * @param FilePathInterface $tempPath The path to the application-specific temporary directory.
+     *
+     * @throws InvalidFilePathException If the $tempPath parameter is invalid.
      */
-    protected function addRoute(RouteInterface $route)
+    public function setTempPath(FilePathInterface $tempPath)
     {
-        $this->myRoutes[] = $route;
+        if (!$tempPath->isDirectory()) {
+            throw new InvalidFilePathException('Temp path "' . $tempPath . '" is not a directory.');
+        }
+
+        try {
+            $this->myTempPath = $this->myDocumentRoot->withFilePath($tempPath);
+        } catch (FilePathLogicException $e) {
+            throw new InvalidFilePathException($e->getMessage());
+        }
     }
 
     /**
-     * Adds a view renderer.
+     * Sets the view files path.
      *
      * @since 1.0.0
      *
-     * @param ViewRendererInterface $viewRenderer The view renderer.
+     * @param FilePathInterface $viewPath The view files path.
+     *
+     * @throws InvalidFilePathException If the $viewPath parameter is invalid.
      */
-    protected function addViewRenderer(ViewRendererInterface $viewRenderer)
+    public function setViewPath(FilePathInterface $viewPath)
     {
-        $this->myViewRenderers[] = $viewRenderer;
-    }
+        if (!$viewPath->isDirectory()) {
+            throw new InvalidFilePathException('View path "' . $viewPath . '" is not a directory.');
+        }
 
-    /**
-     * Returns the routes.
-     *
-     * @since 1.0.0
-     *
-     * @return RouteInterface[] The routes.
-     */
-    protected function getRoutes()
-    {
-        return $this->myRoutes;
+        try {
+            $this->myViewPath = $this->myDocumentRoot->withFilePath($viewPath);
+        } catch (FilePathLogicException $e) {
+            throw new InvalidFilePathException($e->getMessage());
+        }
     }
 
     /**
@@ -186,50 +230,6 @@ abstract class AbstractApplication implements ApplicationInterface
         }
 
         $this->myDocumentRoot = $documentRoot;
-    }
-
-    /**
-     * Sets the path to the application-specific temporary directory.
-     *
-     * @since 1.0.0
-     *
-     * @param FilePathInterface $tempPath The path to the application-specific temporary directory.
-     *
-     * @throws InvalidFilePathException If the $tempPath parameter is invalid.
-     */
-    protected function setTempPath(FilePathInterface $tempPath)
-    {
-        if (!$tempPath->isDirectory()) {
-            throw new InvalidFilePathException('Temp path "' . $tempPath . '" is not a directory.');
-        }
-
-        try {
-            $this->myTempPath = $this->myDocumentRoot->withFilePath($tempPath);
-        } catch (FilePathLogicException $e) {
-            throw new InvalidFilePathException($e->getMessage());
-        }
-    }
-
-    /**
-     * Sets the view files path.
-     *
-     * @since 1.0.0
-     *
-     * @param FilePathInterface $viewPath The view files path.
-     *
-     * @throws InvalidFilePathException If the $viewPath parameter is invalid.
-     */
-    protected function setViewPath(FilePathInterface $viewPath)
-    {
-        if (!$viewPath->isDirectory()) {
-            throw new InvalidFilePathException('View path "' . $viewPath . '" is not a directory.');
-        }
-
-        try {
-            $this->myViewPath = $this->myDocumentRoot->withFilePath($viewPath);
-        } catch (FilePathLogicException $e) {
-            throw new InvalidFilePathException($e->getMessage());
-        }
     }
 
     /**
