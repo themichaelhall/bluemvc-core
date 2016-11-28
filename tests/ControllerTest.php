@@ -7,6 +7,7 @@ use BlueMvc\Core\Response;
 use BlueMvc\Core\RouteMatch;
 
 require_once __DIR__ . '/Helpers/TestControllers/BasicTestController.php';
+require_once __DIR__ . '/Helpers/TestControllers/DefaultActionTestController.php';
 
 /**
  * Test Controller class.
@@ -89,6 +90,40 @@ class Controller extends PHPUnit_Framework_TestCase
 
         $this->assertFalse($isProcessed);
         $this->assertSame('', $response->getContent());
+        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Test existing action for controller with default action.
+     */
+    public function testExistingActionForControllerWithDefaultAction()
+    {
+        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $controller = new DefaultActionTestController();
+        $routeMatch = new RouteMatch($controller, 'foo');
+        $isProcessed = $controller->processRequest($application, $request, $response, $routeMatch);
+
+        $this->assertTrue($isProcessed);
+        $this->assertSame('Foo Action', $response->getContent());
+        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Test non-existing action for controller with default action.
+     */
+    public function testNonExistingActionForControllerWithDefaultAction()
+    {
+        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/bar', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $controller = new DefaultActionTestController();
+        $routeMatch = new RouteMatch($controller, 'bar');
+        $isProcessed = $controller->processRequest($application, $request, $response, $routeMatch);
+
+        $this->assertTrue($isProcessed);
+        $this->assertSame('Default Action', $response->getContent());
         $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 

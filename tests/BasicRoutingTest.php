@@ -169,6 +169,42 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test get existing page for controller with default action.
+     */
+    public function testGetExistingPageForControllerWithDefaultAction()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/default/foo', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        $this->assertSame('Foo Action', $responseOutput);
+        $this->assertSame('Foo Action', $response->getContent());
+        $this->assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
+        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Test get non-existing page for controller with default action.
+     */
+    public function testGetNonExistingPageForControllerWithDefaultAction()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/default/bar', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        $this->assertSame('Default Action', $responseOutput);
+        $this->assertSame('Default Action', $response->getContent());
+        $this->assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
+        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
@@ -181,6 +217,7 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
 
         $this->application->addRoute(new Route('', BasicTestController::class));
         $this->application->addRoute(new Route('view', ViewTestController::class));
+        $this->application->addRoute(new Route('default', DefaultActionTestController::class));
     }
 
     /**
