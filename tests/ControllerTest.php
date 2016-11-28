@@ -123,7 +123,7 @@ class Controller extends PHPUnit_Framework_TestCase
         $isProcessed = $controller->processRequest($application, $request, $response, $routeMatch);
 
         $this->assertTrue($isProcessed);
-        $this->assertSame('Default Action', $response->getContent());
+        $this->assertSame('Default Action bar', $response->getContent());
         $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 

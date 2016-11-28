@@ -198,8 +198,8 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('Default Action', $responseOutput);
-        $this->assertSame('Default Action', $response->getContent());
+        $this->assertSame('Default Action bar', $responseOutput);
+        $this->assertSame('Default Action bar', $response->getContent());
         $this->assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
         $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }

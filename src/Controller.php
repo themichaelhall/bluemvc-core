@@ -76,7 +76,7 @@ abstract class Controller extends AbstractController
         }
 
         // Try to invoke the action, and if that failed, try to invoke the default action.
-        if (!$this->tryInvokeActionMethod($action, [], $result) && !$this->tryInvokeActionMethod('default', [], $result)) {
+        if (!$this->tryInvokeActionMethod($action, [], $result) && !$this->tryInvokeActionMethod('default', [$action], $result)) {
             return false;
         }
 

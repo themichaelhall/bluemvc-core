@@ -14,16 +14,18 @@ class DefaultActionTestController extends Controller
      */
     public function fooAction()
     {
-        return "Foo Action";
+        return 'Foo Action';
     }
 
     /**
      * Default action.
      *
+     * @param string $action The action.
+     *
      * @return string The result.
      */
-    public function defaultAction()
+    public function defaultAction($action)
     {
-        return "Default Action";
+        return 'Default Action ' . $action;
     }
 }
