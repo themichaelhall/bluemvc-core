@@ -12,6 +12,7 @@ require_once __DIR__ . '/Helpers/Fakes/FakeHeaders.php';
 require_once __DIR__ . '/Helpers/TestApplications/BasicTestApplication.php';
 require_once __DIR__ . '/Helpers/TestControllers/BasicTestController.php';
 require_once __DIR__ . '/Helpers/TestControllers/ViewTestController.php';
+require_once __DIR__ . '/Helpers/TestControllers/DefaultActionWithViewTestController.php';
 require_once __DIR__ . '/Helpers/TestViewRenderers/BasicTestViewRenderer.php';
 
 /**
@@ -187,9 +188,9 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test get non-existing page for controller with default action.
+     * Test get default page for controller with default action.
      */
-    public function testGetNonExistingPageForControllerWithDefaultAction()
+    public function testGetDefaultPageForControllerWithDefaultAction()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/default/bar', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
@@ -200,6 +201,24 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame('Default Action bar', $responseOutput);
         $this->assertSame('Default Action bar', $response->getContent());
+        $this->assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
+        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Test get default page for controller with default action with view.
+     */
+    public function testGetDefaultPageForControllerWithDefaultActionWithView()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/defaultview/foo', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        $this->assertSame('<html><body><h1>Default view for action foo</h1></body></html>', $responseOutput);
+        $this->assertSame('<html><body><h1>Default view for action foo</h1></body></html>', $response->getContent());
         $this->assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
         $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
@@ -218,6 +237,7 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $this->application->addRoute(new Route('', BasicTestController::class));
         $this->application->addRoute(new Route('view', ViewTestController::class));
         $this->application->addRoute(new Route('default', DefaultActionTestController::class));
+        $this->application->addRoute(new Route('defaultview', DefaultActionWithViewTestController::class));
     }
 
     /**

@@ -71,13 +71,15 @@ abstract class Controller extends AbstractController
         parent::processRequest($application, $request, $response, $routeMatch);
 
         $action = $routeMatch->getAction();
-        if ($action === '') {
-            $action = 'index';
-        }
+        $actionName = $action !== '' ? $action : 'index'; // fixme: validate and normalize action name
 
         // Try to invoke the action, and if that failed, try to invoke the default action.
-        if (!$this->tryInvokeActionMethod($action, [], $result) && !$this->tryInvokeActionMethod('default', [$action], $result)) {
-            return false;
+        if (!$this->tryInvokeActionMethod($actionName, [], $result)) {
+            $actionName = 'default';
+
+            if (!$this->tryInvokeActionMethod($actionName, [$action], $result)) {
+                return false;
+            }
         }
 
         if ($result instanceof ViewInterface) {
@@ -86,8 +88,6 @@ abstract class Controller extends AbstractController
             if (strlen($controllerName) > 10 && substr(strtolower($controllerName), -10) === 'controller') {
                 $controllerName = substr($controllerName, 0, -10);
             }
-
-            $actionName = $action; // fixme: validate characters
 
             // Try the view renderers until a match is found.
             $hasFoundView = false;
