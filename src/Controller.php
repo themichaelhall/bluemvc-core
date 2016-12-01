@@ -8,6 +8,7 @@ namespace BlueMvc\Core;
 
 use BlueMvc\Core\Base\AbstractController;
 use BlueMvc\Core\Exceptions\ViewFileNotFoundException;
+use BlueMvc\Core\Interfaces\ActionResults\ActionResultInterface;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
@@ -112,7 +113,11 @@ abstract class Controller extends AbstractController
                 throw new ViewFileNotFoundException('Could not find view file ' . implode(' or ', $testedViewFiles));
             }
         } else {
-            $response->setContent($result);
+            if ($result instanceof ActionResultInterface) {
+                $result->updateResponse($response);
+            } else {
+                $response->setContent($result);
+            }
         }
 
         return true;

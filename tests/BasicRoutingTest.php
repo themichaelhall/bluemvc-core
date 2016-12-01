@@ -13,6 +13,7 @@ require_once __DIR__ . '/Helpers/TestApplications/BasicTestApplication.php';
 require_once __DIR__ . '/Helpers/TestControllers/BasicTestController.php';
 require_once __DIR__ . '/Helpers/TestControllers/ViewTestController.php';
 require_once __DIR__ . '/Helpers/TestControllers/DefaultActionWithViewTestController.php';
+require_once __DIR__ . '/Helpers/TestControllers/ActionResultTestController.php';
 require_once __DIR__ . '/Helpers/TestViewRenderers/BasicTestViewRenderer.php';
 
 /**
@@ -224,6 +225,24 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test get a page returning a NotFoundResult.
+     */
+    public function testGetPageWithNotFoundResult()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/notfound', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        $this->assertSame('Page was not found', $responseOutput);
+        $this->assertSame('Page was not found', $response->getContent());
+        $this->assertSame(['HTTP/1.1 404 Not Found'], FakeHeaders::get());
+        $this->assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
@@ -238,6 +257,7 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $this->application->addRoute(new Route('view', ViewTestController::class));
         $this->application->addRoute(new Route('default', DefaultActionTestController::class));
         $this->application->addRoute(new Route('defaultview', DefaultActionWithViewTestController::class));
+        $this->application->addRoute(new Route('actionresult', ActionResultTestController::class));
     }
 
     /**

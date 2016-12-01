@@ -6,6 +6,7 @@ use BlueMvc\Core\Request;
 use BlueMvc\Core\Response;
 use BlueMvc\Core\RouteMatch;
 
+require_once __DIR__ . '/Helpers/TestControllers/ActionResultTestController.php';
 require_once __DIR__ . '/Helpers/TestControllers/BasicTestController.php';
 require_once __DIR__ . '/Helpers/TestControllers/DefaultActionTestController.php';
 
@@ -125,6 +126,23 @@ class Controller extends PHPUnit_Framework_TestCase
         $this->assertTrue($isProcessed);
         $this->assertSame('Default Action bar', $response->getContent());
         $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Test an action returning a ActionResult.
+     */
+    public function testActionReturningActionResult()
+    {
+        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/notfound', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $controller = new ActionResultTestController();
+        $routeMatch = new RouteMatch($controller, 'notfound');
+        $isProcessed = $controller->processRequest($application, $request, $response, $routeMatch);
+
+        $this->assertTrue($isProcessed);
+        $this->assertSame('Page was not found', $response->getContent());
+        $this->assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
     }
 
     /**
