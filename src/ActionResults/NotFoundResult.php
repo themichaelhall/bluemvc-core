@@ -6,16 +6,15 @@
  */
 namespace BlueMvc\Core\ActionResults;
 
+use BlueMvc\Core\Base\ActionResults\AbstractActionResult;
 use BlueMvc\Core\Http\StatusCode;
-use BlueMvc\Core\Interfaces\ActionResults\ActionResultInterface;
-use BlueMvc\Core\Interfaces\ResponseInterface;
 
 /**
  * Class representing a 404 Not Found action result.
  *
  * @since 1.0.0
  */
-class NotFoundResult implements ActionResultInterface // fixme: Abstract base class
+class NotFoundResult extends AbstractActionResult
 {
     /**
      * Constructs the action result.
@@ -28,28 +27,6 @@ class NotFoundResult implements ActionResultInterface // fixme: Abstract base cl
      */
     public function __construct($content = '')
     {
-        if (!is_string($content)) {
-            throw new \InvalidArgumentException('$content parameter is not a string.');
-        }
-
-        $this->myContent = $content;
+        parent::__construct(new StatusCode(StatusCode::NOT_FOUND), $content);
     }
-
-    /**
-     * Updates the response.
-     *
-     * @since 1.0.0
-     *
-     * @param ResponseInterface $response The response.
-     */
-    public function updateResponse(ResponseInterface $response)
-    {
-        $response->setStatusCode(new StatusCode(StatusCode::NOT_FOUND));
-        $response->setContent($this->myContent);
-    }
-
-    /**
-     * @var string My content.
-     */
-    private $myContent;
 }
