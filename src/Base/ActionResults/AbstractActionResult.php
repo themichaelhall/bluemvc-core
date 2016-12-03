@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+
 namespace BlueMvc\Core\Base\ActionResults;
 
 use BlueMvc\Core\Http\StatusCode;

@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+
 namespace BlueMvc\Core\ActionResults;
 
 use BlueMvc\Core\Base\ActionResults\AbstractActionResult;

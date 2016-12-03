@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+
 namespace BlueMvc\Core\Interfaces\ActionResults;
 
 use BlueMvc\Core\Interfaces\ResponseInterface;

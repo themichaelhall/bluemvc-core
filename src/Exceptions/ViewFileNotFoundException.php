@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+
 namespace BlueMvc\Core\Exceptions;
 
 /**

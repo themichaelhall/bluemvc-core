@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+
 namespace BlueMvc\Core;
 
 use BlueMvc\Core\Interfaces\ControllerInterface;

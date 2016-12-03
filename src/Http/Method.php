@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+
 namespace BlueMvc\Core\Http;
 
 use BlueMvc\Core\Exceptions\Http\InvalidMethodNameException;

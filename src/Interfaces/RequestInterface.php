@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+
 namespace BlueMvc\Core\Interfaces;
 
 use BlueMvc\Core\Interfaces\Http\MethodInterface;
