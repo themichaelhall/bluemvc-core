@@ -16,4 +16,27 @@ class HeaderCollectionTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame(0, count($headerCollection));
     }
+
+    /**
+     * Test get method.
+     */
+    public function testGet()
+    {
+        $headerCollection = new HeaderCollection();
+
+        $this->assertNull($headerCollection->get('Content-Type'));
+    }
+
+    /**
+     * Test get method with invalid parameter type.
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage $name parameter is not a string.
+     */
+    public function testGetMethodWithInvalidNameParameterType()
+    {
+        $headerCollection = new HeaderCollection();
+
+        $headerCollection->get(10);
+    }
 }
