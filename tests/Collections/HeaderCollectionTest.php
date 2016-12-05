@@ -80,4 +80,46 @@ class HeaderCollectionTest extends PHPUnit_Framework_TestCase
 
         $headerCollection->set('Location', false);
     }
+
+    /**
+     * Test add method.
+     */
+    public function testAdd()
+    {
+        $headerCollection = new HeaderCollection();
+
+        $headerCollection->set('Accept-Encoding', 'gzip');
+        $headerCollection->add('accept-encoding', 'deflate');
+        $headerCollection->add('content-type', 'text/html');
+
+        $this->assertSame(2, count($headerCollection));
+        $this->assertSame('text/html', $headerCollection->get('Content-type'));
+        $this->assertSame('gzip, deflate', $headerCollection->get('Accept-encoding'));
+    }
+
+    /**
+     * Test add method with invalid name parameter type.
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage $name parameter is not a string.
+     */
+    public function testAddMethodWithInvalidNameParameterType()
+    {
+        $headerCollection = new HeaderCollection();
+
+        $headerCollection->add(10, 'test/html');
+    }
+
+    /**
+     * Test add method with invalid valid parameter type.
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage $value parameter is not a string.
+     */
+    public function testAddMethodWithInvalidValueParameterType()
+    {
+        $headerCollection = new HeaderCollection();
+
+        $headerCollection->add('Location', false);
+    }
 }

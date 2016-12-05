@@ -55,13 +55,12 @@ class HeaderCollection implements HeaderCollectionInterface
             throw new \InvalidArgumentException('$name parameter is not a string.');
         }
 
-        foreach ($this->myHeaders as $headerName => &$headerValue) {
-            if (strtolower($name) === strtolower($headerName)) {
-                return $headerValue;
-            }
+        $key = strtolower($name);
+        if (!isset($this->myHeaders[$key])) {
+            return null;
         }
 
-        return null;
+        return $this->myHeaders[$key][1];
     }
 
     /**
@@ -84,15 +83,38 @@ class HeaderCollection implements HeaderCollectionInterface
             throw new \InvalidArgumentException('$value parameter is not a string.');
         }
 
-        foreach ($this->myHeaders as $headerName => &$headerValue) {
-            if (strtolower($name) === strtolower($headerName)) {
-                $headerValue = $value;
+        $key = strtolower($name);
+        $this->myHeaders[$key] = [$name, $value];
+    }
 
-                return;
-            }
+    /**
+     * Adds a header value by header name.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name  The header name.
+     * @param string $value The header value.
+     *
+     * @throws \InvalidArgumentException If any of the parameters are of invalid type.
+     */
+    public function add($name, $value)
+    {
+        if (!is_string($name)) {
+            throw new \InvalidArgumentException('$name parameter is not a string.');
         }
 
-        $this->myHeaders[$name] = $value;
+        if (!is_string($value)) {
+            throw new \InvalidArgumentException('$value parameter is not a string.');
+        }
+
+        $key = strtolower($name);
+        if (!isset($this->myHeaders[$key])) {
+            $this->myHeaders[$key] = [$name, $value];
+
+            return;
+        }
+
+        $this->myHeaders[$key] = [$name, $this->myHeaders[$key][1] . ', ' . $value];
     }
 
     /**
