@@ -122,4 +122,30 @@ class HeaderCollectionTest extends PHPUnit_Framework_TestCase
 
         $headerCollection->add('Location', false);
     }
+
+    /**
+     * Test iterator functionality for empty collection.
+     */
+    public function testIteratorForEmptyCollection()
+    {
+        $headerCollection = new HeaderCollection();
+
+        $headerArray = iterator_to_array($headerCollection, true);
+
+        $this->assertSame([], $headerArray);
+    }
+
+    /**
+     * Test iterator functionality for non-empty collection.
+     */
+    public function testIteratorForNonEmptyCollection()
+    {
+        $headerCollection = new HeaderCollection();
+        $headerCollection->set('Location', 'http://localhost/');
+        $headerCollection->set('Accept-Encoding', 'gzip');
+
+        $headerArray = iterator_to_array($headerCollection, true);
+
+        $this->assertSame(['Location' => 'http://localhost/', 'Accept-Encoding' => 'gzip'], $headerArray);
+    }
 }
