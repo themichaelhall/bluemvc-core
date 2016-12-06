@@ -24,7 +24,6 @@ class HeaderCollection implements HeaderCollectionInterface
     public function __construct()
     {
         $this->myHeaders = [];
-        $this->myPosition = 0;
     }
 
     /**
@@ -178,9 +177,4 @@ class HeaderCollection implements HeaderCollectionInterface
      * @var array My headers.
      */
     private $myHeaders;
-
-    /**
-     * @var int My position.
-     */
-    private $myPosition;
 }

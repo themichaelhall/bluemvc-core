@@ -106,6 +106,17 @@ class ResponseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test get headers for response with no additional headers.
+     */
+    public function testGetHeadersForResponseWithNoAdditionalHeaders()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+
+        $this->assertSame([], iterator_to_array($response->getHeaders()));
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

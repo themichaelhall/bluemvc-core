@@ -7,7 +7,9 @@
 
 namespace BlueMvc\Core\Base;
 
+use BlueMvc\Core\Collections\HeaderCollection;
 use BlueMvc\Core\Http\StatusCode;
+use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
 use BlueMvc\Core\Interfaces\Http\StatusCodeInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
@@ -28,8 +30,9 @@ abstract class AbstractResponse implements ResponseInterface
      */
     public function __construct(RequestInterface $request)
     {
-        $this->myRequest = $request;
         $this->myContent = '';
+        $this->myHeaders = new HeaderCollection();
+        $this->myRequest = $request;
         $this->myStatusCode = new StatusCode(StatusCode::OK);
     }
 
@@ -43,6 +46,18 @@ abstract class AbstractResponse implements ResponseInterface
     public function getContent()
     {
         return $this->myContent;
+    }
+
+    /**
+     * Returns the headers.
+     *
+     * @since 1.0.0
+     *
+     * @return HeaderCollectionInterface The headers.
+     */
+    public function getHeaders()
+    {
+        return $this->myHeaders;
     }
 
     /**
@@ -97,6 +112,11 @@ abstract class AbstractResponse implements ResponseInterface
      * @var string My content.
      */
     private $myContent;
+
+    /**
+     * @var HeaderCollection My headers.
+     */
+    private $myHeaders;
 
     /**
      * @var RequestInterface My request.
