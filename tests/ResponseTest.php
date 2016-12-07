@@ -117,6 +117,38 @@ class ResponseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test get headers for response with additional headers.
+     */
+    public function testGetHeadersForResponseWithAdditionalHeaders()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $response->setHeader('Content-Type', 'text/plain');
+
+        $this->assertSame(['Content-Type' => 'text/plain'], iterator_to_array($response->getHeaders()));
+    }
+
+    /**
+     * Test output method for response with additional headers.
+     */
+    public function testOutputForResponseWithAdditionalHeaders()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $response->setContent('You are being redirected.');
+        $response->setStatusCode(new StatusCode(StatusCode::TEMPORARY_REDIRECT));
+        $response->setHeader('Location', 'http://foo.bar.com/');
+
+        ob_start();
+        $response->output();
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        $this->assertSame(['HTTP/1.1 307 Temporary Redirect', 'Location: http://foo.bar.com/'], FakeHeaders::get());
+        $this->assertSame('You are being redirected.', $responseOutput);
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

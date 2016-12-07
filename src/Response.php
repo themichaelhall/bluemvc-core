@@ -37,6 +37,13 @@ class Response extends AbstractResponse
     public function output()
     {
         header('HTTP/1.1 ' . $this->getStatusCode());
+
+        // Output headers.
+        foreach ($this->getHeaders() as $headerName => $headerValue) {
+            header($headerName . ': ' . $headerValue);
+        }
+
+        // Output content.
         echo $this->getContent();
     }
 }

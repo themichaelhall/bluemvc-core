@@ -63,6 +63,16 @@ interface ResponseInterface
     public function setContent($content);
 
     /**
+     * Sets a header.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name  The header name.
+     * @param string $value The header value.
+     */
+    public function setHeader($name, $value);
+
+    /**
      * Sets the status code.
      *
      * @since 1.0.0
