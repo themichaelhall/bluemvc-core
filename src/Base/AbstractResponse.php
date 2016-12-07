@@ -37,6 +37,21 @@ abstract class AbstractResponse implements ResponseInterface
     }
 
     /**
+     * Adds a header.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name  The header name.
+     * @param string $value The header value.
+     *
+     * @throws \InvalidArgumentException If any of the parameters are of invalid type.
+     */
+    public function addHeader($name, $value)
+    {
+        $this->myHeaders->add($name, $value);
+    }
+
+    /**
      * Returns the content.
      *
      * @since 1.0.0

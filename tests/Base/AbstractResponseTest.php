@@ -93,4 +93,17 @@ class AbstractResponseTest extends PHPUnit_Framework_TestCase
         $this->assertSame('text/plain', $response->getHeader('content-type'));
         $this->assertNull($response->getHeader('Location'));
     }
+
+    /**
+     * Test addHeader method.
+     */
+    public function testAddHeader()
+    {
+        $request = new BasicTestRequest(Url::parse('http://localhost/'), new Method('GET'));
+        $response = new BasicTestResponse($request);
+        $response->setHeader('allow', 'GET');
+        $response->addHeader('Allow', 'POST');
+
+        $this->assertSame(['Allow' => 'GET, POST'], iterator_to_array($response->getHeaders()));
+    }
 }

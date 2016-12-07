@@ -162,6 +162,19 @@ class ResponseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test addHeader method.
+     */
+    public function testAddHeader()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $response->setHeader('allow', 'GET');
+        $response->addHeader('Allow', 'POST');
+
+        $this->assertSame(['Allow' => 'GET, POST'], iterator_to_array($response->getHeaders()));
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

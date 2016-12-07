@@ -18,6 +18,16 @@ use BlueMvc\Core\Interfaces\Http\StatusCodeInterface;
 interface ResponseInterface
 {
     /**
+     * Adds a header.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name  The header name.
+     * @param string $value The header value.
+     */
+    public function addHeader($name, $value);
+
+    /**
      * Returns the content.
      *
      * @since 1.0.0
