@@ -49,6 +49,22 @@ abstract class AbstractResponse implements ResponseInterface
     }
 
     /**
+     * Returns a header value by header name if it exists, null otherwise.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name The header name.
+     *
+     * @throws \InvalidArgumentException If the $name parameter is not a string.
+     *
+     * @return string|null The header value by header name if it exists, null otherwise.
+     */
+    public function getHeader($name)
+    {
+        return $this->myHeaders->get($name);
+    }
+
+    /**
      * Returns the headers.
      *
      * @since 1.0.0

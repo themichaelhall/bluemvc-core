@@ -149,6 +149,19 @@ class ResponseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test getHeader method.
+     */
+    public function testGetHeader()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $response->setHeader('Content-Type', 'text/plain');
+
+        $this->assertSame('text/plain', $response->getHeader('content-type'));
+        $this->assertNull($response->getHeader('Location'));
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

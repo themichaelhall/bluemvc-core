@@ -89,7 +89,7 @@ class HeaderCollection implements HeaderCollectionInterface
      *
      * @throws \InvalidArgumentException If the $name parameter is not a string.
      *
-     * @return null The header value by header name if it exists, null otherwise.
+     * @return string|null The header value by header name if it exists, null otherwise.
      */
     public function get($name)
     {
