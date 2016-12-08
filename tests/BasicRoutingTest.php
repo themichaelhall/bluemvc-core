@@ -243,6 +243,24 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test get a page returning a RedirectResult.
+     */
+    public function testGetPageWithRedirectResult()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/redirect', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        $this->assertSame('', $responseOutput);
+        $this->assertSame('', $response->getContent());
+        $this->assertSame(['HTTP/1.1 302 Found', 'Location: http://www.domain.com/foo/bar'], FakeHeaders::get());
+        $this->assertSame(StatusCode::FOUND, $response->getStatusCode()->getCode());
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
