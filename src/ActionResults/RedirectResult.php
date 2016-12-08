@@ -7,17 +7,15 @@
 
 namespace BlueMvc\Core\ActionResults;
 
-use BlueMvc\Core\Base\ActionResults\AbstractActionResult;
+use BlueMvc\Core\Base\ActionResults\AbstractRedirectActionResult;
 use BlueMvc\Core\Http\StatusCode;
-use BlueMvc\Core\Interfaces\ResponseInterface;
-use DataTypes\Url;
 
 /**
  * Class representing a 302 Found action result.
  *
  * @since 1.0.0
  */
-class RedirectResult extends AbstractActionResult
+class RedirectResult extends AbstractRedirectActionResult
 {
     /**
      * Constructs the action result.
@@ -30,32 +28,6 @@ class RedirectResult extends AbstractActionResult
      */
     public function __construct($url = '')
     {
-        if (!is_string($url)) {
-            throw new \InvalidArgumentException('$url parameter is not a string.');
-        }
-
-        parent::__construct(new StatusCode(StatusCode::FOUND));
-
-        $this->myUrl = $url;
+        parent::__construct(new StatusCode(StatusCode::FOUND), $url);
     }
-
-    /**
-     * Updates the response.
-     *
-     * @since 1.0.0
-     *
-     * @param ResponseInterface $response The response.
-     */
-    public function updateResponse(ResponseInterface $response)
-    {
-        parent::updateResponse($response);
-
-        $redirectUrl = Url::parseRelative($this->myUrl, $response->getRequest()->getUrl());
-        $response->setHeader('Location', $redirectUrl->__toString());
-    }
-
-    /**
-     * @var string My url.
-     */
-    private $myUrl;
 }
