@@ -154,7 +154,7 @@ abstract class AbstractApplication implements ApplicationInterface
 
             if ($routeMatch !== null) {
                 $controller = $routeMatch->getController();
-                $requestIsProcessed = $controller->processRequest($this, $request, $response, $routeMatch);
+                $requestIsProcessed = $controller->processRequest($this, $request, $response, $routeMatch->getAction(), $routeMatch->getParameters());
 
                 break;
             }

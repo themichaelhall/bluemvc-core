@@ -13,7 +13,6 @@ use BlueMvc\Core\Interfaces\ActionResults\ActionResultInterface;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
-use BlueMvc\Core\Interfaces\RouteMatchInterface;
 use BlueMvc\Core\Interfaces\ViewInterface;
 use DataTypes\FilePath;
 
@@ -62,17 +61,22 @@ abstract class Controller extends AbstractController
      * @param ApplicationInterface $application The application.
      * @param RequestInterface     $request     The request.
      * @param ResponseInterface    $response    The response.
-     * @param RouteMatchInterface  $routeMatch  The route match.
+     * @param string               $action      The action.
+     * @param array                $parameters  The parameters.
      *
+     * @throws \InvalidArgumentException If the $action parameter is not a string.
      * @throws ViewFileNotFoundException If no suitable view file was found.
      *
      * @return bool True if request was actually processed, false otherwise.
      */
-    public function processRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, RouteMatchInterface $routeMatch)
+    public function processRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, $action, array $parameters = [])
     {
-        parent::processRequest($application, $request, $response, $routeMatch);
+        if (!is_string($action)) {
+            throw new \InvalidArgumentException('$action parameter is not a string.');
+        }
 
-        $action = $routeMatch->getAction();
+        parent::processRequest($application, $request, $response, $action, $parameters);
+
         $actionName = $action !== '' ? $action : 'index'; // fixme: validate and normalize action name
 
         // Try to invoke the action, and if that failed, try to invoke the default action.

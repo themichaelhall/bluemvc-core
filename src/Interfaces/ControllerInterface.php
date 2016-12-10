@@ -22,9 +22,10 @@ interface ControllerInterface
      * @param ApplicationInterface $application The application.
      * @param RequestInterface     $request     The request.
      * @param ResponseInterface    $response    The response.
-     * @param RouteMatchInterface  $routeMatch  The route match.
+     * @param string               $action      The action.
+     * @param array                $parameters  The parameters.
      *
      * @return bool True if request was actually processed, false otherwise.
      */
-    public function processRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, RouteMatchInterface $routeMatch);
+    public function processRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, $action, array $parameters = []);
 }
