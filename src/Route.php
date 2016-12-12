@@ -7,17 +7,17 @@
 
 namespace BlueMvc\Core;
 
-use BlueMvc\Core\Base\AbstractRoute;
 use BlueMvc\Core\Exceptions\InvalidControllerClassException;
 use BlueMvc\Core\Exceptions\InvalidRoutePathException;
 use BlueMvc\Core\Interfaces\RequestInterface;
+use BlueMvc\Core\Interfaces\RouteInterface;
 
 /**
  * Class representing a route.
  *
  * @since 1.0.0
  */
-class Route extends AbstractRoute
+class Route implements RouteInterface
 {
     /**
      * Constructs a route.
@@ -85,7 +85,7 @@ class Route extends AbstractRoute
             if ($this->myPath === '') {
                 $action = $path->getFilename() !== null ? $path->getFilename() : '';
 
-                return new RouteMatch(static::tryCreateController($this->myControllerClassName), $action);
+                return new RouteMatch($this->myControllerClassName, $action);
             }
         } else {
             // Subdirectory, e.g. "/foo/" or "/foo/bar/"
@@ -102,7 +102,7 @@ class Route extends AbstractRoute
                     $parameters = [];
                 }
 
-                return new RouteMatch(static::tryCreateController($this->myControllerClassName), $action, $parameters);
+                return new RouteMatch($this->myControllerClassName, $action, $parameters);
             }
         }
 

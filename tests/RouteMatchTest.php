@@ -10,13 +10,13 @@ require_once __DIR__ . '/Helpers/TestControllers/BasicTestController.php';
 class RouteMatchTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Test getController method.
+     * Test getControllerClassName method.
      */
-    public function testGetController()
+    public function testGetControllerClassName()
     {
-        $routeMatch = new RouteMatch(new BasicTestController());
+        $routeMatch = new RouteMatch(BasicTestController::class);
 
-        $this->assertInstanceOf(BasicTestController::class, $routeMatch->getController());
+        $this->assertSame(BasicTestController::class, $routeMatch->getControllerClassName());
     }
 
     /**
@@ -24,7 +24,7 @@ class RouteMatchTest extends PHPUnit_Framework_TestCase
      */
     public function testGetAction()
     {
-        $routeMatch = new RouteMatch(new BasicTestController(), 'foo');
+        $routeMatch = new RouteMatch(BasicTestController::class, 'foo');
 
         $this->assertSame('foo', $routeMatch->getAction());
     }
@@ -34,7 +34,7 @@ class RouteMatchTest extends PHPUnit_Framework_TestCase
      */
     public function testGetParameters()
     {
-        $routeMatch = new RouteMatch(new BasicTestController(), '', ['foo', 'bar']);
+        $routeMatch = new RouteMatch(BasicTestController::class, '', ['foo', 'bar']);
 
         $this->assertSame(['foo', 'bar'], $routeMatch->getParameters());
     }

@@ -7,16 +7,16 @@
 
 namespace BlueMvc\Core;
 
-use BlueMvc\Core\Base\AbstractRoute;
 use BlueMvc\Core\Exceptions\InvalidControllerClassException;
 use BlueMvc\Core\Interfaces\RequestInterface;
+use BlueMvc\Core\Interfaces\RouteInterface;
 
 /**
  * Class representing a default route.
  *
  * @since 1.0.0
  */
-class DefaultRoute extends AbstractRoute
+class DefaultRoute implements RouteInterface
 {
     /**
      * Constructs a default route.
@@ -69,7 +69,7 @@ class DefaultRoute extends AbstractRoute
             $parameters = array_merge(array_slice($directoryParts, 1), [$filename]);
         }
 
-        return new RouteMatch(static::tryCreateController($this->myControllerClassName), $action, $parameters);
+        return new RouteMatch($this->myControllerClassName, $action, $parameters);
     }
 
     /**

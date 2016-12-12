@@ -7,9 +7,11 @@
 
 namespace BlueMvc\Core\Base;
 
+use BlueMvc\Core\Exceptions\InvalidControllerClassException;
 use BlueMvc\Core\Exceptions\InvalidFilePathException;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
+use BlueMvc\Core\Interfaces\ControllerInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
 use BlueMvc\Core\Interfaces\RouteInterface;
@@ -153,7 +155,7 @@ abstract class AbstractApplication implements ApplicationInterface
             $routeMatch = $route->matches($request);
 
             if ($routeMatch !== null) {
-                $controller = $routeMatch->getController();
+                $controller = self::myTryCreateController($routeMatch->getControllerClassName());
                 $requestIsProcessed = $controller->processRequest($this, $request, $response, $routeMatch->getAction(), $routeMatch->getParameters());
 
                 break;
@@ -243,6 +245,33 @@ abstract class AbstractApplication implements ApplicationInterface
         if (!is_dir($directory->__toString())) {
             mkdir($directory->__toString(), 0700, true);
         }
+    }
+
+    /**
+     * Try to create a controller class.
+     *
+     * @since 1.0.0
+     *
+     * @param string $controllerClassName The controller class name.
+     *
+     * @throws InvalidControllerClassException If the $controllerClassName parameter is invalid.
+     *
+     * @return ControllerInterface The controller class.
+     */
+    private static function myTryCreateController($controllerClassName)
+    {
+        try {
+            $controllerClass = new \ReflectionClass($controllerClassName);
+
+            if (!$controllerClass->implementsInterface(ControllerInterface::class)) {
+                throw new InvalidControllerClassException('Controller class "' . $controllerClassName . '" does not implement "' . ControllerInterface::class . '".');
+            }
+        } catch (\ReflectionException $e) {
+            throw new InvalidControllerClassException('Controller class "' . $controllerClassName . '" does not exist.');
+        }
+
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        return $controllerClass->newInstance();
     }
 
     /**

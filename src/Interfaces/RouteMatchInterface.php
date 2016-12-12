@@ -24,13 +24,13 @@ interface RouteMatchInterface
     public function getAction();
 
     /**
-     * Returns the controller.
+     * Returns the controller class name.
      *
      * @since 1.0.0
      *
-     * @return ControllerInterface The controller.
+     * @return string The controller class name.
      */
-    public function getController();
+    public function getControllerClassName();
 
     /**
      * Returns the parameters.

@@ -7,7 +7,6 @@
 
 namespace BlueMvc\Core;
 
-use BlueMvc\Core\Interfaces\ControllerInterface;
 use BlueMvc\Core\Interfaces\RouteMatchInterface;
 
 /**
@@ -22,15 +21,16 @@ class RouteMatch implements RouteMatchInterface
      *
      * @since 1.0.0
      *
-     * @param ControllerInterface $controller The controller.
-     * @param string              $action     The action.
-     * @param string[]            $parameters The parameters.
+     * @param string   $controllerClassName The controller class name.
+     * @param string   $action              The action.
+     * @param string[] $parameters          The parameters.
      */
-    public function __construct(ControllerInterface $controller, $action = '', array $parameters = [])
+    public function __construct($controllerClassName, $action = '', array $parameters = [])
     {
+        assert(is_string($controllerClassName));
         assert(is_string($action));
 
-        $this->myController = $controller;
+        $this->myControllerClassName = $controllerClassName;
         $this->myAction = $action;
         $this->myParameters = $parameters;
     }
@@ -48,15 +48,15 @@ class RouteMatch implements RouteMatchInterface
     }
 
     /**
-     * Returns the controller.
+     * Returns the controller class name.
      *
      * @since 1.0.0
      *
-     * @return ControllerInterface The controller.
+     * @return string The controller class name.
      */
-    public function getController()
+    public function getControllerClassName()
     {
-        return $this->myController;
+        return $this->myControllerClassName;
     }
 
     /**
@@ -77,9 +77,9 @@ class RouteMatch implements RouteMatchInterface
     private $myAction;
 
     /**
-     * @var ControllerInterface My controller.
+     * @var string My controller class name.
      */
-    private $myController;
+    private $myControllerClassName;
 
     /**
      * @var string[] My parameters.

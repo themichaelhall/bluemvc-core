@@ -41,30 +41,6 @@ class RouteTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test that non existing controller class name is invalid.
-     *
-     * @expectedException BlueMvc\Core\Exceptions\InvalidControllerClassException
-     * @expectedExceptionMessage Controller class "NonExistingClassName" does not exist.
-     */
-    public function testNonExistingControllerClassNameIsInvalid()
-    {
-        $route = new Route('', 'NonExistingClassName');
-        $route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']));
-    }
-
-    /**
-     * Test that class not implementing ControllerInterface is invalid.
-     *
-     * @expectedException BlueMvc\Core\Exceptions\InvalidControllerClassException
-     * @expectedExceptionMessage Controller class "RouteTest" does not implement "BlueMvc\Core\Interfaces\ControllerInterface".
-     */
-    public function testControllerClassNotImplementingControllerInterfaceIsInvalid()
-    {
-        $route = new Route('', self::class);
-        $route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']));
-    }
-
-    /**
      * Test url matches for empty path.
      */
     public function testUrlMatchesForEmptyPath()
@@ -114,7 +90,7 @@ class RouteTest extends PHPUnit_Framework_TestCase
         $route = new Route('', BasicTestController::class);
         $routeMatch = $route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']));
 
-        $this->assertInstanceOf(BasicTestController::class, $routeMatch->getController());
+        $this->assertSame(BasicTestController::class, $routeMatch->getControllerClassName());
         $this->assertSame('', $routeMatch->getAction());
         $this->assertSame([], $routeMatch->getParameters());
     }
@@ -127,7 +103,7 @@ class RouteTest extends PHPUnit_Framework_TestCase
         $route = new Route('', BasicTestController::class);
         $routeMatch = $route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo', 'REQUEST_METHOD' => 'GET']));
 
-        $this->assertInstanceOf(BasicTestController::class, $routeMatch->getController());
+        $this->assertSame(BasicTestController::class, $routeMatch->getControllerClassName());
         $this->assertSame('foo', $routeMatch->getAction());
         $this->assertSame([], $routeMatch->getParameters());
     }
@@ -140,7 +116,7 @@ class RouteTest extends PHPUnit_Framework_TestCase
         $route = new Route('foo', BasicTestController::class);
         $routeMatch = $route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo/', 'REQUEST_METHOD' => 'GET']));
 
-        $this->assertInstanceOf(BasicTestController::class, $routeMatch->getController());
+        $this->assertSame(BasicTestController::class, $routeMatch->getControllerClassName());
         $this->assertSame('', $routeMatch->getAction());
         $this->assertSame([], $routeMatch->getParameters());
     }
@@ -153,7 +129,7 @@ class RouteTest extends PHPUnit_Framework_TestCase
         $route = new Route('foo', BasicTestController::class);
         $routeMatch = $route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo/bar', 'REQUEST_METHOD' => 'GET']));
 
-        $this->assertInstanceOf(BasicTestController::class, $routeMatch->getController());
+        $this->assertSame(BasicTestController::class, $routeMatch->getControllerClassName());
         $this->assertSame('bar', $routeMatch->getAction());
         $this->assertSame([], $routeMatch->getParameters());
     }
@@ -166,7 +142,7 @@ class RouteTest extends PHPUnit_Framework_TestCase
         $route = new Route('foo', BasicTestController::class);
         $routeMatch = $route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo/bar/', 'REQUEST_METHOD' => 'GET']));
 
-        $this->assertInstanceOf(BasicTestController::class, $routeMatch->getController());
+        $this->assertSame(BasicTestController::class, $routeMatch->getControllerClassName());
         $this->assertSame('bar', $routeMatch->getAction());
         $this->assertSame([''], $routeMatch->getParameters());
     }
@@ -179,7 +155,7 @@ class RouteTest extends PHPUnit_Framework_TestCase
         $route = new Route('foo', BasicTestController::class);
         $routeMatch = $route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo/bar/baz', 'REQUEST_METHOD' => 'GET']));
 
-        $this->assertInstanceOf(BasicTestController::class, $routeMatch->getController());
+        $this->assertSame(BasicTestController::class, $routeMatch->getControllerClassName());
         $this->assertSame('bar', $routeMatch->getAction());
         $this->assertSame(['baz'], $routeMatch->getParameters());
     }
@@ -192,7 +168,7 @@ class RouteTest extends PHPUnit_Framework_TestCase
         $route = new Route('foo', BasicTestController::class);
         $routeMatch = $route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo/bar/baz/', 'REQUEST_METHOD' => 'GET']));
 
-        $this->assertInstanceOf(BasicTestController::class, $routeMatch->getController());
+        $this->assertSame(BasicTestController::class, $routeMatch->getControllerClassName());
         $this->assertSame('bar', $routeMatch->getAction());
         $this->assertSame(['baz', ''], $routeMatch->getParameters());
     }

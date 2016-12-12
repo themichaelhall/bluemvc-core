@@ -76,6 +76,34 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test get invalid controller class name 1.
+     *
+     * @expectedException \BlueMvc\Core\Exceptions\InvalidControllerClassException
+     * @expectedExceptionMessage Controller class "BlueMvc\Core\FooBar" does not exist.
+     */
+    public function testGetInvalidControllerClassName1()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/invalid-controller-class-name/', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $this->application->addRoute(new Route('invalid-controller-class-name', 'BlueMvc\\Core\\FooBar'));
+        $this->application->run($request, $response);
+    }
+
+    /**
+     * Test get invalid controller class name 2.
+     *
+     * @expectedException \BlueMvc\Core\Exceptions\InvalidControllerClassException
+     * @expectedExceptionMessage Controller class "BlueMvc\Core\Request" does not implement "BlueMvc\Core\Interfaces\ControllerInterface".
+     */
+    public function testGetInvalidControllerClassName2()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/invalid-controller-class-name/', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $this->application->addRoute(new Route('invalid-controller-class-name', 'BlueMvc\\Core\\Request'));
+        $this->application->run($request, $response);
+    }
+
+    /**
      * Test get server error page.
      */
     public function testGetServerErrorPage()
