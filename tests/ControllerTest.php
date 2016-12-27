@@ -8,6 +8,7 @@ use BlueMvc\Core\Response;
 require_once __DIR__ . '/Helpers/TestControllers/ActionResultTestController.php';
 require_once __DIR__ . '/Helpers/TestControllers/BasicTestController.php';
 require_once __DIR__ . '/Helpers/TestControllers/DefaultActionTestController.php';
+require_once __DIR__ . '/Helpers/TestControllers/PreActionEventController.php';
 
 /**
  * Test Controller class.
@@ -149,6 +150,40 @@ class Controller extends PHPUnit_Framework_TestCase
         $this->assertTrue($isProcessed);
         $this->assertSame('Page was not found', $response->getContent());
         $this->assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Test index action with controller with a pre-action event method.
+     */
+    public function testIndexActionWithControllerWithPreActionEventMethod()
+    {
+        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $controller = new PreActionEventController();
+        $isProcessed = $controller->processRequest($application, $request, $response, '');
+
+        $this->assertTrue($isProcessed);
+        $this->assertSame('Index action with pre-action event', $response->getContent());
+        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        $this->assertSame('true', $response->getHeader('X-Pre-Action'));
+    }
+
+    /**
+     * Test default action with controller with a pre-action event method.
+     */
+    public function testDefaultActionWithControllerWithPreActionEventMethod()
+    {
+        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $controller = new PreActionEventController();
+        $isProcessed = $controller->processRequest($application, $request, $response, 'foo');
+
+        $this->assertTrue($isProcessed);
+        $this->assertSame('Default action with pre-action event', $response->getContent());
+        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        $this->assertSame('true', $response->getHeader('X-Pre-Action'));
     }
 
     /**
