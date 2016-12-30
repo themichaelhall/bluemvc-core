@@ -14,7 +14,7 @@ require_once __DIR__ . '/Helpers/TestControllers/BasicTestController.php';
 require_once __DIR__ . '/Helpers/TestControllers/ViewTestController.php';
 require_once __DIR__ . '/Helpers/TestControllers/DefaultActionWithViewTestController.php';
 require_once __DIR__ . '/Helpers/TestControllers/ActionResultTestController.php';
-require_once __DIR__ . '/Helpers/TestControllers/PreActionEventController.php';
+require_once __DIR__ . '/Helpers/TestControllers/PreAndPostActionEventController.php';
 require_once __DIR__ . '/Helpers/TestViewRenderers/BasicTestViewRenderer.php';
 
 /**
@@ -312,16 +312,16 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
      */
     public function testGetIndexPageForControllerWithPreActionEvent()
     {
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/preactionevent/', 'REQUEST_METHOD' => 'GET']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/preandpostactionevent/', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('Index action with pre-action event', $responseOutput);
-        $this->assertSame('Index action with pre-action event', $response->getContent());
-        $this->assertSame(['HTTP/1.1 200 OK', 'X-Pre-Action: true'], FakeHeaders::get());
+        $this->assertSame('Index action with pre- and post-action event', $responseOutput);
+        $this->assertSame('Index action with pre- and post-action event', $response->getContent());
+        $this->assertSame(['HTTP/1.1 200 OK', 'X-Pre-Action: true', 'X-Post-Action: true'], FakeHeaders::get());
         $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
@@ -330,16 +330,16 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
      */
     public function testGetDefaultPageForControllerWithPreActionEvent()
     {
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/preactionevent/foo', 'REQUEST_METHOD' => 'GET']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/preandpostactionevent/foo', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('Default action with pre-action event', $responseOutput);
-        $this->assertSame('Default action with pre-action event', $response->getContent());
-        $this->assertSame(['HTTP/1.1 200 OK', 'X-Pre-Action: true'], FakeHeaders::get());
+        $this->assertSame('Default action with pre- and post-action event', $responseOutput);
+        $this->assertSame('Default action with pre- and post-action event', $response->getContent());
+        $this->assertSame(['HTTP/1.1 200 OK', 'X-Pre-Action: true', 'X-Post-Action: true'], FakeHeaders::get());
         $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
@@ -359,7 +359,7 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $this->application->addRoute(new Route('default', DefaultActionTestController::class));
         $this->application->addRoute(new Route('defaultview', DefaultActionWithViewTestController::class));
         $this->application->addRoute(new Route('actionresult', ActionResultTestController::class));
-        $this->application->addRoute(new Route('preactionevent', PreActionEventController::class));
+        $this->application->addRoute(new Route('preandpostactionevent', PreAndPostActionEventController::class));
     }
 
     /**

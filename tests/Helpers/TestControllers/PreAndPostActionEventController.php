@@ -3,9 +3,9 @@
 use BlueMvc\Core\Controller;
 
 /**
- * Pre-action event test controller class.
+ * Pre- and post-action event test controller class.
  */
-class PreActionEventController extends Controller
+class PreAndPostActionEventController extends Controller
 {
     /**
      * Index action.
@@ -14,7 +14,7 @@ class PreActionEventController extends Controller
      */
     public function indexAction()
     {
-        return 'Index action with pre-action event';
+        return 'Index action with pre- and post-action event';
     }
 
     /**
@@ -24,7 +24,7 @@ class PreActionEventController extends Controller
      */
     public function defaultAction()
     {
-        return 'Default action with pre-action event';
+        return 'Default action with pre- and post-action event';
     }
 
     /**
@@ -35,6 +35,18 @@ class PreActionEventController extends Controller
     protected function onPreActionEvent()
     {
         $this->getResponse()->addHeader('X-Pre-Action', 'true');
+
+        return null;
+    }
+
+    /**
+     * Post-action event.
+     *
+     * @return null
+     */
+    protected function onPostActionEvent()
+    {
+        $this->getResponse()->addHeader('X-Post-Action', 'true');
 
         return null;
     }

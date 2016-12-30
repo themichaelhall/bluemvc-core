@@ -78,6 +78,30 @@ abstract class AbstractController implements ControllerInterface
     }
 
     /**
+     * Post-action event.
+     *
+     * @since 1.0.0
+     *
+     * @return null
+     */
+    protected function onPostActionEvent()
+    {
+        return null;
+    }
+
+    /**
+     * Pre-action event.
+     *
+     * @since 1.0.0
+     *
+     * @return null
+     */
+    protected function onPreActionEvent()
+    {
+        return null;
+    }
+
+    /**
      * Try to invoke an action method.
      *
      * @since 1.0.0
@@ -100,20 +124,9 @@ abstract class AbstractController implements ControllerInterface
 
         $this->onPreActionEvent();
         $result = $actionMethod->invokeArgs($this, $parameters);
+        $this->onPostActionEvent();
 
         return true;
-    }
-
-    /**
-     * Pre-action event.
-     *
-     * @since 1.0.0
-     *
-     * @return null
-     */
-    protected function onPreActionEvent()
-    {
-        return null;
     }
 
     /**
