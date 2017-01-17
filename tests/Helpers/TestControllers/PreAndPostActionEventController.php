@@ -31,7 +31,7 @@ class PreAndPostActionEventController extends Controller
     /**
      * Pre-action event.
      *
-     * @return null
+     * @return NotFoundResult|null The result.
      */
     protected function onPreActionEvent()
     {
@@ -47,10 +47,14 @@ class PreAndPostActionEventController extends Controller
     /**
      * Post-action event.
      *
-     * @return null
+     * @return string|null The result.
      */
     protected function onPostActionEvent()
     {
+        if ($this->getRequest()->getUrl()->getPort() === 82) {
+            return 'This is a post-action result';
+        }
+
         $this->getResponse()->addHeader('X-Post-Action', 'true');
 
         return null;

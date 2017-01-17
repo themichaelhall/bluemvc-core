@@ -362,6 +362,24 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test get a page with post-action event result.
+     */
+    public function testGetPageWithPostActionEventResult()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com:82', 'SERVER_PORT' => '82', 'REQUEST_URI' => '/preandpostactionevent/', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        $this->assertSame('This is a post-action result', $responseOutput);
+        $this->assertSame('This is a post-action result', $response->getContent());
+        $this->assertSame(['HTTP/1.1 200 OK', 'X-Pre-Action: true'], FakeHeaders::get());
+        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

@@ -134,7 +134,12 @@ abstract class AbstractController implements ControllerInterface
         $result = $actionMethod->invokeArgs($this, $parameters);
 
         // Handle post-action event.
-        $this->onPostActionEvent();
+        $postActionResult = $this->onPostActionEvent();
+        if ($postActionResult !== null) {
+            $result = $postActionResult;
+
+            return true;
+        }
 
         return true;
     }
