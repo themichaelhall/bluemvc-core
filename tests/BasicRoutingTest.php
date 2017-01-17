@@ -344,6 +344,24 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test get a page with pre-action event result.
+     */
+    public function testGetPageWithPreActionEventResult()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com:81', 'SERVER_PORT' => '81', 'REQUEST_URI' => '/preandpostactionevent/', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        $this->assertSame('This is a pre-action result', $responseOutput);
+        $this->assertSame('This is a pre-action result', $response->getContent());
+        $this->assertSame(['HTTP/1.1 404 Not Found'], FakeHeaders::get());
+        $this->assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

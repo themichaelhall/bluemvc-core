@@ -1,5 +1,6 @@
 <?php
 
+use BlueMvc\Core\ActionResults\NotFoundResult;
 use BlueMvc\Core\Controller;
 
 /**
@@ -34,6 +35,10 @@ class PreAndPostActionEventController extends Controller
      */
     protected function onPreActionEvent()
     {
+        if ($this->getRequest()->getUrl()->getPort() === 81) {
+            return new NotFoundResult('This is a pre-action result');
+        }
+
         $this->getResponse()->addHeader('X-Pre-Action', 'true');
 
         return null;

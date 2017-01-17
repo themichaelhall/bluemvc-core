@@ -122,8 +122,18 @@ abstract class AbstractController implements ControllerInterface
             return false;
         }
 
-        $this->onPreActionEvent();
+        // Handle pre-action event.
+        $preActionResult = $this->onPreActionEvent();
+        if ($preActionResult !== null) {
+            $result = $preActionResult;
+
+            return true;
+        }
+
+        // Handle action method.
         $result = $actionMethod->invokeArgs($this, $parameters);
+
+        // Handle post-action event.
         $this->onPostActionEvent();
 
         return true;

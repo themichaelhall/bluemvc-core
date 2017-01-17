@@ -189,6 +189,24 @@ class ControllerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test a pre-action event returning a result.
+     */
+    public function testPreActionEventReturningResult()
+    {
+        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com:81', 'SERVER_PORT' => '81', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $controller = new PreAndPostActionEventController();
+        $isProcessed = $controller->processRequest($application, $request, $response, '');
+
+        $this->assertTrue($isProcessed);
+        $this->assertSame('This is a pre-action result', $response->getContent());
+        $this->assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
+        $this->assertNull($response->getHeader('X-Pre-Action'));
+        $this->assertNull($response->getHeader('X-Post-Action'));
+    }
+
+    /**
      * Test getViewData method.
      */
     public function testGetViewData()
