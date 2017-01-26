@@ -119,7 +119,7 @@ abstract class Controller extends AbstractController
             }
         } else {
             if ($result instanceof ActionResultInterface) {
-                $result->updateResponse($response);
+                $result->updateResponse($application, $request, $response);
             } else {
                 $response->setContent($result);
             }

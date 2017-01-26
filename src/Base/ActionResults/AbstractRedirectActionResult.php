@@ -7,7 +7,9 @@
 
 namespace BlueMvc\Core\Base\ActionResults;
 
+use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\Http\StatusCodeInterface;
+use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
 use DataTypes\Url;
 
@@ -44,13 +46,15 @@ class AbstractRedirectActionResult extends AbstractActionResult
      *
      * @since 1.0.0
      *
-     * @param ResponseInterface $response The response.
+     * @param ApplicationInterface $application The application.
+     * @param RequestInterface     $request     The request.
+     * @param ResponseInterface    $response    The response.
      */
-    public function updateResponse(ResponseInterface $response)
+    public function updateResponse(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response)
     {
-        parent::updateResponse($response);
+        parent::updateResponse($application, $request, $response);
 
-        $redirectUrl = Url::parseRelative($this->myUrl, $response->getRequest()->getUrl());
+        $redirectUrl = Url::parseRelative($this->myUrl, $request->getUrl());
         $response->setHeader('Location', $redirectUrl->__toString());
     }
 

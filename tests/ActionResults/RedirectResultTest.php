@@ -1,6 +1,7 @@
 <?php
 
 use BlueMvc\Core\ActionResults\RedirectResult;
+use BlueMvc\Core\Application;
 use BlueMvc\Core\Request;
 use BlueMvc\Core\Response;
 
@@ -14,6 +15,11 @@ class RedirectResultTest extends PHPUnit_Framework_TestCase
      */
     public function testWithAbsoluteUrl()
     {
+        $application = new Application(
+            [
+                'DOCUMENT_ROOT' => '/var/www/',
+            ]
+        );
         $request = new Request(
             [
                 'HTTP_HOST'      => 'www.domain.com',
@@ -23,7 +29,7 @@ class RedirectResultTest extends PHPUnit_Framework_TestCase
         );
         $response = new Response($request);
         $actionResult = new RedirectResult('https://domain.org/baz?query');
-        $actionResult->updateResponse($response);
+        $actionResult->updateResponse($application, $request, $response);
 
         $this->assertSame(302, $response->getStatusCode()->getCode());
         $this->assertSame('Found', $response->getStatusCode()->getDescription());
@@ -36,6 +42,11 @@ class RedirectResultTest extends PHPUnit_Framework_TestCase
      */
     public function testWithRelativeUrl()
     {
+        $application = new Application(
+            [
+                'DOCUMENT_ROOT' => '/var/www/',
+            ]
+        );
         $request = new Request(
             [
                 'HTTP_HOST'      => 'www.domain.com',
@@ -45,7 +56,7 @@ class RedirectResultTest extends PHPUnit_Framework_TestCase
         );
         $response = new Response($request);
         $actionResult = new RedirectResult('../baz');
-        $actionResult->updateResponse($response);
+        $actionResult->updateResponse($application, $request, $response);
 
         $this->assertSame(302, $response->getStatusCode()->getCode());
         $this->assertSame('Found', $response->getStatusCode()->getDescription());
@@ -61,6 +72,11 @@ class RedirectResultTest extends PHPUnit_Framework_TestCase
      */
     public function testWithInvalidUrlParameter()
     {
+        $application = new Application(
+            [
+                'DOCUMENT_ROOT' => '/var/www/',
+            ]
+        );
         $request = new Request(
             [
                 'HTTP_HOST'      => 'www.domain.com',
@@ -71,7 +87,7 @@ class RedirectResultTest extends PHPUnit_Framework_TestCase
 
         $response = new Response($request);
         $actionResult = new RedirectResult('foobar://localhost/');
-        $actionResult->updateResponse($response);
+        $actionResult->updateResponse($application, $request, $response);
     }
 
     /**
@@ -82,6 +98,11 @@ class RedirectResultTest extends PHPUnit_Framework_TestCase
      */
     public function testWithInvalidRelativeUrlParameter()
     {
+        $application = new Application(
+            [
+                'DOCUMENT_ROOT' => '/var/www/',
+            ]
+        );
         $request = new Request(
             [
                 'HTTP_HOST'      => 'www.domain.com',
@@ -92,7 +113,7 @@ class RedirectResultTest extends PHPUnit_Framework_TestCase
 
         $response = new Response($request);
         $actionResult = new RedirectResult('../../baz');
-        $actionResult->updateResponse($response);
+        $actionResult->updateResponse($application, $request, $response);
     }
 
     /**

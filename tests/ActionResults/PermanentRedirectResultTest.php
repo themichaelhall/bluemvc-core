@@ -1,6 +1,7 @@
 <?php
 
 use BlueMvc\Core\ActionResults\PermanentRedirectResult;
+use BlueMvc\Core\Application;
 use BlueMvc\Core\Request;
 use BlueMvc\Core\Response;
 
@@ -14,6 +15,11 @@ class PermanentRedirectResultTest extends PHPUnit_Framework_TestCase
      */
     public function testWithAbsoluteUrl()
     {
+        $application = new Application(
+            [
+                'DOCUMENT_ROOT' => '/var/www/',
+            ]
+        );
         $request = new Request(
             [
                 'HTTP_HOST'      => 'www.domain.com',
@@ -23,7 +29,7 @@ class PermanentRedirectResultTest extends PHPUnit_Framework_TestCase
         );
         $response = new Response($request);
         $actionResult = new PermanentRedirectResult('https://domain.org/baz?query');
-        $actionResult->updateResponse($response);
+        $actionResult->updateResponse($application, $request, $response);
 
         $this->assertSame(301, $response->getStatusCode()->getCode());
         $this->assertSame('Moved Permanently', $response->getStatusCode()->getDescription());
@@ -36,6 +42,11 @@ class PermanentRedirectResultTest extends PHPUnit_Framework_TestCase
      */
     public function testWithRelativeUrl()
     {
+        $application = new Application(
+            [
+                'DOCUMENT_ROOT' => '/var/www/',
+            ]
+        );
         $request = new Request(
             [
                 'HTTP_HOST'      => 'www.domain.com',
@@ -45,7 +56,7 @@ class PermanentRedirectResultTest extends PHPUnit_Framework_TestCase
         );
         $response = new Response($request);
         $actionResult = new PermanentRedirectResult('../baz');
-        $actionResult->updateResponse($response);
+        $actionResult->updateResponse($application, $request, $response);
 
         $this->assertSame(301, $response->getStatusCode()->getCode());
         $this->assertSame('Moved Permanently', $response->getStatusCode()->getDescription());
@@ -61,6 +72,11 @@ class PermanentRedirectResultTest extends PHPUnit_Framework_TestCase
      */
     public function testWithInvalidUrlParameter()
     {
+        $application = new Application(
+            [
+                'DOCUMENT_ROOT' => '/var/www/',
+            ]
+        );
         $request = new Request(
             [
                 'HTTP_HOST'      => 'www.domain.com',
@@ -68,10 +84,9 @@ class PermanentRedirectResultTest extends PHPUnit_Framework_TestCase
                 'REQUEST_METHOD' => 'GET',
             ]
         );
-
         $response = new Response($request);
         $actionResult = new PermanentRedirectResult('foobar://localhost/');
-        $actionResult->updateResponse($response);
+        $actionResult->updateResponse($application, $request, $response);
     }
 
     /**
@@ -82,6 +97,11 @@ class PermanentRedirectResultTest extends PHPUnit_Framework_TestCase
      */
     public function testWithInvalidRelativeUrlParameter()
     {
+        $application = new Application(
+            [
+                'DOCUMENT_ROOT' => '/var/www/',
+            ]
+        );
         $request = new Request(
             [
                 'HTTP_HOST'      => 'www.domain.com',
@@ -89,10 +109,9 @@ class PermanentRedirectResultTest extends PHPUnit_Framework_TestCase
                 'REQUEST_METHOD' => 'GET',
             ]
         );
-
         $response = new Response($request);
         $actionResult = new PermanentRedirectResult('../../baz');
-        $actionResult->updateResponse($response);
+        $actionResult->updateResponse($application, $request, $response);
     }
 
     /**

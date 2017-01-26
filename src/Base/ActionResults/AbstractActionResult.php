@@ -8,7 +8,9 @@
 namespace BlueMvc\Core\Base\ActionResults;
 
 use BlueMvc\Core\Interfaces\ActionResults\ActionResultInterface;
+use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\Http\StatusCodeInterface;
+use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
 
 /**
@@ -43,9 +45,11 @@ abstract class AbstractActionResult implements ActionResultInterface
      *
      * @since 1.0.0
      *
-     * @param ResponseInterface $response The response.
+     * @param ApplicationInterface $application The application.
+     * @param RequestInterface     $request     The request.
+     * @param ResponseInterface    $response    The response.
      */
-    public function updateResponse(ResponseInterface $response)
+    public function updateResponse(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response)
     {
         $response->setStatusCode($this->myStatusCode);
         $response->setContent($this->myContent);

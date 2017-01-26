@@ -1,6 +1,7 @@
 <?php
 
 use BlueMvc\Core\ActionResults\NotFoundResult;
+use BlueMvc\Core\Application;
 use BlueMvc\Core\Request;
 use BlueMvc\Core\Response;
 
@@ -14,6 +15,11 @@ class NotFoundResultTest extends PHPUnit_Framework_TestCase
      */
     public function testDefaultConstructor()
     {
+        $application = new Application(
+            [
+                'DOCUMENT_ROOT' => '/var/www/',
+            ]
+        );
         $request = new Request(
             [
                 'HTTP_HOST'      => 'www.domain.com',
@@ -23,7 +29,7 @@ class NotFoundResultTest extends PHPUnit_Framework_TestCase
         );
         $response = new Response($request);
         $actionResult = new NotFoundResult();
-        $actionResult->updateResponse($response);
+        $actionResult->updateResponse($application, $request, $response);
 
         $this->assertSame(404, $response->getStatusCode()->getCode());
         $this->assertSame('Not Found', $response->getStatusCode()->getDescription());
@@ -35,6 +41,11 @@ class NotFoundResultTest extends PHPUnit_Framework_TestCase
      */
     public function testWithContent()
     {
+        $application = new Application(
+            [
+                'DOCUMENT_ROOT' => '/var/www/',
+            ]
+        );
         $request = new Request(
             [
                 'HTTP_HOST'      => 'www.domain.com',
@@ -44,7 +55,7 @@ class NotFoundResultTest extends PHPUnit_Framework_TestCase
         );
         $response = new Response($request);
         $actionResult = new NotFoundResult('The page was not found.');
-        $actionResult->updateResponse($response);
+        $actionResult->updateResponse($application, $request, $response);
 
         $this->assertSame(404, $response->getStatusCode()->getCode());
         $this->assertSame('Not Found', $response->getStatusCode()->getDescription());
