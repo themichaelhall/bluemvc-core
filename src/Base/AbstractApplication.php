@@ -28,22 +28,6 @@ use DataTypes\Interfaces\FilePathInterface;
 abstract class AbstractApplication implements ApplicationInterface
 {
     /**
-     * Constructs the application.
-     *
-     * @since 1.0.0
-     *
-     * @param FilePathInterface $documentRoot The document root.
-     */
-    public function __construct(FilePathInterface $documentRoot)
-    {
-        $this->setDocumentRoot($documentRoot);
-        $this->myRoutes = [];
-        $this->myTempPath = null;
-        $this->myViewRenderers = [];
-        $this->myViewPath = null;
-    }
-
-    /**
      * Adds a route.
      *
      * @since 1.0.0
@@ -103,7 +87,7 @@ abstract class AbstractApplication implements ApplicationInterface
         if ($this->myTempPath === null) {
             // Generate a default temporary directory by document root.
             $tempPath = FilePath::parse(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'bluemvc' . DIRECTORY_SEPARATOR . sha1($this->myDocumentRoot->__toString()) . DIRECTORY_SEPARATOR);
-            self::ensureDirectoryExists($tempPath);
+            self::myEnsureDirectoryExists($tempPath);
 
             return $tempPath;
         }
@@ -214,6 +198,22 @@ abstract class AbstractApplication implements ApplicationInterface
     }
 
     /**
+     * Constructs the application.
+     *
+     * @since 1.0.0
+     *
+     * @param FilePathInterface $documentRoot The document root.
+     */
+    protected function __construct(FilePathInterface $documentRoot)
+    {
+        $this->setDocumentRoot($documentRoot);
+        $this->myRoutes = [];
+        $this->myTempPath = null;
+        $this->myViewRenderers = [];
+        $this->myViewPath = null;
+    }
+
+    /**
      * Sets the document root.
      *
      * @since 1.0.0
@@ -240,7 +240,7 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @param FilePathInterface $directory The directory.
      */
-    private static function ensureDirectoryExists(FilePathInterface $directory)
+    private static function myEnsureDirectoryExists(FilePathInterface $directory)
     {
         if (!is_dir($directory->__toString())) {
             mkdir($directory->__toString(), 0700, true);
