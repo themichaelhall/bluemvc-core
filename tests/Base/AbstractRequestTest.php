@@ -47,6 +47,14 @@ class AbstractRequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test getHeaders method.
+     */
+    public function testGetHeaders()
+    {
+        $this->assertSame([], iterator_to_array($this->myRequest->getHeaders()));
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

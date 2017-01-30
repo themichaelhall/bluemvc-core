@@ -7,6 +7,7 @@
 
 namespace BlueMvc\Core\Interfaces;
 
+use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
 use BlueMvc\Core\Interfaces\Http\MethodInterface;
 use DataTypes\Interfaces\UrlInterface;
 
@@ -17,6 +18,15 @@ use DataTypes\Interfaces\UrlInterface;
  */
 interface RequestInterface
 {
+    /**
+     * Returns the headers.
+     *
+     * @since 1.0.0
+     *
+     * @return HeaderCollectionInterface The headers.
+     */
+    public function getHeaders();
+
     /**
      * Returns the http method.
      *

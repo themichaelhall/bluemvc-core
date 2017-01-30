@@ -7,6 +7,8 @@
 
 namespace BlueMvc\Core\Base;
 
+use BlueMvc\Core\Collections\HeaderCollection;
+use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
 use BlueMvc\Core\Interfaces\Http\MethodInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use DataTypes\Interfaces\UrlInterface;
@@ -30,6 +32,19 @@ abstract class AbstractRequest implements RequestInterface
     {
         $this->setUrl($url);
         $this->setMethod($method);
+        $this->setHeaders(new HeaderCollection());
+    }
+
+    /**
+     * Returns the headers.
+     *
+     * @since 1.0.0
+     *
+     * @return HeaderCollectionInterface The headers.
+     */
+    public function getHeaders()
+    {
+        return $this->myHeaders;
     }
 
     /**
@@ -57,6 +72,18 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
+     * Sets the headers.
+     *
+     * @since 1.0.0
+     *
+     * @param HeaderCollectionInterface $headers The headers.
+     */
+    protected function setHeaders(HeaderCollectionInterface $headers)
+    {
+        $this->myHeaders = $headers;
+    }
+
+    /**
      * Sets the http method.
      *
      * @since 1.0.0
@@ -79,6 +106,11 @@ abstract class AbstractRequest implements RequestInterface
     {
         $this->myUrl = $url;
     }
+
+    /**
+     * @var HeaderCollectionInterface My headers.
+     */
+    private $myHeaders;
 
     /**
      * @var MethodInterface My method.

@@ -103,4 +103,20 @@ class RequestTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame('POST', $request->getMethod()->__toString());
     }
+
+    /**
+     * Test getHeaders method for request with no headers.
+     */
+    public function testGetHeadersForRequestWithNoHeaders()
+    {
+        $request = new Request(
+            [
+                'HTTP_HOST'      => 'www.domain.com',
+                'REQUEST_URI'    => '/foo/bar',
+                'REQUEST_METHOD' => 'GET',
+            ]
+        );
+
+        $this->assertSame([], iterator_to_array($request->getHeaders()));
+    }
 }
