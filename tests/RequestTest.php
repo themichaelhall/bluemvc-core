@@ -105,18 +105,19 @@ class RequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test getHeaders method for request with no headers.
+     * Test getHeaders method.
      */
-    public function testGetHeadersForRequestWithNoHeaders()
+    public function testGetHeaders()
     {
         $request = new Request(
             [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'GET',
+                'HTTP_HOST'            => 'www.domain.com',
+                'REQUEST_URI'          => '/foo/bar',
+                'REQUEST_METHOD'       => 'GET',
+                'HTTP_ACCEPT_ENCODING' => 'gzip, deflate',
             ]
         );
 
-        $this->assertSame([], iterator_to_array($request->getHeaders()));
+        $this->assertSame(['Host' => 'www.domain.com', 'Accept-Encoding' => 'gzip, deflate'], iterator_to_array($request->getHeaders()));
     }
 }
