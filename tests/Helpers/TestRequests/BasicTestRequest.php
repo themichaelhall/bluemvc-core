@@ -1,6 +1,7 @@
 <?php
 
 use BlueMvc\Core\Base\AbstractRequest;
+use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
 use BlueMvc\Core\Interfaces\Http\MethodInterface;
 use DataTypes\Interfaces\UrlInterface;
 
@@ -18,6 +19,16 @@ class BasicTestRequest extends AbstractRequest
     public function __construct(UrlInterface $url, MethodInterface $method)
     {
         parent::__construct($url, $method);
+    }
+
+    /**
+     * Sets the headers.
+     *
+     * @param HeaderCollectionInterface $headers The headers.
+     */
+    public function setHeaders(HeaderCollectionInterface $headers)
+    {
+        parent::setHeaders($headers);
     }
 
     /**

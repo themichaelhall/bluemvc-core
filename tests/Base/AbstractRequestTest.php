@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../Helpers/TestRequests/BasicTestRequest.php';
 
+use BlueMvc\Core\Collections\HeaderCollection;
 use BlueMvc\Core\Http\Method;
 use DataTypes\Url;
 
@@ -52,6 +53,20 @@ class AbstractRequestTest extends PHPUnit_Framework_TestCase
     public function testGetHeaders()
     {
         $this->assertSame([], iterator_to_array($this->myRequest->getHeaders()));
+    }
+
+    /**
+     * Test setHeaders method.
+     */
+    public function testSetHeaders()
+    {
+        $headers = new HeaderCollection();
+        $headers->add('Accept-Encoding', 'gzip, deflate');
+        $headers->add('Host', 'localhost');
+
+        $this->myRequest->setHeaders($headers);
+
+        $this->assertSame(['Accept-Encoding' => 'gzip, deflate', 'Host' => 'localhost'], iterator_to_array($this->myRequest->getHeaders()));
     }
 
     /**
