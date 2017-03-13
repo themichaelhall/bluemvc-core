@@ -72,6 +72,21 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
+     * Sets a header.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name  The header name.
+     * @param string $value The header value.
+     *
+     * @throws \InvalidArgumentException If any of the parameters are of invalid type.
+     */
+    protected function setHeader($name, $value)
+    {
+        $this->myHeaders->set($name, $value);
+    }
+
+    /**
      * Sets the headers.
      *
      * @since 1.0.0
