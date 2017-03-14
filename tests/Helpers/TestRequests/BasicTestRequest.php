@@ -22,6 +22,17 @@ class BasicTestRequest extends AbstractRequest
     }
 
     /**
+     * Adds a header.
+     *
+     * @param string $name  The name.
+     * @param string $value The value.
+     */
+    public function addHeader($name, $value)
+    {
+        parent::addHeader($name, $value);
+    }
+
+    /**
      * Sets a header.
      *
      * @param string $name  The name.

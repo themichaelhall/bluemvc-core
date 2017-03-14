@@ -80,6 +80,17 @@ class AbstractRequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test addHeader method.
+     */
+    public function testAddHeader()
+    {
+        $this->myRequest->setHeader('Accept-Language', 'en-US');
+        $this->myRequest->addHeader('Accept-Language', 'en');
+
+        $this->assertSame(['Accept-Language' => 'en-US, en'], iterator_to_array($this->myRequest->getHeaders()));
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
