@@ -120,4 +120,22 @@ class RequestTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame(['Host' => 'www.domain.com', 'Accept-Encoding' => 'gzip, deflate'], iterator_to_array($request->getHeaders()));
     }
+
+    /**
+     * Test getHeader method.
+     */
+    public function testGetHeader()
+    {
+        $request = new Request(
+            [
+                'HTTP_HOST'            => 'www.domain.com',
+                'REQUEST_URI'          => '/foo/bar',
+                'REQUEST_METHOD'       => 'GET',
+                'HTTP_ACCEPT_ENCODING' => 'gzip, deflate',
+            ]
+        );
+
+        $this->assertSame('gzip, deflate', $request->getHeader('Accept-Encoding'));
+        $this->assertNull($request->getHeader('Foo-Bar'));
+    }
 }

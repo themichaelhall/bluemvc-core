@@ -19,6 +19,17 @@ use DataTypes\Interfaces\UrlInterface;
 interface RequestInterface
 {
     /**
+     * Returns a header value by header name if it exists, null otherwise.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name The header name.
+     *
+     * @return string|null The header value by header name if it exists, null otherwise.
+     */
+    public function getHeader($name);
+
+    /**
      * Returns the headers.
      *
      * @since 1.0.0
