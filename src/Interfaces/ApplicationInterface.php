@@ -81,6 +81,15 @@ interface ApplicationInterface
     public function getViewRenderers();
 
     /**
+     * Returns true if in debug mode, false otherwise.
+     *
+     * @since 1.0.0
+     *
+     * @return bool True if in debug mode, false otherwise.
+     */
+    public function isDebug();
+
+    /**
      * Runs a request.
      *
      * @since 1.0.0

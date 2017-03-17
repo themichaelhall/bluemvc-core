@@ -124,6 +124,18 @@ abstract class AbstractApplication implements ApplicationInterface
     }
 
     /**
+     * Returns true if in debug mode, false otherwise.
+     *
+     * @since 1.0.0
+     *
+     * @return bool True if in debug mode, false otherwise.
+     */
+    public function isDebug()
+    {
+        return $this->myIsDebug;
+    }
+
+    /**
      * Runs a request.
      *
      * @since 1.0.0
@@ -211,6 +223,7 @@ abstract class AbstractApplication implements ApplicationInterface
         $this->myTempPath = null;
         $this->myViewRenderers = [];
         $this->myViewPath = null;
+        $this->myIsDebug = false;
     }
 
     /**
@@ -280,12 +293,17 @@ abstract class AbstractApplication implements ApplicationInterface
     private $myDocumentRoot;
 
     /**
+     * @var bool True if in debug mode, false otherwise.
+     */
+    private $myIsDebug;
+
+    /**
      * @var RouteInterface[] My routes.
      */
     private $myRoutes;
 
     /**
-     * @var FilePathInterface path to the application-specific temporary directory.
+     * @var FilePathInterface Path to the application-specific temporary directory.
      */
     private $myTempPath;
 

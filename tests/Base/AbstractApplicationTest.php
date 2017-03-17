@@ -249,6 +249,14 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test isDebug method.
+     */
+    public function testIsDebug()
+    {
+        $this->assertFalse($this->myApplication->isDebug());
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
