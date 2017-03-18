@@ -26,13 +26,9 @@ class Application extends AbstractApplication
      */
     public function __construct(array $serverVars = null)
     {
-        $this->myServerVars = $serverVars !== null ? $serverVars : $_SERVER;
+        $serverVars = $serverVars !== null ? $serverVars : $_SERVER;
+        parent::__construct(FilePath::parse($serverVars['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR));
 
-        parent::__construct(FilePath::parse($this->myServerVars['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR));
+        $this->setDebug(isset($serverVars['BLUEMVC_DEBUG']));
     }
-
-    /**
-     * @var array My server array.
-     */
-    private $myServerVars;
 }

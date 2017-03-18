@@ -51,6 +51,16 @@ class BasicTestApplication extends AbstractApplication
     }
 
     /**
+     * Sets the debug mode.
+     *
+     * @param bool $isDebug The debug mode.
+     */
+    public function setDebug($isDebug)
+    {
+        parent::setDebug($isDebug);
+    }
+
+    /**
      * Sets the document root.
      *
      * @param FilePathInterface $documentRoot The document root.

@@ -186,6 +186,23 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test isDebug with debug mode on.
+     */
+    public function testIsDebugWithDebugModeOn()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+
+        $this->myApplication = new Application(
+            [
+                'DOCUMENT_ROOT' => $DS . 'var' . $DS . 'www',
+                'BLUEMVC_DEBUG' => '1',
+            ]
+        );
+
+        $this->assertTrue($this->myApplication->isDebug());
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

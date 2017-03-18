@@ -227,6 +227,18 @@ abstract class AbstractApplication implements ApplicationInterface
     }
 
     /**
+     * Sets the debug mode.
+     *
+     * @since 1.0.0
+     *
+     * @param bool $isDebug The debug mode.
+     */
+    protected function setDebug($isDebug)
+    {
+        $this->myIsDebug = $isDebug;
+    }
+
+    /**
      * Sets the document root.
      *
      * @since 1.0.0
