@@ -102,6 +102,24 @@ class AbstractRequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test getUserAgent method without user agent set.
+     */
+    public function testGetUserAgentWithoutUserAgentSet()
+    {
+        $this->assertSame('', $this->myRequest->getUserAgent());
+    }
+
+    /**
+     * Test getUserAgent method with user agent set.
+     */
+    public function testGetUserAgentWithUserAgentSet()
+    {
+        $this->myRequest->setHeader('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36');
+
+        $this->assertSame('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36', $this->myRequest->getUserAgent());
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

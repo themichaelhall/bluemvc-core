@@ -48,6 +48,15 @@ interface RequestInterface
     public function getMethod();
 
     /**
+     * Returns the user agent or empty string if no user agent exists.
+     *
+     * @since 1.0.0
+     *
+     * @return string The user agent or empty string if no user agent exists.
+     */
+    public function getUserAgent();
+
+    /**
      * Returns the url.
      *
      * @since 1.0.0
