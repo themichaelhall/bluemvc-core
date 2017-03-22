@@ -308,6 +308,24 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test get a page returning a ForbiddenResult.
+     */
+    public function testGetPageWithForbiddenResult()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/forbidden', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        $this->assertSame('Page is forbidden', $responseOutput);
+        $this->assertSame('Page is forbidden', $response->getContent());
+        $this->assertSame(['HTTP/1.1 403 Forbidden'], FakeHeaders::get());
+        $this->assertSame(StatusCode::FORBIDDEN, $response->getStatusCode()->getCode());
+    }
+
+    /**
      * Test get index page for controller with pre-action event.
      */
     public function testGetIndexPageForControllerWithPreActionEvent()

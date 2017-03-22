@@ -1,5 +1,6 @@
 <?php
 
+use BlueMvc\Core\ActionResults\ForbiddenResult;
 use BlueMvc\Core\ActionResults\NotFoundResult;
 use BlueMvc\Core\ActionResults\PermanentRedirectResult;
 use BlueMvc\Core\ActionResults\RedirectResult;
@@ -38,5 +39,15 @@ class ActionResultTestController extends Controller
     public function permanentRedirectAction()
     {
         return new PermanentRedirectResult('https://domain.com/');
+    }
+
+    /**
+     * Action returning a "304 Forbidden" action result.
+     *
+     * @return ForbiddenResult The action result.
+     */
+    public function forbiddenAction()
+    {
+        return new ForbiddenResult('Page is forbidden');
     }
 }
