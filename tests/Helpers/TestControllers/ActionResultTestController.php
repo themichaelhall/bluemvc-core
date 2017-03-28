@@ -3,6 +3,7 @@
 use BlueMvc\Core\ActionResults\ForbiddenResult;
 use BlueMvc\Core\ActionResults\NoContentResult;
 use BlueMvc\Core\ActionResults\NotFoundResult;
+use BlueMvc\Core\ActionResults\NotModifiedResult;
 use BlueMvc\Core\ActionResults\PermanentRedirectResult;
 use BlueMvc\Core\ActionResults\RedirectResult;
 use BlueMvc\Core\Controller;
@@ -60,5 +61,15 @@ class ActionResultTestController extends Controller
     public function nocontentAction()
     {
         return new NoContentResult();
+    }
+
+    /**
+     * Action returning a "304 Not Modified" action result.
+     *
+     * @return NotModifiedResult The action result.
+     */
+    public function notmodifiedAction()
+    {
+        return new NotModifiedResult();
     }
 }
