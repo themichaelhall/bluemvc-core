@@ -1,6 +1,7 @@
 <?php
 
 use BlueMvc\Core\ActionResults\ForbiddenResult;
+use BlueMvc\Core\ActionResults\NoContentResult;
 use BlueMvc\Core\ActionResults\NotFoundResult;
 use BlueMvc\Core\ActionResults\PermanentRedirectResult;
 use BlueMvc\Core\ActionResults\RedirectResult;
@@ -49,5 +50,15 @@ class ActionResultTestController extends Controller
     public function forbiddenAction()
     {
         return new ForbiddenResult('Page is forbidden');
+    }
+
+    /**
+     * Action returning a "204 No Content" action result.
+     *
+     * @return NoContentResult The action result.
+     */
+    public function nocontentAction()
+    {
+        return new NoContentResult();
     }
 }

@@ -326,6 +326,24 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test get a page returning a NoContentResult.
+     */
+    public function testGetPageWithNoContentResult()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/nocontent', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        $this->assertSame('', $responseOutput);
+        $this->assertSame('', $response->getContent());
+        $this->assertSame(['HTTP/1.1 204 No Content'], FakeHeaders::get());
+        $this->assertSame(StatusCode::NO_CONTENT, $response->getStatusCode()->getCode());
+    }
+
+    /**
      * Test get index page for controller with pre-action event.
      */
     public function testGetIndexPageForControllerWithPreActionEvent()
