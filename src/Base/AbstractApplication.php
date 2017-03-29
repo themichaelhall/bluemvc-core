@@ -145,21 +145,28 @@ abstract class AbstractApplication implements ApplicationInterface
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
-        $requestIsProcessed = false;
+        try {
+            $requestIsProcessed = false;
 
-        foreach ($this->myRoutes as $route) {
-            $routeMatch = $route->matches($request);
+            foreach ($this->myRoutes as $route) {
+                $routeMatch = $route->matches($request);
 
-            if ($routeMatch !== null) {
-                $controller = self::myTryCreateController($routeMatch->getControllerClassName());
-                $requestIsProcessed = $controller->processRequest($this, $request, $response, $routeMatch->getAction(), $routeMatch->getParameters());
+                if ($routeMatch !== null) {
+                    $controller = self::myTryCreateController($routeMatch->getControllerClassName());
+                    $requestIsProcessed = $controller->processRequest($this, $request, $response, $routeMatch->getAction(), $routeMatch->getParameters());
 
-                break;
+                    break;
+                }
             }
-        }
 
-        if (!$requestIsProcessed) {
-            $response->setStatusCode(new StatusCode(StatusCode::NOT_FOUND));
+            if (!$requestIsProcessed) {
+                $response->setStatusCode(new StatusCode(StatusCode::NOT_FOUND));
+            }
+        } catch (\Exception $e) {
+            // fixme: clear headers.
+            // fixme: fix content.
+            $response->setStatusCode(new StatusCode(StatusCode::INTERNAL_SERVER_ERROR));
+            $response->setContent($this->myIsDebug ? 'Exception: ' . htmlentities(get_class($e)) . ', Message: ' . htmlentities($e->getMessage()) : '');
         }
 
         $response->output();

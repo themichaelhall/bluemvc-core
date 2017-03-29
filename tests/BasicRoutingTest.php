@@ -1,7 +1,5 @@
 <?php
 
-use BlueMvc\Core\Application;
-use BlueMvc\Core\Exceptions\ViewFileNotFoundException;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Request;
 use BlueMvc\Core\Response;
@@ -78,30 +76,48 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test get invalid controller class name 1.
-     *
-     * @expectedException \BlueMvc\Core\Exceptions\InvalidControllerClassException
-     * @expectedExceptionMessage Controller class "BlueMvc\Core\FooBar" does not exist.
      */
     public function testGetInvalidControllerClassName1()
     {
+        $this->application->setDebug(true);
+        $this->application->addRoute(new Route('invalid-controller-class-name', 'BlueMvc\\Core\\FooBar'));
+
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/invalid-controller-class-name/', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
-        $this->application->addRoute(new Route('invalid-controller-class-name', 'BlueMvc\\Core\\FooBar'));
+        ob_start();
         $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        $this->assertContains('BlueMvc\Core\Exceptions\InvalidControllerClassException', $responseOutput);
+        $this->assertContains('Controller class &quot;BlueMvc\Core\FooBar&quot; does not exist.', $responseOutput);
+        $this->assertContains('BlueMvc\Core\Exceptions\InvalidControllerClassException', $response->getContent());
+        $this->assertContains('Controller class &quot;BlueMvc\Core\FooBar&quot; does not exist.', $response->getContent());
+        $this->assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
+        $this->assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
     }
 
     /**
      * Test get invalid controller class name 2.
-     *
-     * @expectedException \BlueMvc\Core\Exceptions\InvalidControllerClassException
-     * @expectedExceptionMessage Controller class "BlueMvc\Core\Request" does not implement "BlueMvc\Core\Interfaces\ControllerInterface".
      */
     public function testGetInvalidControllerClassName2()
     {
+        $this->application->setDebug(true);
+        $this->application->addRoute(new Route('invalid-controller-class-name', 'BlueMvc\\Core\\Request'));
+
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/invalid-controller-class-name/', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
-        $this->application->addRoute(new Route('invalid-controller-class-name', 'BlueMvc\\Core\\Request'));
+        ob_start();
         $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        $this->assertContains('BlueMvc\Core\Exceptions\InvalidControllerClassException', $responseOutput);
+        $this->assertContains('Controller class &quot;BlueMvc\Core\Request&quot; does not implement &quot;BlueMvc\Core\Interfaces\ControllerInterface&quot;.', $responseOutput);
+        $this->assertContains('BlueMvc\Core\Exceptions\InvalidControllerClassException', $response->getContent());
+        $this->assertContains('Controller class &quot;BlueMvc\Core\Request&quot; does not implement &quot;BlueMvc\Core\Interfaces\ControllerInterface&quot;.', $response->getContent());
+        $this->assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
+        $this->assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -182,21 +198,21 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
     public function testGetViewWithNonExistingViewFilePage()
     {
         $DS = DIRECTORY_SEPARATOR;
-        $exceptionMessage = '';
+        $this->application->setDebug(true);
 
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/view/withnoviewfile', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         ob_start();
-
-        try {
-            $this->application->run($request, $response);
-        } catch (ViewFileNotFoundException $e) {
-            $exceptionMessage = $e->getMessage();
-        }
-
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('Could not find view file "' . $this->application->getViewPath() . 'ViewTest' . $DS . 'withnoviewfile.view"', $exceptionMessage);
+        $this->assertContains('BlueMvc\Core\Exceptions\ViewFileNotFoundException', $responseOutput);
+        $this->assertContains('Could not find view file &quot;' . $this->application->getViewPath() . 'ViewTest' . $DS . 'withnoviewfile.view&quot;', $responseOutput);
+        $this->assertContains('BlueMvc\Core\Exceptions\ViewFileNotFoundException', $response->getContent());
+        $this->assertContains('Could not find view file &quot;' . $this->application->getViewPath() . 'ViewTest' . $DS . 'withnoviewfile.view&quot;', $response->getContent());
+        $this->assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
+        $this->assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -462,7 +478,7 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @var Application My application.
+     * @var BasicTestApplication My application.
      */
     private $application;
 }
