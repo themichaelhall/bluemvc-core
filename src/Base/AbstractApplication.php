@@ -284,7 +284,7 @@ abstract class AbstractApplication implements ApplicationInterface
             "<html>\n" .
             "   <head>\n" .
             "      <meta charset=\"utf-8\">\n" .
-            "      <title>" . htmlentities($e->getMessage()) . "</title>\n" .
+            '      <title>' . htmlentities($e->getMessage()) . "</title>\n" .
             "      <style>\n" .
             "         html, body, h1, p, code, pre {\n" .
             "            margin:0;\n" .
@@ -309,11 +309,11 @@ abstract class AbstractApplication implements ApplicationInterface
             "      </style>\n" .
             "   </head>\n" .
             "   <body>\n" .
-            "      <h1>" . htmlentities($e->getMessage()) . "</h1>\n" .
+            '      <h1>' . htmlentities($e->getMessage()) . "</h1>\n" .
             "      <p>\n" .
-            "         <code>" . htmlentities(get_class($e)) . "</code> was thrown from <code>" . htmlentities($e->getFile()) . ":" . htmlentities($e->getLine()) . "</code> with message <code>" . htmlentities($e->getMessage()) . " (" . htmlentities($e->getCode()) . ")</code>\n" .
+            '         <code>' . htmlentities(get_class($e)) . '</code> was thrown from <code>' . htmlentities($e->getFile()) . ':' . htmlentities($e->getLine()) . '</code> with message <code>' . htmlentities($e->getMessage()) . ' (' . htmlentities($e->getCode()) . ")</code>\n" .
             "      </p>\n" .
-            "      <pre>" . htmlentities($e->getTraceAsString()) . "</pre>\n" .
+            '      <pre>' . htmlentities($e->getTraceAsString()) . "</pre>\n" .
             "   </body>\n" .
             "</html>\n";
     }
