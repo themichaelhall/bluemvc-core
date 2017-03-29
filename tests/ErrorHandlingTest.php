@@ -55,7 +55,6 @@ class ErrorHandlingTest extends PHPUnit_Framework_TestCase
         $this->assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
     }
 
-
     /**
      * Set up.
      */
