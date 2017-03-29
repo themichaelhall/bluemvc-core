@@ -164,9 +164,8 @@ abstract class AbstractApplication implements ApplicationInterface
             }
         } catch (\Exception $e) {
             // fixme: clear headers.
-            // fixme: fix content.
             $response->setStatusCode(new StatusCode(StatusCode::INTERNAL_SERVER_ERROR));
-            $response->setContent($this->myIsDebug ? 'Exception: ' . htmlentities(get_class($e)) . ', Message: ' . htmlentities($e->getMessage()) : '');
+            $response->setContent($this->myExceptionToHtml($e));
         }
 
         $response->output();
@@ -268,6 +267,58 @@ abstract class AbstractApplication implements ApplicationInterface
     }
 
     /**
+     * Converts an exception to html.
+     *
+     * @param \Exception $e The exception.
+     *
+     * @return string The html.
+     */
+    private function myExceptionToHtml(\Exception $e)
+    {
+        if (!$this->myIsDebug) {
+            return '';
+        }
+
+        return
+            "<!DOCTYPE html>\n" .
+            "<html>\n" .
+            "   <head>\n" .
+            "      <meta charset=\"utf-8\">\n" .
+            "      <title>" . htmlentities($e->getMessage()) . "</title>\n" .
+            "      <style>\n" .
+            "         html, body, h1, p, code, pre {\n" .
+            "            margin:0;\n" .
+            "            padding:0;\n" .
+            "            font-size:16px;\n" .
+            "            font-family:Arial, Helvetica, sans-serif;\n" .
+            "            color:#555;\n" .
+            "         }\n" .
+            "         h1 {\n" .
+            "            font-size:2em;\n" .
+            "            margin:.5em;\n" .
+            "            color:#338;\n" .
+            "         }\n" .
+            "         p, pre {\n" .
+            "            font-size:1em;\n" .
+            "            margin:1em;\n" .
+            "         }\n" .
+            "         pre, code {\n" .
+            "            font-family:monospace;\n" .
+            "            color:#000;\n" .
+            "         }\n" .
+            "      </style>\n" .
+            "   </head>\n" .
+            "   <body>\n" .
+            "      <h1>" . htmlentities($e->getMessage()) . "</h1>\n" .
+            "      <p>\n" .
+            "         <code>" . htmlentities(get_class($e)) . "</code> was thrown from <code>" . htmlentities($e->getFile()) . ":" . htmlentities($e->getLine()) . "</code> with message <code>" . htmlentities($e->getMessage()) . " (" . htmlentities($e->getCode()) . ")</code>\n" .
+            "      </p>\n" .
+            "      <pre>" . htmlentities($e->getTraceAsString()) . "</pre>\n" .
+            "   </body>\n" .
+            "</html>\n";
+    }
+
+    /**
      * Ensures that a specified directory exists.
      *
      * @param FilePathInterface $directory The directory.
@@ -281,8 +332,6 @@ abstract class AbstractApplication implements ApplicationInterface
 
     /**
      * Try to create a controller class.
-     *
-     * @since 1.0.0
      *
      * @param string $controllerClassName The controller class name.
      *
