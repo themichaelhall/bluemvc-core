@@ -9,7 +9,6 @@ require_once __DIR__ . '/Helpers/TestViewRenderers/BasicTestViewRenderer.php';
 require_once __DIR__ . '/Helpers/TestControllers/BasicTestController.php';
 require_once __DIR__ . '/Helpers/TestControllers/ErrorTestController.php';
 
-
 /**
  * Test Application class.
  */
