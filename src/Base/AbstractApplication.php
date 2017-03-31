@@ -180,6 +180,18 @@ abstract class AbstractApplication implements ApplicationInterface
             $response->setContent($this->myExceptionToHtml($e));
         }
 
+        $responseCode = $response->getStatusCode();
+        if ($responseCode->isError()) {
+            $errorControllerClass = $this->getErrorControllerClass();
+
+            if ($errorControllerClass !== null) {
+                /** @var ControllerInterface $errorController */
+                $errorController = new $errorControllerClass();
+                // fixme: handle failure here
+                $errorController->processRequest($this, $request, $response, strval($responseCode->getCode()), []);
+            }
+        }
+
         $response->output();
     }
 

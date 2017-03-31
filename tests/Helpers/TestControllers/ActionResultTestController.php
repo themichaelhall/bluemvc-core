@@ -44,7 +44,7 @@ class ActionResultTestController extends Controller
     }
 
     /**
-     * Action returning a "304 Forbidden" action result.
+     * Action returning a "403 Forbidden" action result.
      *
      * @return ForbiddenResult The action result.
      */

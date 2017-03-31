@@ -456,7 +456,6 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
     {
         FakeHeaders::enable();
         $this->application = new BasicTestApplication(FilePath::parse(__DIR__ . DIRECTORY_SEPARATOR));
-
         $this->application->setViewPath(FilePath::parse('Helpers' . DIRECTORY_SEPARATOR . 'TestViews' . DIRECTORY_SEPARATOR));
         $this->application->addViewRenderer(new BasicTestViewRenderer());
 
