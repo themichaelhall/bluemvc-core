@@ -286,6 +286,39 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test setErrorControllerClass method with non-existing class name.
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage $errorControllerClass parameter is not a valid controller class.
+     */
+    public function testSetErrorControllerClassWithInvalidParameterType()
+    {
+        $this->myApplication->setErrorControllerClass(false);
+    }
+
+    /**
+     * Test setErrorControllerClass method with non-existing class name.
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage $errorControllerClass parameter is not a valid controller class.
+     */
+    public function testSetErrorControllerClassWithNonExistingClassName()
+    {
+        $this->myApplication->setErrorControllerClass('BlueMvc\\Core\\FooBar');
+    }
+
+    /**
+     * Test setErrorControllerClass method with invalid class name.
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage $errorControllerClass parameter is not a valid controller class.
+     */
+    public function testSetErrorControllerClassWithInvalidClassName()
+    {
+        $this->myApplication->setErrorControllerClass(BasicTestRequest::class);
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

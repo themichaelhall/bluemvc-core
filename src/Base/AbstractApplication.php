@@ -189,9 +189,15 @@ abstract class AbstractApplication implements ApplicationInterface
      * @since 1.0.0
      *
      * @param string $errorControllerClass The error controller class name.
+     *
+     * @throws \InvalidArgumentException If the class name is not a valid controller class.
      */
     public function setErrorControllerClass($errorControllerClass)
     {
+        if (!is_string($errorControllerClass) || !is_a($errorControllerClass, ControllerInterface::class, true)) {
+            throw new \InvalidArgumentException('$errorControllerClass parameter is not a valid controller class.');
+        }
+
         $this->myErrorControllerClass = $errorControllerClass;
     }
 
