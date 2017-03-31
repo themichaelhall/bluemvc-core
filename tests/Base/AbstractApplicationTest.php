@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../Helpers/TestApplications/BasicTestApplication.php';
 require_once __DIR__ . '/../Helpers/TestViewRenderers/BasicTestViewRenderer.php';
 require_once __DIR__ . '/../Helpers/TestControllers/BasicTestController.php';
+require_once __DIR__ . '/../Helpers/TestControllers/ErrorTestController.php';
 
 use BlueMvc\Core\Exceptions\InvalidFilePathException;
 use BlueMvc\Core\Route;
@@ -272,6 +273,16 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
     public function testGetErrorControllerClass()
     {
         $this->assertNull($this->myApplication->getErrorControllerClass());
+    }
+
+    /**
+     * Test setErrorControllerClass method.
+     */
+    public function testSetErrorControllerClass()
+    {
+        $this->myApplication->setErrorControllerClass(ErrorTestController::class);
+
+        $this->assertSame(ErrorTestController::class, $this->myApplication->getErrorControllerClass());
     }
 
     /**

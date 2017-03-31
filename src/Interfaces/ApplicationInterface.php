@@ -109,6 +109,15 @@ interface ApplicationInterface
     public function run(RequestInterface $request, ResponseInterface $response);
 
     /**
+     * Sets the error controller class name.
+     *
+     * @since 1.0.0
+     *
+     * @param string $errorControllerClass The error controller class name.
+     */
+    public function setErrorControllerClass($errorControllerClass);
+
+    /**
      * Sets the path to the application-specific temporary directory.
      *
      * @since 1.0.0

@@ -7,6 +7,8 @@ use DataTypes\FilePath;
 
 require_once __DIR__ . '/Helpers/TestViewRenderers/BasicTestViewRenderer.php';
 require_once __DIR__ . '/Helpers/TestControllers/BasicTestController.php';
+require_once __DIR__ . '/Helpers/TestControllers/ErrorTestController.php';
+
 
 /**
  * Test Application class.
@@ -208,6 +210,16 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
     public function testGetErrorControllerClass()
     {
         $this->assertNull($this->myApplication->getErrorControllerClass());
+    }
+
+    /**
+     * Test setErrorControllerClass method.
+     */
+    public function testSetErrorControllerClass()
+    {
+        $this->myApplication->setErrorControllerClass(ErrorTestController::class);
+
+        $this->assertSame(ErrorTestController::class, $this->myApplication->getErrorControllerClass());
     }
 
     /**
