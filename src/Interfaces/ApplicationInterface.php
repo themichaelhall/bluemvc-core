@@ -45,6 +45,15 @@ interface ApplicationInterface
     public function getDocumentRoot();
 
     /**
+     * Returns the error controller class name or null if not specified.
+     *
+     * @since 1.0.0
+     *
+     * @return string|null The error controller class name or null if not specified.
+     */
+    public function getErrorControllerClass();
+
+    /**
      * Returns the routes.
      *
      * @since 1.0.0

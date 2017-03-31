@@ -267,6 +267,14 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test getErrorControllerClass method.
+     */
+    public function testGetErrorControllerClass()
+    {
+        $this->assertNull($this->myApplication->getErrorControllerClass());
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

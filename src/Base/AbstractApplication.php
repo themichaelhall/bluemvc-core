@@ -64,6 +64,18 @@ abstract class AbstractApplication implements ApplicationInterface
     }
 
     /**
+     * Returns the error controller class name or null if not specified.
+     *
+     * @since 1.0.0
+     *
+     * @return string|null The error controller class name or null if not specified.
+     */
+    public function getErrorControllerClass()
+    {
+        return $this->myErrorControllerClass;
+    }
+
+    /**
      * Returns the routes.
      *
      * @since 1.0.0
@@ -230,6 +242,7 @@ abstract class AbstractApplication implements ApplicationInterface
         $this->myViewRenderers = [];
         $this->myViewPath = null;
         $this->myIsDebug = false;
+        $this->myErrorControllerClass = null;
     }
 
     /**
@@ -384,4 +397,9 @@ abstract class AbstractApplication implements ApplicationInterface
      * @var ViewRendererInterface[] My view renderers.
      */
     private $myViewRenderers;
+
+    /**
+     * @var string|null My error controller class name.
+     */
+    private $myErrorControllerClass;
 }
