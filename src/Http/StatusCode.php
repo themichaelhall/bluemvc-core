@@ -469,6 +469,18 @@ class StatusCode implements StatusCodeInterface
     }
 
     /**
+     * Returns true if this is an error code, false otherwise.
+     *
+     * @since 1.0.0
+     *
+     * @return bool True if this is an error code, false otherwise.
+     */
+    public function isError()
+    {
+        return $this->myCode >= 400;
+    }
+
+    /**
      * Returns the status code as as string.
      *
      * @since 1.0.0
