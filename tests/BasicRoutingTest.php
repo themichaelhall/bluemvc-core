@@ -139,6 +139,24 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test get page starting with a numeric character.
+     */
+    public function testGetPageStartingWithNumericCharacter()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/123numeric', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        $this->assertSame('Numeric action result', $responseOutput);
+        $this->assertSame('Numeric action result', $response->getContent());
+        $this->assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
+        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
      * Test get view index page.
      */
     public function testGetViewIndexPage()

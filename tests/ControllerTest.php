@@ -105,6 +105,22 @@ class ControllerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test an action starting with a numeric character.
+     */
+    public function testActionStartingWithNumericCharacter()
+    {
+        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/123numeric', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $controller = new BasicTestController();
+        $isProcessed = $controller->processRequest($application, $request, $response, '123numeric');
+
+        $this->assertTrue($isProcessed);
+        $this->assertSame('Numeric action result', $response->getContent());
+        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
      * Test existing action for controller with default action.
      */
     public function testExistingActionForControllerWithDefaultAction()

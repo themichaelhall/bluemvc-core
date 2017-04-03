@@ -117,6 +117,10 @@ abstract class AbstractController implements ControllerInterface
         $reflectionClass = new \ReflectionClass($this);
 
         try {
+            if (strlen($action) > 0 && ctype_digit($action[0])) {
+                $action = '_' . $action;
+            }
+
             $actionMethod = $reflectionClass->getMethod($action . 'Action');
         } catch (\ReflectionException $e) {
             return false;

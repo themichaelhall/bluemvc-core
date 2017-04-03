@@ -29,4 +29,14 @@ class BasicTestController extends Controller
 
         return 'Server Error';
     }
+
+    /**
+     * Action starting with a numeric character.
+     *
+     * @return string The result.
+     */
+    public function _123numericAction()
+    {
+        return 'Numeric action result';
+    }
 }
