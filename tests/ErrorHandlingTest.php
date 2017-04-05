@@ -98,22 +98,22 @@ class ErrorHandlingTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test forbidden page with error controller set.
+     * Test not found error with error controller set 2.
      */
-    public function testForbiddenPageWithErrorControllerSet()
+    public function testNotFoundErrorWithErrorControllerSet2()
     {
         $this->application->setErrorControllerClass(ErrorTestController::class);
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/forbidden', 'REQUEST_METHOD' => 'GET']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/notfound', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('<html><body><h1>Request Failed: Error: 403</h1></body></html>', $responseOutput);
-        $this->assertSame('<html><body><h1>Request Failed: Error: 403</h1></body></html>', $response->getContent());
-        $this->assertSame(['HTTP/1.1 403 Forbidden'], FakeHeaders::get());
-        $this->assertSame(StatusCode::FORBIDDEN, $response->getStatusCode()->getCode());
+        $this->assertSame('<html><body><h1>Request Failed: Error: 404</h1></body></html>', $responseOutput);
+        $this->assertSame('<html><body><h1>Request Failed: Error: 404</h1></body></html>', $response->getContent());
+        $this->assertSame(['HTTP/1.1 404 Not Found'], FakeHeaders::get());
+        $this->assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -133,6 +133,47 @@ class ErrorHandlingTest extends PHPUnit_Framework_TestCase
         $this->assertSame('Hello World!', $response->getContent());
         $this->assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
         $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Test error controller throwing exception in non-debug mode.
+     */
+    public function testErrorControllerThrowingExceptionInNonDebugMode()
+    {
+        $this->application->setErrorControllerClass(ErrorTestController::class);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/forbidden', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        $this->assertSame('', $responseOutput);
+        $this->assertSame('', $response->getContent());
+        $this->assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
+        $this->assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Test error controller throwing exception in debug mode.
+     */
+    public function testErrorControllerThrowingExceptionInDebugMode()
+    {
+        $this->application->setDebug(true);
+        $this->application->setErrorControllerClass(ErrorTestController::class);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/forbidden', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        $this->assertContains('RuntimeException', $responseOutput);
+        $this->assertContains('Exception thrown from 403 action.', $responseOutput);
+        $this->assertContains('RuntimeException', $response->getContent());
+        $this->assertContains('Exception thrown from 403 action.', $response->getContent());
+        $this->assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
+        $this->assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
     }
 
     /**

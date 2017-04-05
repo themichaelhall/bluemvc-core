@@ -187,8 +187,14 @@ abstract class AbstractApplication implements ApplicationInterface
             if ($errorControllerClass !== null) {
                 /** @var ControllerInterface $errorController */
                 $errorController = new $errorControllerClass();
-                // fixme: handle failure here
-                $errorController->processRequest($this, $request, $response, strval($responseCode->getCode()), []);
+
+                try {
+                    $errorController->processRequest($this, $request, $response, strval($responseCode->getCode()), []);
+                } catch (\Exception $e) {
+                    // fixme: use common method for this and code above.
+                    $response->setStatusCode(new StatusCode(StatusCode::INTERNAL_SERVER_ERROR));
+                    $response->setContent($this->myExceptionToHtml($e));
+                }
             }
         }
 

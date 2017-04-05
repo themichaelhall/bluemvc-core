@@ -9,6 +9,15 @@ use BlueMvc\Core\View;
 class ErrorTestController extends Controller
 {
     /**
+     * 403 Forbidden action.
+     */
+    public function _403Action()
+    {
+        // This emulates the case when there is a bug in the error controller.
+        throw new \RuntimeException('Exception thrown from 403 action.');
+    }
+
+    /**
      * Default action.
      *
      * @param string $statusCode The status code as a string.
