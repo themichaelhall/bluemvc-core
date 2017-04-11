@@ -41,6 +41,18 @@ abstract class ErrorController extends Controller implements ErrorControllerInte
     }
 
     /**
+     * Sets the exception.
+     *
+     * @since 1.0.0
+     *
+     * @param \Exception $exception The exception.
+     */
+    public function setException(\Exception $exception)
+    {
+        $this->myException = $exception;
+    }
+
+    /**
      * @var \Exception|null My exception or null if no exception.
      */
     private $myException;

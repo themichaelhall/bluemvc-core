@@ -22,4 +22,13 @@ interface ErrorControllerInterface extends ControllerInterface
      * @return \Exception|null The exception or null if no exception.
      */
     public function getException();
+
+    /**
+     * Sets the exception.
+     *
+     * @since 1.0.0
+     *
+     * @param \Exception $exception The exception.
+     */
+    public function setException(\Exception $exception);
 }
