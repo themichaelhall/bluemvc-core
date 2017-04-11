@@ -1,12 +1,12 @@
 <?php
 
-use BlueMvc\Core\Controller;
+use BlueMvc\Core\ErrorController;
 use BlueMvc\Core\View;
 
 /**
  * Test controller that handles errors.
  */
-class ErrorTestController extends Controller
+class ErrorTestController extends ErrorController
 {
     /**
      * 403 Forbidden action.

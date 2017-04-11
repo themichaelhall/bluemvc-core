@@ -14,4 +14,12 @@ namespace BlueMvc\Core\Interfaces;
  */
 interface ErrorControllerInterface extends ControllerInterface
 {
+    /**
+     * Returns the exception or null if no exception.
+     *
+     * @since 1.0.0
+     *
+     * @return \Exception|null The exception or null if no exception.
+     */
+    public function getException();
 }
