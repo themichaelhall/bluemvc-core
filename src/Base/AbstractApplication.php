@@ -211,7 +211,7 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @param string $errorControllerClass The error controller class name.
      *
-     * @throws \InvalidArgumentException If the class name is not a string.
+     * @throws \InvalidArgumentException       If the class name is not a string.
      * @throws InvalidControllerClassException If the class name is not a valid controller class.
      */
     public function setErrorControllerClass($errorControllerClass)
