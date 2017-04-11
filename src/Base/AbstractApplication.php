@@ -164,7 +164,10 @@ abstract class AbstractApplication implements ApplicationInterface
                 $routeMatch = $route->matches($request);
 
                 if ($routeMatch !== null) {
-                    $controller = self::myTryCreateController($routeMatch->getControllerClassName());
+                    $controllerClass = $routeMatch->getControllerClassName();
+                    $controller = new $controllerClass();
+
+                    /** @var ControllerInterface $controller */
                     $requestIsProcessed = $controller->processRequest($this, $request, $response, $routeMatch->getAction(), $routeMatch->getParameters());
 
                     break;
@@ -208,12 +211,17 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @param string $errorControllerClass The error controller class name.
      *
-     * @throws \InvalidArgumentException If the class name is not a valid controller class.
+     * @throws \InvalidArgumentException If the class name is not a string.
+     * @throws InvalidControllerClassException If the class name is not a valid controller class.
      */
     public function setErrorControllerClass($errorControllerClass)
     {
-        if (!is_string($errorControllerClass) || !is_a($errorControllerClass, ControllerInterface::class, true)) {
-            throw new \InvalidArgumentException('$errorControllerClass parameter is not a valid controller class.');
+        if (!is_string($errorControllerClass)) {
+            throw new \InvalidArgumentException('$errorControllerClass parameter is not a string.');
+        }
+
+        if (!is_a($errorControllerClass, ControllerInterface::class, true)) {
+            throw new InvalidControllerClassException('"' . $errorControllerClass . '" is not a valid controller class.');
         }
 
         $this->myErrorControllerClass = $errorControllerClass;
@@ -377,31 +385,6 @@ abstract class AbstractApplication implements ApplicationInterface
         if (!is_dir($directory->__toString())) {
             mkdir($directory->__toString(), 0700, true);
         }
-    }
-
-    /**
-     * Try to create a controller class.
-     *
-     * @param string $controllerClassName The controller class name.
-     *
-     * @throws InvalidControllerClassException If the $controllerClassName parameter is invalid.
-     *
-     * @return ControllerInterface The controller class.
-     */
-    private static function myTryCreateController($controllerClassName)
-    {
-        try {
-            $controllerClass = new \ReflectionClass($controllerClassName);
-
-            if (!$controllerClass->implementsInterface(ControllerInterface::class)) {
-                throw new InvalidControllerClassException('Controller class "' . $controllerClassName . '" does not implement "' . ControllerInterface::class . '".');
-            }
-        } catch (\ReflectionException $e) {
-            throw new InvalidControllerClassException('Controller class "' . $controllerClassName . '" does not exist.');
-        }
-
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $controllerClass->newInstance();
     }
 
     /**

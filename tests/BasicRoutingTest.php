@@ -78,52 +78,6 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test get invalid controller class name 1.
-     */
-    public function testGetInvalidControllerClassName1()
-    {
-        $this->application->setDebug(true);
-        $this->application->addRoute(new Route('invalid-controller-class-name', 'BlueMvc\\Core\\FooBar'));
-
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/invalid-controller-class-name/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        $this->assertContains('BlueMvc\Core\Exceptions\InvalidControllerClassException', $responseOutput);
-        $this->assertContains('Controller class &quot;BlueMvc\Core\FooBar&quot; does not exist.', $responseOutput);
-        $this->assertContains('BlueMvc\Core\Exceptions\InvalidControllerClassException', $response->getContent());
-        $this->assertContains('Controller class &quot;BlueMvc\Core\FooBar&quot; does not exist.', $response->getContent());
-        $this->assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
-        $this->assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get invalid controller class name 2.
-     */
-    public function testGetInvalidControllerClassName2()
-    {
-        $this->application->setDebug(true);
-        $this->application->addRoute(new Route('invalid-controller-class-name', 'BlueMvc\\Core\\Request'));
-
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/invalid-controller-class-name/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        $this->assertContains('BlueMvc\Core\Exceptions\InvalidControllerClassException', $responseOutput);
-        $this->assertContains('Controller class &quot;BlueMvc\Core\Request&quot; does not implement &quot;BlueMvc\Core\Interfaces\ControllerInterface&quot;.', $responseOutput);
-        $this->assertContains('BlueMvc\Core\Exceptions\InvalidControllerClassException', $response->getContent());
-        $this->assertContains('Controller class &quot;BlueMvc\Core\Request&quot; does not implement &quot;BlueMvc\Core\Interfaces\ControllerInterface&quot;.', $response->getContent());
-        $this->assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
-        $this->assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
-    }
-
-    /**
      * Test get server error page.
      */
     public function testGetServerErrorPage()

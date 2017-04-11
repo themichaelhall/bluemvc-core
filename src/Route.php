@@ -9,6 +9,7 @@ namespace BlueMvc\Core;
 
 use BlueMvc\Core\Exceptions\InvalidControllerClassException;
 use BlueMvc\Core\Exceptions\InvalidRoutePathException;
+use BlueMvc\Core\Interfaces\ControllerInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\RouteInterface;
 
@@ -34,6 +35,10 @@ class Route implements RouteInterface
     {
         assert(is_string($path));
         assert(is_string($controllerClassName));
+
+        if (!is_string($controllerClassName) || !is_a($controllerClassName, ControllerInterface::class, true)) {
+            throw new InvalidControllerClassException('"' . $controllerClassName . '" is not a valid controller class.');
+        }
 
         // Validate path.
         self::myValidatePath($path);

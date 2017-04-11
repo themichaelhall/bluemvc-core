@@ -32,6 +32,28 @@ class RouteTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test that setting an undefined controller class name throws exception.
+     *
+     * @expectedException BlueMvc\Core\Exceptions\InvalidControllerClassException
+     * @expectedExceptionMessage "BlueMvc\Core\FooBar" is not a valid controller class.
+     */
+    public function testSetUndefinedControllerClassThrowsException()
+    {
+        new Route('', 'BlueMvc\\Core\\FooBar');
+    }
+
+    /**
+     * Test that setting an invalid controller class name throws exception.
+     *
+     * @expectedException BlueMvc\Core\Exceptions\InvalidControllerClassException
+     * @expectedExceptionMessage "BlueMvc\Core\Request" is not a valid controller class.
+     */
+    public function testSetInvalidControllerClassThrowsException()
+    {
+        new Route('', 'BlueMvc\\Core\\Request');
+    }
+
+    /**
      * Test getControllerClassName method.
      */
     public function testGetControllerClassName()
