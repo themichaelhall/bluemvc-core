@@ -236,7 +236,7 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
      * Test setErrorControllerClass method with non-existing class name.
      *
      * @expectedException \BlueMvc\Core\Exceptions\InvalidControllerClassException
-     * @expectedExceptionMessage "BlueMvc\Core\FooBar" is not a valid controller class.
+     * @expectedExceptionMessage "BlueMvc\Core\FooBar" is not a valid error controller class.
      */
     public function testSetErrorControllerClassWithNonExistingClassName()
     {
@@ -247,11 +247,22 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
      * Test setErrorControllerClass method with invalid class name.
      *
      * @expectedException \BlueMvc\Core\Exceptions\InvalidControllerClassException
-     * @expectedExceptionMessage "BasicTestRequest" is not a valid controller class.
+     * @expectedExceptionMessage "BasicTestRequest" is not a valid error controller class.
      */
     public function testSetErrorControllerClassWithInvalidClassName()
     {
         $this->myApplication->setErrorControllerClass(BasicTestRequest::class);
+    }
+
+    /**
+     * Test setErrorControllerClass method with ordinary controller class name.
+     *
+     * @expectedException \BlueMvc\Core\Exceptions\InvalidControllerClassException
+     * @expectedExceptionMessage "BasicTestController" is not a valid error controller class.
+     */
+    public function testSetErrorControllerClassWithOrdinaryControllerClassName()
+    {
+        $this->myApplication->setErrorControllerClass(BasicTestController::class);
     }
 
     /**

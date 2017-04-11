@@ -12,6 +12,7 @@ use BlueMvc\Core\Exceptions\InvalidFilePathException;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\ControllerInterface;
+use BlueMvc\Core\Interfaces\ErrorControllerInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
 use BlueMvc\Core\Interfaces\RouteInterface;
@@ -188,7 +189,7 @@ abstract class AbstractApplication implements ApplicationInterface
             $errorControllerClass = $this->getErrorControllerClass();
 
             if ($errorControllerClass !== null) {
-                /** @var ControllerInterface $errorController */
+                /** @var ErrorControllerInterface $errorController */
                 $errorController = new $errorControllerClass();
 
                 try {
@@ -220,8 +221,8 @@ abstract class AbstractApplication implements ApplicationInterface
             throw new \InvalidArgumentException('$errorControllerClass parameter is not a string.');
         }
 
-        if (!is_a($errorControllerClass, ControllerInterface::class, true)) {
-            throw new InvalidControllerClassException('"' . $errorControllerClass . '" is not a valid controller class.');
+        if (!is_a($errorControllerClass, ErrorControllerInterface::class, true)) {
+            throw new InvalidControllerClassException('"' . $errorControllerClass . '" is not a valid error controller class.');
         }
 
         $this->myErrorControllerClass = $errorControllerClass;
