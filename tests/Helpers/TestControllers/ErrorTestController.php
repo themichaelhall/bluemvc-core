@@ -26,6 +26,12 @@ class ErrorTestController extends ErrorController
      */
     public function defaultAction($statusCode)
     {
-        return new View('Error: ' . $statusCode);
+        $errorText = 'Error: ' . $statusCode;
+        $exception = $this->getException();
+        if ($exception !== null) {
+            $errorText .= ', Exception: ' . get_class($exception) . ', ExceptionMessage: ' . $exception->getMessage();
+        }
+
+        return new View($errorText);
     }
 }

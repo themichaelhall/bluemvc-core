@@ -456,8 +456,8 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('<html><body><h1>Request Failed: Error: 500</h1></body></html>', $responseOutput);
-        $this->assertSame('<html><body><h1>Request Failed: Error: 500</h1></body></html>', $response->getContent());
+        $this->assertSame('<html><body><h1>Request Failed: Error: 500, Exception: LogicException, ExceptionMessage: Exception was thrown.</h1></body></html>', $responseOutput);
+        $this->assertSame('<html><body><h1>Request Failed: Error: 500, Exception: LogicException, ExceptionMessage: Exception was thrown.</h1></body></html>', $response->getContent());
         $this->assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
         $this->assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
     }

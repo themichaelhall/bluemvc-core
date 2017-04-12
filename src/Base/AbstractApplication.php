@@ -158,6 +158,8 @@ abstract class AbstractApplication implements ApplicationInterface
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
+        $exception = null;
+
         try {
             $requestIsProcessed = false;
 
@@ -182,8 +184,10 @@ abstract class AbstractApplication implements ApplicationInterface
             // fixme: clear headers.
             $response->setStatusCode(new StatusCode(StatusCode::INTERNAL_SERVER_ERROR));
             $response->setContent($this->myExceptionToHtml($e));
+            $exception = $e;
         }
 
+        // Error controller handling.
         $responseCode = $response->getStatusCode();
         if ($responseCode->isError()) {
             $errorControllerClass = $this->getErrorControllerClass();
@@ -191,6 +195,9 @@ abstract class AbstractApplication implements ApplicationInterface
             if ($errorControllerClass !== null) {
                 /** @var ErrorControllerInterface $errorController */
                 $errorController = new $errorControllerClass();
+                if ($exception !== null) {
+                    $errorController->setException($exception);
+                }
 
                 try {
                     $errorController->processRequest($this, $request, $response, strval($responseCode->getCode()), []);
