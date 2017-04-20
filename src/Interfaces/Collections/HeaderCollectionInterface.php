@@ -49,7 +49,7 @@ interface HeaderCollectionInterface extends \Countable, \Iterator
      *
      * @param string $name The header name.
      *
-     * @return null The header value by header name if it exists, null otherwise.
+     * @return string|null The header value by header name if it exists, null otherwise.
      */
     public function get($name);
 

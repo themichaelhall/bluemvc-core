@@ -16,4 +16,14 @@ class ParameterCollectionTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame(0, count($parameterCollection));
     }
+
+    /**
+     * Test get method.
+     */
+    public function testGet()
+    {
+        $parameterCollection = new ParameterCollection();
+
+        $this->assertNull($parameterCollection->get('Foo'));
+    }
 }

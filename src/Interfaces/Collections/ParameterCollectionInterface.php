@@ -22,4 +22,15 @@ interface ParameterCollectionInterface extends \Countable
      * @return int The number of parameters.
      */
     public function count();
+
+    /**
+     * Returns the parameter value by parameter name if it exists, null otherwise.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name The parameter name.
+     *
+     * @return string|null The parameter value by parameter name if it exists, null otherwise.
+     */
+    public function get($name);
 }
