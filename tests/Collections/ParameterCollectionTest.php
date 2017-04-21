@@ -26,4 +26,17 @@ class ParameterCollectionTest extends PHPUnit_Framework_TestCase
 
         $this->assertNull($parameterCollection->get('Foo'));
     }
+
+    /**
+     * Test get method with invalid name parameter type.
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage $name parameter is not a string.
+     */
+    public function testGetMethodWithInvalidNameParameterType()
+    {
+        $parameterCollection = new ParameterCollection();
+
+        $parameterCollection->get(10);
+    }
 }

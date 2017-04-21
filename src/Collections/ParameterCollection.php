@@ -45,10 +45,16 @@ class ParameterCollection implements ParameterCollectionInterface
      *
      * @param string $name The parameter name.
      *
+     * @throws \InvalidArgumentException If the $name parameter is not a string.
+     *
      * @return string|null The parameter value by parameter name if it exists, null otherwise.
      */
     public function get($name)
     {
+        if (!is_string($name)) {
+            throw new \InvalidArgumentException('$name parameter is not a string.');
+        }
+
         // fixme
         return null;
     }
