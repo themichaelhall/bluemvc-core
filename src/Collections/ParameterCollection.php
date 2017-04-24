@@ -55,8 +55,34 @@ class ParameterCollection implements ParameterCollectionInterface
             throw new \InvalidArgumentException('$name parameter is not a string.');
         }
 
-        // fixme
-        return null;
+        if (!isset($this->myParameters[$name])) {
+            return null;
+        }
+
+        return $this->myParameters[$name];
+    }
+
+    /**
+     * Sets a parameter value by parameter name.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name  The parameter name.
+     * @param string $value The parameter value.
+     *
+     * @throws \InvalidArgumentException If any of the parameters are of invalid type.
+     */
+    public function set($name, $value)
+    {
+        if (!is_string($name)) {
+            throw new \InvalidArgumentException('$name parameter is not a string.');
+        }
+
+        if (!is_string($value)) {
+            throw new \InvalidArgumentException('$value parameter is not a string.');
+        }
+
+        $this->myParameters[$name] = $value;
     }
 
     /**

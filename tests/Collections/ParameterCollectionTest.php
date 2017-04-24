@@ -39,4 +39,46 @@ class ParameterCollectionTest extends PHPUnit_Framework_TestCase
 
         $parameterCollection->get(10);
     }
+
+    /**
+     * Test set method.
+     */
+    public function testSet()
+    {
+        $parameterCollection = new ParameterCollection();
+        $parameterCollection->set('Foo', 'xxx');
+        $parameterCollection->set('bar', 'YYY');
+        $parameterCollection->set('foo', 'zzz');
+
+        $this->assertSame(3, count($parameterCollection));
+        $this->assertSame('xxx', $parameterCollection->get('Foo'));
+        $this->assertSame('YYY', $parameterCollection->get('bar'));
+        $this->assertSame('zzz', $parameterCollection->get('foo'));
+    }
+
+    /**
+     * Test set method with invalid name parameter type.
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage $name parameter is not a string.
+     */
+    public function testSetMethodWithInvalidNameParameterType()
+    {
+        $parameterCollection = new ParameterCollection();
+
+        $parameterCollection->set(10, 'Foo');
+    }
+
+    /**
+     * Test set method with invalid valid parameter type.
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage $value parameter is not a string.
+     */
+    public function testSetMethodWithInvalidValueParameterType()
+    {
+        $parameterCollection = new ParameterCollection();
+
+        $parameterCollection->set('Bar', false);
+    }
 }
