@@ -12,17 +12,8 @@ namespace BlueMvc\Core\Interfaces\Collections;
  *
  * @since 1.0.0
  */
-interface ParameterCollectionInterface extends \Countable
+interface ParameterCollectionInterface extends \Countable, \Iterator
 {
-    /**
-     * Returns the number of parameters.
-     *
-     * @since 1.0.0
-     *
-     * @return int The number of parameters.
-     */
-    public function count();
-
     /**
      * Returns the parameter value by parameter name if it exists, null otherwise.
      *

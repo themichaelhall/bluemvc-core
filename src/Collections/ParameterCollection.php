@@ -39,6 +39,18 @@ class ParameterCollection implements ParameterCollectionInterface
     }
 
     /**
+     * Returns the current parameter value.
+     *
+     * @since 1.0.0
+     *
+     * @return string The current parameter value.
+     */
+    public function current()
+    {
+        return current($this->myParameters);
+    }
+
+    /**
      * Returns the parameter value by parameter name if it exists, null otherwise.
      *
      * @since 1.0.0
@@ -63,6 +75,28 @@ class ParameterCollection implements ParameterCollectionInterface
     }
 
     /**
+     * Returns the current parameter name.
+     *
+     * @since 1.0.0
+     *
+     * @return string The current parameter name.
+     */
+    public function key()
+    {
+        return key($this->myParameters);
+    }
+
+    /**
+     * Moves forwards to the next parameter.
+     *
+     * @since 1.0.0
+     */
+    public function next()
+    {
+        next($this->myParameters);
+    }
+
+    /**
      * Sets a parameter value by parameter name.
      *
      * @since 1.0.0
@@ -83,6 +117,28 @@ class ParameterCollection implements ParameterCollectionInterface
         }
 
         $this->myParameters[$name] = $value;
+    }
+
+    /**
+     * Rewinds the parameter collection to to first element.
+     *
+     * @since 1.0.0
+     */
+    public function rewind()
+    {
+        reset($this->myParameters);
+    }
+
+    /**
+     * Returns true if the current parameter is valid.
+     *
+     * @since 1.0.0
+     *
+     * @return bool True if the current parameter is valid.
+     */
+    public function valid()
+    {
+        return current($this->myParameters) !== false;
     }
 
     /**

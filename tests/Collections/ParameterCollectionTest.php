@@ -81,4 +81,30 @@ class ParameterCollectionTest extends PHPUnit_Framework_TestCase
 
         $parameterCollection->set('Bar', false);
     }
+
+    /**
+     * Test iterator functionality for empty collection.
+     */
+    public function testIteratorForEmptyCollection()
+    {
+        $parameterCollection = new ParameterCollection();
+
+        $parameterArray = iterator_to_array($parameterCollection, true);
+
+        $this->assertSame([], $parameterArray);
+    }
+
+    /**
+     * Test iterator functionality for non-empty collection.
+     */
+    public function testIteratorForNonEmptyCollection()
+    {
+        $parameterCollection = new ParameterCollection();
+        $parameterCollection->set('Foo', '1');
+        $parameterCollection->set('Bar', '2');
+
+        $parameterArray = iterator_to_array($parameterCollection, true);
+
+        $this->assertSame(['Foo' => '1', 'Bar' => '2'], $parameterArray);
+    }
 }
