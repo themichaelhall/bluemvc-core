@@ -35,7 +35,7 @@ abstract class AbstractRequest implements RequestInterface
         $this->setUrl($url);
         $this->setMethod($method);
         $this->setHeaders(new HeaderCollection());
-        $this->myFormParameters = new ParameterCollection();
+        $this->setFormParameters(new ParameterCollection());
     }
 
     /**
@@ -127,6 +127,18 @@ abstract class AbstractRequest implements RequestInterface
     protected function addHeader($name, $value)
     {
         $this->myHeaders->add($name, $value);
+    }
+
+    /**
+     * Sets the form parameters.
+     *
+     * @since 1.0.0
+     *
+     * @param ParameterCollectionInterface $parameters The form parameters.
+     */
+    protected function setFormParameters(ParameterCollectionInterface $parameters)
+    {
+        $this->myFormParameters = $parameters;
     }
 
     /**

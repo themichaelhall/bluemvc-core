@@ -2,6 +2,7 @@
 
 use BlueMvc\Core\Base\AbstractRequest;
 use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
+use BlueMvc\Core\Interfaces\Collections\ParameterCollectionInterface;
 use BlueMvc\Core\Interfaces\Http\MethodInterface;
 use DataTypes\Interfaces\UrlInterface;
 
@@ -30,6 +31,16 @@ class BasicTestRequest extends AbstractRequest
     public function addHeader($name, $value)
     {
         parent::addHeader($name, $value);
+    }
+
+    /**
+     * Sets the form parameters.
+     *
+     * @param ParameterCollectionInterface $parameters The form parameters.
+     */
+    public function setFormParameters(ParameterCollectionInterface $parameters)
+    {
+        parent::setFormParameters($parameters);
     }
 
     /**

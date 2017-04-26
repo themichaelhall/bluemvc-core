@@ -3,6 +3,7 @@
 require_once __DIR__ . '/../Helpers/TestRequests/BasicTestRequest.php';
 
 use BlueMvc\Core\Collections\HeaderCollection;
+use BlueMvc\Core\Collections\ParameterCollection;
 use BlueMvc\Core\Http\Method;
 use DataTypes\Url;
 
@@ -120,11 +121,23 @@ class AbstractRequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test getFormParameters method without form parameters set.
+     * Test getFormParameters method.
      */
-    public function testGetFormParametersWithoutFormParametersSet()
+    public function testGetFormParameters()
     {
         $this->assertSame([], iterator_to_array($this->myRequest->getFormParameters()));
+    }
+
+    /**
+     * Test setFormParameters method.
+     */
+    public function testSetFormParameters()
+    {
+        $formParameters = new ParameterCollection();
+        $formParameters->set('Foo', 'Bar');
+        $this->myRequest->setFormParameters($formParameters);
+
+        $this->assertSame(['Foo' => 'Bar'], iterator_to_array($this->myRequest->getFormParameters()));
     }
 
     /**
