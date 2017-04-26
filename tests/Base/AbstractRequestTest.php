@@ -120,6 +120,14 @@ class AbstractRequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test getFormParameters method without form parameters set.
+     */
+    public function testGetFormParametersWithoutFormParametersSet()
+    {
+        $this->assertSame([], iterator_to_array($this->myRequest->getFormParameters()));
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

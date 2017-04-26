@@ -8,7 +8,9 @@
 namespace BlueMvc\Core\Base;
 
 use BlueMvc\Core\Collections\HeaderCollection;
+use BlueMvc\Core\Collections\ParameterCollection;
 use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
+use BlueMvc\Core\Interfaces\Collections\ParameterCollectionInterface;
 use BlueMvc\Core\Interfaces\Http\MethodInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use DataTypes\Interfaces\UrlInterface;
@@ -33,6 +35,19 @@ abstract class AbstractRequest implements RequestInterface
         $this->setUrl($url);
         $this->setMethod($method);
         $this->setHeaders(new HeaderCollection());
+        $this->myFormParameters = new ParameterCollection();
+    }
+
+    /**
+     * Returns the form parameters.
+     *
+     * @since 1.0.0
+     *
+     * @return ParameterCollectionInterface The form parameters.
+     */
+    public function getFormParameters()
+    {
+        return $this->myFormParameters;
     }
 
     /**
@@ -164,6 +179,11 @@ abstract class AbstractRequest implements RequestInterface
     {
         $this->myUrl = $url;
     }
+
+    /**
+     * @var ParameterCollectionInterface My form parameters.
+     */
+    private $myFormParameters;
 
     /**
      * @var HeaderCollectionInterface My headers.

@@ -8,6 +8,7 @@
 namespace BlueMvc\Core\Interfaces;
 
 use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
+use BlueMvc\Core\Interfaces\Collections\ParameterCollectionInterface;
 use BlueMvc\Core\Interfaces\Http\MethodInterface;
 use DataTypes\Interfaces\UrlInterface;
 
@@ -18,6 +19,15 @@ use DataTypes\Interfaces\UrlInterface;
  */
 interface RequestInterface
 {
+    /**
+     * Returns the form parameters.
+     *
+     * @since 1.0.0
+     *
+     * @return ParameterCollectionInterface The form parameters.
+     */
+    public function getFormParameters();
+
     /**
      * Returns a header value by header name if it exists, null otherwise.
      *

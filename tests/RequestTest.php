@@ -171,4 +171,20 @@ class RequestTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36', $request->getUserAgent());
     }
+
+    /**
+     * Test getFormParameters method without form parameters set.
+     */
+    public function testGetFormParametersWithoutFormParametersSet()
+    {
+        $request = new Request(
+            [
+                'HTTP_HOST'      => 'www.domain.com',
+                'REQUEST_URI'    => '/foo/bar',
+                'REQUEST_METHOD' => 'GET',
+            ]
+        );
+
+        $this->assertSame([], iterator_to_array($request->getFormParameters()));
+    }
 }
