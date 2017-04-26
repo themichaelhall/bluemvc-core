@@ -9,6 +9,7 @@ namespace BlueMvc\Core;
 
 use BlueMvc\Core\Base\AbstractRequest;
 use BlueMvc\Core\Collections\HeaderCollection;
+use BlueMvc\Core\Collections\ParameterCollection;
 use BlueMvc\Core\Http\Method;
 use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
 use DataTypes\Host;
@@ -29,25 +30,29 @@ class Request extends AbstractRequest
      * @since 1.0.0
      *
      * @param array|null $serverVars The server array or null to use the global $_SERVER array.
+     * @param array|null $getVars    The get array or null to use the global $_GET array.
+     * @param array|null $postVars   The post array or null to use the global $_POST array.
      */
-    public function __construct(array $serverVars = null)
+    public function __construct(array $serverVars = null, array $getVars = null, array $postVars = null)
     {
-        $this->myServerVars = $serverVars !== null ? $serverVars : $_SERVER;
+        $serverVars = $serverVars ?: $_SERVER;
+        $postVars = $postVars ?: $_POST;
 
-        $uriAndQueryString = explode('?', $this->myServerVars['REQUEST_URI'], 2);
-        $hostAndPort = explode(':', $this->myServerVars['HTTP_HOST'], 2);
+        $uriAndQueryString = explode('?', $serverVars['REQUEST_URI'], 2);
+        $hostAndPort = explode(':', $serverVars['HTTP_HOST'], 2);
 
         parent::__construct(
             Url::fromParts(
-                Scheme::parse('http' . (isset($this->myServerVars['HTTPS']) && $this->myServerVars['HTTPS'] !== '' ? 's' : '')),
+                Scheme::parse('http' . (isset($serverVars['HTTPS']) && $serverVars['HTTPS'] !== '' ? 's' : '')),
                 Host::parse($hostAndPort[0]),
                 count($hostAndPort) > 1 ? intval($hostAndPort[1]) : null,
                 UrlPath::parse($uriAndQueryString[0]),
                 count($uriAndQueryString) > 1 ? $uriAndQueryString[1] : null
-            ), new Method($this->myServerVars['REQUEST_METHOD'])
+            ), new Method($serverVars['REQUEST_METHOD'])
         );
 
-        $this->setHeaders(self::myParseHeaders($this->myServerVars));
+        $this->setHeaders(self::myParseHeaders($serverVars));
+        $this->setFormParameters(self::myParseParameters($postVars));
     }
 
     /**
@@ -71,7 +76,19 @@ class Request extends AbstractRequest
     }
 
     /**
-     * @var array My server array.
+     * Parses an array with parameters into a parameter collection.
+     *
+     * @param array $parametersArray The parameters array.
+     *
+     * @return ParameterCollection The parameter collection.
      */
-    private $myServerVars;
+    private static function myParseParameters(array $parametersArray)
+    {
+        $parameters = new ParameterCollection();
+        foreach ($parametersArray as $parameterName => $parameterValue) {
+            $parameters->set($parameterName, is_array($parameterValue) ? $parameterValue[0] : $parameterValue);
+        }
+
+        return $parameters;
+    }
 }
