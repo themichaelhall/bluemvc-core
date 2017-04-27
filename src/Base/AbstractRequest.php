@@ -130,6 +130,21 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
+     * Sets a form parameter.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name  The form parameter name.
+     * @param string $value The form parameter value.
+     *
+     * @throws \InvalidArgumentException If any of the parameters are of invalid type.
+     */
+    protected function setFormParameter($name, $value)
+    {
+        $this->myFormParameters->set($name, $value);
+    }
+
+    /**
      * Sets the form parameters.
      *
      * @since 1.0.0

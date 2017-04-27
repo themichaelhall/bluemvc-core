@@ -34,6 +34,17 @@ class BasicTestRequest extends AbstractRequest
     }
 
     /**
+     * Sets a form parameter.
+     *
+     * @param string $name  The form parameter name.
+     * @param string $value The form parameter value.
+     */
+    public function setFormParameter($name, $value)
+    {
+        parent::setFormParameter($name, $value);
+    }
+
+    /**
      * Sets the form parameters.
      *
      * @param ParameterCollectionInterface $parameters The form parameters.
