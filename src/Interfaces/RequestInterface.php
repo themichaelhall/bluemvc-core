@@ -20,6 +20,17 @@ use DataTypes\Interfaces\UrlInterface;
 interface RequestInterface
 {
     /**
+     * Returns a form parameter value by form parameter name if it exists, null otherwise.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name The form parameter name.
+     *
+     * @return string|null The form parameter value by form parameter name if it exists, null otherwise.
+     */
+    public function getFormParameter($name);
+
+    /**
      * Returns the form parameters.
      *
      * @since 1.0.0

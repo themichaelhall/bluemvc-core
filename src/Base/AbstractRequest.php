@@ -39,6 +39,22 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
+     * Returns a form parameter value by form parameter name if it exists, null otherwise.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name The form parameter name.
+     *
+     * @throws \InvalidArgumentException If the $name parameter is not a string.
+     *
+     * @return string|null The form parameter value by form parameter name if it exists, null otherwise.
+     */
+    public function getFormParameter($name)
+    {
+        return $this->myFormParameters->get($name);
+    }
+
+    /**
      * Returns the form parameters.
      *
      * @since 1.0.0

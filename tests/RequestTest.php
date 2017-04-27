@@ -209,4 +209,28 @@ class RequestTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame(['Foo' => '1', 'Bar' => '2'], iterator_to_array($request->getFormParameters()));
     }
+
+    /**
+     * Test getFormParameter method.
+     */
+    public function testGetFormParameter()
+    {
+        $request = new Request(
+            [
+                'HTTP_HOST'      => 'www.domain.com',
+                'REQUEST_URI'    => '/foo/bar',
+                'REQUEST_METHOD' => 'GET',
+            ],
+            [
+            ],
+            [
+                'Foo' => '1',
+                'Bar' => ['2', '3'],
+            ]
+        );
+
+        $this->assertSame('1', $request->getFormParameter('Foo'));
+        $this->assertSame('2', $request->getFormParameter('Bar'));
+        $this->assertNull($request->getFormParameter('Baz'));
+    }
 }
