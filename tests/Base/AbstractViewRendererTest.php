@@ -1,11 +1,13 @@
 <?php
 
-require_once __DIR__ . '/../Helpers/TestViewRenderers/BasicTestViewRenderer.php';
+namespace BlueMvc\Core\Tests\Base;
+
+use BlueMvc\Core\Tests\Helpers\TestViewRenderers\BasicTestViewRenderer;
 
 /**
  * Test AbstractViewRenderer class.
  */
-class AbstractViewRendererTest extends PHPUnit_Framework_TestCase
+class AbstractViewRendererTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test getViewFileExtension method.
@@ -14,6 +16,6 @@ class AbstractViewRendererTest extends PHPUnit_Framework_TestCase
     {
         $viewRenderer = new BasicTestViewRenderer();
 
-        $this->assertSame('view', $viewRenderer->getViewFileExtension());
+        self::assertSame('view', $viewRenderer->getViewFileExtension());
     }
 }

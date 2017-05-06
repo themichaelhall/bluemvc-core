@@ -28,6 +28,11 @@
       "BlueMvc\\Core\\": "src"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "BlueMvc\\Core\\Tests\\": "tests"
+    }
+  },
   "minimum-stability": "dev",
   "prefer-stable": true
 }

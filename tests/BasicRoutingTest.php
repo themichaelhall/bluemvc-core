@@ -4,6 +4,7 @@ use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Request;
 use BlueMvc\Core\Response;
 use BlueMvc\Core\Route;
+use BlueMvc\Core\Tests\Helpers\TestViewRenderers\BasicTestViewRenderer;
 use DataTypes\FilePath;
 
 require_once __DIR__ . '/Helpers/Fakes/FakeHeaders.php';
@@ -16,7 +17,6 @@ require_once __DIR__ . '/Helpers/TestControllers/ActionResultTestController.php'
 require_once __DIR__ . '/Helpers/TestControllers/PreAndPostActionEventController.php';
 require_once __DIR__ . '/Helpers/TestControllers/ErrorTestController.php';
 require_once __DIR__ . '/Helpers/TestControllers/ExceptionTestController.php';
-require_once __DIR__ . '/Helpers/TestViewRenderers/BasicTestViewRenderer.php';
 
 /**
  * Test basic routing for a application.
@@ -125,8 +125,8 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('<html><body><h1>Index</h1></body></html>', $responseOutput);
-        $this->assertSame('<html><body><h1>Index</h1></body></html>', $response->getContent());
+        $this->assertSame('<html><body><h1>Index</h1><span>' . $this->application->getDocumentRoot() . '</span><em>' . $request->getUrl() . '</em></body></html>', $responseOutput);
+        $this->assertSame('<html><body><h1>Index</h1><span>' . $this->application->getDocumentRoot() . '</span><em>' . $request->getUrl() . '</em></body></html>', $response->getContent());
         $this->assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
         $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
@@ -143,8 +143,8 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('<html><body><h1>With model</h1><p>This is the model.</p></body></html>', $responseOutput);
-        $this->assertSame('<html><body><h1>With model</h1><p>This is the model.</p></body></html>', $response->getContent());
+        $this->assertSame('<html><body><h1>With model</h1><span>' . $this->application->getDocumentRoot() . '</span><em>' . $request->getUrl() . '</em><p>This is the model.</p></body></html>', $responseOutput);
+        $this->assertSame('<html><body><h1>With model</h1><span>' . $this->application->getDocumentRoot() . '</span><em>' . $request->getUrl() . '</em><p>This is the model.</p></body></html>', $response->getContent());
         $this->assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
         $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
@@ -161,8 +161,8 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('<html><body><h1>With model and view data</h1><p>This is the model.</p><i>This is the view data.</i></body></html>', $responseOutput);
-        $this->assertSame('<html><body><h1>With model and view data</h1><p>This is the model.</p><i>This is the view data.</i></body></html>', $response->getContent());
+        $this->assertSame('<html><body><h1>With model and view data</h1><span>' . $this->application->getDocumentRoot() . '</span><em>' . $request->getUrl() . '</em><p>This is the model.</p><i>This is the view data.</i></body></html>', $responseOutput);
+        $this->assertSame('<html><body><h1>With model and view data</h1><span>' . $this->application->getDocumentRoot() . '</span><em>' . $request->getUrl() . '</em><p>This is the model.</p><i>This is the view data.</i></body></html>', $response->getContent());
         $this->assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
         $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }

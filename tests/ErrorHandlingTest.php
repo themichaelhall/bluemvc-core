@@ -4,6 +4,7 @@ use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Request;
 use BlueMvc\Core\Response;
 use BlueMvc\Core\Route;
+use BlueMvc\Core\Tests\Helpers\TestViewRenderers\BasicTestViewRenderer;
 use DataTypes\FilePath;
 
 require_once __DIR__ . '/Helpers/Fakes/FakeHeaders.php';
@@ -12,7 +13,6 @@ require_once __DIR__ . '/Helpers/TestControllers/ActionResultTestController.php'
 require_once __DIR__ . '/Helpers/TestControllers/BasicTestController.php';
 require_once __DIR__ . '/Helpers/TestControllers/ExceptionTestController.php';
 require_once __DIR__ . '/Helpers/TestControllers/ErrorTestController.php';
-require_once __DIR__ . '/Helpers/TestViewRenderers/BasicTestViewRenderer.php';
 
 /**
  * Test error handling.

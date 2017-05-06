@@ -8,6 +8,7 @@
 namespace BlueMvc\Core\Base;
 
 use BlueMvc\Core\Interfaces\ApplicationInterface;
+use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ViewRendererInterface;
 use DataTypes\Interfaces\FilePathInterface;
 
@@ -48,15 +49,15 @@ abstract class AbstractViewRenderer implements ViewRendererInterface
      *
      * @since 1.0.0
      *
-     * @param ApplicationInterface $application    The application.
-     * @param FilePathInterface    $viewsDirectory The views directory.
-     * @param FilePathInterface    $viewFile       The view file.
-     * @param mixed                $model          The model or null if there is no model.
-     * @param mixed                $viewData       The view data or null if there is no view data.
+     * @param ApplicationInterface $application The application.
+     * @param RequestInterface     $request     The request.
+     * @param FilePathInterface    $viewFile    The view file.
+     * @param mixed                $model       The model or null if there is no model.
+     * @param mixed                $viewData    The view data or null if there is no view data.
      *
      * @return string The rendered view.
      */
-    abstract public function renderView(ApplicationInterface $application, FilePathInterface $viewsDirectory, FilePathInterface $viewFile, $model = null, $viewData = null);
+    abstract public function renderView(ApplicationInterface $application, RequestInterface $request, FilePathInterface $viewFile, $model = null, $viewData = null);
 
     /**
      * @var string My file extension for views compatible with this renderer.

@@ -1,14 +1,19 @@
 <?php
 
-use DataTypes\FilePath;
+namespace BlueMvc\Core\Tests;
 
-require_once __DIR__ . '/Helpers/TestViewRenderers/BasicTestViewRenderer.php';
+use BlueMvc\Core\Http\Method;
+use BlueMvc\Core\Tests\Helpers\TestViewRenderers\BasicTestViewRenderer;
+use DataTypes\FilePath;
+use DataTypes\Url;
+
 require_once __DIR__ . '/Helpers/TestApplications/BasicTestApplication.php';
+require_once __DIR__ . '/Helpers/TestRequests/BasicTestRequest.php';
 
 /**
  * Test ViewRenderer class.
  */
-class ViewRendererTest extends PHPUnit_Framework_TestCase
+class ViewRendererTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test renderView method with empty model.
@@ -17,14 +22,18 @@ class ViewRendererTest extends PHPUnit_Framework_TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
+        $application = new \BasicTestApplication(FilePath::parse($DS . 'var' . $DS . 'www' . $DS));
+        $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
+        $request = new \BasicTestRequest(Url::parse('http://localhost/foo'), new Method('GET'));
+
         $viewRenderer = new BasicTestViewRenderer();
         $result = $viewRenderer->renderView(
-            new BasicTestApplication(FilePath::parse($DS . 'var' . $DS . 'www' . $DS)),
-            FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS),
+            $application,
+            $request,
             FilePath::parse('ViewTest' . $DS . 'index.view')
         );
 
-        $this->assertSame('<html><body><h1>Index</h1></body></html>', $result);
+        self::assertSame('<html><body><h1>Index</h1><span>' . $DS . 'var' . $DS . 'www' . $DS . '</span><em>http://localhost/foo</em></body></html>', $result);
     }
 
     /**
@@ -34,15 +43,19 @@ class ViewRendererTest extends PHPUnit_Framework_TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
+        $application = new \BasicTestApplication(FilePath::parse($DS . 'var' . $DS . 'www' . $DS));
+        $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
+        $request = new \BasicTestRequest(Url::parse('http://localhost/bar'), new Method('GET'));
+
         $viewRenderer = new BasicTestViewRenderer();
         $result = $viewRenderer->renderView(
-            new BasicTestApplication(FilePath::parse($DS . 'var' . $DS . 'www' . $DS)),
-            FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS),
+            $application,
+            $request,
             FilePath::parse('ViewTest' . $DS . 'withmodel.view'),
             'This is the model.'
         );
 
-        $this->assertSame('<html><body><h1>With model</h1><p>This is the model.</p></body></html>', $result);
+        self::assertSame('<html><body><h1>With model</h1><span>' . $DS . 'var' . $DS . 'www' . $DS . '</span><em>http://localhost/bar</em><p>This is the model.</p></body></html>', $result);
     }
 
     /**
@@ -52,15 +65,19 @@ class ViewRendererTest extends PHPUnit_Framework_TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
+        $application = new \BasicTestApplication(FilePath::parse($DS . 'var' . $DS . 'www' . $DS));
+        $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
+        $request = new \BasicTestRequest(Url::parse('http://localhost/baz'), new Method('GET'));
+
         $viewRenderer = new BasicTestViewRenderer();
         $result = $viewRenderer->renderView(
-            new BasicTestApplication(FilePath::parse($DS . 'var' . $DS . 'www' . $DS)),
-            FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS),
+            $application,
+            $request,
             FilePath::parse('ViewTest' . $DS . 'withviewdata.view'),
             'This is the model.',
             'This is the view data.'
         );
 
-        $this->assertSame('<html><body><h1>With model and view data</h1><p>This is the model.</p><i>This is the view data.</i></body></html>', $result);
+        self::assertSame('<html><body><h1>With model and view data</h1><span>' . $DS . 'var' . $DS . 'www' . $DS . '</span><em>http://localhost/baz</em><p>This is the model.</p><i>This is the view data.</i></body></html>', $result);
     }
 }

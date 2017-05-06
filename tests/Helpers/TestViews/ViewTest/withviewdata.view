@@ -1,1 +1,1 @@
-<html><body><h1>With model and view data</h1><p>{MODEL}</p><i>{VIEWDATA}</i></body></html>
+<html><body><h1>With model and view data</h1><span>{ROOT}</span><em>{URL}</em><p>{MODEL}</p><i>{VIEWDATA}</i></body></html>
