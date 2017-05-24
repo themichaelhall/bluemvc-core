@@ -69,6 +69,15 @@ interface RequestInterface
     public function getMethod();
 
     /**
+     * Returns the query parameters.
+     *
+     * @since 1.0.0
+     *
+     * @return ParameterCollectionInterface The query parameters.
+     */
+    public function getQueryParameters();
+
+    /**
      * Returns the user agent or empty string if no user agent exists.
      *
      * @since 1.0.0
