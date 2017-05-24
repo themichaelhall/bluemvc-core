@@ -69,6 +69,17 @@ interface RequestInterface
     public function getMethod();
 
     /**
+     * Returns a query parameter value by query parameter name if it exists, null otherwise.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name The query parameter name.
+     *
+     * @return string|null The query parameter value by query parameter name if it exists, null otherwise.
+     */
+    public function getQueryParameter($name);
+
+    /**
      * Returns the query parameters.
      *
      * @since 1.0.0
