@@ -36,7 +36,7 @@ abstract class AbstractRequest implements RequestInterface
         $this->setMethod($method);
         $this->setHeaders(new HeaderCollection());
         $this->setFormParameters(new ParameterCollection());
-        $this->myQueryParameters = new ParameterCollection(); // fixme: setQueryParameters()
+        $this->setQueryParameters(new ParameterCollection());
     }
 
     /**
@@ -222,6 +222,18 @@ abstract class AbstractRequest implements RequestInterface
     protected function setMethod(MethodInterface $method)
     {
         $this->myMethod = $method;
+    }
+
+    /**
+     * Sets the query parameters.
+     *
+     * @since 1.0.0
+     *
+     * @param ParameterCollectionInterface $parameters The query parameters.
+     */
+    protected function setQueryParameters(ParameterCollectionInterface $parameters)
+    {
+        $this->myQueryParameters = $parameters;
     }
 
     /**

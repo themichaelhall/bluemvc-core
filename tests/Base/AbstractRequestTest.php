@@ -170,6 +170,18 @@ class AbstractRequestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test setQueryParameters method.
+     */
+    public function testSetQueryParameters()
+    {
+        $queryParameters = new ParameterCollection();
+        $queryParameters->set('foo', 'bar');
+        $this->myRequest->setQueryParameters($queryParameters);
+
+        $this->assertSame(['foo' => 'bar'], iterator_to_array($this->myRequest->getQueryParameters()));
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

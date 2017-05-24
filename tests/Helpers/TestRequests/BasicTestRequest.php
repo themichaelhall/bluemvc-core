@@ -86,6 +86,16 @@ class BasicTestRequest extends AbstractRequest
     }
 
     /**
+     * Sets the query parameters.
+     *
+     * @param ParameterCollectionInterface $parameters The query parameters.
+     */
+    public function setQueryParameters(ParameterCollectionInterface $parameters)
+    {
+        parent::setQueryParameters($parameters);
+    }
+
+    /**
      * Sets the url.
      *
      * @param UrlInterface $url The url.
