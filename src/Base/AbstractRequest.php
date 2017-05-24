@@ -225,6 +225,21 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
+     * Sets a query parameter.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name  The query parameter name.
+     * @param string $value The query parameter value.
+     *
+     * @throws \InvalidArgumentException If any of the parameters are of invalid type.
+     */
+    protected function setQueryParameter($name, $value)
+    {
+        $this->myQueryParameters->set($name, $value);
+    }
+
+    /**
      * Sets the query parameters.
      *
      * @since 1.0.0

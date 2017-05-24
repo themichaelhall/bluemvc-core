@@ -86,6 +86,17 @@ class BasicTestRequest extends AbstractRequest
     }
 
     /**
+     * Sets a query parameter.
+     *
+     * @param string $name  The query parameter name.
+     * @param string $value The query parameter value.
+     */
+    public function setQueryParameter($name, $value)
+    {
+        parent::setQueryParameter($name, $value);
+    }
+
+    /**
      * Sets the query parameters.
      *
      * @param ParameterCollectionInterface $parameters The query parameters.
