@@ -1,23 +1,24 @@
 <?php
 
+namespace BlueMvc\Core\Tests;
+
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Request;
 use BlueMvc\Core\Response;
 use BlueMvc\Core\Route;
+use BlueMvc\Core\Tests\Helpers\Fakes\FakeHeaders;
+use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
+use BlueMvc\Core\Tests\Helpers\TestControllers\ActionResultTestController;
+use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
+use BlueMvc\Core\Tests\Helpers\TestControllers\ErrorTestController;
+use BlueMvc\Core\Tests\Helpers\TestControllers\ExceptionTestController;
 use BlueMvc\Core\Tests\Helpers\TestViewRenderers\BasicTestViewRenderer;
 use DataTypes\FilePath;
-
-require_once __DIR__ . '/Helpers/Fakes/FakeHeaders.php';
-require_once __DIR__ . '/Helpers/TestApplications/BasicTestApplication.php';
-require_once __DIR__ . '/Helpers/TestControllers/ActionResultTestController.php';
-require_once __DIR__ . '/Helpers/TestControllers/BasicTestController.php';
-require_once __DIR__ . '/Helpers/TestControllers/ExceptionTestController.php';
-require_once __DIR__ . '/Helpers/TestControllers/ErrorTestController.php';
 
 /**
  * Test error handling.
  */
-class ErrorHandlingTest extends PHPUnit_Framework_TestCase
+class ErrorHandlingTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test server error in debug mode.
@@ -32,12 +33,12 @@ class ErrorHandlingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertContains('LogicException', $responseOutput);
-        $this->assertContains('Exception was thrown.', $responseOutput);
-        $this->assertContains('LogicException', $response->getContent());
-        $this->assertContains('Exception was thrown.', $response->getContent());
-        $this->assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
-        $this->assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
+        self::assertContains('LogicException', $responseOutput);
+        self::assertContains('Exception was thrown.', $responseOutput);
+        self::assertContains('LogicException', $response->getContent());
+        self::assertContains('Exception was thrown.', $response->getContent());
+        self::assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
+        self::assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -53,10 +54,10 @@ class ErrorHandlingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('', $responseOutput);
-        $this->assertSame('', $response->getContent());
-        $this->assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
-        $this->assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
+        self::assertSame('', $responseOutput);
+        self::assertSame('', $response->getContent());
+        self::assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
+        self::assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -72,10 +73,10 @@ class ErrorHandlingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('<html><body><h1>Request Failed: Error: 500, Exception: LogicException, ExceptionMessage: Exception was thrown.</h1></body></html>', $responseOutput);
-        $this->assertSame('<html><body><h1>Request Failed: Error: 500, Exception: LogicException, ExceptionMessage: Exception was thrown.</h1></body></html>', $response->getContent());
-        $this->assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
-        $this->assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
+        self::assertSame('<html><body><h1>Request Failed: Error: 500, Exception: LogicException, ExceptionMessage: Exception was thrown.</h1></body></html>', $responseOutput);
+        self::assertSame('<html><body><h1>Request Failed: Error: 500, Exception: LogicException, ExceptionMessage: Exception was thrown.</h1></body></html>', $response->getContent());
+        self::assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
+        self::assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -91,10 +92,10 @@ class ErrorHandlingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('<html><body><h1>Request Failed: Error: 404</h1></body></html>', $responseOutput);
-        $this->assertSame('<html><body><h1>Request Failed: Error: 404</h1></body></html>', $response->getContent());
-        $this->assertSame(['HTTP/1.1 404 Not Found'], FakeHeaders::get());
-        $this->assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
+        self::assertSame('<html><body><h1>Request Failed: Error: 404</h1></body></html>', $responseOutput);
+        self::assertSame('<html><body><h1>Request Failed: Error: 404</h1></body></html>', $response->getContent());
+        self::assertSame(['HTTP/1.1 404 Not Found'], FakeHeaders::get());
+        self::assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -110,10 +111,10 @@ class ErrorHandlingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('<html><body><h1>Request Failed: Error: 404</h1></body></html>', $responseOutput);
-        $this->assertSame('<html><body><h1>Request Failed: Error: 404</h1></body></html>', $response->getContent());
-        $this->assertSame(['HTTP/1.1 404 Not Found'], FakeHeaders::get());
-        $this->assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
+        self::assertSame('<html><body><h1>Request Failed: Error: 404</h1></body></html>', $responseOutput);
+        self::assertSame('<html><body><h1>Request Failed: Error: 404</h1></body></html>', $response->getContent());
+        self::assertSame(['HTTP/1.1 404 Not Found'], FakeHeaders::get());
+        self::assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -129,10 +130,10 @@ class ErrorHandlingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('Hello World!', $responseOutput);
-        $this->assertSame('Hello World!', $response->getContent());
-        $this->assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
-        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertSame('Hello World!', $responseOutput);
+        self::assertSame('Hello World!', $response->getContent());
+        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -148,10 +149,10 @@ class ErrorHandlingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('', $responseOutput);
-        $this->assertSame('', $response->getContent());
-        $this->assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
-        $this->assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
+        self::assertSame('', $responseOutput);
+        self::assertSame('', $response->getContent());
+        self::assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
+        self::assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -168,12 +169,12 @@ class ErrorHandlingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertContains('RuntimeException', $responseOutput);
-        $this->assertContains('Exception thrown from 403 action.', $responseOutput);
-        $this->assertContains('RuntimeException', $response->getContent());
-        $this->assertContains('Exception thrown from 403 action.', $response->getContent());
-        $this->assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
-        $this->assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
+        self::assertContains('RuntimeException', $responseOutput);
+        self::assertContains('Exception thrown from 403 action.', $responseOutput);
+        self::assertContains('RuntimeException', $response->getContent());
+        self::assertContains('Exception thrown from 403 action.', $response->getContent());
+        self::assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
+        self::assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
     }
 
     /**

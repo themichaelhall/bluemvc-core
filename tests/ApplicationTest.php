@@ -5,11 +5,11 @@ namespace BlueMvc\Core\Tests;
 use BlueMvc\Core\Application;
 use BlueMvc\Core\Exceptions\InvalidFilePathException;
 use BlueMvc\Core\Route;
+use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
+use BlueMvc\Core\Tests\Helpers\TestControllers\ErrorTestController;
+use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
 use BlueMvc\Core\Tests\Helpers\TestViewRenderers\BasicTestViewRenderer;
 use DataTypes\FilePath;
-
-require_once __DIR__ . '/Helpers/TestControllers/BasicTestController.php';
-require_once __DIR__ . '/Helpers/TestControllers/ErrorTestController.php';
 
 /**
  * Test Application class.
@@ -218,9 +218,9 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetErrorControllerClass()
     {
-        $this->myApplication->setErrorControllerClass(\ErrorTestController::class);
+        $this->myApplication->setErrorControllerClass(ErrorTestController::class);
 
-        self::assertSame(\ErrorTestController::class, $this->myApplication->getErrorControllerClass());
+        self::assertSame(ErrorTestController::class, $this->myApplication->getErrorControllerClass());
     }
 
     /**
@@ -249,22 +249,22 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      * Test setErrorControllerClass method with invalid class name.
      *
      * @expectedException \BlueMvc\Core\Exceptions\InvalidControllerClassException
-     * @expectedExceptionMessage "BasicTestRequest" is not a valid error controller class.
+     * @expectedExceptionMessage "BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest" is not a valid error controller class.
      */
     public function testSetErrorControllerClassWithInvalidClassName()
     {
-        $this->myApplication->setErrorControllerClass(\BasicTestRequest::class);
+        $this->myApplication->setErrorControllerClass(BasicTestRequest::class);
     }
 
     /**
      * Test setErrorControllerClass method with ordinary controller class name.
      *
      * @expectedException \BlueMvc\Core\Exceptions\InvalidControllerClassException
-     * @expectedExceptionMessage "BasicTestController" is not a valid error controller class.
+     * @expectedExceptionMessage "BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController" is not a valid error controller class.
      */
     public function testSetErrorControllerClassWithOrdinaryControllerClassName()
     {
-        $this->myApplication->setErrorControllerClass(\BasicTestController::class);
+        $this->myApplication->setErrorControllerClass(BasicTestController::class);
     }
 
     /**
@@ -282,7 +282,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
 
         $this->myApplication->setViewPath(FilePath::parse('views' . $DS));
         $this->myApplication->addViewRenderer(new BasicTestViewRenderer());
-        $this->myApplication->addRoute(new Route('', \BasicTestController::class));
+        $this->myApplication->addRoute(new Route('', BasicTestController::class));
         rmdir($this->myApplication->getTempPath());
     }
 

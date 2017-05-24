@@ -1,5 +1,7 @@
 <?php
 
+namespace BlueMvc\Core\Tests\ActionResults;
+
 use BlueMvc\Core\ActionResults\NotFoundResult;
 use BlueMvc\Core\Application;
 use BlueMvc\Core\Request;
@@ -8,7 +10,7 @@ use BlueMvc\Core\Response;
 /**
  * Test NotFoundResult class.
  */
-class NotFoundResultTest extends PHPUnit_Framework_TestCase
+class NotFoundResultTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test default constructor.
@@ -31,9 +33,9 @@ class NotFoundResultTest extends PHPUnit_Framework_TestCase
         $actionResult = new NotFoundResult();
         $actionResult->updateResponse($application, $request, $response);
 
-        $this->assertSame(404, $response->getStatusCode()->getCode());
-        $this->assertSame('Not Found', $response->getStatusCode()->getDescription());
-        $this->assertSame('', $response->getContent());
+        self::assertSame(404, $response->getStatusCode()->getCode());
+        self::assertSame('Not Found', $response->getStatusCode()->getDescription());
+        self::assertSame('', $response->getContent());
     }
 
     /**
@@ -57,9 +59,9 @@ class NotFoundResultTest extends PHPUnit_Framework_TestCase
         $actionResult = new NotFoundResult('The page was not found.');
         $actionResult->updateResponse($application, $request, $response);
 
-        $this->assertSame(404, $response->getStatusCode()->getCode());
-        $this->assertSame('Not Found', $response->getStatusCode()->getDescription());
-        $this->assertSame('The page was not found.', $response->getContent());
+        self::assertSame(404, $response->getStatusCode()->getCode());
+        self::assertSame('Not Found', $response->getStatusCode()->getDescription());
+        self::assertSame('The page was not found.', $response->getContent());
     }
 
     /**

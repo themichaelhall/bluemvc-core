@@ -1,6 +1,6 @@
 <?php
 
-namespace {
+namespace BlueMvc\Core\Tests\Helpers\Fakes {
 
     /**
      * Helper for fake headers.
@@ -64,6 +64,8 @@ namespace {
 
 namespace BlueMvc\Core {
 
+    use BlueMvc\Core\Tests\Helpers\Fakes\FakeHeaders;
+
     /**
      * Fakes the header PHP method.
      *
@@ -71,8 +73,8 @@ namespace BlueMvc\Core {
      */
     function header($header)
     {
-        if (\FakeHeaders::isEnabled()) {
-            \FakeHeaders::add($header);
+        if (FakeHeaders::isEnabled()) {
+            FakeHeaders::add($header);
         } else {
             \header($header);
         }

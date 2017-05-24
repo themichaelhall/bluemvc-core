@@ -1,13 +1,14 @@
 <?php
 
-use BlueMvc\Core\RouteMatch;
+namespace BlueMvc\Core\Tests;
 
-require_once __DIR__ . '/Helpers/TestControllers/BasicTestController.php';
+use BlueMvc\Core\RouteMatch;
+use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
 
 /**
  * Test RouteMatchTest class.
  */
-class RouteMatchTest extends PHPUnit_Framework_TestCase
+class RouteMatchTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test getControllerClassName method.
@@ -16,7 +17,7 @@ class RouteMatchTest extends PHPUnit_Framework_TestCase
     {
         $routeMatch = new RouteMatch(BasicTestController::class);
 
-        $this->assertSame(BasicTestController::class, $routeMatch->getControllerClassName());
+        self::assertSame(BasicTestController::class, $routeMatch->getControllerClassName());
     }
 
     /**
@@ -26,7 +27,7 @@ class RouteMatchTest extends PHPUnit_Framework_TestCase
     {
         $routeMatch = new RouteMatch(BasicTestController::class, 'foo');
 
-        $this->assertSame('foo', $routeMatch->getAction());
+        self::assertSame('foo', $routeMatch->getAction());
     }
 
     /**
@@ -36,6 +37,6 @@ class RouteMatchTest extends PHPUnit_Framework_TestCase
     {
         $routeMatch = new RouteMatch(BasicTestController::class, '', ['foo', 'bar']);
 
-        $this->assertSame(['foo', 'bar'], $routeMatch->getParameters());
+        self::assertSame(['foo', 'bar'], $routeMatch->getParameters());
     }
 }

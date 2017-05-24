@@ -3,12 +3,11 @@
 namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\Http\Method;
+use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
+use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
 use BlueMvc\Core\Tests\Helpers\TestViewRenderers\BasicTestViewRenderer;
 use DataTypes\FilePath;
 use DataTypes\Url;
-
-require_once __DIR__ . '/Helpers/TestApplications/BasicTestApplication.php';
-require_once __DIR__ . '/Helpers/TestRequests/BasicTestRequest.php';
 
 /**
  * Test ViewRenderer class.
@@ -22,9 +21,9 @@ class ViewRendererTest extends \PHPUnit_Framework_TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
-        $application = new \BasicTestApplication(FilePath::parse($DS . 'var' . $DS . 'www' . $DS));
+        $application = new BasicTestApplication(FilePath::parse($DS . 'var' . $DS . 'www' . $DS));
         $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
-        $request = new \BasicTestRequest(Url::parse('http://localhost/foo'), new Method('GET'));
+        $request = new BasicTestRequest(Url::parse('http://localhost/foo'), new Method('GET'));
 
         $viewRenderer = new BasicTestViewRenderer();
         $result = $viewRenderer->renderView(
@@ -43,9 +42,9 @@ class ViewRendererTest extends \PHPUnit_Framework_TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
-        $application = new \BasicTestApplication(FilePath::parse($DS . 'var' . $DS . 'www' . $DS));
+        $application = new BasicTestApplication(FilePath::parse($DS . 'var' . $DS . 'www' . $DS));
         $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
-        $request = new \BasicTestRequest(Url::parse('http://localhost/bar'), new Method('GET'));
+        $request = new BasicTestRequest(Url::parse('http://localhost/bar'), new Method('GET'));
 
         $viewRenderer = new BasicTestViewRenderer();
         $result = $viewRenderer->renderView(
@@ -65,9 +64,9 @@ class ViewRendererTest extends \PHPUnit_Framework_TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
-        $application = new \BasicTestApplication(FilePath::parse($DS . 'var' . $DS . 'www' . $DS));
+        $application = new BasicTestApplication(FilePath::parse($DS . 'var' . $DS . 'www' . $DS));
         $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
-        $request = new \BasicTestRequest(Url::parse('http://localhost/baz'), new Method('GET'));
+        $request = new BasicTestRequest(Url::parse('http://localhost/baz'), new Method('GET'));
 
         $viewRenderer = new BasicTestViewRenderer();
         $result = $viewRenderer->renderView(

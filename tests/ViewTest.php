@@ -1,11 +1,13 @@
 <?php
 
+namespace BlueMvc\Core\Tests;
+
 use BlueMvc\Core\View;
 
 /**
  * Test View class.
  */
-class ViewTest extends PHPUnit_Framework_TestCase
+class ViewTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test create view with no model.
@@ -14,7 +16,7 @@ class ViewTest extends PHPUnit_Framework_TestCase
     {
         $view = new View();
 
-        $this->assertNull($view->getModel());
+        self::assertNull($view->getModel());
     }
 
     /**
@@ -24,6 +26,6 @@ class ViewTest extends PHPUnit_Framework_TestCase
     {
         $view = new View('The Model');
 
-        $this->assertSame('The Model', $view->getModel());
+        self::assertSame('The Model', $view->getModel());
     }
 }

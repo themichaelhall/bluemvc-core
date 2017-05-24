@@ -1,5 +1,7 @@
 <?php
 
+namespace BlueMvc\Core\Tests\Helpers\TestApplications;
+
 use BlueMvc\Core\Base\AbstractApplication;
 use BlueMvc\Core\Interfaces\RouteInterface;
 use BlueMvc\Core\Interfaces\ViewRendererInterface;

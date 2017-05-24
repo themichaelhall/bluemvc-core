@@ -1,5 +1,7 @@
 <?php
 
+namespace BlueMvc\Core\Tests\ActionResults;
+
 use BlueMvc\Core\ActionResults\RedirectResult;
 use BlueMvc\Core\Application;
 use BlueMvc\Core\Request;
@@ -8,7 +10,7 @@ use BlueMvc\Core\Response;
 /**
  * Test RedirectResult class.
  */
-class RedirectResultTest extends PHPUnit_Framework_TestCase
+class RedirectResultTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test with absolute url.
@@ -31,10 +33,10 @@ class RedirectResultTest extends PHPUnit_Framework_TestCase
         $actionResult = new RedirectResult('https://domain.org/baz?query');
         $actionResult->updateResponse($application, $request, $response);
 
-        $this->assertSame(302, $response->getStatusCode()->getCode());
-        $this->assertSame('Found', $response->getStatusCode()->getDescription());
-        $this->assertSame('', $response->getContent());
-        $this->assertSame('https://domain.org/baz?query', $response->getHeader('Location'));
+        self::assertSame(302, $response->getStatusCode()->getCode());
+        self::assertSame('Found', $response->getStatusCode()->getDescription());
+        self::assertSame('', $response->getContent());
+        self::assertSame('https://domain.org/baz?query', $response->getHeader('Location'));
     }
 
     /**
@@ -58,10 +60,10 @@ class RedirectResultTest extends PHPUnit_Framework_TestCase
         $actionResult = new RedirectResult('../baz');
         $actionResult->updateResponse($application, $request, $response);
 
-        $this->assertSame(302, $response->getStatusCode()->getCode());
-        $this->assertSame('Found', $response->getStatusCode()->getDescription());
-        $this->assertSame('', $response->getContent());
-        $this->assertSame('http://www.domain.com/baz', $response->getHeader('Location'));
+        self::assertSame(302, $response->getStatusCode()->getCode());
+        self::assertSame('Found', $response->getStatusCode()->getDescription());
+        self::assertSame('', $response->getContent());
+        self::assertSame('http://www.domain.com/baz', $response->getHeader('Location'));
     }
 
     /**

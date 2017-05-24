@@ -1,14 +1,15 @@
 <?php
 
+namespace BlueMvc\Core\Tests;
+
 use BlueMvc\Core\DefaultRoute;
 use BlueMvc\Core\Request;
-
-require_once __DIR__ . '/Helpers/TestControllers/BasicTestController.php';
+use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
 
 /**
  * Test DefaultRoute class.
  */
-class DefaultRouteTest extends PHPUnit_Framework_TestCase
+class DefaultRouteTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test getControllerClassName method.
@@ -16,7 +17,7 @@ class DefaultRouteTest extends PHPUnit_Framework_TestCase
     public function testGetControllerClassName()
     {
         $route = new DefaultRoute(BasicTestController::class);
-        $this->assertSame(BasicTestController::class, $route->getControllerClassName());
+        self::assertSame(BasicTestController::class, $route->getControllerClassName());
     }
 
     /**
@@ -26,11 +27,11 @@ class DefaultRouteTest extends PHPUnit_Framework_TestCase
     {
         $route = new DefaultRoute(BasicTestController::class);
 
-        $this->assertNotNull($route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET'])));
-        $this->assertNotNull($route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo', 'REQUEST_METHOD' => 'GET'])));
-        $this->assertNotNull($route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo/', 'REQUEST_METHOD' => 'GET'])));
-        $this->assertNotNull($route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo/bar', 'REQUEST_METHOD' => 'GET'])));
-        $this->assertNotNull($route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo/bar/', 'REQUEST_METHOD' => 'GET'])));
+        self::assertNotNull($route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET'])));
+        self::assertNotNull($route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo', 'REQUEST_METHOD' => 'GET'])));
+        self::assertNotNull($route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo/', 'REQUEST_METHOD' => 'GET'])));
+        self::assertNotNull($route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo/bar', 'REQUEST_METHOD' => 'GET'])));
+        self::assertNotNull($route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo/bar/', 'REQUEST_METHOD' => 'GET'])));
     }
 
     /**
@@ -41,9 +42,9 @@ class DefaultRouteTest extends PHPUnit_Framework_TestCase
         $route = new DefaultRoute(BasicTestController::class);
         $routeMatch = $route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']));
 
-        $this->assertSame(BasicTestController::class, $routeMatch->getControllerClassName());
-        $this->assertSame('', $routeMatch->getAction());
-        $this->assertSame([], $routeMatch->getParameters());
+        self::assertSame(BasicTestController::class, $routeMatch->getControllerClassName());
+        self::assertSame('', $routeMatch->getAction());
+        self::assertSame([], $routeMatch->getParameters());
     }
 
     /**
@@ -54,9 +55,9 @@ class DefaultRouteTest extends PHPUnit_Framework_TestCase
         $route = new DefaultRoute(BasicTestController::class);
         $routeMatch = $route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo', 'REQUEST_METHOD' => 'GET']));
 
-        $this->assertSame(BasicTestController::class, $routeMatch->getControllerClassName());
-        $this->assertSame('foo', $routeMatch->getAction());
-        $this->assertSame([], $routeMatch->getParameters());
+        self::assertSame(BasicTestController::class, $routeMatch->getControllerClassName());
+        self::assertSame('foo', $routeMatch->getAction());
+        self::assertSame([], $routeMatch->getParameters());
     }
 
     /**
@@ -67,9 +68,9 @@ class DefaultRouteTest extends PHPUnit_Framework_TestCase
         $route = new DefaultRoute(BasicTestController::class);
         $routeMatch = $route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo/', 'REQUEST_METHOD' => 'GET']));
 
-        $this->assertSame(BasicTestController::class, $routeMatch->getControllerClassName());
-        $this->assertSame('foo', $routeMatch->getAction());
-        $this->assertSame([''], $routeMatch->getParameters());
+        self::assertSame(BasicTestController::class, $routeMatch->getControllerClassName());
+        self::assertSame('foo', $routeMatch->getAction());
+        self::assertSame([''], $routeMatch->getParameters());
     }
 
     /**
@@ -80,9 +81,9 @@ class DefaultRouteTest extends PHPUnit_Framework_TestCase
         $route = new DefaultRoute(BasicTestController::class);
         $routeMatch = $route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo/bar', 'REQUEST_METHOD' => 'GET']));
 
-        $this->assertSame(BasicTestController::class, $routeMatch->getControllerClassName());
-        $this->assertSame('foo', $routeMatch->getAction());
-        $this->assertSame(['bar'], $routeMatch->getParameters());
+        self::assertSame(BasicTestController::class, $routeMatch->getControllerClassName());
+        self::assertSame('foo', $routeMatch->getAction());
+        self::assertSame(['bar'], $routeMatch->getParameters());
     }
 
     /**
@@ -93,9 +94,9 @@ class DefaultRouteTest extends PHPUnit_Framework_TestCase
         $route = new DefaultRoute(BasicTestController::class);
         $routeMatch = $route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo/bar/', 'REQUEST_METHOD' => 'GET']));
 
-        $this->assertSame(BasicTestController::class, $routeMatch->getControllerClassName());
-        $this->assertSame('foo', $routeMatch->getAction());
-        $this->assertSame(['bar', ''], $routeMatch->getParameters());
+        self::assertSame(BasicTestController::class, $routeMatch->getControllerClassName());
+        self::assertSame('foo', $routeMatch->getAction());
+        self::assertSame(['bar', ''], $routeMatch->getParameters());
     }
 
     /**
@@ -106,9 +107,9 @@ class DefaultRouteTest extends PHPUnit_Framework_TestCase
         $route = new DefaultRoute(BasicTestController::class);
         $routeMatch = $route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo/bar/baz', 'REQUEST_METHOD' => 'GET']));
 
-        $this->assertSame(BasicTestController::class, $routeMatch->getControllerClassName());
-        $this->assertSame('foo', $routeMatch->getAction());
-        $this->assertSame(['bar', 'baz'], $routeMatch->getParameters());
+        self::assertSame(BasicTestController::class, $routeMatch->getControllerClassName());
+        self::assertSame('foo', $routeMatch->getAction());
+        self::assertSame(['bar', 'baz'], $routeMatch->getParameters());
     }
 
     /**
@@ -119,8 +120,8 @@ class DefaultRouteTest extends PHPUnit_Framework_TestCase
         $route = new DefaultRoute(BasicTestController::class);
         $routeMatch = $route->matches(new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo/bar/baz/', 'REQUEST_METHOD' => 'GET']));
 
-        $this->assertSame(BasicTestController::class, $routeMatch->getControllerClassName());
-        $this->assertSame('foo', $routeMatch->getAction());
-        $this->assertSame(['bar', 'baz', ''], $routeMatch->getParameters());
+        self::assertSame(BasicTestController::class, $routeMatch->getControllerClassName());
+        self::assertSame('foo', $routeMatch->getAction());
+        self::assertSame(['bar', 'baz', ''], $routeMatch->getParameters());
     }
 }

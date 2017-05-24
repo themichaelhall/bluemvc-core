@@ -1,27 +1,28 @@
 <?php
 
+namespace BlueMvc\Core\Tests;
+
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Request;
 use BlueMvc\Core\Response;
 use BlueMvc\Core\Route;
+use BlueMvc\Core\Tests\Helpers\Fakes\FakeHeaders;
+use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
+use BlueMvc\Core\Tests\Helpers\TestControllers\ActionResultTestController;
+use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
+use BlueMvc\Core\Tests\Helpers\TestControllers\DefaultActionTestController;
+use BlueMvc\Core\Tests\Helpers\TestControllers\DefaultActionWithViewTestController;
+use BlueMvc\Core\Tests\Helpers\TestControllers\ErrorTestController;
+use BlueMvc\Core\Tests\Helpers\TestControllers\ExceptionTestController;
+use BlueMvc\Core\Tests\Helpers\TestControllers\PreAndPostActionEventController;
+use BlueMvc\Core\Tests\Helpers\TestControllers\ViewTestController;
 use BlueMvc\Core\Tests\Helpers\TestViewRenderers\BasicTestViewRenderer;
 use DataTypes\FilePath;
-
-require_once __DIR__ . '/Helpers/Fakes/FakeHeaders.php';
-require_once __DIR__ . '/Helpers/TestApplications/BasicTestApplication.php';
-require_once __DIR__ . '/Helpers/TestControllers/BasicTestController.php';
-require_once __DIR__ . '/Helpers/TestControllers/ViewTestController.php';
-require_once __DIR__ . '/Helpers/TestControllers/DefaultActionWithViewTestController.php';
-require_once __DIR__ . '/Helpers/TestControllers/DefaultActionTestController.php';
-require_once __DIR__ . '/Helpers/TestControllers/ActionResultTestController.php';
-require_once __DIR__ . '/Helpers/TestControllers/PreAndPostActionEventController.php';
-require_once __DIR__ . '/Helpers/TestControllers/ErrorTestController.php';
-require_once __DIR__ . '/Helpers/TestControllers/ExceptionTestController.php';
 
 /**
  * Test basic routing for a application.
  */
-class BasicRoutingTest extends PHPUnit_Framework_TestCase
+class BasicRoutingTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test get index page.
@@ -35,10 +36,10 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('Hello World!', $responseOutput);
-        $this->assertSame('Hello World!', $response->getContent());
-        $this->assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
-        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertSame('Hello World!', $responseOutput);
+        self::assertSame('Hello World!', $response->getContent());
+        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -53,10 +54,10 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('', $responseOutput);
-        $this->assertSame('', $response->getContent());
-        $this->assertSame(['HTTP/1.1 404 Not Found'], FakeHeaders::get());
-        $this->assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
+        self::assertSame('', $responseOutput);
+        self::assertSame('', $response->getContent());
+        self::assertSame(['HTTP/1.1 404 Not Found'], FakeHeaders::get());
+        self::assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -71,10 +72,10 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('', $responseOutput);
-        $this->assertSame('', $response->getContent());
-        $this->assertSame(['HTTP/1.1 404 Not Found'], FakeHeaders::get());
-        $this->assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
+        self::assertSame('', $responseOutput);
+        self::assertSame('', $response->getContent());
+        self::assertSame(['HTTP/1.1 404 Not Found'], FakeHeaders::get());
+        self::assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -89,10 +90,10 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('Server Error', $responseOutput);
-        $this->assertSame('Server Error', $response->getContent());
-        $this->assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
-        $this->assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
+        self::assertSame('Server Error', $responseOutput);
+        self::assertSame('Server Error', $response->getContent());
+        self::assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
+        self::assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -107,10 +108,10 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('Numeric action result', $responseOutput);
-        $this->assertSame('Numeric action result', $response->getContent());
-        $this->assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
-        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertSame('Numeric action result', $responseOutput);
+        self::assertSame('Numeric action result', $response->getContent());
+        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -125,10 +126,10 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('<html><body><h1>Index</h1><span>' . $this->application->getDocumentRoot() . '</span><em>' . $request->getUrl() . '</em></body></html>', $responseOutput);
-        $this->assertSame('<html><body><h1>Index</h1><span>' . $this->application->getDocumentRoot() . '</span><em>' . $request->getUrl() . '</em></body></html>', $response->getContent());
-        $this->assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
-        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertSame('<html><body><h1>Index</h1><span>' . $this->application->getDocumentRoot() . '</span><em>' . $request->getUrl() . '</em></body></html>', $responseOutput);
+        self::assertSame('<html><body><h1>Index</h1><span>' . $this->application->getDocumentRoot() . '</span><em>' . $request->getUrl() . '</em></body></html>', $response->getContent());
+        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -143,10 +144,10 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('<html><body><h1>With model</h1><span>' . $this->application->getDocumentRoot() . '</span><em>' . $request->getUrl() . '</em><p>This is the model.</p></body></html>', $responseOutput);
-        $this->assertSame('<html><body><h1>With model</h1><span>' . $this->application->getDocumentRoot() . '</span><em>' . $request->getUrl() . '</em><p>This is the model.</p></body></html>', $response->getContent());
-        $this->assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
-        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertSame('<html><body><h1>With model</h1><span>' . $this->application->getDocumentRoot() . '</span><em>' . $request->getUrl() . '</em><p>This is the model.</p></body></html>', $responseOutput);
+        self::assertSame('<html><body><h1>With model</h1><span>' . $this->application->getDocumentRoot() . '</span><em>' . $request->getUrl() . '</em><p>This is the model.</p></body></html>', $response->getContent());
+        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -161,10 +162,10 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('<html><body><h1>With model and view data</h1><span>' . $this->application->getDocumentRoot() . '</span><em>' . $request->getUrl() . '</em><p>This is the model.</p><i>This is the view data.</i></body></html>', $responseOutput);
-        $this->assertSame('<html><body><h1>With model and view data</h1><span>' . $this->application->getDocumentRoot() . '</span><em>' . $request->getUrl() . '</em><p>This is the model.</p><i>This is the view data.</i></body></html>', $response->getContent());
-        $this->assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
-        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertSame('<html><body><h1>With model and view data</h1><span>' . $this->application->getDocumentRoot() . '</span><em>' . $request->getUrl() . '</em><p>This is the model.</p><i>This is the view data.</i></body></html>', $responseOutput);
+        self::assertSame('<html><body><h1>With model and view data</h1><span>' . $this->application->getDocumentRoot() . '</span><em>' . $request->getUrl() . '</em><p>This is the model.</p><i>This is the view data.</i></body></html>', $response->getContent());
+        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -182,12 +183,12 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertContains('BlueMvc\Core\Exceptions\ViewFileNotFoundException', $responseOutput);
-        $this->assertContains('Could not find view file &quot;' . $this->application->getViewPath() . 'ViewTest' . $DS . 'withnoviewfile.view&quot;', $responseOutput);
-        $this->assertContains('BlueMvc\Core\Exceptions\ViewFileNotFoundException', $response->getContent());
-        $this->assertContains('Could not find view file &quot;' . $this->application->getViewPath() . 'ViewTest' . $DS . 'withnoviewfile.view&quot;', $response->getContent());
-        $this->assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
-        $this->assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
+        self::assertContains('BlueMvc\Core\Exceptions\ViewFileNotFoundException', $responseOutput);
+        self::assertContains('Could not find view file &quot;' . $this->application->getViewPath() . 'ViewTest' . $DS . 'withnoviewfile.view&quot;', $responseOutput);
+        self::assertContains('BlueMvc\Core\Exceptions\ViewFileNotFoundException', $response->getContent());
+        self::assertContains('Could not find view file &quot;' . $this->application->getViewPath() . 'ViewTest' . $DS . 'withnoviewfile.view&quot;', $response->getContent());
+        self::assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
+        self::assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -202,10 +203,10 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('Foo Action', $responseOutput);
-        $this->assertSame('Foo Action', $response->getContent());
-        $this->assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
-        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertSame('Foo Action', $responseOutput);
+        self::assertSame('Foo Action', $response->getContent());
+        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -220,10 +221,10 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('Default Action bar', $responseOutput);
-        $this->assertSame('Default Action bar', $response->getContent());
-        $this->assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
-        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertSame('Default Action bar', $responseOutput);
+        self::assertSame('Default Action bar', $response->getContent());
+        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -238,10 +239,10 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('<html><body><h1>Default view for action foo</h1></body></html>', $responseOutput);
-        $this->assertSame('<html><body><h1>Default view for action foo</h1></body></html>', $response->getContent());
-        $this->assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
-        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertSame('<html><body><h1>Default view for action foo</h1></body></html>', $responseOutput);
+        self::assertSame('<html><body><h1>Default view for action foo</h1></body></html>', $response->getContent());
+        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -256,10 +257,10 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('Page was not found', $responseOutput);
-        $this->assertSame('Page was not found', $response->getContent());
-        $this->assertSame(['HTTP/1.1 404 Not Found'], FakeHeaders::get());
-        $this->assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
+        self::assertSame('Page was not found', $responseOutput);
+        self::assertSame('Page was not found', $response->getContent());
+        self::assertSame(['HTTP/1.1 404 Not Found'], FakeHeaders::get());
+        self::assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -274,10 +275,10 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('', $responseOutput);
-        $this->assertSame('', $response->getContent());
-        $this->assertSame(['HTTP/1.1 302 Found', 'Location: http://www.domain.com/foo/bar'], FakeHeaders::get());
-        $this->assertSame(StatusCode::FOUND, $response->getStatusCode()->getCode());
+        self::assertSame('', $responseOutput);
+        self::assertSame('', $response->getContent());
+        self::assertSame(['HTTP/1.1 302 Found', 'Location: http://www.domain.com/foo/bar'], FakeHeaders::get());
+        self::assertSame(StatusCode::FOUND, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -292,10 +293,10 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('', $responseOutput);
-        $this->assertSame('', $response->getContent());
-        $this->assertSame(['HTTP/1.1 301 Moved Permanently', 'Location: https://domain.com/'], FakeHeaders::get());
-        $this->assertSame(StatusCode::MOVED_PERMANENTLY, $response->getStatusCode()->getCode());
+        self::assertSame('', $responseOutput);
+        self::assertSame('', $response->getContent());
+        self::assertSame(['HTTP/1.1 301 Moved Permanently', 'Location: https://domain.com/'], FakeHeaders::get());
+        self::assertSame(StatusCode::MOVED_PERMANENTLY, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -310,10 +311,10 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('Page is forbidden', $responseOutput);
-        $this->assertSame('Page is forbidden', $response->getContent());
-        $this->assertSame(['HTTP/1.1 403 Forbidden'], FakeHeaders::get());
-        $this->assertSame(StatusCode::FORBIDDEN, $response->getStatusCode()->getCode());
+        self::assertSame('Page is forbidden', $responseOutput);
+        self::assertSame('Page is forbidden', $response->getContent());
+        self::assertSame(['HTTP/1.1 403 Forbidden'], FakeHeaders::get());
+        self::assertSame(StatusCode::FORBIDDEN, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -328,10 +329,10 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('', $responseOutput);
-        $this->assertSame('', $response->getContent());
-        $this->assertSame(['HTTP/1.1 204 No Content'], FakeHeaders::get());
-        $this->assertSame(StatusCode::NO_CONTENT, $response->getStatusCode()->getCode());
+        self::assertSame('', $responseOutput);
+        self::assertSame('', $response->getContent());
+        self::assertSame(['HTTP/1.1 204 No Content'], FakeHeaders::get());
+        self::assertSame(StatusCode::NO_CONTENT, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -346,10 +347,10 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('', $responseOutput);
-        $this->assertSame('', $response->getContent());
-        $this->assertSame(['HTTP/1.1 304 Not Modified'], FakeHeaders::get());
-        $this->assertSame(StatusCode::NOT_MODIFIED, $response->getStatusCode()->getCode());
+        self::assertSame('', $responseOutput);
+        self::assertSame('', $response->getContent());
+        self::assertSame(['HTTP/1.1 304 Not Modified'], FakeHeaders::get());
+        self::assertSame(StatusCode::NOT_MODIFIED, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -364,10 +365,10 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('Index action with pre- and post-action event', $responseOutput);
-        $this->assertSame('Index action with pre- and post-action event', $response->getContent());
-        $this->assertSame(['HTTP/1.1 200 OK', 'X-Pre-Action: true', 'X-Post-Action: true'], FakeHeaders::get());
-        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertSame('Index action with pre- and post-action event', $responseOutput);
+        self::assertSame('Index action with pre- and post-action event', $response->getContent());
+        self::assertSame(['HTTP/1.1 200 OK', 'X-Pre-Action: true', 'X-Post-Action: true'], FakeHeaders::get());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -382,10 +383,10 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('Default action with pre- and post-action event', $responseOutput);
-        $this->assertSame('Default action with pre- and post-action event', $response->getContent());
-        $this->assertSame(['HTTP/1.1 200 OK', 'X-Pre-Action: true', 'X-Post-Action: true'], FakeHeaders::get());
-        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertSame('Default action with pre- and post-action event', $responseOutput);
+        self::assertSame('Default action with pre- and post-action event', $response->getContent());
+        self::assertSame(['HTTP/1.1 200 OK', 'X-Pre-Action: true', 'X-Post-Action: true'], FakeHeaders::get());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -400,10 +401,10 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('This is a pre-action result', $responseOutput);
-        $this->assertSame('This is a pre-action result', $response->getContent());
-        $this->assertSame(['HTTP/1.1 404 Not Found'], FakeHeaders::get());
-        $this->assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
+        self::assertSame('This is a pre-action result', $responseOutput);
+        self::assertSame('This is a pre-action result', $response->getContent());
+        self::assertSame(['HTTP/1.1 404 Not Found'], FakeHeaders::get());
+        self::assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -418,10 +419,10 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('This is a post-action result', $responseOutput);
-        $this->assertSame('This is a post-action result', $response->getContent());
-        $this->assertSame(['HTTP/1.1 200 OK', 'X-Pre-Action: true'], FakeHeaders::get());
-        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertSame('This is a post-action result', $responseOutput);
+        self::assertSame('This is a post-action result', $response->getContent());
+        self::assertSame(['HTTP/1.1 200 OK', 'X-Pre-Action: true'], FakeHeaders::get());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -437,10 +438,10 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('<html><body><h1>Request Failed: Error: 404</h1></body></html>', $responseOutput);
-        $this->assertSame('<html><body><h1>Request Failed: Error: 404</h1></body></html>', $response->getContent());
-        $this->assertSame(['HTTP/1.1 404 Not Found'], FakeHeaders::get());
-        $this->assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
+        self::assertSame('<html><body><h1>Request Failed: Error: 404</h1></body></html>', $responseOutput);
+        self::assertSame('<html><body><h1>Request Failed: Error: 404</h1></body></html>', $response->getContent());
+        self::assertSame(['HTTP/1.1 404 Not Found'], FakeHeaders::get());
+        self::assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -456,10 +457,10 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('<html><body><h1>Request Failed: Error: 500, Exception: LogicException, ExceptionMessage: Exception was thrown.</h1></body></html>', $responseOutput);
-        $this->assertSame('<html><body><h1>Request Failed: Error: 500, Exception: LogicException, ExceptionMessage: Exception was thrown.</h1></body></html>', $response->getContent());
-        $this->assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
-        $this->assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
+        self::assertSame('<html><body><h1>Request Failed: Error: 500, Exception: LogicException, ExceptionMessage: Exception was thrown.</h1></body></html>', $responseOutput);
+        self::assertSame('<html><body><h1>Request Failed: Error: 500, Exception: LogicException, ExceptionMessage: Exception was thrown.</h1></body></html>', $response->getContent());
+        self::assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
+        self::assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -475,10 +476,10 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertSame('', $responseOutput);
-        $this->assertSame('', $response->getContent());
-        $this->assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
-        $this->assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
+        self::assertSame('', $responseOutput);
+        self::assertSame('', $response->getContent());
+        self::assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
+        self::assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -495,12 +496,12 @@ class BasicRoutingTest extends PHPUnit_Framework_TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        $this->assertContains('Exception thrown from 403 action.', $responseOutput);
-        $this->assertContains('Exception thrown from 403 action.', $response->getContent());
-        $this->assertContains('RuntimeException', $responseOutput);
-        $this->assertContains('RuntimeException', $response->getContent());
-        $this->assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
-        $this->assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
+        self::assertContains('Exception thrown from 403 action.', $responseOutput);
+        self::assertContains('Exception thrown from 403 action.', $response->getContent());
+        self::assertContains('RuntimeException', $responseOutput);
+        self::assertContains('RuntimeException', $response->getContent());
+        self::assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
+        self::assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
     }
 
     /**

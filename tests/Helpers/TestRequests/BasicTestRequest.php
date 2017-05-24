@@ -1,5 +1,7 @@
 <?php
 
+namespace BlueMvc\Core\Tests\Helpers\TestRequests;
+
 use BlueMvc\Core\Base\AbstractRequest;
 use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\ParameterCollectionInterface;

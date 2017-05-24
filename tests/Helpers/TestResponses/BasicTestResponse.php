@@ -1,5 +1,7 @@
 <?php
 
+namespace BlueMvc\Core\Tests\Helpers\TestResponses;
+
 use BlueMvc\Core\Base\AbstractResponse;
 
 /**

@@ -1,11 +1,13 @@
 <?php
 
+namespace BlueMvc\Core\Tests;
+
 use BlueMvc\Core\Request;
 
 /**
  * Test Request class.
  */
-class RequestTest extends PHPUnit_Framework_TestCase
+class RequestTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test getUrl method.
@@ -20,7 +22,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame('http://www.domain.com/foo/bar', $request->getUrl()->__toString());
+        self::assertSame('http://www.domain.com/foo/bar', $request->getUrl()->__toString());
     }
 
     /**
@@ -37,7 +39,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame('https://www.domain.com/foo/bar', $request->getUrl()->__toString());
+        self::assertSame('https://www.domain.com/foo/bar', $request->getUrl()->__toString());
     }
 
     /**
@@ -53,7 +55,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame('http://www.domain.com:8080/foo/bar', $request->getUrl()->__toString());
+        self::assertSame('http://www.domain.com:8080/foo/bar', $request->getUrl()->__toString());
     }
 
     /**
@@ -69,7 +71,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame('http://www.domain.com/foo/bar?', $request->getUrl()->__toString());
+        self::assertSame('http://www.domain.com/foo/bar?', $request->getUrl()->__toString());
     }
 
     /**
@@ -85,7 +87,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame('http://www.domain.com/foo/bar?baz=true', $request->getUrl()->__toString());
+        self::assertSame('http://www.domain.com/foo/bar?baz=true', $request->getUrl()->__toString());
     }
 
     /**
@@ -101,7 +103,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame('POST', $request->getMethod()->__toString());
+        self::assertSame('POST', $request->getMethod()->__toString());
     }
 
     /**
@@ -118,7 +120,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame(['Host' => 'www.domain.com', 'Accept-Encoding' => 'gzip, deflate'], iterator_to_array($request->getHeaders()));
+        self::assertSame(['Host' => 'www.domain.com', 'Accept-Encoding' => 'gzip, deflate'], iterator_to_array($request->getHeaders()));
     }
 
     /**
@@ -135,8 +137,8 @@ class RequestTest extends PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame('gzip, deflate', $request->getHeader('Accept-Encoding'));
-        $this->assertNull($request->getHeader('Foo-Bar'));
+        self::assertSame('gzip, deflate', $request->getHeader('Accept-Encoding'));
+        self::assertNull($request->getHeader('Foo-Bar'));
     }
 
     /**
@@ -152,7 +154,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame('', $request->getUserAgent());
+        self::assertSame('', $request->getUserAgent());
     }
 
     /**
@@ -169,7 +171,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36', $request->getUserAgent());
+        self::assertSame('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36', $request->getUserAgent());
     }
 
     /**
@@ -185,7 +187,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame([], iterator_to_array($request->getFormParameters()));
+        self::assertSame([], iterator_to_array($request->getFormParameters()));
     }
 
     /**
@@ -207,7 +209,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame(['Foo' => '1', 'Bar' => '2'], iterator_to_array($request->getFormParameters()));
+        self::assertSame(['Foo' => '1', 'Bar' => '2'], iterator_to_array($request->getFormParameters()));
     }
 
     /**
@@ -229,9 +231,9 @@ class RequestTest extends PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame('1', $request->getFormParameter('Foo'));
-        $this->assertSame('2', $request->getFormParameter('Bar'));
-        $this->assertNull($request->getFormParameter('Baz'));
+        self::assertSame('1', $request->getFormParameter('Foo'));
+        self::assertSame('2', $request->getFormParameter('Bar'));
+        self::assertNull($request->getFormParameter('Baz'));
     }
 
     /**
@@ -247,7 +249,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame([], iterator_to_array($request->getQueryParameters()));
+        self::assertSame([], iterator_to_array($request->getQueryParameters()));
     }
 
     /**
@@ -267,7 +269,7 @@ class RequestTest extends PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame(['Foo' => '1', 'Bar' => '2'], iterator_to_array($request->getQueryParameters()));
+        self::assertSame(['Foo' => '1', 'Bar' => '2'], iterator_to_array($request->getQueryParameters()));
     }
 
     /**
@@ -287,8 +289,8 @@ class RequestTest extends PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame('1', $request->getQueryParameter('Foo'));
-        $this->assertSame('2', $request->getQueryParameter('Bar'));
-        $this->assertNull($request->getQueryParameter('Baz'));
+        self::assertSame('1', $request->getQueryParameter('Foo'));
+        self::assertSame('2', $request->getQueryParameter('Bar'));
+        self::assertNull($request->getQueryParameter('Baz'));
     }
 }

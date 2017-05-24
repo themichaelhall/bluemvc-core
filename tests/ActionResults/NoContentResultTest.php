@@ -1,5 +1,7 @@
 <?php
 
+namespace BlueMvc\Core\Tests\ActionResults;
+
 use BlueMvc\Core\ActionResults\NoContentResult;
 use BlueMvc\Core\Application;
 use BlueMvc\Core\Request;
@@ -8,7 +10,7 @@ use BlueMvc\Core\Response;
 /**
  * Test NoContentResult class.
  */
-class NoContentResultTest extends PHPUnit_Framework_TestCase
+class NoContentResultTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test default constructor.
@@ -31,8 +33,8 @@ class NoContentResultTest extends PHPUnit_Framework_TestCase
         $actionResult = new NoContentResult();
         $actionResult->updateResponse($application, $request, $response);
 
-        $this->assertSame(204, $response->getStatusCode()->getCode());
-        $this->assertSame('No Content', $response->getStatusCode()->getDescription());
-        $this->assertSame('', $response->getContent());
+        self::assertSame(204, $response->getStatusCode()->getCode());
+        self::assertSame('No Content', $response->getStatusCode()->getDescription());
+        self::assertSame('', $response->getContent());
     }
 }

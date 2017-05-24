@@ -1,11 +1,13 @@
 <?php
 
+namespace BlueMvc\Core\Tests\Collections;
+
 use BlueMvc\Core\Collections\HeaderCollection;
 
 /**
  * Test HeaderCollection class.
  */
-class HeaderCollectionTest extends PHPUnit_Framework_TestCase
+class HeaderCollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test count for empty collection.
@@ -14,7 +16,7 @@ class HeaderCollectionTest extends PHPUnit_Framework_TestCase
     {
         $headerCollection = new HeaderCollection();
 
-        $this->assertSame(0, count($headerCollection));
+        self::assertSame(0, count($headerCollection));
     }
 
     /**
@@ -24,7 +26,7 @@ class HeaderCollectionTest extends PHPUnit_Framework_TestCase
     {
         $headerCollection = new HeaderCollection();
 
-        $this->assertNull($headerCollection->get('Content-Type'));
+        self::assertNull($headerCollection->get('Content-Type'));
     }
 
     /**
@@ -50,9 +52,9 @@ class HeaderCollectionTest extends PHPUnit_Framework_TestCase
         $headerCollection->set('Host', 'localhost');
         $headerCollection->set('Content-Type', 'image/png');
 
-        $this->assertSame(2, count($headerCollection));
-        $this->assertSame('image/png', $headerCollection->get('Content-Type'));
-        $this->assertSame('localhost', $headerCollection->get('Host'));
+        self::assertSame(2, count($headerCollection));
+        self::assertSame('image/png', $headerCollection->get('Content-Type'));
+        self::assertSame('localhost', $headerCollection->get('Host'));
     }
 
     /**
@@ -92,9 +94,9 @@ class HeaderCollectionTest extends PHPUnit_Framework_TestCase
         $headerCollection->add('accept-encoding', 'deflate');
         $headerCollection->add('content-type', 'text/html');
 
-        $this->assertSame(2, count($headerCollection));
-        $this->assertSame('text/html', $headerCollection->get('Content-type'));
-        $this->assertSame('gzip, deflate', $headerCollection->get('Accept-encoding'));
+        self::assertSame(2, count($headerCollection));
+        self::assertSame('text/html', $headerCollection->get('Content-type'));
+        self::assertSame('gzip, deflate', $headerCollection->get('Accept-encoding'));
     }
 
     /**
@@ -132,7 +134,7 @@ class HeaderCollectionTest extends PHPUnit_Framework_TestCase
 
         $headerArray = iterator_to_array($headerCollection, true);
 
-        $this->assertSame([], $headerArray);
+        self::assertSame([], $headerArray);
     }
 
     /**
@@ -146,6 +148,6 @@ class HeaderCollectionTest extends PHPUnit_Framework_TestCase
 
         $headerArray = iterator_to_array($headerCollection, true);
 
-        $this->assertSame(['Location' => 'http://localhost/', 'Accept-Encoding' => 'gzip'], $headerArray);
+        self::assertSame(['Location' => 'http://localhost/', 'Accept-Encoding' => 'gzip'], $headerArray);
     }
 }

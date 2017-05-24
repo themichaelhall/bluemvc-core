@@ -1,18 +1,20 @@
 <?php
 
-require_once __DIR__ . '/../Helpers/TestApplications/BasicTestApplication.php';
-require_once __DIR__ . '/../Helpers/TestControllers/BasicTestController.php';
-require_once __DIR__ . '/../Helpers/TestControllers/ErrorTestController.php';
+namespace BlueMvc\Core\Tests\Base;
 
 use BlueMvc\Core\Exceptions\InvalidFilePathException;
 use BlueMvc\Core\Route;
+use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
+use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
+use BlueMvc\Core\Tests\Helpers\TestControllers\ErrorTestController;
+use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
 use BlueMvc\Core\Tests\Helpers\TestViewRenderers\BasicTestViewRenderer;
 use DataTypes\FilePath;
 
 /**
  * Test AbstractApplication class (via derived test class).
  */
-class AbstractApplicationTest extends PHPUnit_Framework_TestCase
+class AbstractApplicationTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test getDocumentRoot method.
@@ -21,7 +23,7 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
-        $this->assertSame($DS . 'var' . $DS . 'www' . $DS, $this->myApplication->getDocumentRoot()->__toString());
+        self::assertSame($DS . 'var' . $DS . 'www' . $DS, $this->myApplication->getDocumentRoot()->__toString());
     }
 
     /**
@@ -31,8 +33,8 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
     {
         $viewRenderers = $this->myApplication->getViewRenderers();
 
-        $this->assertSame(1, count($viewRenderers));
-        $this->assertInstanceOf(BasicTestViewRenderer::class, $viewRenderers[0]);
+        self::assertSame(1, count($viewRenderers));
+        self::assertInstanceOf(BasicTestViewRenderer::class, $viewRenderers[0]);
     }
 
     /**
@@ -42,7 +44,7 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
-        $this->assertSame($DS . 'var' . $DS . 'www' . $DS, $this->myApplication->getViewPath()->__toString());
+        self::assertSame($DS . 'var' . $DS . 'www' . $DS, $this->myApplication->getViewPath()->__toString());
     }
 
     /**
@@ -52,7 +54,7 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
     {
         $routes = $this->myApplication->getRoutes();
 
-        $this->assertSame(1, count($routes));
+        self::assertSame(1, count($routes));
     }
 
     /**
@@ -64,7 +66,7 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
 
         $this->myApplication->setViewPath(FilePath::parse($DS . 'bluemvc' . $DS . 'html' . $DS));
 
-        $this->assertSame($DS . 'bluemvc' . $DS . 'html' . $DS, $this->myApplication->getViewPath()->__toString());
+        self::assertSame($DS . 'bluemvc' . $DS . 'html' . $DS, $this->myApplication->getViewPath()->__toString());
     }
 
     /**
@@ -76,7 +78,7 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
 
         $this->myApplication->setViewPath(FilePath::parse('..' . $DS . 'bluemvc' . $DS . 'html' . $DS));
 
-        $this->assertSame($DS . 'var' . $DS . 'bluemvc' . $DS . 'html' . $DS, $this->myApplication->getViewPath()->__toString());
+        self::assertSame($DS . 'var' . $DS . 'bluemvc' . $DS . 'html' . $DS, $this->myApplication->getViewPath()->__toString());
     }
 
     /**
@@ -93,7 +95,7 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
             $exceptionMessage = $e->getMessage();
         }
 
-        $this->assertSame('Document root "' . $DS . 'var' . $DS . 'www' . $DS . 'file.txt" is not a directory.', $exceptionMessage);
+        self::assertSame('Document root "' . $DS . 'var' . $DS . 'www' . $DS . 'file.txt" is not a directory.', $exceptionMessage);
     }
 
     /**
@@ -110,7 +112,7 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
             $exceptionMessage = $e->getMessage();
         }
 
-        $this->assertSame('Document root "' . $DS . 'var' . $DS . 'www' . $DS . 'file.txt" is not a directory.', $exceptionMessage);
+        self::assertSame('Document root "' . $DS . 'var' . $DS . 'www' . $DS . 'file.txt" is not a directory.', $exceptionMessage);
     }
 
     /**
@@ -127,7 +129,7 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
             $exceptionMessage = $e->getMessage();
         }
 
-        $this->assertSame('Document root "var' . $DS . 'www' . $DS . '" is not an absolute path.', $exceptionMessage);
+        self::assertSame('Document root "var' . $DS . 'www' . $DS . '" is not an absolute path.', $exceptionMessage);
     }
 
     /**
@@ -144,7 +146,7 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
             $exceptionMessage = $e->getMessage();
         }
 
-        $this->assertSame('Document root "var' . $DS . 'www' . $DS . '" is not an absolute path.', $exceptionMessage);
+        self::assertSame('Document root "var' . $DS . 'www' . $DS . '" is not an absolute path.', $exceptionMessage);
     }
 
     /**
@@ -161,7 +163,7 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
             $exceptionMessage = $e->getMessage();
         }
 
-        $this->assertSame('View path "' . $DS . 'views' . $DS . 'file.txt" is not a directory.', $exceptionMessage);
+        self::assertSame('View path "' . $DS . 'views' . $DS . 'file.txt" is not a directory.', $exceptionMessage);
     }
 
     /**
@@ -178,7 +180,7 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
             $exceptionMessage = $e->getMessage();
         }
 
-        $this->assertSame('File path "' . $DS . 'var' . $DS . 'www' . $DS . '" can not be combined with file path "..' . $DS . '..' . $DS . '..' . $DS . 'views' . $DS . '": Absolute path is above root level.', $exceptionMessage);
+        self::assertSame('File path "' . $DS . 'var' . $DS . 'www' . $DS . '" can not be combined with file path "..' . $DS . '..' . $DS . '..' . $DS . 'views' . $DS . '": Absolute path is above root level.', $exceptionMessage);
     }
 
     /**
@@ -188,7 +190,7 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
-        $this->assertSame(sys_get_temp_dir() . $DS . 'bluemvc' . $DS . sha1($this->myApplication->getDocumentRoot()->__toString()) . $DS, $this->myApplication->getTempPath()->__toString());
+        self::assertSame(sys_get_temp_dir() . $DS . 'bluemvc' . $DS . sha1($this->myApplication->getDocumentRoot()->__toString()) . $DS, $this->myApplication->getTempPath()->__toString());
     }
 
     /**
@@ -200,7 +202,7 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
 
         $this->myApplication->setTempPath(FilePath::parse($DS . 'tmp' . $DS . 'bluemvc' . $DS));
 
-        $this->assertSame($DS . 'tmp' . $DS . 'bluemvc' . $DS, $this->myApplication->getTempPath()->__toString());
+        self::assertSame($DS . 'tmp' . $DS . 'bluemvc' . $DS, $this->myApplication->getTempPath()->__toString());
     }
 
     /**
@@ -212,7 +214,7 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
 
         $this->myApplication->setTempPath(FilePath::parse('tmp' . $DS . 'bluemvc' . $DS));
 
-        $this->assertSame($DS . 'var' . $DS . 'www' . $DS . 'tmp' . $DS . 'bluemvc' . $DS, $this->myApplication->getTempPath()->__toString());
+        self::assertSame($DS . 'var' . $DS . 'www' . $DS . 'tmp' . $DS . 'bluemvc' . $DS, $this->myApplication->getTempPath()->__toString());
     }
 
     /**
@@ -229,7 +231,7 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
             $exceptionMessage = $e->getMessage();
         }
 
-        $this->assertSame('Temp path "' . $DS . 'tmp' . $DS . 'file.txt" is not a directory.', $exceptionMessage);
+        self::assertSame('Temp path "' . $DS . 'tmp' . $DS . 'file.txt" is not a directory.', $exceptionMessage);
     }
 
     /**
@@ -246,7 +248,7 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
             $exceptionMessage = $e->getMessage();
         }
 
-        $this->assertSame('File path "' . $DS . 'var' . $DS . 'www' . $DS . '" can not be combined with file path "..' . $DS . '..' . $DS . '..' . $DS . 'tmp' . $DS . '": Absolute path is above root level.', $exceptionMessage);
+        self::assertSame('File path "' . $DS . 'var' . $DS . 'www' . $DS . '" can not be combined with file path "..' . $DS . '..' . $DS . '..' . $DS . 'tmp' . $DS . '": Absolute path is above root level.', $exceptionMessage);
     }
 
     /**
@@ -254,7 +256,7 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
      */
     public function testIsDebug()
     {
-        $this->assertFalse($this->myApplication->isDebug());
+        self::assertFalse($this->myApplication->isDebug());
     }
 
     /**
@@ -264,7 +266,7 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
     {
         $this->myApplication->setDebug(true);
 
-        $this->assertTrue($this->myApplication->isDebug());
+        self::assertTrue($this->myApplication->isDebug());
     }
 
     /**
@@ -272,7 +274,7 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
      */
     public function testGetErrorControllerClass()
     {
-        $this->assertNull($this->myApplication->getErrorControllerClass());
+        self::assertNull($this->myApplication->getErrorControllerClass());
     }
 
     /**
@@ -282,7 +284,7 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
     {
         $this->myApplication->setErrorControllerClass(ErrorTestController::class);
 
-        $this->assertSame(ErrorTestController::class, $this->myApplication->getErrorControllerClass());
+        self::assertSame(ErrorTestController::class, $this->myApplication->getErrorControllerClass());
     }
 
     /**
@@ -311,7 +313,7 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
      * Test setErrorControllerClass method with invalid class name.
      *
      * @expectedException \BlueMvc\Core\Exceptions\InvalidControllerClassException
-     * @expectedExceptionMessage "BasicTestRequest" is not a valid error controller class.
+     * @expectedExceptionMessage "BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest" is not a valid error controller class.
      */
     public function testSetErrorControllerClassWithInvalidClassName()
     {
@@ -322,7 +324,7 @@ class AbstractApplicationTest extends PHPUnit_Framework_TestCase
      * Test setErrorControllerClass method with ordinary controller class name.
      *
      * @expectedException \BlueMvc\Core\Exceptions\InvalidControllerClassException
-     * @expectedExceptionMessage "BasicTestController" is not a valid error controller class.
+     * @expectedExceptionMessage "BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController" is not a valid error controller class.
      */
     public function testSetErrorControllerClassWithOrdinaryControllerClassName()
     {

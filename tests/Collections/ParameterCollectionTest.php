@@ -1,11 +1,13 @@
 <?php
 
+namespace BlueMvc\Core\Tests\Collections;
+
 use BlueMvc\Core\Collections\ParameterCollection;
 
 /**
  * Test ParameterCollection class.
  */
-class ParameterCollectionTest extends PHPUnit_Framework_TestCase
+class ParameterCollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test count for empty collection.
@@ -14,7 +16,7 @@ class ParameterCollectionTest extends PHPUnit_Framework_TestCase
     {
         $parameterCollection = new ParameterCollection();
 
-        $this->assertSame(0, count($parameterCollection));
+        self::assertSame(0, count($parameterCollection));
     }
 
     /**
@@ -24,7 +26,7 @@ class ParameterCollectionTest extends PHPUnit_Framework_TestCase
     {
         $parameterCollection = new ParameterCollection();
 
-        $this->assertNull($parameterCollection->get('Foo'));
+        self::assertNull($parameterCollection->get('Foo'));
     }
 
     /**
@@ -50,10 +52,10 @@ class ParameterCollectionTest extends PHPUnit_Framework_TestCase
         $parameterCollection->set('bar', 'YYY');
         $parameterCollection->set('foo', 'zzz');
 
-        $this->assertSame(3, count($parameterCollection));
-        $this->assertSame('xxx', $parameterCollection->get('Foo'));
-        $this->assertSame('YYY', $parameterCollection->get('bar'));
-        $this->assertSame('zzz', $parameterCollection->get('foo'));
+        self::assertSame(3, count($parameterCollection));
+        self::assertSame('xxx', $parameterCollection->get('Foo'));
+        self::assertSame('YYY', $parameterCollection->get('bar'));
+        self::assertSame('zzz', $parameterCollection->get('foo'));
     }
 
     /**
@@ -91,7 +93,7 @@ class ParameterCollectionTest extends PHPUnit_Framework_TestCase
 
         $parameterArray = iterator_to_array($parameterCollection, true);
 
-        $this->assertSame([], $parameterArray);
+        self::assertSame([], $parameterArray);
     }
 
     /**
@@ -105,6 +107,6 @@ class ParameterCollectionTest extends PHPUnit_Framework_TestCase
 
         $parameterArray = iterator_to_array($parameterCollection, true);
 
-        $this->assertSame(['Foo' => '1', 'Bar' => '2'], $parameterArray);
+        self::assertSame(['Foo' => '1', 'Bar' => '2'], $parameterArray);
     }
 }

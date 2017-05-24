@@ -1,11 +1,13 @@
 <?php
 
+namespace BlueMvc\Core\Tests\Http;
+
 use BlueMvc\Core\Http\StatusCode;
 
 /**
  * Test StatusCode class.
  */
-class StatusCodeTest extends PHPUnit_Framework_TestCase
+class StatusCodeTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test getCode method.
@@ -27,7 +29,7 @@ class StatusCodeTest extends PHPUnit_Framework_TestCase
     ) {
         $statusCode = new StatusCode($constant);
 
-        $this->assertSame($code, $statusCode->getCode());
+        self::assertSame($code, $statusCode->getCode());
     }
 
     /**
@@ -50,7 +52,7 @@ class StatusCodeTest extends PHPUnit_Framework_TestCase
     ) {
         $statusCode = new StatusCode($constant);
 
-        $this->assertSame($description, $statusCode->getDescription());
+        self::assertSame($description, $statusCode->getDescription());
     }
 
     /**
@@ -76,7 +78,7 @@ class StatusCodeTest extends PHPUnit_Framework_TestCase
     ) {
         $statusCode = new StatusCode($constant);
 
-        $this->assertSame($isError, $statusCode->isError());
+        self::assertSame($isError, $statusCode->isError());
     }
 
     /**
@@ -99,7 +101,7 @@ class StatusCodeTest extends PHPUnit_Framework_TestCase
     ) {
         $statusCode = new StatusCode($constant);
 
-        $this->assertSame($asString, $statusCode->__toString());
+        self::assertSame($asString, $statusCode->__toString());
     }
 
     /**

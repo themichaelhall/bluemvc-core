@@ -1,5 +1,7 @@
 <?php
 
+namespace BlueMvc\Core\Tests\Helpers\TestControllers;
+
 use BlueMvc\Core\ActionResults\ForbiddenResult;
 use BlueMvc\Core\ActionResults\NoContentResult;
 use BlueMvc\Core\ActionResults\NotFoundResult;

@@ -1,5 +1,7 @@
 <?php
 
+namespace BlueMvc\Core\Tests\Helpers\TestControllers;
+
 use BlueMvc\Core\ErrorController;
 use BlueMvc\Core\View;
 

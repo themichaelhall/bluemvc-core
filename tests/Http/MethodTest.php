@@ -1,11 +1,13 @@
 <?php
 
+namespace BlueMvc\Core\Tests\Http;
+
 use BlueMvc\Core\Http\Method;
 
 /**
  * Test Method class.
  */
-class MethodTest extends PHPUnit_Framework_TestCase
+class MethodTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test __toString method.
@@ -14,7 +16,7 @@ class MethodTest extends PHPUnit_Framework_TestCase
     {
         $method = new Method('PUT');
 
-        $this->assertSame('PUT', $method->__toString());
+        self::assertSame('PUT', $method->__toString());
     }
 
     /**
@@ -24,7 +26,7 @@ class MethodTest extends PHPUnit_Framework_TestCase
     {
         $method = new Method('POST');
 
-        $this->assertSame('POST', $method->getName());
+        self::assertSame('POST', $method->getName());
     }
 
     /**
@@ -32,11 +34,11 @@ class MethodTest extends PHPUnit_Framework_TestCase
      */
     public function testIsGet()
     {
-        $this->assertTrue((new Method('GET'))->isGet());
-        $this->assertFalse((new Method('POST'))->isGet());
-        $this->assertFalse((new Method('PUT'))->isGet());
-        $this->assertFalse((new Method('DELETE'))->isGet());
-        $this->assertFalse((new Method('get'))->isGet());
+        self::assertTrue((new Method('GET'))->isGet());
+        self::assertFalse((new Method('POST'))->isGet());
+        self::assertFalse((new Method('PUT'))->isGet());
+        self::assertFalse((new Method('DELETE'))->isGet());
+        self::assertFalse((new Method('get'))->isGet());
     }
 
     /**
@@ -44,11 +46,11 @@ class MethodTest extends PHPUnit_Framework_TestCase
      */
     public function testIsPost()
     {
-        $this->assertFalse((new Method('GET'))->isPost());
-        $this->assertTrue((new Method('POST'))->isPost());
-        $this->assertFalse((new Method('PUT'))->isPost());
-        $this->assertFalse((new Method('DELETE'))->isPost());
-        $this->assertFalse((new Method('post'))->isPost());
+        self::assertFalse((new Method('GET'))->isPost());
+        self::assertTrue((new Method('POST'))->isPost());
+        self::assertFalse((new Method('PUT'))->isPost());
+        self::assertFalse((new Method('DELETE'))->isPost());
+        self::assertFalse((new Method('post'))->isPost());
     }
 
     /**
@@ -56,11 +58,11 @@ class MethodTest extends PHPUnit_Framework_TestCase
      */
     public function testIsPut()
     {
-        $this->assertFalse((new Method('GET'))->isPut());
-        $this->assertFalse((new Method('POST'))->isPut());
-        $this->assertTrue((new Method('PUT'))->isPut());
-        $this->assertFalse((new Method('DELETE'))->isPut());
-        $this->assertFalse((new Method('put'))->isPut());
+        self::assertFalse((new Method('GET'))->isPut());
+        self::assertFalse((new Method('POST'))->isPut());
+        self::assertTrue((new Method('PUT'))->isPut());
+        self::assertFalse((new Method('DELETE'))->isPut());
+        self::assertFalse((new Method('put'))->isPut());
     }
 
     /**
@@ -68,17 +70,17 @@ class MethodTest extends PHPUnit_Framework_TestCase
      */
     public function testIsDelete()
     {
-        $this->assertFalse((new Method('GET'))->isDelete());
-        $this->assertFalse((new Method('POST'))->isDelete());
-        $this->assertFalse((new Method('PUT'))->isDelete());
-        $this->assertTrue((new Method('DELETE'))->isDelete());
-        $this->assertFalse((new Method('delete'))->isDelete());
+        self::assertFalse((new Method('GET'))->isDelete());
+        self::assertFalse((new Method('POST'))->isDelete());
+        self::assertFalse((new Method('PUT'))->isDelete());
+        self::assertTrue((new Method('DELETE'))->isDelete());
+        self::assertFalse((new Method('delete'))->isDelete());
     }
 
     /**
      * Test that invalid character in method name is invalid.
      *
-     * @expectedException BlueMvc\Core\Exceptions\Http\InvalidMethodNameException
+     * @expectedException \BlueMvc\Core\Exceptions\Http\InvalidMethodNameException
      * @expectedExceptionMessage Method "FOO{BAR" contains invalid character "{".
      */
     public function testInvalidCharacterInMethodNameIsInvalid()

@@ -1,5 +1,7 @@
 <?php
 
+namespace BlueMvc\Core\Tests\ActionResults;
+
 use BlueMvc\Core\ActionResults\ForbiddenResult;
 use BlueMvc\Core\Application;
 use BlueMvc\Core\Request;
@@ -8,7 +10,7 @@ use BlueMvc\Core\Response;
 /**
  * Test ForbiddenResult class.
  */
-class ForbiddenResultTest extends PHPUnit_Framework_TestCase
+class ForbiddenResultTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test default constructor.
@@ -31,9 +33,9 @@ class ForbiddenResultTest extends PHPUnit_Framework_TestCase
         $actionResult = new ForbiddenResult();
         $actionResult->updateResponse($application, $request, $response);
 
-        $this->assertSame(403, $response->getStatusCode()->getCode());
-        $this->assertSame('Forbidden', $response->getStatusCode()->getDescription());
-        $this->assertSame('', $response->getContent());
+        self::assertSame(403, $response->getStatusCode()->getCode());
+        self::assertSame('Forbidden', $response->getStatusCode()->getDescription());
+        self::assertSame('', $response->getContent());
     }
 
     /**
@@ -57,9 +59,9 @@ class ForbiddenResultTest extends PHPUnit_Framework_TestCase
         $actionResult = new ForbiddenResult('You are forbidden to view this content.');
         $actionResult->updateResponse($application, $request, $response);
 
-        $this->assertSame(403, $response->getStatusCode()->getCode());
-        $this->assertSame('Forbidden', $response->getStatusCode()->getDescription());
-        $this->assertSame('You are forbidden to view this content.', $response->getContent());
+        self::assertSame(403, $response->getStatusCode()->getCode());
+        self::assertSame('Forbidden', $response->getStatusCode()->getDescription());
+        self::assertSame('You are forbidden to view this content.', $response->getContent());
     }
 
     /**

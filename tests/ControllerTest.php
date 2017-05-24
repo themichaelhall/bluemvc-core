@@ -1,19 +1,20 @@
 <?php
 
+namespace BlueMvc\Core\Tests;
+
 use BlueMvc\Core\Application;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Request;
 use BlueMvc\Core\Response;
-
-require_once __DIR__ . '/Helpers/TestControllers/ActionResultTestController.php';
-require_once __DIR__ . '/Helpers/TestControllers/BasicTestController.php';
-require_once __DIR__ . '/Helpers/TestControllers/DefaultActionTestController.php';
-require_once __DIR__ . '/Helpers/TestControllers/PreAndPostActionEventController.php';
+use BlueMvc\Core\Tests\Helpers\TestControllers\ActionResultTestController;
+use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
+use BlueMvc\Core\Tests\Helpers\TestControllers\DefaultActionTestController;
+use BlueMvc\Core\Tests\Helpers\TestControllers\PreAndPostActionEventController;
 
 /**
  * Test Controller class.
  */
-class ControllerTest extends PHPUnit_Framework_TestCase
+class ControllerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test getApplication method.
@@ -26,7 +27,7 @@ class ControllerTest extends PHPUnit_Framework_TestCase
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, '');
 
-        $this->assertSame($application, $controller->getApplication());
+        self::assertSame($application, $controller->getApplication());
     }
 
     /**
@@ -40,7 +41,7 @@ class ControllerTest extends PHPUnit_Framework_TestCase
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, '');
 
-        $this->assertSame($request, $controller->getRequest());
+        self::assertSame($request, $controller->getRequest());
     }
 
     /**
@@ -54,7 +55,7 @@ class ControllerTest extends PHPUnit_Framework_TestCase
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, '');
 
-        $this->assertSame($response, $controller->getResponse());
+        self::assertSame($response, $controller->getResponse());
     }
 
     /**
@@ -83,9 +84,9 @@ class ControllerTest extends PHPUnit_Framework_TestCase
         $controller = new BasicTestController();
         $isProcessed = $controller->processRequest($application, $request, $response, '');
 
-        $this->assertTrue($isProcessed);
-        $this->assertSame('Hello World!', $response->getContent());
-        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertTrue($isProcessed);
+        self::assertSame('Hello World!', $response->getContent());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -99,9 +100,9 @@ class ControllerTest extends PHPUnit_Framework_TestCase
         $controller = new BasicTestController();
         $isProcessed = $controller->processRequest($application, $request, $response, 'notfound');
 
-        $this->assertFalse($isProcessed);
-        $this->assertSame('', $response->getContent());
-        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertFalse($isProcessed);
+        self::assertSame('', $response->getContent());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -115,9 +116,9 @@ class ControllerTest extends PHPUnit_Framework_TestCase
         $controller = new BasicTestController();
         $isProcessed = $controller->processRequest($application, $request, $response, '123numeric');
 
-        $this->assertTrue($isProcessed);
-        $this->assertSame('Numeric action result', $response->getContent());
-        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertTrue($isProcessed);
+        self::assertSame('Numeric action result', $response->getContent());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -131,9 +132,9 @@ class ControllerTest extends PHPUnit_Framework_TestCase
         $controller = new DefaultActionTestController();
         $isProcessed = $controller->processRequest($application, $request, $response, 'foo');
 
-        $this->assertTrue($isProcessed);
-        $this->assertSame('Foo Action', $response->getContent());
-        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertTrue($isProcessed);
+        self::assertSame('Foo Action', $response->getContent());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -147,9 +148,9 @@ class ControllerTest extends PHPUnit_Framework_TestCase
         $controller = new DefaultActionTestController();
         $isProcessed = $controller->processRequest($application, $request, $response, 'bar');
 
-        $this->assertTrue($isProcessed);
-        $this->assertSame('Default Action bar', $response->getContent());
-        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertTrue($isProcessed);
+        self::assertSame('Default Action bar', $response->getContent());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -163,9 +164,9 @@ class ControllerTest extends PHPUnit_Framework_TestCase
         $controller = new ActionResultTestController();
         $isProcessed = $controller->processRequest($application, $request, $response, 'notfound');
 
-        $this->assertTrue($isProcessed);
-        $this->assertSame('Page was not found', $response->getContent());
-        $this->assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
+        self::assertTrue($isProcessed);
+        self::assertSame('Page was not found', $response->getContent());
+        self::assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -179,11 +180,11 @@ class ControllerTest extends PHPUnit_Framework_TestCase
         $controller = new PreAndPostActionEventController();
         $isProcessed = $controller->processRequest($application, $request, $response, '');
 
-        $this->assertTrue($isProcessed);
-        $this->assertSame('Index action with pre- and post-action event', $response->getContent());
-        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-        $this->assertSame('true', $response->getHeader('X-Pre-Action'));
-        $this->assertSame('true', $response->getHeader('X-Post-Action'));
+        self::assertTrue($isProcessed);
+        self::assertSame('Index action with pre- and post-action event', $response->getContent());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertSame('true', $response->getHeader('X-Pre-Action'));
+        self::assertSame('true', $response->getHeader('X-Post-Action'));
     }
 
     /**
@@ -197,11 +198,11 @@ class ControllerTest extends PHPUnit_Framework_TestCase
         $controller = new PreAndPostActionEventController();
         $isProcessed = $controller->processRequest($application, $request, $response, 'foo');
 
-        $this->assertTrue($isProcessed);
-        $this->assertSame('Default action with pre- and post-action event', $response->getContent());
-        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-        $this->assertSame('true', $response->getHeader('X-Pre-Action'));
-        $this->assertSame('true', $response->getHeader('X-Post-Action'));
+        self::assertTrue($isProcessed);
+        self::assertSame('Default action with pre- and post-action event', $response->getContent());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertSame('true', $response->getHeader('X-Pre-Action'));
+        self::assertSame('true', $response->getHeader('X-Post-Action'));
     }
 
     /**
@@ -215,11 +216,11 @@ class ControllerTest extends PHPUnit_Framework_TestCase
         $controller = new PreAndPostActionEventController();
         $isProcessed = $controller->processRequest($application, $request, $response, '');
 
-        $this->assertTrue($isProcessed);
-        $this->assertSame('This is a pre-action result', $response->getContent());
-        $this->assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
-        $this->assertNull($response->getHeader('X-Pre-Action'));
-        $this->assertNull($response->getHeader('X-Post-Action'));
+        self::assertTrue($isProcessed);
+        self::assertSame('This is a pre-action result', $response->getContent());
+        self::assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
+        self::assertNull($response->getHeader('X-Pre-Action'));
+        self::assertNull($response->getHeader('X-Post-Action'));
     }
 
     /**
@@ -233,11 +234,11 @@ class ControllerTest extends PHPUnit_Framework_TestCase
         $controller = new PreAndPostActionEventController();
         $isProcessed = $controller->processRequest($application, $request, $response, '');
 
-        $this->assertTrue($isProcessed);
-        $this->assertSame('This is a post-action result', $response->getContent());
-        $this->assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-        $this->assertSame('true', $response->getHeader('X-Pre-Action'));
-        $this->assertNull($response->getHeader('X-Post-Action'));
+        self::assertTrue($isProcessed);
+        self::assertSame('This is a post-action result', $response->getContent());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertSame('true', $response->getHeader('X-Pre-Action'));
+        self::assertNull($response->getHeader('X-Post-Action'));
     }
 
     /**
@@ -247,8 +248,8 @@ class ControllerTest extends PHPUnit_Framework_TestCase
     {
         $controller = new BasicTestController();
 
-        $this->assertNull($controller->getViewData('Foo'));
-        $this->assertNull($controller->getViewData('Bar'));
+        self::assertNull($controller->getViewData('Foo'));
+        self::assertNull($controller->getViewData('Bar'));
     }
 
     /**
@@ -259,7 +260,7 @@ class ControllerTest extends PHPUnit_Framework_TestCase
         $controller = new BasicTestController();
         $controller->setViewData('Foo', 42);
 
-        $this->assertSame(42, $controller->getViewData('Foo'));
-        $this->assertNull($controller->getViewData('Bar'));
+        self::assertSame(42, $controller->getViewData('Foo'));
+        self::assertNull($controller->getViewData('Bar'));
     }
 }

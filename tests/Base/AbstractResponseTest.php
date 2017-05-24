@@ -1,16 +1,17 @@
 <?php
 
-require_once __DIR__ . '/../Helpers/TestResponses/BasicTestResponse.php';
-require_once __DIR__ . '/../Helpers/TestRequests/BasicTestRequest.php';
+namespace BlueMvc\Core\Tests\Base;
 
 use BlueMvc\Core\Http\Method;
 use BlueMvc\Core\Http\StatusCode;
+use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
+use BlueMvc\Core\Tests\Helpers\TestResponses\BasicTestResponse;
 use DataTypes\Url;
 
 /**
  * Test AbstractResponse class (via derived test class).
  */
-class AbstractResponseTest extends PHPUnit_Framework_TestCase
+class AbstractResponseTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test getContent method.
@@ -20,7 +21,7 @@ class AbstractResponseTest extends PHPUnit_Framework_TestCase
         $request = new BasicTestRequest(Url::parse('http://localhost/'), new Method('GET'));
         $response = new BasicTestResponse($request);
 
-        $this->assertSame('', $response->getContent());
+        self::assertSame('', $response->getContent());
     }
 
     /**
@@ -32,7 +33,7 @@ class AbstractResponseTest extends PHPUnit_Framework_TestCase
         $response = new BasicTestResponse($request);
         $response->setContent('Hello world!');
 
-        $this->assertSame('Hello world!', $response->getContent());
+        self::assertSame('Hello world!', $response->getContent());
     }
 
     /**
@@ -43,7 +44,7 @@ class AbstractResponseTest extends PHPUnit_Framework_TestCase
         $request = new BasicTestRequest(Url::parse('http://localhost/'), new Method('GET'));
         $response = new BasicTestResponse($request);
 
-        $this->assertSame('200 OK', $response->getStatusCode()->__toString());
+        self::assertSame('200 OK', $response->getStatusCode()->__toString());
     }
 
     /**
@@ -55,7 +56,7 @@ class AbstractResponseTest extends PHPUnit_Framework_TestCase
         $response = new BasicTestResponse($request);
         $response->setStatusCode(new StatusCode(StatusCode::GONE));
 
-        $this->assertSame('410 Gone', $response->getStatusCode()->__toString());
+        self::assertSame('410 Gone', $response->getStatusCode()->__toString());
     }
 
     /**
@@ -66,7 +67,7 @@ class AbstractResponseTest extends PHPUnit_Framework_TestCase
         $request = new BasicTestRequest(Url::parse('http://localhost/'), new Method('GET'));
         $response = new BasicTestResponse($request);
 
-        $this->assertSame([], iterator_to_array($response->getHeaders()));
+        self::assertSame([], iterator_to_array($response->getHeaders()));
     }
 
     /**
@@ -78,7 +79,7 @@ class AbstractResponseTest extends PHPUnit_Framework_TestCase
         $response = new BasicTestResponse($request);
         $response->setHeader('Content-Type', 'text/plain');
 
-        $this->assertSame(['Content-Type' => 'text/plain'], iterator_to_array($response->getHeaders()));
+        self::assertSame(['Content-Type' => 'text/plain'], iterator_to_array($response->getHeaders()));
     }
 
     /**
@@ -90,8 +91,8 @@ class AbstractResponseTest extends PHPUnit_Framework_TestCase
         $response = new BasicTestResponse($request);
         $response->setHeader('Content-Type', 'text/plain');
 
-        $this->assertSame('text/plain', $response->getHeader('content-type'));
-        $this->assertNull($response->getHeader('Location'));
+        self::assertSame('text/plain', $response->getHeader('content-type'));
+        self::assertNull($response->getHeader('Location'));
     }
 
     /**
@@ -104,6 +105,6 @@ class AbstractResponseTest extends PHPUnit_Framework_TestCase
         $response->setHeader('allow', 'GET');
         $response->addHeader('Allow', 'POST');
 
-        $this->assertSame(['Allow' => 'GET, POST'], iterator_to_array($response->getHeaders()));
+        self::assertSame(['Allow' => 'GET, POST'], iterator_to_array($response->getHeaders()));
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+namespace BlueMvc\Core\Tests\ActionResults;
+
 use BlueMvc\Core\ActionResults\NotModifiedResult;
 use BlueMvc\Core\Application;
 use BlueMvc\Core\Request;
@@ -8,7 +10,7 @@ use BlueMvc\Core\Response;
 /**
  * Test NotModifiedResult class.
  */
-class NotModifiedResultTest extends PHPUnit_Framework_TestCase
+class NotModifiedResultTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test default constructor.
@@ -31,8 +33,8 @@ class NotModifiedResultTest extends PHPUnit_Framework_TestCase
         $actionResult = new NotModifiedResult();
         $actionResult->updateResponse($application, $request, $response);
 
-        $this->assertSame(304, $response->getStatusCode()->getCode());
-        $this->assertSame('Not Modified', $response->getStatusCode()->getDescription());
-        $this->assertSame('', $response->getContent());
+        self::assertSame(304, $response->getStatusCode()->getCode());
+        self::assertSame('Not Modified', $response->getStatusCode()->getDescription());
+        self::assertSame('', $response->getContent());
     }
 }

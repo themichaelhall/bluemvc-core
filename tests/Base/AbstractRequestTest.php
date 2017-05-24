@@ -1,23 +1,24 @@
 <?php
 
-require_once __DIR__ . '/../Helpers/TestRequests/BasicTestRequest.php';
+namespace BlueMvc\Core\Tests\Base;
 
 use BlueMvc\Core\Collections\HeaderCollection;
 use BlueMvc\Core\Collections\ParameterCollection;
 use BlueMvc\Core\Http\Method;
+use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
 use DataTypes\Url;
 
 /**
  * Test AbstractRequest class (via derived test class).
  */
-class AbstractRequestTest extends PHPUnit_Framework_TestCase
+class AbstractRequestTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test getUrl method.
      */
     public function testGetUrl()
     {
-        $this->assertSame('https://domain.com/foo/bar', $this->myRequest->getUrl()->__toString());
+        self::assertSame('https://domain.com/foo/bar', $this->myRequest->getUrl()->__toString());
     }
 
     /**
@@ -25,7 +26,7 @@ class AbstractRequestTest extends PHPUnit_Framework_TestCase
      */
     public function testGetMethod()
     {
-        $this->assertSame('POST', $this->myRequest->getMethod()->__toString());
+        self::assertSame('POST', $this->myRequest->getMethod()->__toString());
     }
 
     /**
@@ -35,7 +36,7 @@ class AbstractRequestTest extends PHPUnit_Framework_TestCase
     {
         $this->myRequest->setUrl(Url::parse('http://foo.com:8080/bar?baz'));
 
-        $this->assertSame('http://foo.com:8080/bar?baz', $this->myRequest->getUrl()->__toString());
+        self::assertSame('http://foo.com:8080/bar?baz', $this->myRequest->getUrl()->__toString());
     }
 
     /**
@@ -45,7 +46,7 @@ class AbstractRequestTest extends PHPUnit_Framework_TestCase
     {
         $this->myRequest->setMethod(new Method('GET'));
 
-        $this->assertSame('GET', $this->myRequest->getMethod()->__toString());
+        self::assertSame('GET', $this->myRequest->getMethod()->__toString());
     }
 
     /**
@@ -53,7 +54,7 @@ class AbstractRequestTest extends PHPUnit_Framework_TestCase
      */
     public function testGetHeaders()
     {
-        $this->assertSame([], iterator_to_array($this->myRequest->getHeaders()));
+        self::assertSame([], iterator_to_array($this->myRequest->getHeaders()));
     }
 
     /**
@@ -67,7 +68,7 @@ class AbstractRequestTest extends PHPUnit_Framework_TestCase
 
         $this->myRequest->setHeaders($headers);
 
-        $this->assertSame(['Accept-Encoding' => 'gzip, deflate', 'Host' => 'localhost'], iterator_to_array($this->myRequest->getHeaders()));
+        self::assertSame(['Accept-Encoding' => 'gzip, deflate', 'Host' => 'localhost'], iterator_to_array($this->myRequest->getHeaders()));
     }
 
     /**
@@ -77,7 +78,7 @@ class AbstractRequestTest extends PHPUnit_Framework_TestCase
     {
         $this->myRequest->setHeader('Accept-Language', 'en-US,en;q=0.5');
 
-        $this->assertSame(['Accept-Language' => 'en-US,en;q=0.5'], iterator_to_array($this->myRequest->getHeaders()));
+        self::assertSame(['Accept-Language' => 'en-US,en;q=0.5'], iterator_to_array($this->myRequest->getHeaders()));
     }
 
     /**
@@ -88,7 +89,7 @@ class AbstractRequestTest extends PHPUnit_Framework_TestCase
         $this->myRequest->setHeader('Accept-Language', 'en-US');
         $this->myRequest->addHeader('Accept-Language', 'en');
 
-        $this->assertSame(['Accept-Language' => 'en-US, en'], iterator_to_array($this->myRequest->getHeaders()));
+        self::assertSame(['Accept-Language' => 'en-US, en'], iterator_to_array($this->myRequest->getHeaders()));
     }
 
     /**
@@ -98,8 +99,8 @@ class AbstractRequestTest extends PHPUnit_Framework_TestCase
     {
         $this->myRequest->setHeader('Accept-Language', 'en-US,en;q=0.5');
 
-        $this->assertSame('en-US,en;q=0.5', $this->myRequest->getHeader('accept-language'));
-        $this->assertNull($this->myRequest->getHeader('Foo-Bar'));
+        self::assertSame('en-US,en;q=0.5', $this->myRequest->getHeader('accept-language'));
+        self::assertNull($this->myRequest->getHeader('Foo-Bar'));
     }
 
     /**
@@ -107,7 +108,7 @@ class AbstractRequestTest extends PHPUnit_Framework_TestCase
      */
     public function testGetUserAgentWithoutUserAgentSet()
     {
-        $this->assertSame('', $this->myRequest->getUserAgent());
+        self::assertSame('', $this->myRequest->getUserAgent());
     }
 
     /**
@@ -117,7 +118,7 @@ class AbstractRequestTest extends PHPUnit_Framework_TestCase
     {
         $this->myRequest->setHeader('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36');
 
-        $this->assertSame('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36', $this->myRequest->getUserAgent());
+        self::assertSame('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36', $this->myRequest->getUserAgent());
     }
 
     /**
@@ -125,7 +126,7 @@ class AbstractRequestTest extends PHPUnit_Framework_TestCase
      */
     public function testGetFormParameters()
     {
-        $this->assertSame([], iterator_to_array($this->myRequest->getFormParameters()));
+        self::assertSame([], iterator_to_array($this->myRequest->getFormParameters()));
     }
 
     /**
@@ -137,7 +138,7 @@ class AbstractRequestTest extends PHPUnit_Framework_TestCase
         $formParameters->set('Foo', 'Bar');
         $this->myRequest->setFormParameters($formParameters);
 
-        $this->assertSame(['Foo' => 'Bar'], iterator_to_array($this->myRequest->getFormParameters()));
+        self::assertSame(['Foo' => 'Bar'], iterator_to_array($this->myRequest->getFormParameters()));
     }
 
     /**
@@ -147,7 +148,7 @@ class AbstractRequestTest extends PHPUnit_Framework_TestCase
     {
         $this->myRequest->setFormParameter('Foo', 'Bar');
 
-        $this->assertSame(['Foo' => 'Bar'], iterator_to_array($this->myRequest->getFormParameters()));
+        self::assertSame(['Foo' => 'Bar'], iterator_to_array($this->myRequest->getFormParameters()));
     }
 
     /**
@@ -157,8 +158,8 @@ class AbstractRequestTest extends PHPUnit_Framework_TestCase
     {
         $this->myRequest->setFormParameter('Foo', 'Bar');
 
-        $this->assertSame('Bar', $this->myRequest->getFormParameter('Foo'));
-        $this->assertNull($this->myRequest->getFormParameter('Bar'));
+        self::assertSame('Bar', $this->myRequest->getFormParameter('Foo'));
+        self::assertNull($this->myRequest->getFormParameter('Bar'));
     }
 
     /**
@@ -166,7 +167,7 @@ class AbstractRequestTest extends PHPUnit_Framework_TestCase
      */
     public function testGetQueryParameters()
     {
-        $this->assertSame([], iterator_to_array($this->myRequest->getQueryParameters()));
+        self::assertSame([], iterator_to_array($this->myRequest->getQueryParameters()));
     }
 
     /**
@@ -178,7 +179,7 @@ class AbstractRequestTest extends PHPUnit_Framework_TestCase
         $queryParameters->set('foo', 'bar');
         $this->myRequest->setQueryParameters($queryParameters);
 
-        $this->assertSame(['foo' => 'bar'], iterator_to_array($this->myRequest->getQueryParameters()));
+        self::assertSame(['foo' => 'bar'], iterator_to_array($this->myRequest->getQueryParameters()));
     }
 
     /**
@@ -188,7 +189,7 @@ class AbstractRequestTest extends PHPUnit_Framework_TestCase
     {
         $this->myRequest->setQueryParameter('Foo', 'Bar');
 
-        $this->assertSame(['Foo' => 'Bar'], iterator_to_array($this->myRequest->getQueryParameters()));
+        self::assertSame(['Foo' => 'Bar'], iterator_to_array($this->myRequest->getQueryParameters()));
     }
 
     /**
@@ -198,8 +199,8 @@ class AbstractRequestTest extends PHPUnit_Framework_TestCase
     {
         $this->myRequest->setQueryParameter('Foo', 'Bar');
 
-        $this->assertSame('Bar', $this->myRequest->getQueryParameter('Foo'));
-        $this->assertNull($this->myRequest->getQueryParameter('Bar'));
+        self::assertSame('Bar', $this->myRequest->getQueryParameter('Foo'));
+        self::assertNull($this->myRequest->getQueryParameter('Bar'));
     }
 
     /**

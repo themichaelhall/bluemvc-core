@@ -1,11 +1,13 @@
 <?php
 
-require_once __DIR__ . '/Helpers/TestControllers/ErrorTestController.php';
+namespace BlueMvc\Core\Tests;
+
+use BlueMvc\Core\Tests\Helpers\TestControllers\ErrorTestController;
 
 /**
  * Test ErrorController class.
  */
-class ErrorControllerTest extends PHPUnit_Framework_TestCase
+class ErrorControllerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test getException method.
@@ -14,7 +16,7 @@ class ErrorControllerTest extends PHPUnit_Framework_TestCase
     {
         $errorController = new ErrorTestController();
 
-        $this->assertNull($errorController->getException());
+        self::assertNull($errorController->getException());
     }
 
     /**
@@ -26,6 +28,6 @@ class ErrorControllerTest extends PHPUnit_Framework_TestCase
         $exception = new \OutOfBoundsException('Test Exception');
         $errorController->setException($exception);
 
-        $this->assertSame($exception, $errorController->getException());
+        self::assertSame($exception, $errorController->getException());
     }
 }
