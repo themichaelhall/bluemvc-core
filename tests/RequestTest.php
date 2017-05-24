@@ -249,4 +249,24 @@ class RequestTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame([], iterator_to_array($request->getQueryParameters()));
     }
+
+    /**
+     * Test getQueryParameters method with query parameters set.
+     */
+    public function testGetQueryParametersWithQueryParametersSet()
+    {
+        $request = new Request(
+            [
+                'HTTP_HOST'      => 'www.domain.com',
+                'REQUEST_URI'    => '/foo/bar',
+                'REQUEST_METHOD' => 'GET',
+            ],
+            [
+                'Foo' => '1',
+                'Bar' => ['2', '3'],
+            ]
+        );
+
+        $this->assertSame(['Foo' => '1', 'Bar' => '2'], iterator_to_array($request->getQueryParameters()));
+    }
 }

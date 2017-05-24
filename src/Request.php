@@ -36,6 +36,7 @@ class Request extends AbstractRequest
     public function __construct(array $serverVars = null, array $getVars = null, array $postVars = null)
     {
         $serverVars = $serverVars ?: $_SERVER;
+        $getVars = $getVars ?: $_GET;
         $postVars = $postVars ?: $_POST;
 
         $uriAndQueryString = explode('?', $serverVars['REQUEST_URI'], 2);
@@ -52,6 +53,7 @@ class Request extends AbstractRequest
         );
 
         $this->setHeaders(self::myParseHeaders($serverVars));
+        $this->setQueryParameters(self::myParseParameters($getVars));
         $this->setFormParameters(self::myParseParameters($postVars));
     }
 
