@@ -293,4 +293,44 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         self::assertSame('2', $request->getQueryParameter('Bar'));
         self::assertNull($request->getQueryParameter('Baz'));
     }
+
+    /**
+     * Test getQueryParameter method with numeric parameter.
+     */
+    public function testGetQueryParameterWithNumericParameters()
+    {
+        $request = new Request(
+            [
+                'HTTP_HOST'      => 'www.domain.com',
+                'REQUEST_URI'    => '/foo/bar',
+                'REQUEST_METHOD' => 'GET',
+            ],
+            [
+                1 => 2,
+            ]
+        );
+
+        self::assertSame('2', $request->getQueryParameter('1'));
+    }
+
+    /**
+     * Test getFormParameter method with numeric parameter.
+     */
+    public function testGetFormParameterWithNumericParameters()
+    {
+        $request = new Request(
+            [
+                'HTTP_HOST'      => 'www.domain.com',
+                'REQUEST_URI'    => '/foo/bar',
+                'REQUEST_METHOD' => 'GET',
+            ],
+            [
+            ],
+            [
+                1 => 2,
+            ]
+        );
+
+        self::assertSame('2', $request->getFormParameter('1'));
+    }
 }

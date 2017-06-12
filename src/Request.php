@@ -88,7 +88,10 @@ class Request extends AbstractRequest
     {
         $parameters = new ParameterCollection();
         foreach ($parametersArray as $parameterName => $parameterValue) {
-            $parameters->set($parameterName, is_array($parameterValue) ? $parameterValue[0] : $parameterValue);
+            $parameters->set(
+                strval($parameterName),
+                strval(is_array($parameterValue) ? $parameterValue[0] : $parameterValue)
+            );
         }
 
         return $parameters;
