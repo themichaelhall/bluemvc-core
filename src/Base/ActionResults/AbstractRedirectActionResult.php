@@ -36,7 +36,7 @@ class AbstractRedirectActionResult extends AbstractActionResult
             throw new \InvalidArgumentException('$url parameter is not a string.');
         }
 
-        parent::__construct($statusCode);
+        parent::__construct('', $statusCode);
 
         $this->myUrl = $url;
     }

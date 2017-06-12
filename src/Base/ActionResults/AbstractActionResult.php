@@ -25,12 +25,12 @@ abstract class AbstractActionResult implements ActionResultInterface
      *
      * @since 1.0.0
      *
-     * @param StatusCodeInterface $statusCode The status code.
      * @param string              $content    The content.
+     * @param StatusCodeInterface $statusCode The status code.
      *
      * @throws \InvalidArgumentException If the content parameter is not a string.
      */
-    protected function __construct(StatusCodeInterface $statusCode, $content = '')
+    protected function __construct($content, StatusCodeInterface $statusCode)
     {
         if (!is_string($content)) {
             throw new \InvalidArgumentException('$content parameter is not a string.');

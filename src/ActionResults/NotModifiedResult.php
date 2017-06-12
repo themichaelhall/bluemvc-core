@@ -24,6 +24,6 @@ class NotModifiedResult extends AbstractActionResult
      */
     public function __construct()
     {
-        parent::__construct(new StatusCode(StatusCode::NOT_MODIFIED), '');
+        parent::__construct('', new StatusCode(StatusCode::NOT_MODIFIED));
     }
 }

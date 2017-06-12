@@ -28,6 +28,6 @@ class NotFoundResult extends AbstractActionResult
      */
     public function __construct($content = '')
     {
-        parent::__construct(new StatusCode(StatusCode::NOT_FOUND), $content);
+        parent::__construct($content, new StatusCode(StatusCode::NOT_FOUND));
     }
 }

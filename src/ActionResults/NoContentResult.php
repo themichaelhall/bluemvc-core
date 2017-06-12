@@ -24,6 +24,6 @@ class NoContentResult extends AbstractActionResult
      */
     public function __construct()
     {
-        parent::__construct(new StatusCode(StatusCode::NO_CONTENT), '');
+        parent::__construct('', new StatusCode(StatusCode::NO_CONTENT));
     }
 }

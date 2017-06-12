@@ -28,6 +28,6 @@ class ForbiddenResult extends AbstractActionResult
      */
     public function __construct($content = '')
     {
-        parent::__construct(new StatusCode(StatusCode::FORBIDDEN), $content);
+        parent::__construct($content, new StatusCode(StatusCode::FORBIDDEN));
     }
 }
