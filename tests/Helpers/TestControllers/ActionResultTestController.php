@@ -3,6 +3,7 @@
 namespace BlueMvc\Core\Tests\Helpers\TestControllers;
 
 use BlueMvc\Core\ActionResults\ForbiddenResult;
+use BlueMvc\Core\ActionResults\JsonResult;
 use BlueMvc\Core\ActionResults\NoContentResult;
 use BlueMvc\Core\ActionResults\NotFoundResult;
 use BlueMvc\Core\ActionResults\NotModifiedResult;
@@ -73,5 +74,15 @@ class ActionResultTestController extends Controller
     public function notmodifiedAction()
     {
         return new NotModifiedResult();
+    }
+
+    /**
+     * Action returning a JSON action result.
+     *
+     * @return JsonResult The action result.
+     */
+    public function jsonAction()
+    {
+        return new JsonResult(['Foo' => 1, 'Bar' => ['Baz' => 2]]);
     }
 }

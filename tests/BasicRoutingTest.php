@@ -354,6 +354,24 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test get a page returning a JsonResult.
+     */
+    public function testGetPageWithJsonResult()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/json', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        self::assertSame('{"Foo":1,"Bar":{"Baz":2}}', $responseOutput);
+        self::assertSame('{"Foo":1,"Bar":{"Baz":2}}', $response->getContent());
+        self::assertSame(['HTTP/1.1 200 OK', 'Content-Type: application/json'], FakeHeaders::get());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
      * Test get index page for controller with pre-action event.
      */
     public function testGetIndexPageForControllerWithPreActionEvent()
