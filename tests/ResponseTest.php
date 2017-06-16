@@ -176,6 +176,18 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test setExpiry method.
+     */
+    public function testSetExpiry()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $response->setExpiry(new \DateTimeImmutable('2017-06-16 18:30:00', new \DateTimeZone('Europe/Stockholm')));
+
+        self::assertSame(['Expires' => 'Fri, 16 Jun 2017 16:30:00 GMT'], iterator_to_array($response->getHeaders()));
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

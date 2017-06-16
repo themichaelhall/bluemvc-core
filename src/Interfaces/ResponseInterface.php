@@ -84,6 +84,15 @@ interface ResponseInterface
     public function setContent($content);
 
     /**
+     * Sets the expiry time.
+     *
+     * @since 1.0.0
+     *
+     * @param \DateTimeImmutable $expiry The expiry time.
+     */
+    public function setExpiry(\DateTimeImmutable $expiry);
+
+    /**
      * Sets a header.
      *
      * @since 1.0.0

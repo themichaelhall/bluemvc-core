@@ -107,4 +107,16 @@ class AbstractResponseTest extends \PHPUnit_Framework_TestCase
 
         self::assertSame(['Allow' => 'GET, POST'], iterator_to_array($response->getHeaders()));
     }
+
+    /**
+     * Test setExpiry method.
+     */
+    public function testSetExpiry()
+    {
+        $request = new BasicTestRequest(Url::parse('http://localhost/'), new Method('GET'));
+        $response = new BasicTestResponse($request);
+        $response->setExpiry(new \DateTimeImmutable('2017-06-16 18:30:00', new \DateTimeZone('Europe/Stockholm')));
+
+        self::assertSame(['Expires' => 'Fri, 16 Jun 2017 16:30:00 GMT'], iterator_to_array($response->getHeaders()));
+    }
 }

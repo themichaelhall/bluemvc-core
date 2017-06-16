@@ -128,6 +128,18 @@ abstract class AbstractResponse implements ResponseInterface
     }
 
     /**
+     * Sets the expiry time.
+     *
+     * @since 1.0.0
+     *
+     * @param \DateTimeImmutable $expiry The expiry time.
+     */
+    public function setExpiry(\DateTimeImmutable $expiry)
+    {
+        $this->setHeader('Expires', $expiry->setTimeZone(new \DateTimeZone('UTC'))->format('D, d M Y H:i:s \G\M\T'));
+    }
+
+    /**
      * Sets a header.
      *
      * @since 1.0.0
