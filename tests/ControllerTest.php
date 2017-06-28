@@ -10,6 +10,9 @@ use BlueMvc\Core\Tests\Helpers\TestControllers\ActionResultTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\DefaultActionTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\PreAndPostActionEventController;
+use BlueMvc\Core\Tests\Helpers\TestControllers\ViewTestController;
+use BlueMvc\Core\Tests\Helpers\TestViewRenderers\BasicTestViewRenderer;
+use DataTypes\FilePath;
 
 /**
  * Test Controller class.
@@ -167,6 +170,48 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         self::assertTrue($isProcessed);
         self::assertSame('Page was not found', $response->getContent());
         self::assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Test an action returning a view.
+     */
+    public function testActionReturningView()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+
+        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
+        $application->addViewRenderer(new BasicTestViewRenderer());
+
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $controller = new ViewTestController();
+        $isProcessed = $controller->processRequest($application, $request, $response, '');
+
+        self::assertTrue($isProcessed);
+        self::assertSame('<html><body><h1>Index</h1><span>' . $application->getDocumentRoot() . '</span><em>http://www.domain.com/</em></body></html>', $response->getContent());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Test an action returning a custom view file.
+     */
+    public function testActionReturningCustomViewFile()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+
+        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
+        $application->addViewRenderer(new BasicTestViewRenderer());
+
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/withcustomviewfile', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $controller = new ViewTestController();
+        $isProcessed = $controller->processRequest($application, $request, $response, 'withcustomviewfile');
+
+        self::assertTrue($isProcessed);
+        self::assertSame('<html><body><h1>Custom view file</h1><span>' . $application->getDocumentRoot() . '</span><em>http://www.domain.com/withcustomviewfile</em><p>This is the model.</p></body></html>', $response->getContent());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
     /**

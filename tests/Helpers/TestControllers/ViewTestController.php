@@ -43,12 +43,22 @@ class ViewTestController extends Controller
     }
 
     /**
-     * Action with no view file.
+     * Action with no corresponding view file.
      *
      * @return View The view.
      */
     public function withnoviewfileAction()
     {
         return new View();
+    }
+
+    /**
+     * Action with custom view file.
+     *
+     * @return View The view.
+     */
+    public function withcustomviewfileAction()
+    {
+        return new View('This is the model.', 'custom');
     }
 }

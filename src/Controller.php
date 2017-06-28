@@ -101,7 +101,7 @@ abstract class Controller extends AbstractController
 
             // fixme: Exception if no view renderers are found.
             foreach ($application->getViewRenderers() as $viewRenderer) {
-                $viewFile = FilePath::parse($controllerName . DIRECTORY_SEPARATOR . $actionName . '.' . $viewRenderer->getViewFileExtension());
+                $viewFile = FilePath::parse($controllerName . DIRECTORY_SEPARATOR . ($result->getFile() ?: $actionName) . '.' . $viewRenderer->getViewFileExtension());
                 $fullViewFile = $application->getViewPath()->withFilePath($viewFile);
 
                 if (file_exists($fullViewFile->__toString())) {
