@@ -15,6 +15,15 @@ namespace BlueMvc\Core\Interfaces;
 interface ViewInterface
 {
     /**
+     * Returns the file.
+     *
+     * @since 1.0.0
+     *
+     * @return string|null The file.
+     */
+    public function getFile();
+
+    /**
      * Returns the model.
      *
      * @since 1.0.0

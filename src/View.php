@@ -21,10 +21,11 @@ class View extends AbstractView
      *
      * @since 1.0.0
      *
-     * @param mixed $model The model.
+     * @param mixed       $model The model.
+     * @param string|null $file  The file.
      */
-    public function __construct($model = null)
+    public function __construct($model = null, $file = null)
     {
-        parent::__construct($model);
+        parent::__construct($model, $file);
     }
 }

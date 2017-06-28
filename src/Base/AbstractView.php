@@ -21,11 +21,33 @@ abstract class AbstractView implements ViewInterface
      *
      * @since 1.0.0
      *
-     * @param mixed $model The model.
+     * @param mixed       $model The model.
+     * @param string|null $file  The file.
+     *
+     * @throws \InvalidArgumentException If the $file parameter is not a string or null.
      */
-    public function __construct($model = null)
+    public function __construct($model = null, $file = null)
     {
         $this->myModel = $model;
+
+        if (!is_string($file) && !is_null($file)) {
+            throw new \InvalidArgumentException('$file parameter is not a string or null.');
+        }
+
+        // fixme: validate $file
+        $this->myFile = $file;
+    }
+
+    /**
+     * Returns the file.
+     *
+     * @since 1.0.0
+     *
+     * @return string|null The file.
+     */
+    public function getFile()
+    {
+        return $this->myFile;
     }
 
     /**
@@ -44,4 +66,9 @@ abstract class AbstractView implements ViewInterface
      * @var mixed My model.
      */
     private $myModel;
+
+    /**
+     * @var string|null My file.
+     */
+    private $myFile;
 }
