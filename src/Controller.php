@@ -14,7 +14,6 @@ use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
 use BlueMvc\Core\Interfaces\ViewInterface;
-use DataTypes\FilePath;
 
 /**
  * Class representing a standard controller.
@@ -88,42 +87,20 @@ abstract class Controller extends AbstractController
             }
         }
 
+        // Handle result.
         if ($result instanceof ViewInterface) {
-            // A view was returned. Figure out the path to the view file(s) to try.
-            $controllerName = (new \ReflectionClass($this))->getShortName();
-            if (strlen($controllerName) > 10 && substr(strtolower($controllerName), -10) === 'controller') {
-                $controllerName = substr($controllerName, 0, -10);
-            }
+            $result->updateResponse($application, $request, $response, $this, $actionName, $this->myViewData);
 
-            // Try the view renderers until a match is found.
-            $hasFoundView = false;
-            $testedViewFiles = [];
-
-            // fixme: Exception if no view renderers are found.
-            foreach ($application->getViewRenderers() as $viewRenderer) {
-                $viewFile = FilePath::parse($controllerName . DIRECTORY_SEPARATOR . ($result->getFile() ?: $actionName) . '.' . $viewRenderer->getViewFileExtension());
-                $fullViewFile = $application->getViewPath()->withFilePath($viewFile);
-
-                if (file_exists($fullViewFile->__toString())) {
-                    $response->setContent($viewRenderer->renderView($application, $request, $viewFile, $result->getModel(), $this->myViewData));
-                    $hasFoundView = true;
-
-                    break;
-                }
-
-                $testedViewFiles[] = '"' . $fullViewFile->__toString() . '"';
-            }
-
-            if (!$hasFoundView) {
-                throw new ViewFileNotFoundException('Could not find view file ' . implode(' or ', $testedViewFiles));
-            }
-        } else {
-            if ($result instanceof ActionResultInterface) {
-                $result->updateResponse($application, $request, $response);
-            } else {
-                $response->setContent($result);
-            }
+            return true;
         }
+
+        if ($result instanceof ActionResultInterface) {
+            $result->updateResponse($application, $request, $response);
+
+            return true;
+        }
+
+        $response->setContent($result);
 
         return true;
     }

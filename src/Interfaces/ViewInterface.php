@@ -15,20 +15,16 @@ namespace BlueMvc\Core\Interfaces;
 interface ViewInterface
 {
     /**
-     * Returns the file.
+     * Updates the response.
      *
      * @since 1.0.0
      *
-     * @return string|null The file.
+     * @param ApplicationInterface $application The application.
+     * @param RequestInterface     $request     The request.
+     * @param ResponseInterface    $response    The response.
+     * @param ControllerInterface  $controller  The controller.
+     * @param string               $action      The action.
+     * @param array                $viewData    The view data.
      */
-    public function getFile();
-
-    /**
-     * Returns the model.
-     *
-     * @since 1.0.0
-     *
-     * @return mixed The model.
-     */
-    public function getModel();
+    public function updateResponse(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, ControllerInterface $controller, $action, $viewData);
 }
