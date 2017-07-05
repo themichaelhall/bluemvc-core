@@ -8,6 +8,7 @@
 namespace BlueMvc\Core\ActionResults;
 
 use BlueMvc\Core\Base\ActionResults\AbstractActionResult;
+use BlueMvc\Core\Exceptions\InvalidActionResultContentException;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\Http\StatusCodeInterface;
@@ -26,12 +27,19 @@ class JsonResult extends AbstractActionResult
      *
      * @since 1.0.0
      *
-     * @param array                    $content    The content.
+     * @param mixed                    $content    The content.
      * @param StatusCodeInterface|null $statusCode The status code or null for status code 200 OK.
+     *
+     * @throws InvalidActionResultContentException If the content could not be json-encoded.
      */
-    public function __construct(array $content, StatusCodeInterface $statusCode = null)
+    public function __construct($content, StatusCodeInterface $statusCode = null)
     {
-        parent::__construct(json_encode($content), $statusCode ?: new StatusCode(StatusCode::OK));
+        $json = json_encode($content);
+        if ($json === false) {
+            throw new InvalidActionResultContentException('Could not create JsonResult from content: ' . json_last_error_msg());
+        }
+
+        parent::__construct($json, $statusCode ?: new StatusCode(StatusCode::OK));
     }
 
     /**
