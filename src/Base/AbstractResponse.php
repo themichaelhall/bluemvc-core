@@ -132,11 +132,25 @@ abstract class AbstractResponse implements ResponseInterface
      *
      * @since 1.0.0
      *
-     * @param \DateTimeImmutable $expiry The expiry time.
+     * @param \DateTimeImmutable|null $expiry The expiry time or null for immediate expiry.
      */
-    public function setExpiry(\DateTimeImmutable $expiry)
+    public function setExpiry(\DateTimeImmutable $expiry = null)
     {
+        $date = new \DateTimeImmutable();
+        $expiry = $expiry ?: $date;
+
+        $this->setHeader('Date', $date->setTimeZone(new \DateTimeZone('UTC'))->format('D, d M Y H:i:s \G\M\T'));
         $this->setHeader('Expires', $expiry->setTimeZone(new \DateTimeZone('UTC'))->format('D, d M Y H:i:s \G\M\T'));
+
+        if ($expiry <= $date) {
+            $this->setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
+
+            return;
+        }
+
+        $maxAge = $expiry->getTimestamp() - $date->getTimestamp();
+        $this->setHeader('Cache-Control', 'public, max-age=' . $maxAge);
+        $this->setHeader('Vary', 'Accept-Encoding');
     }
 
     /**

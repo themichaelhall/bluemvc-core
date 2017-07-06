@@ -109,14 +109,46 @@ class AbstractResponseTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test setExpiry method.
+     * Test setExpiry method with null expiry time value.
      */
-    public function testSetExpiry()
+    public function testSetExpiryWithNullTime()
     {
         $request = new BasicTestRequest(Url::parse('http://localhost/'), new Method('GET'));
         $response = new BasicTestResponse($request);
-        $response->setExpiry(new \DateTimeImmutable('2017-06-16 18:30:00', new \DateTimeZone('Europe/Stockholm')));
+        $response->setExpiry(null);
 
-        self::assertSame(['Expires' => 'Fri, 16 Jun 2017 16:30:00 GMT'], iterator_to_array($response->getHeaders()));
+        self::assertSame($response->getHeader('Date'), $response->getHeader('Expires'));
+        self::assertSame('no-cache, no-store, must-revalidate, max-age=0', $response->getHeader('Cache-Control'));
+    }
+
+    /**
+     * Test setExpiry method with past expiry time value.
+     */
+    public function testSetExpiryWithPastTime()
+    {
+        $request = new BasicTestRequest(Url::parse('http://localhost/'), new Method('GET'));
+        $response = new BasicTestResponse($request);
+
+        $expiry = (new \DateTimeImmutable())->sub(new \DateInterval('PT24H'));
+        $response->setExpiry($expiry);
+
+        self::assertSame($expiry->setTimeZone(new \DateTimeZone('UTC'))->format('D, d M Y H:i:s \G\M\T'), $response->getHeader('Expires'));
+        self::assertSame('no-cache, no-store, must-revalidate, max-age=0', $response->getHeader('Cache-Control'));
+    }
+
+    /**
+     * Test setExpiry method with future expiry time value.
+     */
+    public function testSetExpiryWithFutureTime()
+    {
+        $request = new BasicTestRequest(Url::parse('http://localhost/'), new Method('GET'));
+        $response = new BasicTestResponse($request);
+
+        $expiry = (new \DateTimeImmutable())->add(new \DateInterval('PT24H'));
+        $response->setExpiry($expiry);
+
+        self::assertSame($expiry->setTimeZone(new \DateTimeZone('UTC'))->format('D, d M Y H:i:s \G\M\T'), $response->getHeader('Expires'));
+        self::assertSame('public, max-age=86400', $response->getHeader('Cache-Control'));
+        self::assertSame('Accept-Encoding', $response->getHeader('Vary'));
     }
 }

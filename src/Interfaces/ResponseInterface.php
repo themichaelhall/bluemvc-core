@@ -88,9 +88,9 @@ interface ResponseInterface
      *
      * @since 1.0.0
      *
-     * @param \DateTimeImmutable $expiry The expiry time.
+     * @param \DateTimeImmutable|null $expiry The expiry time or null for immediate expiry.
      */
-    public function setExpiry(\DateTimeImmutable $expiry);
+    public function setExpiry(\DateTimeImmutable $expiry = null);
 
     /**
      * Sets a header.
