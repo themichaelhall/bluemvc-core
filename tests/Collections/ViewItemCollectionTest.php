@@ -18,4 +18,14 @@ class ViewItemCollectionTest extends \PHPUnit_Framework_TestCase
 
         self::assertSame(0, count($viewItemCollection));
     }
+
+    /**
+     * Test get method.
+     */
+    public function testGet()
+    {
+        $viewItemCollection = new ViewItemCollection();
+
+        self::assertNull($viewItemCollection->get('Foo'));
+    }
 }
