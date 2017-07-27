@@ -45,11 +45,40 @@ class ViewItemCollection implements ViewItemCollectionInterface
      *
      * @param string $name The view item name.
      *
+     * @throws \InvalidArgumentException If the $name parameter is not a string.
+     *
      * @return string|null The view item value by view item name if it exists, null otherwise.
      */
     public function get($name)
     {
-        return null; // fixme
+        if (!is_string($name)) {
+            throw new \InvalidArgumentException('$name parameter is not a string.');
+        }
+
+        if (!isset($this->myItems[$name])) {
+            return null;
+        }
+
+        return $this->myItems[$name];
+    }
+
+    /**
+     * Sets a view item value by view item name.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name  The view item name.
+     * @param mixed  $value The view item value.
+     *
+     * @throws \InvalidArgumentException If the $name parameter is not a string.
+     */
+    public function set($name, $value)
+    {
+        if (!is_string($name)) {
+            throw new \InvalidArgumentException('$name parameter is not a string.');
+        }
+
+        $this->myItems[$name] = $value;
     }
 
     /**

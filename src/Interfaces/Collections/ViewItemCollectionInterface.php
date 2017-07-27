@@ -24,4 +24,14 @@ interface ViewItemCollectionInterface extends \Countable
      * @return string|null The view item value by view item name if it exists, null otherwise.
      */
     public function get($name);
+
+    /**
+     * Sets a view item value by view item name.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name  The view item name.
+     * @param mixed  $value The view item value.
+     */
+    public function set($name, $value);
 }
