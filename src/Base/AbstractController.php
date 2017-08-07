@@ -104,6 +104,21 @@ abstract class AbstractController implements ControllerInterface
     }
 
     /**
+     * Sets a view item.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name  The view item name.
+     * @param mixed  $value The view item value.
+     *
+     * @throws \InvalidArgumentException If the $name parameter is not a string.
+     */
+    public function setViewItem($name, $value)
+    {
+        $this->myViewItems->set($name, $value);
+    }
+
+    /**
      * Constructs the controller.
      *
      * @since 1.0.0
