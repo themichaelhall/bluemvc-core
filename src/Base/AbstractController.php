@@ -58,6 +58,18 @@ abstract class AbstractController implements ControllerInterface
     }
 
     /**
+     * Returns the view items.
+     *
+     * @since 1.0.0
+     *
+     * @return ViewItemCollectionInterface The view items.
+     */
+    public function getViewItems()
+    {
+        return $this->myViewItems;
+    }
+
+    /**
      * Processes a request.
      *
      * @since 1.0.0

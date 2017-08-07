@@ -308,4 +308,15 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         self::assertSame(42, $controller->getViewData('Foo'));
         self::assertNull($controller->getViewData('Bar'));
     }
+
+    /**
+     * Test getViewItems method.
+     */
+    public function testGetViewItems()
+    {
+        $controller = new BasicTestController();
+        $viewItems = $controller->getViewItems();
+
+        self::assertSame([], iterator_to_array($viewItems, true));
+    }
 }
