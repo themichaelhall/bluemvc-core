@@ -29,6 +29,8 @@ abstract class Controller extends AbstractController
      */
     public function __construct()
     {
+        parent::__construct();
+
         $this->myViewData = [];
     }
 
@@ -115,6 +117,7 @@ abstract class Controller extends AbstractController
      */
     public function setViewData($key, $value)
     {
+        // fixme: deprecate
         assert(is_string($key), '$key is not a string');
 
         $this->myViewData[$key] = $value;

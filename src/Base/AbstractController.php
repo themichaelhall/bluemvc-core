@@ -7,7 +7,9 @@
 
 namespace BlueMvc\Core\Base;
 
+use BlueMvc\Core\Collections\ViewItemCollection;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
+use BlueMvc\Core\Interfaces\Collections\ViewItemCollectionInterface;
 use BlueMvc\Core\Interfaces\ControllerInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
@@ -75,6 +77,16 @@ abstract class AbstractController implements ControllerInterface
         $this->myResponse = $response;
 
         return false;
+    }
+
+    /**
+     * Constructs the controller.
+     *
+     * @since 1.0.0
+     */
+    protected function __construct()
+    {
+        $this->myViewItems = new ViewItemCollection();
     }
 
     /**
@@ -162,4 +174,9 @@ abstract class AbstractController implements ControllerInterface
      * @var ResponseInterface|null My response.
      */
     private $myResponse;
+
+    /**
+     * @var ViewItemCollectionInterface My view items.
+     */
+    private $myViewItems;
 }
