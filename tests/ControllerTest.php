@@ -3,6 +3,7 @@
 namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\Application;
+use BlueMvc\Core\Collections\ViewItemCollection;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Request;
 use BlueMvc\Core\Response;
@@ -315,8 +316,21 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function testGetViewItems()
     {
         $controller = new BasicTestController();
-        $viewItems = $controller->getViewItems();
 
-        self::assertSame([], iterator_to_array($viewItems, true));
+        self::assertSame([], iterator_to_array($controller->getViewItems(), true));
+    }
+
+    /**
+     * Test setViewItems method.
+     */
+    public function testSetViewItems()
+    {
+        $controller = new BasicTestController();
+        $viewItems = new ViewItemCollection();
+        $viewItems->set('Foo', 'Bar');
+        $viewItems->set('One', 1);
+        $controller->setViewItems($viewItems);
+
+        self::assertSame(['Foo' => 'Bar', 'One' => 1], iterator_to_array($controller->getViewItems(), true));
     }
 }

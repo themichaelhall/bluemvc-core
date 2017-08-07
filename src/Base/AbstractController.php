@@ -92,6 +92,18 @@ abstract class AbstractController implements ControllerInterface
     }
 
     /**
+     * Sets the view items.
+     *
+     * @since 1.0.0
+     *
+     * @param ViewItemCollectionInterface $viewItems The view items.
+     */
+    public function setViewItems(ViewItemCollectionInterface $viewItems)
+    {
+        $this->myViewItems = $viewItems;
+    }
+
+    /**
      * Constructs the controller.
      *
      * @since 1.0.0
