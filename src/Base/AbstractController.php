@@ -58,6 +58,22 @@ abstract class AbstractController implements ControllerInterface
     }
 
     /**
+     * Returns a view item value by view item name if it exists, null otherwise.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name The view item name.
+     *
+     * @throws \InvalidArgumentException If the $name parameter is not a string.
+     *
+     * @return mixed|null The view item value by view item name if it exists, null otherwise.
+     */
+    public function getViewItem($name)
+    {
+        return $this->myViewItems->get($name);
+    }
+
+    /**
      * Returns the view items.
      *
      * @since 1.0.0
