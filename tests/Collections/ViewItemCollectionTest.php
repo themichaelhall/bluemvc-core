@@ -70,4 +70,30 @@ class ViewItemCollectionTest extends \PHPUnit_Framework_TestCase
 
         $viewItemCollection->set(10, 'Foo');
     }
+
+    /**
+     * Test iterator functionality for empty collection.
+     */
+    public function testIteratorForEmptyCollection()
+    {
+        $viewItemCollection = new ViewItemCollection();
+
+        $viewItemArray = iterator_to_array($viewItemCollection, true);
+
+        self::assertSame([], $viewItemArray);
+    }
+
+    /**
+     * Test iterator functionality for non-empty collection.
+     */
+    public function testIteratorForNonEmptyCollection()
+    {
+        $viewItemCollection = new ViewItemCollection();
+        $viewItemCollection->set('Foo', false);
+        $viewItemCollection->set('Bar', 'Baz');
+
+        $viewItemArray = iterator_to_array($viewItemCollection, true);
+
+        self::assertSame(['Foo' => false, 'Bar' => 'Baz'], $viewItemArray);
+    }
 }

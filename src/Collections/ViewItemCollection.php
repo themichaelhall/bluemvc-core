@@ -39,6 +39,18 @@ class ViewItemCollection implements ViewItemCollectionInterface
     }
 
     /**
+     * Returns the current view item value.
+     *
+     * @since 1.0.0
+     *
+     * @return string The current view item value.
+     */
+    public function current()
+    {
+        return current($this->myItems);
+    }
+
+    /**
      * Returns the view item value by view item name if it exists, null otherwise.
      *
      * @since 1.0.0
@@ -63,6 +75,28 @@ class ViewItemCollection implements ViewItemCollectionInterface
     }
 
     /**
+     * Returns the current view item name.
+     *
+     * @since 1.0.0
+     *
+     * @return string The current view item name.
+     */
+    public function key()
+    {
+        return key($this->myItems);
+    }
+
+    /**
+     * Moves forwards to the next view item.
+     *
+     * @since 1.0.0
+     */
+    public function next()
+    {
+        next($this->myItems);
+    }
+
+    /**
      * Sets a view item value by view item name.
      *
      * @since 1.0.0
@@ -79,6 +113,28 @@ class ViewItemCollection implements ViewItemCollectionInterface
         }
 
         $this->myItems[$name] = $value;
+    }
+
+    /**
+     * Rewinds the view item collection to to first element.
+     *
+     * @since 1.0.0
+     */
+    public function rewind()
+    {
+        reset($this->myItems);
+    }
+
+    /**
+     * Returns true if the current view item is valid.
+     *
+     * @since 1.0.0
+     *
+     * @return bool True if the current view item is valid.
+     */
+    public function valid()
+    {
+        return key($this->myItems) !== null;
     }
 
     /**
