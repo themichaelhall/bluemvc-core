@@ -288,29 +288,6 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test getViewData method.
-     */
-    public function testGetViewData()
-    {
-        $controller = new BasicTestController();
-
-        self::assertNull($controller->getViewData('Foo'));
-        self::assertNull($controller->getViewData('Bar'));
-    }
-
-    /**
-     * Test setViewData method.
-     */
-    public function testSetViewData()
-    {
-        $controller = new BasicTestController();
-        $controller->setViewData('Foo', 42);
-
-        self::assertSame(42, $controller->getViewData('Foo'));
-        self::assertNull($controller->getViewData('Bar'));
-    }
-
-    /**
      * Test getViewItems method.
      */
     public function testGetViewItems()

@@ -30,28 +30,6 @@ abstract class Controller extends AbstractController
     public function __construct()
     {
         parent::__construct();
-
-        $this->myViewData = [];
-    }
-
-    /**
-     * Returns the view data for a key or null if view data for the key is not set.
-     *
-     * @since 1.0.0
-     *
-     * @param string $key The key.
-     *
-     * @return mixed The view data for a key or null if view data for the key is not set.
-     */
-    public function getViewData($key)
-    {
-        assert(is_string($key), '$key is not a string');
-
-        if (!isset($this->myViewData[$key])) {
-            return null;
-        }
-
-        return $this->myViewData[$key];
     }
 
     /**
@@ -91,7 +69,7 @@ abstract class Controller extends AbstractController
 
         // Handle result.
         if ($result instanceof ViewInterface) {
-            $result->updateResponse($application, $request, $response, $this, $actionName, $this->myViewData);
+            $result->updateResponse($application, $request, $response, $this, $actionName, $this->getViewItems());
 
             return true;
         }
@@ -106,25 +84,4 @@ abstract class Controller extends AbstractController
 
         return true;
     }
-
-    /**
-     * Sets the view data for a key.
-     *
-     * @since 1.0.0
-     *
-     * @param string $key   The key.
-     * @param mixed  $value The value.
-     */
-    public function setViewData($key, $value)
-    {
-        // fixme: deprecate
-        assert(is_string($key), '$key is not a string');
-
-        $this->myViewData[$key] = $value;
-    }
-
-    /**
-     * @var array My view data.
-     */
-    private $myViewData;
 }

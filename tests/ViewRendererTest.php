@@ -2,6 +2,7 @@
 
 namespace BlueMvc\Core\Tests;
 
+use BlueMvc\Core\Collections\ViewItemCollection;
 use BlueMvc\Core\Http\Method;
 use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
 use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
@@ -67,6 +68,8 @@ class ViewRendererTest extends \PHPUnit_Framework_TestCase
         $application = new BasicTestApplication(FilePath::parse($DS . 'var' . $DS . 'www' . $DS));
         $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
         $request = new BasicTestRequest(Url::parse('http://localhost/baz'), new Method('GET'));
+        $viewItems = new ViewItemCollection();
+        $viewItems->set('Foo', 'This is the view data.');
 
         $viewRenderer = new BasicTestViewRenderer();
         $result = $viewRenderer->renderView(
@@ -74,7 +77,7 @@ class ViewRendererTest extends \PHPUnit_Framework_TestCase
             $request,
             FilePath::parse('ViewTest' . $DS . 'withviewdata.view'),
             'This is the model.',
-            'This is the view data.'
+            $viewItems
         );
 
         self::assertSame('<html><body><h1>With model and view data</h1><span>' . $DS . 'var' . $DS . 'www' . $DS . '</span><em>http://localhost/baz</em><p>This is the model.</p><i>This is the view data.</i></body></html>', $result);

@@ -9,6 +9,7 @@ namespace BlueMvc\Core\Base;
 
 use BlueMvc\Core\Exceptions\ViewFileNotFoundException;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
+use BlueMvc\Core\Interfaces\Collections\ViewItemCollectionInterface;
 use BlueMvc\Core\Interfaces\ControllerInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
@@ -73,17 +74,17 @@ abstract class AbstractView implements ViewInterface
      *
      * @since 1.0.0
      *
-     * @param ApplicationInterface $application The application.
-     * @param RequestInterface     $request     The request.
-     * @param ResponseInterface    $response    The response.
-     * @param ControllerInterface  $controller  The controller.
-     * @param string               $action      The action.
-     * @param array                $viewData    The view data.
+     * @param ApplicationInterface        $application The application.
+     * @param RequestInterface            $request     The request.
+     * @param ResponseInterface           $response    The response.
+     * @param ControllerInterface         $controller  The controller.
+     * @param string                      $action      The action.
+     * @param ViewItemCollectionInterface $viewItems   The view items.
      *
      * @throws \InvalidArgumentException If the $action parameter is not a string.
      * @throws ViewFileNotFoundException If a suitable view file could not be found.
      */
-    public function updateResponse(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, ControllerInterface $controller, $action, $viewData)
+    public function updateResponse(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, ControllerInterface $controller, $action, ViewItemCollectionInterface $viewItems)
     {
         if (!is_string($action)) {
             throw new \InvalidArgumentException('$action parameter is not a string.');
@@ -103,7 +104,7 @@ abstract class AbstractView implements ViewInterface
             $fullViewFile = $application->getViewPath()->withFilePath($viewFile);
 
             if (file_exists($fullViewFile->__toString())) {
-                $response->setContent($viewRenderer->renderView($application, $request, $viewFile, $this->getModel(), $viewData));
+                $response->setContent($viewRenderer->renderView($application, $request, $viewFile, $this->getModel(), $viewItems));
 
                 return;
             }

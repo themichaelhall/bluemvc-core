@@ -3,6 +3,7 @@
 namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\Application;
+use BlueMvc\Core\Collections\ViewItemCollection;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Request;
 use BlueMvc\Core\Response;
@@ -78,8 +79,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $response = new Response($request);
         $controller = new ViewTestController();
         $view = new View('The Model');
+        $viewItems = new ViewItemCollection();
 
-        $view->updateResponse($application, $request, $response, $controller, 0, []);
+        $view->updateResponse($application, $request, $response, $controller, 0, $viewItems);
     }
 
     /**
@@ -97,8 +99,10 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $response = new Response($request);
         $controller = new ViewTestController();
         $view = new View('The Model');
+        $viewItems = new ViewItemCollection();
+        $viewItems->set('Foo', 'The View Data');
 
-        $view->updateResponse($application, $request, $response, $controller, 'withviewdata', ['The View Data']);
+        $view->updateResponse($application, $request, $response, $controller, 'withviewdata', $viewItems);
 
         self::assertSame('<html><body><h1>With model and view data</h1><span>' . $application->getDocumentRoot() . '</span><em>' . $request->getUrl() . '</em><p>The Model</p><i>The View Data</i></body></html>', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
@@ -119,10 +123,11 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $response = new Response($request);
         $controller = new ViewTestController();
         $view = new View('The Model');
+        $viewItems = new ViewItemCollection();
         $exception = null;
 
         try {
-            $view->updateResponse($application, $request, $response, $controller, 'withnoviewfile', []);
+            $view->updateResponse($application, $request, $response, $controller, 'withnoviewfile', $viewItems);
         } catch (\Exception $exception) {
         }
 
@@ -145,8 +150,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $response = new Response($request);
         $controller = new ViewTestController();
         $view = new View('The Model', 'custom');
+        $viewItems = new ViewItemCollection();
 
-        $view->updateResponse($application, $request, $response, $controller, 'index', []);
+        $view->updateResponse($application, $request, $response, $controller, 'index', $viewItems);
 
         self::assertSame('<html><body><h1>Custom view file</h1><span>' . $application->getDocumentRoot() . '</span><em>http://www.domain.com/</em><p>The Model</p></body></html>', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
