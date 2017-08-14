@@ -8,9 +8,11 @@
 namespace BlueMvc\Core;
 
 use BlueMvc\Core\Base\AbstractController;
+use BlueMvc\Core\Collections\ViewItemCollection;
 use BlueMvc\Core\Exceptions\ViewFileNotFoundException;
 use BlueMvc\Core\Interfaces\ActionResults\ActionResultInterface;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
+use BlueMvc\Core\Interfaces\Collections\ViewItemCollectionInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
 use BlueMvc\Core\Interfaces\ViewInterface;
@@ -29,7 +31,35 @@ abstract class Controller extends AbstractController
      */
     public function __construct()
     {
-        parent::__construct();
+        $this->myViewItems = new ViewItemCollection();
+    }
+
+    /**
+     * Returns a view item value by view item name if it exists, null otherwise.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name The view item name.
+     *
+     * @throws \InvalidArgumentException If the $name parameter is not a string.
+     *
+     * @return mixed|null The view item value by view item name if it exists, null otherwise.
+     */
+    public function getViewItem($name)
+    {
+        return $this->myViewItems->get($name);
+    }
+
+    /**
+     * Returns the view items.
+     *
+     * @since 1.0.0
+     *
+     * @return ViewItemCollectionInterface The view items.
+     */
+    public function getViewItems()
+    {
+        return $this->myViewItems;
     }
 
     /**
@@ -69,7 +99,7 @@ abstract class Controller extends AbstractController
 
         // Handle result.
         if ($result instanceof ViewInterface) {
-            $result->updateResponse($application, $request, $response, $this, $actionName, $this->getViewItems());
+            $result->updateResponse($application, $request, $response, $this, $actionName, $this->myViewItems);
 
             return true;
         }
@@ -84,4 +114,36 @@ abstract class Controller extends AbstractController
 
         return true;
     }
+
+    /**
+     * Sets a view item.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name  The view item name.
+     * @param mixed  $value The view item value.
+     *
+     * @throws \InvalidArgumentException If the $name parameter is not a string.
+     */
+    public function setViewItem($name, $value)
+    {
+        $this->myViewItems->set($name, $value);
+    }
+
+    /**
+     * Sets the view items.
+     *
+     * @since 1.0.0
+     *
+     * @param ViewItemCollectionInterface $viewItems The view items.
+     */
+    public function setViewItems(ViewItemCollectionInterface $viewItems)
+    {
+        $this->myViewItems = $viewItems;
+    }
+
+    /**
+     * @var ViewItemCollectionInterface My view items.
+     */
+    private $myViewItems;
 }

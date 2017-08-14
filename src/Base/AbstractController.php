@@ -7,9 +7,7 @@
 
 namespace BlueMvc\Core\Base;
 
-use BlueMvc\Core\Collections\ViewItemCollection;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
-use BlueMvc\Core\Interfaces\Collections\ViewItemCollectionInterface;
 use BlueMvc\Core\Interfaces\ControllerInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
@@ -58,34 +56,6 @@ abstract class AbstractController implements ControllerInterface
     }
 
     /**
-     * Returns a view item value by view item name if it exists, null otherwise.
-     *
-     * @since 1.0.0
-     *
-     * @param string $name The view item name.
-     *
-     * @throws \InvalidArgumentException If the $name parameter is not a string.
-     *
-     * @return mixed|null The view item value by view item name if it exists, null otherwise.
-     */
-    public function getViewItem($name)
-    {
-        return $this->myViewItems->get($name);
-    }
-
-    /**
-     * Returns the view items.
-     *
-     * @since 1.0.0
-     *
-     * @return ViewItemCollectionInterface The view items.
-     */
-    public function getViewItems()
-    {
-        return $this->myViewItems;
-    }
-
-    /**
      * Processes a request.
      *
      * @since 1.0.0
@@ -105,43 +75,6 @@ abstract class AbstractController implements ControllerInterface
         $this->myResponse = $response;
 
         return false;
-    }
-
-    /**
-     * Sets the view items.
-     *
-     * @since 1.0.0
-     *
-     * @param ViewItemCollectionInterface $viewItems The view items.
-     */
-    public function setViewItems(ViewItemCollectionInterface $viewItems)
-    {
-        $this->myViewItems = $viewItems;
-    }
-
-    /**
-     * Sets a view item.
-     *
-     * @since 1.0.0
-     *
-     * @param string $name  The view item name.
-     * @param mixed  $value The view item value.
-     *
-     * @throws \InvalidArgumentException If the $name parameter is not a string.
-     */
-    public function setViewItem($name, $value)
-    {
-        $this->myViewItems->set($name, $value);
-    }
-
-    /**
-     * Constructs the controller.
-     *
-     * @since 1.0.0
-     */
-    protected function __construct()
-    {
-        $this->myViewItems = new ViewItemCollection();
     }
 
     /**
@@ -229,9 +162,4 @@ abstract class AbstractController implements ControllerInterface
      * @var ResponseInterface|null My response.
      */
     private $myResponse;
-
-    /**
-     * @var ViewItemCollectionInterface My view items.
-     */
-    private $myViewItems;
 }
