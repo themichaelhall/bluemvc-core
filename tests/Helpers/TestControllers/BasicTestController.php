@@ -71,4 +71,16 @@ class BasicTestController extends Controller
     {
         return true;
     }
+
+    /**
+     * Action returning null.
+     *
+     * @return null The result.
+     */
+    public function nullAction()
+    {
+        $this->getResponse()->setContent('Content set manually.');
+
+        return null;
+    }
 }
