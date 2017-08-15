@@ -124,6 +124,7 @@ abstract class AbstractResponse implements ResponseInterface
      */
     public function setContent($content)
     {
+        // fixme: check content parameter.
         $this->myContent = $content;
     }
 

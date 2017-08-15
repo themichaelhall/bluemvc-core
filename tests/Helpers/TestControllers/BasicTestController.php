@@ -41,4 +41,34 @@ class BasicTestController extends Controller
     {
         return 'Numeric action result';
     }
+
+    /**
+     * Action returning an integer.
+     *
+     * @return int The result.
+     */
+    public function intAction()
+    {
+        return 42;
+    }
+
+    /**
+     * Action returning false.
+     *
+     * @return bool The result.
+     */
+    public function falseAction()
+    {
+        return false;
+    }
+
+    /**
+     * Action returning true.
+     *
+     * @return bool The result.
+     */
+    public function trueAction()
+    {
+        return true;
+    }
 }

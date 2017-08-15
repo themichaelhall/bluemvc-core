@@ -336,4 +336,52 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         self::assertSame(['One' => 1, 'Two' => 2], $controller->getViewItem('Baz'));
         self::assertNull($controller->getViewItem('Bar'));
     }
+
+    /**
+     * Test an action returning an integer.
+     */
+    public function testActionReturningInteger()
+    {
+        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/int', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $controller = new BasicTestController();
+        $isProcessed = $controller->processRequest($application, $request, $response, 'int');
+
+        self::assertTrue($isProcessed);
+        self::assertSame('42', $response->getContent());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Test an action returning false.
+     */
+    public function testActionReturningFalse()
+    {
+        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/false', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $controller = new BasicTestController();
+        $isProcessed = $controller->processRequest($application, $request, $response, 'false');
+
+        self::assertTrue($isProcessed);
+        self::assertSame('false', $response->getContent());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Test an action returning true.
+     */
+    public function testActionReturningTrue()
+    {
+        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/true', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $controller = new BasicTestController();
+        $isProcessed = $controller->processRequest($application, $request, $response, 'true');
+
+        self::assertTrue($isProcessed);
+        self::assertSame('true', $response->getContent());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
 }

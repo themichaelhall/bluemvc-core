@@ -110,7 +110,17 @@ abstract class Controller extends AbstractController
             return true;
         }
 
-        $response->setContent($result);
+        if (is_bool($result)) {
+            $response->setContent($result ? 'true' : 'false');
+
+            return true;
+        }
+
+        if (is_scalar($result)) {
+            $response->setContent((string) $result);
+
+            return true;
+        }
 
         return true;
     }

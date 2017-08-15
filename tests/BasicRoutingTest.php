@@ -541,6 +541,60 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test get integer result page.
+     */
+    public function testGetIntegerResultPage()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/int', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        self::assertSame('42', $responseOutput);
+        self::assertSame('42', $response->getContent());
+        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Test get false result page.
+     */
+    public function testGetFalseResultPage()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/false', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        self::assertSame('false', $responseOutput);
+        self::assertSame('false', $response->getContent());
+        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Test get true result page.
+     */
+    public function testGetTrueResultPage()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/true', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        self::assertSame('true', $responseOutput);
+        self::assertSame('true', $response->getContent());
+        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
