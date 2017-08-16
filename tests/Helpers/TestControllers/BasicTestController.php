@@ -4,6 +4,8 @@ namespace BlueMvc\Core\Tests\Helpers\TestControllers;
 
 use BlueMvc\Core\Controller;
 use BlueMvc\Core\Http\StatusCode;
+use BlueMvc\Core\Tests\Helpers\TestClasses\SimpleTestClass;
+use BlueMvc\Core\Tests\Helpers\TestClasses\StringableTestClass;
 
 /**
  * Basic test controller class.
@@ -82,5 +84,25 @@ class BasicTestController extends Controller
         $this->getResponse()->setContent('Content set manually.');
 
         return null;
+    }
+
+    /**
+     * Action returning an object.
+     *
+     * @return SimpleTestClass The result.
+     */
+    public function objectAction()
+    {
+        return new SimpleTestClass('Foo');
+    }
+
+    /**
+     * Action returning a stringable object.
+     *
+     * @return StringableTestClass The result.
+     */
+    public function stringableAction()
+    {
+        return new StringableTestClass('Bar');
     }
 }

@@ -116,8 +116,14 @@ abstract class Controller extends AbstractController
             return true;
         }
 
-        if (is_scalar($result)) {
+        if (is_scalar($result) || (is_object($result) && method_exists($result, '__toString'))) {
             $response->setContent((string) $result);
+
+            return true;
+        }
+
+        if ($result !== null) {
+            $response->setContent(gettype($result));
 
             return true;
         }
