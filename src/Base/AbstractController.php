@@ -106,23 +106,19 @@ abstract class AbstractController implements ControllerInterface
      *
      * @since 1.0.0
      *
-     * @param string $action     The action.
-     * @param array  $parameters The parameters.
-     * @param mixed  $result     The result.
+     * @param string $action          The action.
+     * @param array  $parameters      The parameters.
+     * @param bool   $isCaseSensitive True if action method is case sensitive, false otherwise.
+     * @param mixed  $result          The result.
      *
      * @return bool True if action method was invoked successfully, false otherwise.
      */
-    protected function tryInvokeActionMethod($action, array $parameters, &$result)
+    protected function tryInvokeActionMethod($action, array $parameters, $isCaseSensitive, &$result)
     {
         $reflectionClass = new \ReflectionClass($this);
 
-        try {
-            if (strlen($action) > 0 && ctype_digit($action[0])) {
-                $action = '_' . $action;
-            }
-
-            $actionMethod = $reflectionClass->getMethod($action . 'Action');
-        } catch (\ReflectionException $e) {
+        $actionMethod = self::myFindActionMethod($reflectionClass, $action, $isCaseSensitive);
+        if ($actionMethod === null) {
             return false;
         }
 
@@ -146,6 +142,37 @@ abstract class AbstractController implements ControllerInterface
         }
 
         return true;
+    }
+
+    /**
+     * Try to find an action method by action.
+     *
+     * @param \ReflectionClass $reflectionClass The ReflectionClass.
+     * @param string           $action          The action.
+     * @param bool             $isCaseSensitive True if action method is case sensitive, false otherwise.
+     *
+     * @return \ReflectionMethod|null The action method or null if no action method was found.
+     */
+    private static function myFindActionMethod(\ReflectionClass $reflectionClass, $action, $isCaseSensitive)
+    {
+        $actionMethod = null;
+
+        // Methods can not begin with a digit, prepend underscore to make it possible.
+        if (strlen($action) > 0 && ctype_digit($action[0])) {
+            $action = '_' . $action;
+        }
+
+        try {
+            $actionMethod = $reflectionClass->getMethod($action . 'Action');
+
+            if ($isCaseSensitive && $action !== substr($actionMethod->getName(), 0, strlen($action))) {
+                return null;
+            }
+        } catch (\ReflectionException $e) {
+            return null;
+        }
+
+        return $actionMethod;
     }
 
     /**

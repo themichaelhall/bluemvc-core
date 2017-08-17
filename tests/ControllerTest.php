@@ -11,6 +11,7 @@ use BlueMvc\Core\Tests\Helpers\TestControllers\ActionResultTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\DefaultActionTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\PreAndPostActionEventController;
+use BlueMvc\Core\Tests\Helpers\TestControllers\UppercaseActionTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ViewTestController;
 use BlueMvc\Core\Tests\Helpers\TestViewRenderers\BasicTestViewRenderer;
 use DataTypes\FilePath;
@@ -430,6 +431,70 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
 
         self::assertTrue($isProcessed);
         self::assertSame('Text is "Bar"', $response->getContent());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Test an index action in uppercase.
+     */
+    public function testUppercaseIndexAction()
+    {
+        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $controller = new UppercaseActionTestController();
+        $isProcessed = $controller->processRequest($application, $request, $response, '');
+
+        self::assertTrue($isProcessed);
+        self::assertSame('INDEX action', $response->getContent());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Test a default action in uppercase.
+     */
+    public function testUppercaseDefaultAction()
+    {
+        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/bar', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $controller = new UppercaseActionTestController();
+        $isProcessed = $controller->processRequest($application, $request, $response, 'bar');
+
+        self::assertTrue($isProcessed);
+        self::assertSame('DEFAULT action "bar"', $response->getContent());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Test an uppercase action method with uppercase action.
+     */
+    public function testUppercaseActionMethodWithUppercaseAction()
+    {
+        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/FOO', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $controller = new UppercaseActionTestController();
+        $isProcessed = $controller->processRequest($application, $request, $response, 'FOO');
+
+        self::assertTrue($isProcessed);
+        self::assertSame('FOO action', $response->getContent());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Test an uppercase action method with uppercase action.
+     */
+    public function testUppercaseActionMethodWithLowercaseAction()
+    {
+        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/FOO', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $controller = new UppercaseActionTestController();
+        $isProcessed = $controller->processRequest($application, $request, $response, 'foo');
+
+        self::assertTrue($isProcessed);
+        self::assertSame('DEFAULT action "foo"', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 }

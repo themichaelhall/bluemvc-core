@@ -86,13 +86,14 @@ abstract class Controller extends AbstractController
 
         parent::processRequest($application, $request, $response, $action, $parameters);
 
-        $actionName = $action !== '' ? $action : 'index'; // fixme: validate and normalize action name
+        $isIndex = $action === '';
+        $actionName = $isIndex ? 'index' : $action;
 
         // Try to invoke the action, and if that failed, try to invoke the default action.
-        if (!$this->tryInvokeActionMethod($actionName, [], $result)) {
+        if (!$this->tryInvokeActionMethod($actionName, [], !$isIndex, $result)) {
             $actionName = 'default';
 
-            if (!$this->tryInvokeActionMethod($actionName, [$action], $result)) {
+            if (!$this->tryInvokeActionMethod($actionName, [$action], false, $result)) {
                 return false;
             }
         }
