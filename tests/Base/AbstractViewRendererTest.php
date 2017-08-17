@@ -18,4 +18,26 @@ class AbstractViewRendererTest extends \PHPUnit_Framework_TestCase
 
         self::assertSame('view', $viewRenderer->getViewFileExtension());
     }
+
+    /**
+     * Test create view renderer with invalid file extension.
+     *
+     * @expectedException \BlueMvc\Core\Exceptions\InvalidViewFileExtensionException
+     * @expectedExceptionMessage View file extension "foo$bar" contains invalid character "$".
+     */
+    public function testCreateWithInvalidFileExtension()
+    {
+        new BasicTestViewRenderer('foo$bar');
+    }
+
+    /**
+     * Test create view renderer with invalid argument type.
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage $viewFileExtension parameter is not a string.
+     */
+    public function testCreateWithInvalidArgumentType()
+    {
+        new BasicTestViewRenderer([]);
+    }
 }

@@ -7,6 +7,7 @@
 
 namespace BlueMvc\Core\Base;
 
+use BlueMvc\Core\Exceptions\InvalidViewFileExtensionException;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\Collections\ViewItemCollectionInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
@@ -26,10 +27,20 @@ abstract class AbstractViewRenderer implements ViewRendererInterface
      * @since 1.0.0
      *
      * @param string $viewFileExtension The view file extension for views compatible with this renderer.
+     *
+     * @throws \InvalidArgumentException         If the $viewFileExtension parameter is not a string.
+     * @throws InvalidViewFileExtensionException If the view file extension is invalid.
      */
     public function __construct($viewFileExtension)
     {
-        // fixme: Validate $getViewFileExtension
+        if (!is_string($viewFileExtension)) {
+            throw new \InvalidArgumentException('$viewFileExtension parameter is not a string.');
+        }
+
+        if (preg_match('/[^a-zA-Z0-9._-]/', $viewFileExtension, $matches)) {
+            throw new InvalidViewFileExtensionException('View file extension "' . $viewFileExtension . '" contains invalid character "' . $matches[0] . '".');
+        }
+
         $this->myViewFileExtension = $viewFileExtension;
     }
 

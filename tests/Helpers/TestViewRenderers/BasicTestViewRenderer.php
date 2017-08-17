@@ -15,10 +15,12 @@ class BasicTestViewRenderer extends AbstractViewRenderer
 {
     /**
      * Constructs the view renderer.
+     *
+     * @param mixed $viewFileExtension The view file extension.
      */
-    public function __construct()
+    public function __construct($viewFileExtension = 'view')
     {
-        parent::__construct('view');
+        parent::__construct($viewFileExtension);
     }
 
     /**
