@@ -181,9 +181,7 @@ abstract class AbstractApplication implements ApplicationInterface
                 $response->setStatusCode(new StatusCode(StatusCode::NOT_FOUND));
             }
         } catch (\Exception $e) {
-            // fixme: clear headers.
-            $response->setStatusCode(new StatusCode(StatusCode::INTERNAL_SERVER_ERROR));
-            $response->setContent($this->myExceptionToHtml($e));
+            $this->myExceptionToResponse($e, $response);
             $exception = $e;
         }
 
@@ -202,9 +200,7 @@ abstract class AbstractApplication implements ApplicationInterface
                 try {
                     $errorController->processRequest($this, $request, $response, strval($responseCode->getCode()), []);
                 } catch (\Exception $e) {
-                    // fixme: use common method for this and code above.
-                    $response->setStatusCode(new StatusCode(StatusCode::INTERNAL_SERVER_ERROR));
-                    $response->setContent($this->myExceptionToHtml($e));
+                    $this->myExceptionToResponse($e, $response);
                 }
             }
         }
@@ -332,13 +328,26 @@ abstract class AbstractApplication implements ApplicationInterface
     }
 
     /**
+     * Outputs an exception to a response.
+     *
+     * @param \Exception        $exception The exception.
+     * @param ResponseInterface $response  The response.
+     */
+    private function myExceptionToResponse(\Exception $exception, ResponseInterface $response)
+    {
+        // fixme: clear headers.
+        $response->setStatusCode(new StatusCode(StatusCode::INTERNAL_SERVER_ERROR));
+        $response->setContent($this->myExceptionToHtml($exception));
+    }
+
+    /**
      * Converts an exception to html.
      *
-     * @param \Exception $e The exception.
+     * @param \Exception $exception The exception.
      *
      * @return string The html.
      */
-    private function myExceptionToHtml(\Exception $e)
+    private function myExceptionToHtml(\Exception $exception)
     {
         if (!$this->myIsDebug) {
             return '';
@@ -349,7 +358,7 @@ abstract class AbstractApplication implements ApplicationInterface
             "<html>\n" .
             "   <head>\n" .
             "      <meta charset=\"utf-8\">\n" .
-            '      <title>' . htmlentities($e->getMessage()) . "</title>\n" .
+            '      <title>' . htmlentities($exception->getMessage()) . "</title>\n" .
             "      <style>\n" .
             "         html, body, h1, p, code, pre {\n" .
             "            margin:0;\n" .
@@ -374,11 +383,11 @@ abstract class AbstractApplication implements ApplicationInterface
             "      </style>\n" .
             "   </head>\n" .
             "   <body>\n" .
-            '      <h1>' . htmlentities($e->getMessage()) . "</h1>\n" .
+            '      <h1>' . htmlentities($exception->getMessage()) . "</h1>\n" .
             "      <p>\n" .
-            '         <code>' . htmlentities(get_class($e)) . '</code> was thrown from <code>' . htmlentities($e->getFile()) . ':' . htmlentities($e->getLine()) . '</code> with message <code>' . htmlentities($e->getMessage()) . ' (' . htmlentities($e->getCode()) . ")</code>\n" .
+            '         <code>' . htmlentities(get_class($exception)) . '</code> was thrown from <code>' . htmlentities($exception->getFile()) . ':' . htmlentities($exception->getLine()) . '</code> with message <code>' . htmlentities($exception->getMessage()) . ' (' . htmlentities($exception->getCode()) . ")</code>\n" .
             "      </p>\n" .
-            '      <pre>' . htmlentities($e->getTraceAsString()) . "</pre>\n" .
+            '      <pre>' . htmlentities($exception->getTraceAsString()) . "</pre>\n" .
             "   </body>\n" .
             "</html>\n";
     }
