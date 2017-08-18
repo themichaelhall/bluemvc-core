@@ -103,6 +103,15 @@ interface ResponseInterface
     public function setHeader($name, $value);
 
     /**
+     * Sets the headers.
+     *
+     * @since 1.0.0
+     *
+     * @param HeaderCollectionInterface $headers The headers.
+     */
+    public function setHeaders(HeaderCollectionInterface $headers);
+
+    /**
      * Sets the status code.
      *
      * @since 1.0.0

@@ -170,6 +170,18 @@ abstract class AbstractResponse implements ResponseInterface
     }
 
     /**
+     * Sets the headers.
+     *
+     * @since 1.0.0
+     *
+     * @param HeaderCollectionInterface $headers The headers.
+     */
+    public function setHeaders(HeaderCollectionInterface $headers)
+    {
+        $this->myHeaders = $headers;
+    }
+
+    /**
      * Sets the status code.
      *
      * @since 1.0.0

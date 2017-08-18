@@ -2,6 +2,7 @@
 
 namespace BlueMvc\Core\Tests\Base;
 
+use BlueMvc\Core\Collections\HeaderCollection;
 use BlueMvc\Core\Http\Method;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
@@ -106,6 +107,21 @@ class AbstractResponseTest extends \PHPUnit_Framework_TestCase
         $response->addHeader('Allow', 'POST');
 
         self::assertSame(['Allow' => 'GET, POST'], iterator_to_array($response->getHeaders()));
+    }
+
+    /**
+     * Test setHeaders method.
+     */
+    public function testSetHeaders()
+    {
+        $request = new BasicTestRequest(Url::parse('http://localhost/'), new Method('GET'));
+        $response = new BasicTestResponse($request);
+        $headers = new HeaderCollection();
+        $headers->set('Content-type', 'text/html');
+        $headers->set('Cache-Control', 'max-age=0, must-revalidate');
+        $response->setHeaders($headers);
+
+        self::assertSame(['Content-type' => 'text/html', 'Cache-Control' => 'max-age=0, must-revalidate'], iterator_to_array($response->getHeaders()));
     }
 
     /**

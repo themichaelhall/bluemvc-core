@@ -2,6 +2,7 @@
 
 namespace BlueMvc\Core\Tests;
 
+use BlueMvc\Core\Collections\HeaderCollection;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Request;
 use BlueMvc\Core\Response;
@@ -173,6 +174,20 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $response->addHeader('Allow', 'POST');
 
         self::assertSame(['Allow' => 'GET, POST'], iterator_to_array($response->getHeaders()));
+    }
+
+    /**
+     * Test setHeaders method.
+     */
+    public function testSetHeaders()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $headers = new HeaderCollection();
+        $headers->set('Server', 'bluemvc-core');
+        $response->setHeaders($headers);
+
+        self::assertSame(['Server' => 'bluemvc-core'], iterator_to_array($response->getHeaders()));
     }
 
     /**
