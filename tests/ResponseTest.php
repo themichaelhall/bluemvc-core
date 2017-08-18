@@ -231,7 +231,6 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
         self::assertSame($expiry->setTimeZone(new \DateTimeZone('UTC'))->format('D, d M Y H:i:s \G\M\T'), $response->getHeader('Expires'));
         self::assertSame('public, max-age=86400', $response->getHeader('Cache-Control'));
-        self::assertSame('Accept-Encoding', $response->getHeader('Vary'));
     }
 
     /**

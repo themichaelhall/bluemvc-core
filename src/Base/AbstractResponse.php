@@ -151,7 +151,6 @@ abstract class AbstractResponse implements ResponseInterface
 
         $maxAge = $expiry->getTimestamp() - $date->getTimestamp();
         $this->setHeader('Cache-Control', 'public, max-age=' . $maxAge);
-        $this->setHeader('Vary', 'Accept-Encoding');
     }
 
     /**
