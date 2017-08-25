@@ -90,10 +90,10 @@ abstract class Controller extends AbstractController
         $actionName = $isIndex ? 'index' : $action;
 
         // Try to invoke the action, and if that failed, try to invoke the default action.
-        if (!$this->tryInvokeActionMethod($actionName, [], !$isIndex, $result)) {
+        if (!$this->tryInvokeActionMethod($actionName, $parameters, !$isIndex, $result)) {
             $actionName = 'default';
 
-            if (!$this->tryInvokeActionMethod($actionName, [$action], false, $result)) {
+            if (!$this->tryInvokeActionMethod($actionName, [$action], false, $result)) { // fixme: parameters + test
                 return false;
             }
         }

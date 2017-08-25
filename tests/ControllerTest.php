@@ -10,6 +10,7 @@ use BlueMvc\Core\Response;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ActionResultTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\DefaultActionTestController;
+use BlueMvc\Core\Tests\Helpers\TestControllers\MultiLevelTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\PreAndPostActionEventController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\UppercaseActionTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ViewTestController;
@@ -246,7 +247,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $isProcessed = $controller->processRequest($application, $request, $response, 'foo');
 
         self::assertTrue($isProcessed);
-        self::assertSame('Default action with pre- and post-action event', $response->getContent());
+        self::assertSame('Default action "foo" with pre- and post-action event', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
         self::assertSame('true', $response->getHeader('X-Pre-Action'));
         self::assertSame('true', $response->getHeader('X-Post-Action'));
@@ -496,5 +497,53 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         self::assertTrue($isProcessed);
         self::assertSame('DEFAULT action "foo"', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Test multi level actions.
+     *
+     * @dataProvider multiLevelActionsDataProvider
+     *
+     * @param string $action              The action.
+     * @param array  $parameters          The parameters.
+     * @param bool   $expectedIsProcessed True if the excepted result is that action is processed, false otherwise.
+     * @param string $expectedContent     The expected content.
+     */
+    public function testMultiLevelActions($action, array $parameters, $expectedIsProcessed, $expectedContent)
+    {
+        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/' . $action, 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $controller = new MultiLevelTestController();
+        $isProcessed = $controller->processRequest($application, $request, $response, $action, $parameters);
+
+        self::assertSame($expectedIsProcessed, $isProcessed);
+        self::assertSame($expectedContent, $response->getContent());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Data provider for multi level action tests.
+     */
+    public function multiLevelActionsDataProvider()
+    {
+        return [
+            ['noparams', [], true, 'No Parameters'],
+            ['noparams', ['param1'], false, ''],
+            ['noparams', ['param1', 'param2'], false, ''],
+            ['noparams', ['param1', 'param2', 'param3'], false, ''],
+            ['foo', [], false, ''],
+            ['foo', ['param1'], true, 'FooAction: Foo=[param1]'],
+            ['foo', ['param1', 'param2'], false, ''],
+            ['foo', ['param1', 'param2', 'param3'], false, ''],
+            ['foobar', [], false, ''],
+            ['foobar', ['param1'], false, ''],
+            ['foobar', ['param1', 'param2'], true, 'FooBarAction: Foo=[param1], Bar=[param2]'],
+            ['foobar', ['param1', 'param2', 'param3'], false, ''],
+            ['foobarbaz', [], false, ''],
+            ['foobarbaz', ['param1'], false, ''],
+            ['foobarbaz', ['param1', 'param2'], false, ''],
+            ['foobarbaz', ['param1', 'param2', 'param3'], true, 'FooBarBazAction: Foo=[param1], Bar=[param2], Baz=[param3]'],
+        ];
     }
 }

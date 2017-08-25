@@ -119,8 +119,16 @@ abstract class AbstractController implements ControllerInterface
 
         $actionMethod = self::myFindActionMethod($reflectionClass, $action, $isCaseSensitive);
         if ($actionMethod === null) {
+            // Suitable action method not found.
             return false;
         }
+
+        if (!self::myActionMethodMatchesParameters($actionMethod, $parameters)) {
+            // Action method found, but parameters did not match.
+            return false; // fixme: Do not invoke default method in this case.
+        }
+
+        // fixme: test that these are not invoked if parameter doesn't match.
 
         // Handle pre-action event.
         $preActionResult = $this->onPreActionEvent();
@@ -139,6 +147,23 @@ abstract class AbstractController implements ControllerInterface
             $result = $postActionResult;
 
             return true;
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if an action method matches an array of parameters.
+     *
+     * @param \ReflectionMethod $reflectionMethod The action method.
+     * @param array             $parameters       The parameters.
+     *
+     * @return bool True if action method matches the parameters, false otherwise.
+     */
+    private static function myActionMethodMatchesParameters(\ReflectionMethod $reflectionMethod, array $parameters)
+    {
+        if ($reflectionMethod->getNumberOfParameters() !== count($parameters)) {
+            return false;
         }
 
         return true;
