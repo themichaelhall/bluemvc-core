@@ -162,8 +162,19 @@ abstract class AbstractController implements ControllerInterface
      */
     private static function myActionMethodMatchesParameters(\ReflectionMethod $reflectionMethod, array $parameters)
     {
-        if ($reflectionMethod->getNumberOfParameters() !== count($parameters)) {
+        $parametersCount = count($parameters);
+
+        if ($reflectionMethod->getNumberOfParameters() < $parametersCount) {
             return false;
+        }
+
+        $index = 0;
+        foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
+            if ($index >= $parametersCount && !$reflectionParameter->isOptional()) {
+                return false;
+            }
+
+            $index++;
         }
 
         return true;
