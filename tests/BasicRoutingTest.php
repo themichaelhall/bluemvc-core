@@ -815,14 +815,6 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
             ['foobarbazstring/param1/param2/', 'FooBarBazStringAction: Foo=[param1], Bar=[param2], Baz=[]', ['HTTP/1.1 200 OK'], StatusCode::OK],
             ['foobarbazstring/param1/param2/param3', 'FooBarBazStringAction: Foo=[param1], Bar=[param2], Baz=[param3]', ['HTTP/1.1 200 OK'], StatusCode::OK],
             ['foobarbazstring/param1/param2/param3/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
-            ['foobarnullbaz', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
-            ['foobarnullbaz/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
-            ['foobarnullbaz/param1', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
-            ['foobarnullbaz/param1/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
-            ['foobarnullbaz/param1/param2', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
-            ['foobarnullbaz/param1/param2/', 'FooBarNullBazAction: Foo=[param1], Bar=[param2], Baz=[]', ['HTTP/1.1 200 OK'], StatusCode::OK],
-            ['foobarnullbaz/param1/param2/param3', 'FooBarNullBazAction: Foo=[param1], Bar=[param2], Baz=[param3]', ['HTTP/1.1 200 OK'], StatusCode::OK],
-            ['foobarnullbaz/param1/param2/param3/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
         ];
     }
 
