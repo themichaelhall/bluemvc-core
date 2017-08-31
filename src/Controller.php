@@ -90,10 +90,16 @@ abstract class Controller extends AbstractController
         $actionName = $isIndex ? 'index' : $action;
 
         // Try to invoke the action, and if that failed, try to invoke the default action.
-        if (!$this->tryInvokeActionMethod($actionName, $parameters, !$isIndex, $result)) {
+        if (!$this->tryInvokeActionMethod($actionName, $parameters, !$isIndex, $result, $hasFoundActionMethod)) {
+            if ($hasFoundActionMethod) {
+                // If action method was found, but something else failed (e.g. parameter mismatch),
+                // do not try to invoke default method.
+                return false;
+            }
+
             $actionName = 'default';
 
-            if (!$this->tryInvokeActionMethod($actionName, [$action], false, $result)) { // fixme: parameters + test
+            if (!$this->tryInvokeActionMethod($actionName, array_merge([$action], $parameters), false, $result)) {
                 return false;
             }
         }

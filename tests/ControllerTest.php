@@ -568,6 +568,10 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
             ['foobarbazstring', ['param1'], false, ''],
             ['foobarbazstring', ['param1', 'param2'], true, 'FooBarBazStringAction: Foo=[param1], Bar=[param2], Baz=[default string]'],
             ['foobarbazstring', ['param1', 'param2', 'param3'], true, 'FooBarBazStringAction: Foo=[param1], Bar=[param2], Baz=[param3]'],
+            ['nonexisting', [], false, ''],
+            ['nonexisting', ['param1'], true, 'DefaultAction: Foo=[nonexisting], Bar=[param1], Baz=[*null*]'],
+            ['nonexisting', ['param1', 'param2'], true, 'DefaultAction: Foo=[nonexisting], Bar=[param1], Baz=[param2]'],
+            ['nonexisting', ['param1', 'param2', 'param3'], false, ''],
         ];
     }
 }

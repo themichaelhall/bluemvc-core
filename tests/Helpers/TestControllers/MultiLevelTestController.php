@@ -137,4 +137,18 @@ class MultiLevelTestController extends Controller
     {
         return 'FooNullBarNullBazNullAction: Foo=[' . ($foo !== null ? $foo : '*null*') . '], Bar=[' . ($bar !== null ? $bar : '*null*') . '], Baz=[' . ($baz !== null ? $baz : '*null*') . ']';
     }
+
+    /**
+     * The default action.
+     *
+     * @param mixed $foo The first parameter.
+     * @param mixed $bar The second parameter.
+     * @param mixed $baz The third parameter.
+     *
+     * @return string The result.
+     */
+    public function defaultAction($foo, $bar, $baz = null)
+    {
+        return 'DefaultAction: Foo=[' . $foo . '], Bar=[' . $bar . '], Baz=[' . ($baz !== null ? $baz : '*null*') . ']';
+    }
 }

@@ -106,29 +106,32 @@ abstract class AbstractController implements ControllerInterface
      *
      * @since 1.0.0
      *
-     * @param string $action          The action.
-     * @param array  $parameters      The parameters.
-     * @param bool   $isCaseSensitive True if action method is case sensitive, false otherwise.
-     * @param mixed  $result          The result.
+     * @param string $action               The action.
+     * @param array  $parameters           The parameters.
+     * @param bool   $isCaseSensitive      True if action method is case sensitive, false otherwise.
+     * @param mixed  $result               The result.
+     * @param bool   $hasFoundActionMethod If true, action method was found, false otherwise.
      *
      * @return bool True if action method was invoked successfully, false otherwise.
      */
-    protected function tryInvokeActionMethod($action, array $parameters, $isCaseSensitive, &$result)
+    protected function tryInvokeActionMethod($action, array $parameters, $isCaseSensitive, &$result, &$hasFoundActionMethod = null)
     {
         $reflectionClass = new \ReflectionClass($this);
 
         $actionMethod = self::myFindActionMethod($reflectionClass, $action, $isCaseSensitive);
         if ($actionMethod === null) {
             // Suitable action method not found.
+            $hasFoundActionMethod = false;
+
             return false;
         }
 
+        $hasFoundActionMethod = true;
+
         if (!self::myActionMethodMatchesParameters($actionMethod, $parameters)) {
             // Action method found, but parameters did not match.
-            return false; // fixme: Do not invoke default method in this case.
+            return false;
         }
-
-        // fixme: test that these are not invoked if parameter doesn't match.
 
         // Handle pre-action event.
         $preActionResult = $this->onPreActionEvent();
