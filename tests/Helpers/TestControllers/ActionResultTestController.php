@@ -4,6 +4,7 @@ namespace BlueMvc\Core\Tests\Helpers\TestControllers;
 
 use BlueMvc\Core\ActionResults\ForbiddenResult;
 use BlueMvc\Core\ActionResults\JsonResult;
+use BlueMvc\Core\ActionResults\MethodNotAllowedResult;
 use BlueMvc\Core\ActionResults\NoContentResult;
 use BlueMvc\Core\ActionResults\NotFoundResult;
 use BlueMvc\Core\ActionResults\NotModifiedResult;
@@ -74,6 +75,16 @@ class ActionResultTestController extends Controller
     public function notmodifiedAction()
     {
         return new NotModifiedResult();
+    }
+
+    /**
+     * Action returning a "405 Method Not Allowed" action result.
+     *
+     * @return MethodNotAllowedResult The action result.
+     */
+    public function methodnotallowedAction()
+    {
+        return new MethodNotAllowedResult();
     }
 
     /**

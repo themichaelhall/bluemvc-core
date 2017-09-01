@@ -374,6 +374,24 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test get a page returning a MethodNotAllowedResult.
+     */
+    public function testGetPageWithMethodNotAllowedResult()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/methodnotallowed', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        self::assertSame('', $responseOutput);
+        self::assertSame('', $response->getContent());
+        self::assertSame(['HTTP/1.1 405 Method Not Allowed'], FakeHeaders::get());
+        self::assertSame(StatusCode::METHOD_NOT_ALLOWED, $response->getStatusCode()->getCode());
+    }
+
+    /**
      * Test get a page returning a JsonResult.
      */
     public function testGetPageWithJsonResult()
