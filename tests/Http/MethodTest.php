@@ -87,4 +87,15 @@ class MethodTest extends \PHPUnit_Framework_TestCase
     {
         new Method('FOO{BAR');
     }
+
+    /**
+     * Test create method with invalid name parameter type.
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage $name parameter is not a string.
+     */
+    public function testCreateWithInvalidNameParameterType()
+    {
+        new Method(123);
+    }
 }

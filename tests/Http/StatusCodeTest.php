@@ -116,6 +116,17 @@ class StatusCodeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test create status code with invalid code parameter type.
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage $code parameter is not an integer.
+     */
+    public function testCreateWithInvalidCodeParameterType()
+    {
+        new StatusCode(false);
+    }
+
+    /**
      * Data provider for status code tests.
      *
      * @return array The data.

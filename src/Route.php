@@ -28,15 +28,21 @@ class Route implements RouteInterface
      * @param string $path                The path.
      * @param string $controllerClassName The controller class name.
      *
+     * @throws \InvalidArgumentException       If any of the parameters are of invalid type.
      * @throws InvalidControllerClassException If the controller class name is invalid.
      * @throws InvalidRoutePathException       If the path is invalid.
      */
     public function __construct($path, $controllerClassName)
     {
-        assert(is_string($path));
-        assert(is_string($controllerClassName));
+        if (!is_string($path)) {
+            throw new \InvalidArgumentException('$path parameter is not a string.');
+        }
 
-        if (!is_string($controllerClassName) || !is_a($controllerClassName, ControllerInterface::class, true)) {
+        if (!is_string($controllerClassName)) {
+            throw new \InvalidArgumentException('$controllerClassName parameter is not a string.');
+        }
+
+        if (!is_a($controllerClassName, ControllerInterface::class, true)) {
             throw new InvalidControllerClassException('"' . $controllerClassName . '" is not a valid controller class.');
         }
 

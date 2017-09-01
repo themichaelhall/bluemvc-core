@@ -430,11 +430,14 @@ class StatusCode implements StatusCodeInterface
      *
      * @param int $code The code.
      *
+     * @throws \InvalidArgumentException  If the $code parameter is not an integer.
      * @throws InvalidStatusCodeException If the code is invalid.
      */
     public function __construct($code)
     {
-        assert(is_int($code));
+        if (!is_int($code)) {
+            throw new \InvalidArgumentException('$code parameter is not an integer.');
+        }
 
         if (!isset(self::$myDescriptions[$code])) {
             throw new InvalidStatusCodeException('Status code ' . $code . ' is invalid.');

@@ -24,11 +24,18 @@ class RouteMatch implements RouteMatchInterface
      * @param string   $controllerClassName The controller class name.
      * @param string   $action              The action.
      * @param string[] $parameters          The parameters.
+     *
+     * @throws \InvalidArgumentException If any of the parameters are of invalid type.
      */
     public function __construct($controllerClassName, $action = '', array $parameters = [])
     {
-        assert(is_string($controllerClassName));
-        assert(is_string($action));
+        if (!is_string($controllerClassName)) {
+            throw new \InvalidArgumentException('$controllerClassName parameter is not a string.');
+        }
+
+        if (!is_string($action)) {
+            throw new \InvalidArgumentException('$action parameter is not a string.');
+        }
 
         $this->myControllerClassName = $controllerClassName;
         $this->myAction = $action;

@@ -195,4 +195,26 @@ class RouteTest extends \PHPUnit_Framework_TestCase
         self::assertSame('bar', $routeMatch->getAction());
         self::assertSame(['baz', ''], $routeMatch->getParameters());
     }
+
+    /**
+     * Test create route match with invalid path parameter type.
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage $path parameter is not a string.
+     */
+    public function testCreateWithInvalidPathParameterType()
+    {
+        new Route(null, BasicTestController::class);
+    }
+
+    /**
+     * Test create route with invalid controller class name parameter type.
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage $controllerClassName parameter is not a string.
+     */
+    public function testCreateWithInvalidControllerClassNameParameterType()
+    {
+        new Route('', true);
+    }
 }

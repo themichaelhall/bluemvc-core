@@ -24,11 +24,14 @@ class Method implements MethodInterface
      *
      * @param string $name The method name.
      *
+     * @throws \InvalidArgumentException  If the $name parameter is not a string.
      * @throws InvalidMethodNameException If the method name is invalid.
      */
     public function __construct($name)
     {
-        assert(is_string($name));
+        if (!is_string($name)) {
+            throw new \InvalidArgumentException('$name parameter is not a string.');
+        }
 
         if (preg_match('/[^a-zA-Z0-9]/', $name, $matches)) {
             throw new InvalidMethodNameException('Method "' . $name . '" contains invalid character "' . $matches[0] . '".');
