@@ -5,7 +5,7 @@ namespace BlueMvc\Core\Tests\Helpers\TestControllers;
 use BlueMvc\Core\Controller;
 
 /**
- * Test controller with various action methods visibility
+ * Test controller with various action methods visibility.
  */
 class ActionMethodVisibilityTestController extends Controller
 {
@@ -30,6 +30,7 @@ class ActionMethodVisibilityTestController extends Controller
     }
 
     /** @noinspection PhpUnusedPrivateMethodInspection */
+
     /**
      * A private action.
      *
@@ -61,6 +62,7 @@ class ActionMethodVisibilityTestController extends Controller
     }
 
     /** @noinspection PhpUnusedPrivateMethodInspection */
+
     /**
      * A private static action.
      *
