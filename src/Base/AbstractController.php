@@ -207,6 +207,10 @@ abstract class AbstractController implements ControllerInterface
             if ($isCaseSensitive && $action !== substr($actionMethod->getName(), 0, strlen($action))) {
                 return null;
             }
+
+            if (!$actionMethod->isPublic()) {
+                return null;
+            }
         } catch (\ReflectionException $e) {
             return null;
         }

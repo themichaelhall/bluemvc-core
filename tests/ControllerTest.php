@@ -7,6 +7,7 @@ use BlueMvc\Core\Collections\ViewItemCollection;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Request;
 use BlueMvc\Core\Response;
+use BlueMvc\Core\Tests\Helpers\TestControllers\ActionMethodVisibilityTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ActionResultTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\DefaultActionTestController;
@@ -572,6 +573,43 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
             ['nonexisting', ['param1'], true, 'DefaultAction: Foo=[nonexisting], Bar=[param1], Baz=[*null*]'],
             ['nonexisting', ['param1', 'param2'], true, 'DefaultAction: Foo=[nonexisting], Bar=[param1], Baz=[param2]'],
             ['nonexisting', ['param1', 'param2', 'param3'], false, ''],
+        ];
+    }
+
+    /**
+     * Test action method visibility.
+     *
+     * @dataProvider actionMethodVisibilityDataProvider
+     *
+     * @param string $action              The action.
+     * @param bool   $expectedIsProcessed True if the excepted result is that action is processed, false otherwise.
+     * @param string $expectedContent     The expected content.
+     */
+    public function testActionMethodVisibility($action, $expectedIsProcessed, $expectedContent)
+    {
+        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/' . $action, 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $controller = new ActionMethodVisibilityTestController();
+        $isProcessed = $controller->processRequest($application, $request, $response, $action, []);
+
+        self::assertSame($expectedIsProcessed, $isProcessed);
+        self::assertSame($expectedContent, $response->getContent());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Data provider for action method visibility tests.
+     */
+    public function actionMethodVisibilityDataProvider()
+    {
+        return [
+            ['public', true, 'Public action'],
+            ['protected', true, 'Default action: Action=[protected]'],
+            ['private', true, 'Default action: Action=[private]'],
+            ['publicStatic', true, 'Public static action'],
+            ['protectedStatic', true, 'Default action: Action=[protectedStatic]'],
+            ['privateStatic', true, 'Default action: Action=[privateStatic]'],
         ];
     }
 }

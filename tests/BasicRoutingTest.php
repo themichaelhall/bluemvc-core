@@ -8,6 +8,7 @@ use BlueMvc\Core\Response;
 use BlueMvc\Core\Route;
 use BlueMvc\Core\Tests\Helpers\Fakes\FakeHeaders;
 use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
+use BlueMvc\Core\Tests\Helpers\TestControllers\ActionMethodVisibilityTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ActionResultTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\DefaultActionTestController;
@@ -845,6 +846,46 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test get pages with different action method visibilities.
+     *
+     * @dataProvider actionMethodVisibilityPagesDataProvider
+     *
+     * @param string $url                The (relative) url.
+     * @param string $expectedContent    The expected content.
+     * @param array  $expectedHeaders    The expected headers.
+     * @param int    $expectedStatusCode The expected status code.
+     */
+    public function testActionMethodVisibilityPages($url, $expectedContent, array $expectedHeaders, $expectedStatusCode)
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionMethodVisibility/' . $url, 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        self::assertSame($expectedContent, $responseOutput);
+        self::assertSame($expectedContent, $response->getContent());
+        self::assertSame($expectedHeaders, FakeHeaders::get());
+        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Data provider for action method visibility tests.
+     */
+    public function actionMethodVisibilityPagesDataProvider()
+    {
+        return [
+            ['public', 'Public action', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['protected', 'Default action: Action=[protected]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['private', 'Default action: Action=[private]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['publicStatic', 'Public static action', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['protectedStatic', 'Default action: Action=[protectedStatic]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['privateStatic', 'Default action: Action=[privateStatic]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+        ];
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
@@ -863,6 +904,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
         $this->application->addRoute(new Route('exception', ExceptionTestController::class));
         $this->application->addRoute(new Route('uppercase', UppercaseActionTestController::class));
         $this->application->addRoute(new Route('multilevel', MultiLevelTestController::class));
+        $this->application->addRoute(new Route('actionMethodVisibility', ActionMethodVisibilityTestController::class));
     }
 
     /**
