@@ -16,7 +16,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
     public function testGetPath()
     {
         $DS = DIRECTORY_SEPARATOR;
-        $uploadedFile = new UploadedFile(FilePath::parse('/foo/bar.txt'), 'FooBar.txt');
+        $uploadedFile = new UploadedFile(FilePath::parse('/foo/bar.txt'), 'FooBar.txt', 1234);
 
         self::assertSame($DS . 'foo' . $DS . 'bar.txt', $uploadedFile->getPath()->__toString());
     }
@@ -26,9 +26,19 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetOriginalName()
     {
-        $uploadedFile = new UploadedFile(FilePath::parse('/foo/bar.txt'), 'FooBar.txt');
+        $uploadedFile = new UploadedFile(FilePath::parse('/foo/bar.txt'), 'FooBar.txt', 1234);
 
         self::assertSame('FooBar.txt', $uploadedFile->getOriginalName());
+    }
+
+    /**
+     * Test getSize method.
+     */
+    public function testGetSize()
+    {
+        $uploadedFile = new UploadedFile(FilePath::parse('/foo/bar.txt'), 'FooBar.txt', 1234);
+
+        self::assertSame(1234, $uploadedFile->getSize());
     }
 
     /**
@@ -41,6 +51,7 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
 
         self::assertSame($DS . 'foo' . $DS . 'bar.txt', $uploadedFile->getPath()->__toString());
         self::assertSame('', $uploadedFile->getOriginalName());
+        self::assertSame(0, $uploadedFile->getSize());
     }
 
     /**
@@ -52,5 +63,16 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
     public function testCreateWithInvalidOriginalNameParameterType()
     {
         new UploadedFile(FilePath::parse('/foo/bar.txt'), 0);
+    }
+
+    /**
+     * Test create with invalid size parameter type.
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage $size parameter is not an integer.
+     */
+    public function testCreateWithInvalidSizeParameterType()
+    {
+        new UploadedFile(FilePath::parse('/foo/bar.txt'), 'FooBar.txt', true);
     }
 }

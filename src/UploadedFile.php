@@ -24,17 +24,23 @@ class UploadedFile implements UploadedFileInterface
      *
      * @param FilePathInterface $path         The path to the file.
      * @param string            $originalName The original name of the file.
+     * @param int               $size         The size of the file.
      *
      * @throws \InvalidArgumentException If any of the parameters are of invalid type.
      */
-    public function __construct(FilePathInterface $path, $originalName = '')
+    public function __construct(FilePathInterface $path, $originalName = '', $size = 0)
     {
         if (!is_string($originalName)) {
             throw new \InvalidArgumentException('$originalName parameter is not a string.');
         }
 
+        if (!is_int($size)) {
+            throw new \InvalidArgumentException('$size parameter is not an integer.');
+        }
+
         $this->myPath = $path;
         $this->myOriginalName = $originalName;
+        $this->mySize = $size;
     }
 
     /**
@@ -62,6 +68,18 @@ class UploadedFile implements UploadedFileInterface
     }
 
     /**
+     * Returns the size of the file.
+     *
+     * @since 1.0.0
+     *
+     * @return int The size of the file.
+     */
+    public function getSize()
+    {
+        return $this->mySize;
+    }
+
+    /**
      * @var FilePathInterface My path to the file.
      */
     private $myPath;
@@ -70,4 +88,9 @@ class UploadedFile implements UploadedFileInterface
      * @var string My original name of the file.
      */
     private $myOriginalName;
+
+    /**
+     * @var int My size of the file.
+     */
+    private $mySize;
 }

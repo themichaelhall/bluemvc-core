@@ -33,4 +33,13 @@ interface UploadedFileInterface
      * @return FilePathInterface The path to the uploaded file.
      */
     public function getPath();
+
+    /**
+     * Returns the size of the file.
+     *
+     * @since 1.0.0
+     *
+     * @return int The size of the file.
+     */
+    public function getSize();
 }
