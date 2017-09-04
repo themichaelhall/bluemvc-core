@@ -22,19 +22,39 @@ class UploadedFile implements UploadedFileInterface
      *
      * @since 1.0.0
      *
-     * @param FilePathInterface $path The path to the uploaded file.
+     * @param FilePathInterface $path         The path to the file.
+     * @param string            $originalName The original name of the file.
+     *
+     * @throws \InvalidArgumentException If any of the parameters are of invalid type.
      */
-    public function __construct(FilePathInterface $path)
+    public function __construct(FilePathInterface $path, $originalName = '')
     {
+        if (!is_string($originalName)) {
+            throw new \InvalidArgumentException('$originalName parameter is not a string.');
+        }
+
         $this->myPath = $path;
+        $this->myOriginalName = $originalName;
     }
 
     /**
-     * Returns the path to the uploaded file.
+     * Returns the original name of the file.
      *
      * @since 1.0.0
      *
-     * @return FilePathInterface The path to the uploaded file.
+     * @return string The original name of the file.
+     */
+    public function getOriginalName()
+    {
+        return $this->myOriginalName;
+    }
+
+    /**
+     * Returns the path to the file.
+     *
+     * @since 1.0.0
+     *
+     * @return FilePathInterface The path to the file.
      */
     public function getPath()
     {
@@ -42,7 +62,12 @@ class UploadedFile implements UploadedFileInterface
     }
 
     /**
-     * @var FilePathInterface My path to the uploaded file.
+     * @var FilePathInterface My path to the file.
      */
     private $myPath;
+
+    /**
+     * @var string My original name of the file.
+     */
+    private $myOriginalName;
 }

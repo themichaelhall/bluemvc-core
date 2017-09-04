@@ -17,6 +17,15 @@ use DataTypes\Interfaces\FilePathInterface;
 interface UploadedFileInterface
 {
     /**
+     * Returns the original name of the file.
+     *
+     * @since 1.0.0
+     *
+     * @return string The original name of the file.
+     */
+    public function getOriginalName();
+
+    /**
      * Returns the path to the uploaded file.
      *
      * @since 1.0.0
