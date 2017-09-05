@@ -7,6 +7,7 @@
 
 namespace BlueMvc\Core;
 
+use BlueMvc\Core\Exceptions\InvalidFilePathException;
 use BlueMvc\Core\Interfaces\UploadedFileInterface;
 use DataTypes\Interfaces\FilePathInterface;
 
@@ -27,6 +28,7 @@ class UploadedFile implements UploadedFileInterface
      * @param int               $size         The size of the file.
      *
      * @throws \InvalidArgumentException If any of the parameters are of invalid type.
+     * @throws InvalidFilePathException  If the path is not file or an absolute path.
      */
     public function __construct(FilePathInterface $path, $originalName = '', $size = 0)
     {
@@ -36,6 +38,14 @@ class UploadedFile implements UploadedFileInterface
 
         if (!is_int($size)) {
             throw new \InvalidArgumentException('$size parameter is not an integer.');
+        }
+
+        if (!$path->isFile()) {
+            throw new InvalidFilePathException('Path "' . $path . '" is not a file.');
+        }
+
+        if (!$path->isAbsolute()) {
+            throw new InvalidFilePathException('Path "' . $path . '" is not an absolute path.');
         }
 
         $this->myPath = $path;

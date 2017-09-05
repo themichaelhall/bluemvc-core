@@ -2,6 +2,7 @@
 
 namespace BlueMvc\Core\Tests;
 
+use BlueMvc\Core\Exceptions\InvalidFilePathException;
 use BlueMvc\Core\UploadedFile;
 use DataTypes\FilePath;
 
@@ -74,5 +75,37 @@ class UploadedFileTest extends \PHPUnit_Framework_TestCase
     public function testCreateWithInvalidSizeParameterType()
     {
         new UploadedFile(FilePath::parse('/foo/bar.txt'), 'FooBar.txt', true);
+    }
+
+    /**
+     * Test create with directory as path.
+     */
+    public function testCreateWithDirectoryAsPath()
+    {
+        $exception = null;
+        $DS = DIRECTORY_SEPARATOR;
+
+        try {
+            new UploadedFile(FilePath::parse('/foo/bar/'));
+        } catch (InvalidFilePathException $exception) {
+        }
+
+        self::assertSame('Path "' . $DS . 'foo' . $DS . 'bar' . $DS . '" is not a file.', $exception->getMessage());
+    }
+
+    /**
+     * Test create with a relative path.
+     */
+    public function testCreateWithRelativePath()
+    {
+        $exception = null;
+        $DS = DIRECTORY_SEPARATOR;
+
+        try {
+            new UploadedFile(FilePath::parse('./foo/bar.txt'));
+        } catch (InvalidFilePathException $exception) {
+        }
+
+        self::assertSame('Path "foo' . $DS . 'bar.txt" is not an absolute path.', $exception->getMessage());
     }
 }
