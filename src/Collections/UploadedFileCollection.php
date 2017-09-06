@@ -56,7 +56,30 @@ class UploadedFileCollection implements UploadedFileCollectionInterface
             throw new \InvalidArgumentException('$name parameter is not a string.');
         }
 
-        return null;
+        if (!isset($this->myUploadedFiles[$name])) {
+            return null;
+        }
+
+        return $this->myUploadedFiles[$name];
+    }
+
+    /**
+     * Sets an uploaded file by name.
+     *
+     * @since 1.0.0
+     *
+     * @param string                $name         The name.
+     * @param UploadedFileInterface $uploadedFile The uploaded file.
+     *
+     * @throws \InvalidArgumentException If the $name parameter is not a string.
+     */
+    public function set($name, UploadedFileInterface $uploadedFile)
+    {
+        if (!is_string($name)) {
+            throw new \InvalidArgumentException('$name parameter is not a string.');
+        }
+
+        $this->myUploadedFiles[$name] = $uploadedFile;
     }
 
     /**

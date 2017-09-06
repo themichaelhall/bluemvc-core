@@ -26,4 +26,14 @@ interface UploadedFileCollectionInterface extends \Countable
      * @return UploadedFileInterface|null The the uploaded file by name if it exists, null otherwise.
      */
     public function get($name);
+
+    /**
+     * Sets an uploaded file by name.
+     *
+     * @since 1.0.0
+     *
+     * @param string                $name         The name.
+     * @param UploadedFileInterface $uploadedFile The uploaded file.
+     */
+    public function set($name, UploadedFileInterface $uploadedFile);
 }
