@@ -40,6 +40,26 @@ class UploadedFileCollection implements UploadedFileCollectionInterface
     }
 
     /**
+     * Returns the uploaded file by name if it exists, null otherwise.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name The name.
+     *
+     * @throws \InvalidArgumentException If the $name parameter is not a string.
+     *
+     * @return UploadedFileInterface|null The the uploaded file by name if it exists, null otherwise.
+     */
+    public function get($name)
+    {
+        if (!is_string($name)) {
+            throw new \InvalidArgumentException('$name parameter is not a string.');
+        }
+
+        return null;
+    }
+
+    /**
      * @var UploadedFileInterface[] My uploaded files.
      */
     private $myUploadedFiles;

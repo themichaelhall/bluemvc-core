@@ -7,6 +7,8 @@
 
 namespace BlueMvc\Core\Interfaces\Collections;
 
+use BlueMvc\Core\Interfaces\UploadedFileInterface;
+
 /**
  * Interface for UploadedFileCollection class.
  *
@@ -14,4 +16,14 @@ namespace BlueMvc\Core\Interfaces\Collections;
  */
 interface UploadedFileCollectionInterface extends \Countable
 {
+    /**
+     * Returns the uploaded file by name if it exists, null otherwise.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name The name.
+     *
+     * @return UploadedFileInterface|null The the uploaded file by name if it exists, null otherwise.
+     */
+    public function get($name);
 }
