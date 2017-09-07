@@ -204,6 +204,14 @@ class AbstractRequestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test getUploadedFiles method.
+     */
+    public function testGetUploadedFiles()
+    {
+        self::assertSame([], iterator_to_array($this->myRequest->getUploadedFiles()));
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

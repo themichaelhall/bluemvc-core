@@ -333,4 +333,20 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
         self::assertSame('2', $request->getFormParameter('1'));
     }
+
+    /**
+     * Test getUploadedFiles method with no uploaded files set.
+     */
+    public function testGetUploadedFilesWithNoUploadedFiles()
+    {
+        $request = new Request(
+            [
+                'HTTP_HOST'      => 'www.domain.com',
+                'REQUEST_URI'    => '/foo/bar',
+                'REQUEST_METHOD' => 'GET',
+            ]
+        );
+
+        self::assertSame([], iterator_to_array($request->getUploadedFiles()));
+    }
 }

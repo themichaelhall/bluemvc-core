@@ -9,6 +9,7 @@ namespace BlueMvc\Core\Interfaces;
 
 use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\ParameterCollectionInterface;
+use BlueMvc\Core\Interfaces\Collections\UploadedFileCollectionInterface;
 use BlueMvc\Core\Interfaces\Http\MethodInterface;
 use DataTypes\Interfaces\UrlInterface;
 
@@ -87,6 +88,15 @@ interface RequestInterface
      * @return ParameterCollectionInterface The query parameters.
      */
     public function getQueryParameters();
+
+    /**
+     * Returns the uploaded files.
+     *
+     * @since 1.0.0
+     *
+     * @return UploadedFileCollectionInterface The uploaded files.
+     */
+    public function getUploadedFiles();
 
     /**
      * Returns the user agent or empty string if no user agent exists.

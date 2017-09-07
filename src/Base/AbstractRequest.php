@@ -9,8 +9,10 @@ namespace BlueMvc\Core\Base;
 
 use BlueMvc\Core\Collections\HeaderCollection;
 use BlueMvc\Core\Collections\ParameterCollection;
+use BlueMvc\Core\Collections\UploadedFileCollection;
 use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\ParameterCollectionInterface;
+use BlueMvc\Core\Interfaces\Collections\UploadedFileCollectionInterface;
 use BlueMvc\Core\Interfaces\Http\MethodInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use DataTypes\Interfaces\UrlInterface;
@@ -37,6 +39,7 @@ abstract class AbstractRequest implements RequestInterface
         $this->setHeaders(new HeaderCollection());
         $this->setFormParameters(new ParameterCollection());
         $this->setQueryParameters(new ParameterCollection());
+        $this->myUploadedFiles = new UploadedFileCollection(); // fixme: setUploadedFiles()
     }
 
     /**
@@ -133,6 +136,18 @@ abstract class AbstractRequest implements RequestInterface
     public function getQueryParameters()
     {
         return $this->myQueryParameters;
+    }
+
+    /**
+     * Returns the uploaded files.
+     *
+     * @since 1.0.0
+     *
+     * @return UploadedFileCollectionInterface The uploaded files.
+     */
+    public function getUploadedFiles()
+    {
+        return $this->myUploadedFiles;
     }
 
     /**
@@ -298,6 +313,11 @@ abstract class AbstractRequest implements RequestInterface
      * @var ParameterCollectionInterface My query parameters.
      */
     private $myQueryParameters;
+
+    /**
+     * @var UploadedFileCollectionInterface My uploaded files.
+     */
+    private $myUploadedFiles;
 
     /**
      * @var UrlInterface My url.
