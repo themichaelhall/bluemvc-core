@@ -14,7 +14,7 @@ use BlueMvc\Core\Interfaces\UploadedFileInterface;
  *
  * @since 1.0.0
  */
-interface UploadedFileCollectionInterface extends \Countable
+interface UploadedFileCollectionInterface extends \Countable, \Iterator
 {
     /**
      * Returns the uploaded file by name if it exists, null otherwise.

@@ -74,4 +74,33 @@ class UploadedFileCollectionTest extends \PHPUnit_Framework_TestCase
 
         $uploadedFileCollection->set(false, new UploadedFile(FilePath::parse('/tmp/foo')));
     }
+
+    /**
+     * Test iterator functionality for empty collection.
+     */
+    public function testIteratorForEmptyCollection()
+    {
+        $uploadedFileCollection = new UploadedFileCollection();
+
+        $uploadedFileArray = iterator_to_array($uploadedFileCollection, true);
+
+        self::assertSame([], $uploadedFileArray);
+    }
+
+    /**
+     * Test iterator functionality for non-empty collection.
+     */
+    public function testIteratorForNonEmptyCollection()
+    {
+        $fileFoo = new UploadedFile(FilePath::parse('/tmp/foo.txt'), 'Foo', 1234);
+        $fileBar = new UploadedFile(FilePath::parse('/tmp/bar.dat'));
+
+        $uploadedFileCollection = new UploadedFileCollection();
+        $uploadedFileCollection->set('Foo', $fileFoo);
+        $uploadedFileCollection->set('bar', $fileBar);
+
+        $uploadedFileArray = iterator_to_array($uploadedFileCollection, true);
+
+        self::assertSame(['Foo' => $fileFoo, 'bar' => $fileBar], $uploadedFileArray);
+    }
 }

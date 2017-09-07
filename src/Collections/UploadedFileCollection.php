@@ -40,6 +40,18 @@ class UploadedFileCollection implements UploadedFileCollectionInterface
     }
 
     /**
+     * Returns the current uploaded file value.
+     *
+     * @since 1.0.0
+     *
+     * @return string The current uploaded file value.
+     */
+    public function current()
+    {
+        return current($this->myUploadedFiles);
+    }
+
+    /**
      * Returns the uploaded file by name if it exists, null otherwise.
      *
      * @since 1.0.0
@@ -64,6 +76,38 @@ class UploadedFileCollection implements UploadedFileCollectionInterface
     }
 
     /**
+     * Returns the current uploaded file name.
+     *
+     * @since 1.0.0
+     *
+     * @return string The current uploaded file name.
+     */
+    public function key()
+    {
+        return key($this->myUploadedFiles);
+    }
+
+    /**
+     * Moves forwards to the next uploaded file.
+     *
+     * @since 1.0.0
+     */
+    public function next()
+    {
+        next($this->myUploadedFiles);
+    }
+
+    /**
+     * Rewinds the uploaded file collection to to first element.
+     *
+     * @since 1.0.0
+     */
+    public function rewind()
+    {
+        reset($this->myUploadedFiles);
+    }
+
+    /**
      * Sets an uploaded file by name.
      *
      * @since 1.0.0
@@ -80,6 +124,18 @@ class UploadedFileCollection implements UploadedFileCollectionInterface
         }
 
         $this->myUploadedFiles[$name] = $uploadedFile;
+    }
+
+    /**
+     * Returns true if the current uploaded file is valid.
+     *
+     * @since 1.0.0
+     *
+     * @return bool True if the current uploaded file is valid.
+     */
+    public function valid()
+    {
+        return key($this->myUploadedFiles) !== null;
     }
 
     /**

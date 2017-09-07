@@ -97,6 +97,16 @@ class ViewItemCollection implements ViewItemCollectionInterface
     }
 
     /**
+     * Rewinds the view item collection to to first element.
+     *
+     * @since 1.0.0
+     */
+    public function rewind()
+    {
+        reset($this->myItems);
+    }
+
+    /**
      * Sets a view item value by view item name.
      *
      * @since 1.0.0
@@ -113,16 +123,6 @@ class ViewItemCollection implements ViewItemCollectionInterface
         }
 
         $this->myItems[$name] = $value;
-    }
-
-    /**
-     * Rewinds the view item collection to to first element.
-     *
-     * @since 1.0.0
-     */
-    public function rewind()
-    {
-        reset($this->myItems);
     }
 
     /**
