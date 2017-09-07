@@ -395,4 +395,39 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         self::assertSame('..\\Bar.html', $uploadedFiles->get('2')->getOriginalName());
         self::assertSame(42, $uploadedFiles->get('2')->getSize());
     }
+
+    /**
+     * Test getUploadedFile method.
+     */
+    public function testGetUploadedFile()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+
+        $request = new Request(
+            [
+                'HTTP_HOST'      => 'www.domain.com',
+                'REQUEST_URI'    => '/foo/bar',
+                'REQUEST_METHOD' => 'GET',
+            ],
+            [
+            ],
+            [
+            ],
+            [
+                'foo' => [
+                    'name'     => 'Documents/Foo.doc',
+                    'type'     => 'application/msword',
+                    'tmp_name' => '/tmp/foo123.doc',
+                    'size'     => '56789',
+                    'error'    => '0',
+                ],
+            ]
+        );
+
+        self::assertSame($DS . 'tmp' . $DS . 'foo123.doc', $request->getUploadedFile('foo')->getPath()->__toString());
+        self::assertSame('Documents/Foo.doc', $request->getUploadedFile('foo')->getOriginalName());
+        self::assertSame(56789, $request->getUploadedFile('foo')->getSize());
+        self::assertNull($request->getUploadedFile('FOO'));
+        self::assertNull($request->getUploadedFile('bar'));
+    }
 }

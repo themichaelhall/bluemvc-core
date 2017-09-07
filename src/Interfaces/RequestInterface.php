@@ -90,6 +90,17 @@ interface RequestInterface
     public function getQueryParameters();
 
     /**
+     * Returns a uploaded file by name if it exists, null otherwise.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name The uploaded file name.
+     *
+     * @return UploadedFileInterface|null The uploaded file by name if it exists, null otherwise.
+     */
+    public function getUploadedFile($name);
+
+    /**
      * Returns the uploaded files.
      *
      * @since 1.0.0

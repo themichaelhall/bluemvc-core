@@ -15,6 +15,7 @@ use BlueMvc\Core\Interfaces\Collections\ParameterCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\UploadedFileCollectionInterface;
 use BlueMvc\Core\Interfaces\Http\MethodInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
+use BlueMvc\Core\Interfaces\UploadedFileInterface;
 use DataTypes\Interfaces\UrlInterface;
 
 /**
@@ -136,6 +137,22 @@ abstract class AbstractRequest implements RequestInterface
     public function getQueryParameters()
     {
         return $this->myQueryParameters;
+    }
+
+    /**
+     * Returns a uploaded file by name if it exists, null otherwise.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name The uploaded file name.
+     *
+     * @throws \InvalidArgumentException If the $name parameter is not a string.
+     *
+     * @return UploadedFileInterface|null The uploaded file by name if it exists, null otherwise.
+     */
+    public function getUploadedFile($name)
+    {
+        return $this->myUploadedFiles->get($name);
     }
 
     /**

@@ -232,6 +232,24 @@ class AbstractRequestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test getUploadedFile method.
+     */
+    public function testGetUploadedFile()
+    {
+        $fileFoo = new UploadedFile(FilePath::parse('/tmp/foo'), 'Foo.txt', 1000);
+        $fileBar = new UploadedFile(FilePath::parse('/tmp/bar'), 'Bar.txt', 1000);
+
+        $uploadedFiles = new UploadedFileCollection();
+        $uploadedFiles->set('FOO', $fileFoo);
+        $uploadedFiles->set('bar', $fileBar);
+
+        $this->myRequest->setUploadedFiles($uploadedFiles);
+
+        self::assertSame($fileFoo, $this->myRequest->getUploadedFile('FOO'));
+        self::assertSame($fileBar, $this->myRequest->getUploadedFile('bar'));
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
