@@ -39,7 +39,7 @@ abstract class AbstractRequest implements RequestInterface
         $this->setHeaders(new HeaderCollection());
         $this->setFormParameters(new ParameterCollection());
         $this->setQueryParameters(new ParameterCollection());
-        $this->myUploadedFiles = new UploadedFileCollection(); // fixme: setUploadedFiles()
+        $this->setUploadedFiles(new UploadedFileCollection());
     }
 
     /**
@@ -280,6 +280,18 @@ abstract class AbstractRequest implements RequestInterface
     protected function setQueryParameters(ParameterCollectionInterface $parameters)
     {
         $this->myQueryParameters = $parameters;
+    }
+
+    /**
+     * Sets the uploaded files.
+     *
+     * @since 1.0.0
+     *
+     * @param UploadedFileCollectionInterface $uploadedFiles The uploaded files.
+     */
+    protected function setUploadedFiles(UploadedFileCollectionInterface $uploadedFiles)
+    {
+        $this->myUploadedFiles = $uploadedFiles;
     }
 
     /**

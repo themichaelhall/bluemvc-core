@@ -4,8 +4,11 @@ namespace BlueMvc\Core\Tests\Base;
 
 use BlueMvc\Core\Collections\HeaderCollection;
 use BlueMvc\Core\Collections\ParameterCollection;
+use BlueMvc\Core\Collections\UploadedFileCollection;
 use BlueMvc\Core\Http\Method;
 use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
+use BlueMvc\Core\UploadedFile;
+use DataTypes\FilePath;
 use DataTypes\Url;
 
 /**
@@ -209,6 +212,23 @@ class AbstractRequestTest extends \PHPUnit_Framework_TestCase
     public function testGetUploadedFiles()
     {
         self::assertSame([], iterator_to_array($this->myRequest->getUploadedFiles()));
+    }
+
+    /**
+     * Test setUploadedFiles method.
+     */
+    public function testSetUploadedFiles()
+    {
+        $fileFoo = new UploadedFile(FilePath::parse('/tmp/foo'), 'Foo.txt', 1000);
+        $fileBar = new UploadedFile(FilePath::parse('/tmp/bar'), 'Bar.txt', 1000);
+
+        $uploadedFiles = new UploadedFileCollection();
+        $uploadedFiles->set('foo', $fileFoo);
+        $uploadedFiles->set('bar', $fileBar);
+
+        $this->myRequest->setUploadedFiles($uploadedFiles);
+
+        self::assertSame(['foo' => $fileFoo, 'bar' => $fileBar], iterator_to_array($this->myRequest->getUploadedFiles()));
     }
 
     /**

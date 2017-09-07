@@ -5,6 +5,7 @@ namespace BlueMvc\Core\Tests\Helpers\TestRequests;
 use BlueMvc\Core\Base\AbstractRequest;
 use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\ParameterCollectionInterface;
+use BlueMvc\Core\Interfaces\Collections\UploadedFileCollectionInterface;
 use BlueMvc\Core\Interfaces\Http\MethodInterface;
 use DataTypes\Interfaces\UrlInterface;
 
@@ -106,6 +107,16 @@ class BasicTestRequest extends AbstractRequest
     public function setQueryParameters(ParameterCollectionInterface $parameters)
     {
         parent::setQueryParameters($parameters);
+    }
+
+    /**
+     * Sets the uploaded files.
+     *
+     * @param UploadedFileCollectionInterface $uploadedFiles The uploaded files.
+     */
+    public function setUploadedFiles(UploadedFileCollectionInterface $uploadedFiles)
+    {
+        parent::setUploadedFiles($uploadedFiles);
     }
 
     /**
