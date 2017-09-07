@@ -300,6 +300,21 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
+     * Sets an uploaded file.
+     *
+     * @since 1.0.0
+     *
+     * @param string                $name         The uploaded file name.
+     * @param UploadedFileInterface $uploadedFile The uploaded file.
+     *
+     * @throws \InvalidArgumentException If the $name parameter is not a string.
+     */
+    protected function setUploadedFile($name, UploadedFileInterface $uploadedFile)
+    {
+        $this->myUploadedFiles->set($name, $uploadedFile);
+    }
+
+    /**
      * Sets the uploaded files.
      *
      * @since 1.0.0
