@@ -10,8 +10,10 @@ namespace BlueMvc\Core;
 use BlueMvc\Core\Base\AbstractRequest;
 use BlueMvc\Core\Collections\HeaderCollection;
 use BlueMvc\Core\Collections\ParameterCollection;
+use BlueMvc\Core\Collections\UploadedFileCollection;
 use BlueMvc\Core\Http\Method;
 use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
+use DataTypes\FilePath;
 use DataTypes\Host;
 use DataTypes\Scheme;
 use DataTypes\Url;
@@ -32,12 +34,14 @@ class Request extends AbstractRequest
      * @param array|null $serverVars The server array or null to use the global $_SERVER array.
      * @param array|null $getVars    The get array or null to use the global $_GET array.
      * @param array|null $postVars   The post array or null to use the global $_POST array.
+     * @param array|null $filesVars  The file array or null to use the global $_FILES array.
      */
-    public function __construct(array $serverVars = null, array $getVars = null, array $postVars = null)
+    public function __construct(array $serverVars = null, array $getVars = null, array $postVars = null, $filesVars = null)
     {
         $serverVars = $serverVars ?: $_SERVER;
         $getVars = $getVars ?: $_GET;
         $postVars = $postVars ?: $_POST;
+        $filesVars = $filesVars ?: $_FILES;
 
         $uriAndQueryString = explode('?', $serverVars['REQUEST_URI'], 2);
         $hostAndPort = explode(':', $serverVars['HTTP_HOST'], 2);
@@ -55,6 +59,7 @@ class Request extends AbstractRequest
         $this->setHeaders(self::myParseHeaders($serverVars));
         $this->setQueryParameters(self::myParseParameters($getVars));
         $this->setFormParameters(self::myParseParameters($postVars));
+        $this->setUploadedFiles(self::myParseUploadedFiles($filesVars));
     }
 
     /**
@@ -87,6 +92,7 @@ class Request extends AbstractRequest
     private static function myParseParameters(array $parametersArray)
     {
         $parameters = new ParameterCollection();
+
         foreach ($parametersArray as $parameterName => $parameterValue) {
             $parameters->set(
                 strval($parameterName),
@@ -95,5 +101,30 @@ class Request extends AbstractRequest
         }
 
         return $parameters;
+    }
+
+    /**
+     * Parses an array with files info an uploaded files collection.
+     *
+     * @param array $filesArray The files array.
+     *
+     * @return UploadedFileCollection The uploaded files collection.
+     */
+    private static function myParseUploadedFiles(array $filesArray)
+    {
+        $uploadedFiles = new UploadedFileCollection();
+
+        foreach ($filesArray as $uploadedFileName => $uploadedFileInfo) {
+            $uploadedFiles->set(
+                strval($uploadedFileName),
+                new UploadedFile(
+                    FilePath::parse($uploadedFileInfo['tmp_name']),
+                    $uploadedFileInfo['name'],
+                    intval($uploadedFileInfo['size'])
+                )
+            );
+        }
+
+        return $uploadedFiles;
     }
 }

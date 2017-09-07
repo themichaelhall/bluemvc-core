@@ -349,4 +349,50 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
         self::assertSame([], iterator_to_array($request->getUploadedFiles()));
     }
+
+    /**
+     * Test getUploadedFiles method with uploaded files set.
+     */
+    public function testGetUploadedFilesWithUploadedFiles()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+
+        $request = new Request(
+            [
+                'HTTP_HOST'      => 'www.domain.com',
+                'REQUEST_URI'    => '/foo/bar',
+                'REQUEST_METHOD' => 'GET',
+            ],
+            [
+            ],
+            [
+            ],
+            [
+                'foo' => [
+                    'name'     => 'Documents/Foo.doc',
+                    'type'     => 'application/msword',
+                    'tmp_name' => '/tmp/foo123.doc',
+                    'size'     => '56789',
+                    'error'    => '0',
+                ],
+                2     => [
+                    'name'     => '..\\Bar.html',
+                    'type'     => 'text/html; charset=utf-8',
+                    'tmp_name' => '/tmp/bar456.htm',
+                    'size'     => 42,
+                    'error'    => 0,
+                ],
+            ]
+        );
+
+        $uploadedFiles = $request->getUploadedFiles();
+
+        self::assertSame(2, count($uploadedFiles));
+        self::assertSame($DS . 'tmp' . $DS . 'foo123.doc', $uploadedFiles->get('foo')->getPath()->__toString());
+        self::assertSame('Documents/Foo.doc', $uploadedFiles->get('foo')->getOriginalName());
+        self::assertSame(56789, $uploadedFiles->get('foo')->getSize());
+        self::assertSame($DS . 'tmp' . $DS . 'bar456.htm', $uploadedFiles->get('2')->getPath()->__toString());
+        self::assertSame('..\\Bar.html', $uploadedFiles->get('2')->getOriginalName());
+        self::assertSame(42, $uploadedFiles->get('2')->getSize());
+    }
 }
