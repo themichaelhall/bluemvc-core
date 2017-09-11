@@ -11,6 +11,7 @@ use BlueMvc\Core\Base\AbstractRequest;
 use BlueMvc\Core\Collections\HeaderCollection;
 use BlueMvc\Core\Collections\ParameterCollection;
 use BlueMvc\Core\Collections\UploadedFileCollection;
+use BlueMvc\Core\Exceptions\ServerEnvironmentException;
 use BlueMvc\Core\Http\Method;
 use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
 use DataTypes\FilePath;
@@ -108,6 +109,8 @@ class Request extends AbstractRequest
      *
      * @param array $filesArray The files array.
      *
+     * @throws ServerEnvironmentException If file upload failed due to server error or misconfiguration.
+     *
      * @return UploadedFileCollection The uploaded files collection.
      */
     private static function myParseUploadedFiles(array $filesArray)
@@ -115,6 +118,15 @@ class Request extends AbstractRequest
         $uploadedFiles = new UploadedFileCollection();
 
         foreach ($filesArray as $uploadedFileName => $uploadedFileInfo) {
+            $error = intval($uploadedFileInfo['error']);
+            if ($error !== 0) {
+                if (isset(self::$myFileUploadErrors[$error])) {
+                    throw new ServerEnvironmentException('File upload failed: ' . self::$myFileUploadErrors[$error]);
+                }
+
+                continue;
+            }
+
             $uploadedFiles->set(
                 strval($uploadedFileName),
                 new UploadedFile(
@@ -127,4 +139,13 @@ class Request extends AbstractRequest
 
         return $uploadedFiles;
     }
+
+    /**
+     * @var array My file upload errors that should result in an exception.
+     */
+    private static $myFileUploadErrors = [
+        UPLOAD_ERR_NO_TMP_DIR => 'Missing a temporary folder (UPLOAD_ERR_NO_TMP_DIR).',
+        UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk (UPLOAD_ERR_CANT_WRITE).',
+        UPLOAD_ERR_EXTENSION  => 'File upload stopped by extension (UPLOAD_ERR_EXTENSION).',
+    ];
 }

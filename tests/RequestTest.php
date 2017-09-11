@@ -2,6 +2,7 @@
 
 namespace BlueMvc\Core\Tests;
 
+use BlueMvc\Core\Exceptions\ServerEnvironmentException;
 use BlueMvc\Core\Request;
 
 /**
@@ -429,5 +430,65 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         self::assertSame(56789, $request->getUploadedFile('foo')->getSize());
         self::assertNull($request->getUploadedFile('FOO'));
         self::assertNull($request->getUploadedFile('bar'));
+    }
+
+    /**
+     * Test error in uploaded files.
+     *
+     * @dataProvider errorInUploadedFilesDataProvider
+     *
+     * @param int    $error                    The file upload error.
+     * @param string $expectedExceptionMessage The expected exception message or null if no exception was thrown.
+     */
+    public function testErrorInUploadedFiles($error, $expectedExceptionMessage)
+    {
+        $request = null;
+        $exceptionMessage = null;
+
+        try {
+            $request = new Request(
+                [
+                    'HTTP_HOST'      => 'www.domain.com',
+                    'REQUEST_URI'    => '/foo/bar',
+                    'REQUEST_METHOD' => 'GET',
+                ],
+                [
+                ],
+                [
+                ],
+                [
+                    'foo' => [
+                        'name'     => 'Foo.txt',
+                        'type'     => 'text/plain',
+                        'tmp_name' => '/tmp/foo.txt',
+                        'size'     => '100',
+                        'error'    => $error,
+                    ],
+                ]
+            );
+        } catch (ServerEnvironmentException $exception) {
+            $exceptionMessage = $exception->getMessage();
+        }
+
+        self::assertTrue($request === null || $request->getUploadedFile('foo') === null);
+        self::assertSame($expectedExceptionMessage, $exceptionMessage);
+    }
+
+    /**
+     * Data provider for error in uploaded files test.
+     *
+     * @return array The data.
+     */
+    public function errorInUploadedFilesDataProvider()
+    {
+        return [
+            [UPLOAD_ERR_INI_SIZE, null],
+            [UPLOAD_ERR_FORM_SIZE, null],
+            [UPLOAD_ERR_PARTIAL, null],
+            [UPLOAD_ERR_NO_FILE, null],
+            [UPLOAD_ERR_NO_TMP_DIR, 'File upload failed: Missing a temporary folder (UPLOAD_ERR_NO_TMP_DIR).'],
+            [UPLOAD_ERR_CANT_WRITE, 'File upload failed: Failed to write file to disk (UPLOAD_ERR_CANT_WRITE).'],
+            [UPLOAD_ERR_EXTENSION, 'File upload failed: File upload stopped by extension (UPLOAD_ERR_EXTENSION).'],
+        ];
     }
 }
