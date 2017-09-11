@@ -491,4 +491,39 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             [UPLOAD_ERR_EXTENSION, 'File upload failed: File upload stopped by extension (UPLOAD_ERR_EXTENSION).'],
         ];
     }
+
+    /**
+     * Test getUploadedFile method with multiple files.
+     */
+    public function testGetUploadedFileWithMultipleFiles()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+
+        $request = new Request(
+            [
+                'HTTP_HOST'      => 'www.domain.com',
+                'REQUEST_URI'    => '/foo/bar',
+                'REQUEST_METHOD' => 'GET',
+            ],
+            [
+            ],
+            [
+            ],
+            [
+                'foo' => [
+                    'name'     => ['Documents/Foo.doc', 'Documents/Bar.txt'],
+                    'type'     => ['application/msword', 'text/plain'],
+                    'tmp_name' => ['/tmp/foo123.doc', '/tmp/bar456.doc'],
+                    'size'     => [56789, 1234],
+                    'error'    => [0, 0],
+                ],
+            ]
+        );
+
+        self::assertSame($DS . 'tmp' . $DS . 'foo123.doc', $request->getUploadedFile('foo')->getPath()->__toString());
+        self::assertSame('Documents/Foo.doc', $request->getUploadedFile('foo')->getOriginalName());
+        self::assertSame(56789, $request->getUploadedFile('foo')->getSize());
+        self::assertNull($request->getUploadedFile('FOO'));
+        self::assertNull($request->getUploadedFile('bar'));
+    }
 }

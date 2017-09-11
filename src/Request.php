@@ -14,6 +14,7 @@ use BlueMvc\Core\Collections\UploadedFileCollection;
 use BlueMvc\Core\Exceptions\ServerEnvironmentException;
 use BlueMvc\Core\Http\Method;
 use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
+use BlueMvc\Core\Interfaces\UploadedFileInterface;
 use DataTypes\FilePath;
 use DataTypes\Host;
 use DataTypes\Scheme;
@@ -118,26 +119,50 @@ class Request extends AbstractRequest
         $uploadedFiles = new UploadedFileCollection();
 
         foreach ($filesArray as $uploadedFileName => $uploadedFileInfo) {
-            $error = intval($uploadedFileInfo['error']);
-            if ($error !== 0) {
-                if (isset(self::$myFileUploadErrors[$error])) {
-                    throw new ServerEnvironmentException('File upload failed: ' . self::$myFileUploadErrors[$error]);
-                }
-
+            $uploadedFile = self::myParseUploadedFile($uploadedFileInfo);
+            if ($uploadedFile === null) {
                 continue;
             }
 
-            $uploadedFiles->set(
-                strval($uploadedFileName),
-                new UploadedFile(
-                    FilePath::parse($uploadedFileInfo['tmp_name']),
-                    $uploadedFileInfo['name'],
-                    intval($uploadedFileInfo['size'])
-                )
-            );
+            $uploadedFiles->set(strval($uploadedFileName), $uploadedFile);
         }
 
         return $uploadedFiles;
+    }
+
+    /**
+     * Parses an array with file info into an uploaded file.
+     *
+     * @param array $uploadedFileInfo The file info.
+     *
+     * @throws ServerEnvironmentException If file upload failed due to server error or misconfiguration.
+     *
+     * @return UploadedFileInterface|null The uploaded file or null if parsing was not successful.
+     */
+    private static function myParseUploadedFile(array $uploadedFileInfo)
+    {
+        $error = is_array($uploadedFileInfo['error']) ? $uploadedFileInfo['error'][0] : $uploadedFileInfo['error'];
+        $error = intval($error);
+
+        if ($error !== 0) {
+            if (isset(self::$myFileUploadErrors[$error])) {
+                throw new ServerEnvironmentException('File upload failed: ' . self::$myFileUploadErrors[$error]);
+            }
+
+            return null;
+        }
+
+        $path = is_array($uploadedFileInfo['tmp_name']) ? $uploadedFileInfo['tmp_name'][0] : $uploadedFileInfo['tmp_name'];
+        $originalName = is_array($uploadedFileInfo['name']) ? $uploadedFileInfo['name'][0] : $uploadedFileInfo['name'];
+        $size = is_array($uploadedFileInfo['size']) ? $uploadedFileInfo['size'][0] : $uploadedFileInfo['size'];
+
+        $result = new UploadedFile(
+            FilePath::parse(strval($path)),
+            strval($originalName),
+            intval($size)
+        );
+
+        return $result;
     }
 
     /**
