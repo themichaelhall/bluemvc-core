@@ -78,6 +78,18 @@ abstract class AbstractController implements ControllerInterface
     }
 
     /**
+     * Constructs the controller.
+     *
+     * @since 1.0.0
+     */
+    protected function __construct()
+    {
+        $this->myApplication = null;
+        $this->myRequest = null;
+        $this->myResponse = null;
+    }
+
+    /**
      * Post-action event.
      *
      * @since 1.0.0

@@ -31,6 +31,8 @@ abstract class Controller extends AbstractController
      */
     public function __construct()
     {
+        parent::__construct();
+
         $this->myViewItems = new ViewItemCollection();
     }
 
