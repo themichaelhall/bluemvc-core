@@ -187,7 +187,7 @@ abstract class AbstractResponse implements ResponseInterface
      *
      * @since 1.0.0
      */
-    public abstract function output();
+    abstract public function output();
 
     /**
      * Constructs a response.
