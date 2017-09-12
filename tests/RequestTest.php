@@ -4,6 +4,7 @@ namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\Exceptions\ServerEnvironmentException;
 use BlueMvc\Core\Request;
+use BlueMvc\Core\Tests\Helpers\Fakes\FakeIsUploadedFile;
 
 /**
  * Test Request class.
@@ -525,5 +526,51 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         self::assertSame(56789, $request->getUploadedFile('foo')->getSize());
         self::assertNull($request->getUploadedFile('FOO'));
         self::assertNull($request->getUploadedFile('bar'));
+    }
+
+    /**
+     * Test getUploadedFile method with file that is not an uploaded file.
+     */
+    public function testGetUploadedFileWithNotUploadedFile()
+    {
+        $request = new Request(
+            [
+                'HTTP_HOST'      => 'www.domain.com',
+                'REQUEST_URI'    => '/foo/bar',
+                'REQUEST_METHOD' => 'GET',
+            ],
+            [
+            ],
+            [
+            ],
+            [
+                'foo' => [
+                    'name'     => 'Documents/Foo.doc',
+                    'type'     => 'application/msword',
+                    'tmp_name' => '/tmp/foo123.not-uploaded',
+                    'size'     => '56789',
+                    'error'    => '0',
+                ],
+            ]
+        );
+
+        self::assertEmpty($request->getUploadedFiles());
+        self::assertNull($request->getUploadedFile('foo'));
+    }
+
+    /**
+     * Set up.
+     */
+    public function setUp()
+    {
+        FakeIsUploadedFile::enable();
+    }
+
+    /**
+     * Tear down.
+     */
+    public function tearDown()
+    {
+        FakeIsUploadedFile::disable();
     }
 }
