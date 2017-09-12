@@ -38,7 +38,7 @@ class Request extends AbstractRequest
      * @param array|null $postVars   The post array or null to use the global $_POST array.
      * @param array|null $filesVars  The file array or null to use the global $_FILES array.
      */
-    public function __construct(array $serverVars = null, array $getVars = null, array $postVars = null, $filesVars = null)
+    public function __construct(array $serverVars = null, array $getVars = null, array $postVars = null, array $filesVars = null)
     {
         $serverVars = $serverVars ?: $_SERVER;
         $getVars = $getVars ?: $_GET;

@@ -26,24 +26,6 @@ use DataTypes\Interfaces\UrlInterface;
 abstract class AbstractRequest implements RequestInterface
 {
     /**
-     * Constructs the request.
-     *
-     * @since 1.0.0
-     *
-     * @param UrlInterface    $url    The url.
-     * @param MethodInterface $method The method.
-     */
-    public function __construct(UrlInterface $url, MethodInterface $method)
-    {
-        $this->setUrl($url);
-        $this->setMethod($method);
-        $this->setHeaders(new HeaderCollection());
-        $this->setFormParameters(new ParameterCollection());
-        $this->setQueryParameters(new ParameterCollection());
-        $this->setUploadedFiles(new UploadedFileCollection());
-    }
-
-    /**
      * Returns a form parameter value by form parameter name if it exists, null otherwise.
      *
      * @since 1.0.0
@@ -189,6 +171,24 @@ abstract class AbstractRequest implements RequestInterface
     public function getUrl()
     {
         return $this->myUrl;
+    }
+
+    /**
+     * Constructs the request.
+     *
+     * @since 1.0.0
+     *
+     * @param UrlInterface    $url    The url.
+     * @param MethodInterface $method The method.
+     */
+    protected function __construct(UrlInterface $url, MethodInterface $method)
+    {
+        $this->setUrl($url);
+        $this->setMethod($method);
+        $this->setHeaders(new HeaderCollection());
+        $this->setFormParameters(new ParameterCollection());
+        $this->setQueryParameters(new ParameterCollection());
+        $this->setUploadedFiles(new UploadedFileCollection());
     }
 
     /**

@@ -48,6 +48,19 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test setContent method with invalid content parameter type.
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage $content parameter is not a string.
+     */
+    public function testSetContentWithInvalidContentParameterType()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $response->setContent(12.34);
+    }
+
+    /**
      * Test getStatusCode method.
      */
     public function testGetStatusCode()
@@ -161,6 +174,20 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
         self::assertSame('text/plain', $response->getHeader('content-type'));
         self::assertNull($response->getHeader('Location'));
+    }
+
+    /**
+     * Test setHeader method.
+     */
+    public function testSetHeader()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $response->setHeader('allow', 'GET');
+        $response->setHeader('Content-type', 'text/html');
+        $response->setHeader('Content-Type', 'application/octet-stream');
+
+        self::assertSame(['allow' => 'GET', 'Content-Type' => 'application/octet-stream'], iterator_to_array($response->getHeaders()));
     }
 
     /**

@@ -22,21 +22,6 @@ use BlueMvc\Core\Interfaces\ResponseInterface;
 abstract class AbstractResponse implements ResponseInterface
 {
     /**
-     * Constructs a response.
-     *
-     * @since 1.0.0
-     *
-     * @param RequestInterface $request The request.
-     */
-    public function __construct(RequestInterface $request)
-    {
-        $this->myContent = '';
-        $this->myHeaders = new HeaderCollection();
-        $this->myRequest = $request;
-        $this->myStatusCode = new StatusCode(StatusCode::OK);
-    }
-
-    /**
      * Adds a header.
      *
      * @since 1.0.0
@@ -121,10 +106,15 @@ abstract class AbstractResponse implements ResponseInterface
      * @since 1.0.0
      *
      * @param string $content The content.
+     *
+     * @throws \InvalidArgumentException If the $content parameter is not a string.
      */
     public function setContent($content)
     {
-        // fixme: check content parameter.
+        if (!is_string($content)) {
+            throw new \InvalidArgumentException('$content parameter is not a string.');
+        }
+
         $this->myContent = $content;
     }
 
@@ -190,6 +180,28 @@ abstract class AbstractResponse implements ResponseInterface
     public function setStatusCode(StatusCodeInterface $statusCode)
     {
         $this->myStatusCode = $statusCode;
+    }
+
+    /**
+     * Outputs the content.
+     *
+     * @since 1.0.0
+     */
+    public abstract function output();
+
+    /**
+     * Constructs a response.
+     *
+     * @since 1.0.0
+     *
+     * @param RequestInterface $request The request.
+     */
+    protected function __construct(RequestInterface $request)
+    {
+        $this->myContent = '';
+        $this->myHeaders = new HeaderCollection();
+        $this->myRequest = $request;
+        $this->myStatusCode = new StatusCode(StatusCode::OK);
     }
 
     /**

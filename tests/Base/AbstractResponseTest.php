@@ -26,6 +26,17 @@ class AbstractResponseTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test getRequest method.
+     */
+    public function testGetRequest()
+    {
+        $request = new BasicTestRequest(Url::parse('http://localhost/'), new Method('GET'));
+        $response = new BasicTestResponse($request);
+
+        self::assertSame($request, $response->getRequest());
+    }
+
+    /**
      * Test setContent method.
      */
     public function testSetContent()
@@ -35,6 +46,19 @@ class AbstractResponseTest extends \PHPUnit_Framework_TestCase
         $response->setContent('Hello world!');
 
         self::assertSame('Hello world!', $response->getContent());
+    }
+
+    /**
+     * Test setContent method with invalid content parameter type.
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage $content parameter is not a string.
+     */
+    public function testSetContentWithInvalidContentParameterType()
+    {
+        $request = new BasicTestRequest(Url::parse('http://localhost/'), new Method('GET'));
+        $response = new BasicTestResponse($request);
+        $response->setContent(false);
     }
 
     /**
@@ -81,6 +105,20 @@ class AbstractResponseTest extends \PHPUnit_Framework_TestCase
         $response->setHeader('Content-Type', 'text/plain');
 
         self::assertSame(['Content-Type' => 'text/plain'], iterator_to_array($response->getHeaders()));
+    }
+
+    /**
+     * Test setHeader method.
+     */
+    public function testSetHeader()
+    {
+        $request = new BasicTestRequest(Url::parse('http://localhost/'), new Method('GET'));
+        $response = new BasicTestResponse($request);
+        $response->setHeader('allow', 'GET');
+        $response->setHeader('Content-Type', 'text/plain');
+        $response->setHeader('Allow', 'POST');
+
+        self::assertSame(['Allow' => 'POST', 'Content-Type' => 'text/plain'], iterator_to_array($response->getHeaders()));
     }
 
     /**
