@@ -7,18 +7,17 @@
 
 namespace BlueMvc\Core;
 
+use BlueMvc\Core\Base\AbstractRoute;
 use BlueMvc\Core\Exceptions\InvalidControllerClassException;
 use BlueMvc\Core\Exceptions\InvalidRoutePathException;
-use BlueMvc\Core\Interfaces\ControllerInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
-use BlueMvc\Core\Interfaces\RouteInterface;
 
 /**
  * Class representing a route.
  *
  * @since 1.0.0
  */
-class Route implements RouteInterface
+class Route extends AbstractRoute
 {
     /**
      * Constructs a route.
@@ -38,31 +37,11 @@ class Route implements RouteInterface
             throw new \InvalidArgumentException('$path parameter is not a string.');
         }
 
-        if (!is_string($controllerClassName)) {
-            throw new \InvalidArgumentException('$controllerClassName parameter is not a string.');
-        }
-
-        if (!is_a($controllerClassName, ControllerInterface::class, true)) {
-            throw new InvalidControllerClassException('"' . $controllerClassName . '" is not a valid controller class.');
-        }
+        parent::__construct($controllerClassName);
 
         // Validate path.
         self::myValidatePath($path);
         $this->myPath = $path;
-
-        $this->myControllerClassName = $controllerClassName;
-    }
-
-    /**
-     * Returns the controller class name.
-     *
-     * @since 1.0.0
-     *
-     * @return string The controller class name.
-     */
-    public function getControllerClassName()
-    {
-        return $this->myControllerClassName;
     }
 
     /**
@@ -96,7 +75,7 @@ class Route implements RouteInterface
             if ($this->myPath === '') {
                 $action = $path->getFilename() !== null ? $path->getFilename() : '';
 
-                return new RouteMatch($this->myControllerClassName, $action);
+                return new RouteMatch($this->getControllerClassName(), $action);
             }
         } else {
             // Subdirectory, e.g. "/foo/" or "/foo/bar/"
@@ -113,7 +92,7 @@ class Route implements RouteInterface
                     $parameters = [];
                 }
 
-                return new RouteMatch($this->myControllerClassName, $action, $parameters);
+                return new RouteMatch($this->getControllerClassName(), $action, $parameters);
             }
         }
 
@@ -133,11 +112,6 @@ class Route implements RouteInterface
             throw new InvalidRoutePathException('Path "' . $path . '" contains invalid character "' . $matches[0] . '".');
         }
     }
-
-    /**
-     * @var string My controller class name.
-     */
-    private $myControllerClassName;
 
     /**
      * @var string My path.
