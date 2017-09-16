@@ -21,6 +21,28 @@ class DefaultRouteTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test that setting an undefined controller class name throws exception.
+     *
+     * @expectedException \BlueMvc\Core\Exceptions\InvalidControllerClassException
+     * @expectedExceptionMessage "BlueMvc\Core\FooBar" is not a valid controller class.
+     */
+    public function testSetUndefinedControllerClassThrowsException()
+    {
+        new DefaultRoute('BlueMvc\\Core\\FooBar');
+    }
+
+    /**
+     * Test that setting an invalid controller class name throws exception.
+     *
+     * @expectedException \BlueMvc\Core\Exceptions\InvalidControllerClassException
+     * @expectedExceptionMessage "BlueMvc\Core\Request" is not a valid controller class.
+     */
+    public function testSetInvalidControllerClassThrowsException()
+    {
+        new DefaultRoute('BlueMvc\\Core\\Request');
+    }
+
+    /**
      * Test that all url matches.
      */
     public function testAllUrlMatches()
@@ -123,5 +145,16 @@ class DefaultRouteTest extends \PHPUnit_Framework_TestCase
         self::assertSame(BasicTestController::class, $routeMatch->getControllerClassName());
         self::assertSame('foo', $routeMatch->getAction());
         self::assertSame(['bar', 'baz', ''], $routeMatch->getParameters());
+    }
+
+    /**
+     * Test create route with invalid controller class name parameter type.
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage $controllerClassName parameter is not a string.
+     */
+    public function testCreateWithInvalidControllerClassNameParameterType()
+    {
+        new DefaultRoute(10);
     }
 }
