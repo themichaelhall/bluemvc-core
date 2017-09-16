@@ -157,4 +157,15 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         self::assertSame('<html><body><h1>Custom view file</h1><span>' . $application->getDocumentRoot() . '</span><em>http://www.domain.com/</em><p>The Model</p></body></html>', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
+
+    /**
+     * Test create a view with invalid view file.
+     *
+     * @expectedException \BlueMvc\Core\Exceptions\InvalidViewFileException
+     * @expectedExceptionMessage View file "foo$bar" contains invalid character "$".
+     */
+    public function testCreateWithInvalidViewFile()
+    {
+        new View([], 'foo$bar');
+    }
 }

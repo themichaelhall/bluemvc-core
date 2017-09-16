@@ -7,6 +7,7 @@
 
 namespace BlueMvc\Core;
 
+use BlueMvc\Core\Exceptions\InvalidViewFileException;
 use BlueMvc\Core\Exceptions\ViewFileNotFoundException;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\Collections\ViewItemCollectionInterface;
@@ -32,6 +33,7 @@ class View implements ViewInterface
      * @param string|null $file  The file.
      *
      * @throws \InvalidArgumentException If the $file parameter is not a string or null.
+     * @throws InvalidViewFileException If the file is invalid.
      */
     public function __construct($model = null, $file = null)
     {
@@ -41,7 +43,10 @@ class View implements ViewInterface
             throw new \InvalidArgumentException('$file parameter is not a string or null.');
         }
 
-        // fixme: validate $file
+        if (preg_match('/[^a-zA-Z0-9._-]/', $file, $matches)) {
+            throw new InvalidViewFileException('View file "' . $file . '" contains invalid character "' . $matches[0] . '".');
+        }
+
         $this->myFile = $file;
     }
 
