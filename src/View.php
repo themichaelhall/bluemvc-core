@@ -33,7 +33,7 @@ class View implements ViewInterface
      * @param string|null $file  The file.
      *
      * @throws \InvalidArgumentException If the $file parameter is not a string or null.
-     * @throws InvalidViewFileException If the file is invalid.
+     * @throws InvalidViewFileException  If the file is invalid.
      */
     public function __construct($model = null, $file = null)
     {
