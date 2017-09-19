@@ -21,6 +21,18 @@ class ViewTestController extends Controller
     }
 
     /**
+     * Alternate view type action.
+     *
+     * @return View The view;
+     */
+    public function alternateAction()
+    {
+        $this->setViewItem('Foo', 'Bar');
+
+        return new View('This is the model.');
+    }
+
+    /**
      * Action with model.
      *
      * @return View The view.

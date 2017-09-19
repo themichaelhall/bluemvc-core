@@ -9,6 +9,7 @@ use BlueMvc\Core\Request;
 use BlueMvc\Core\Response;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ViewTestController;
 use BlueMvc\Core\Tests\Helpers\TestViewRenderers\BasicTestViewRenderer;
+use BlueMvc\Core\Tests\Helpers\TestViewRenderers\JsonTestViewRenderer;
 use BlueMvc\Core\View;
 use DataTypes\FilePath;
 
@@ -167,5 +168,55 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     public function testCreateWithInvalidViewFile()
     {
         new View([], 'foo$bar');
+    }
+
+    /**
+     * Test update response method with alternate view renderer (basic test view renderer first)
+     */
+    public function testUpdateResponseWithAlternativeViewRendererBasicFirst()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+
+        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
+        $application->addViewRenderer(new BasicTestViewRenderer());
+        $application->addViewRenderer(new JsonTestViewRenderer());
+
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/alternate', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $controller = new ViewTestController();
+        $view = new View('The Model');
+        $viewItems = new ViewItemCollection();
+        $viewItems->set('Foo', 'The View Data');
+
+        $view->updateResponse($application, $request, $response, $controller, 'alternate', $viewItems);
+
+        self::assertSame('<html><body><h1>Alternate</h1><span>' . $application->getDocumentRoot() . '</span><em>' . $request->getUrl() . '</em><p>The Model</p><i>The View Data</i></body></html>', $response->getContent());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Test update response method with alternate view renderer (json test view renderer first)
+     */
+    public function testUpdateResponseWithAlternativeViewRendererJsonFirst()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+
+        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
+        $application->addViewRenderer(new JsonTestViewRenderer());
+        $application->addViewRenderer(new BasicTestViewRenderer());
+
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/alternate', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $controller = new ViewTestController();
+        $view = new View('The Model');
+        $viewItems = new ViewItemCollection();
+        $viewItems->set('Foo', 'The View Data');
+
+        $view->updateResponse($application, $request, $response, $controller, 'alternate', $viewItems);
+
+        self::assertSame('{"Model":"The Model","ViewItems":{"Foo":"The View Data"}}', $response->getContent());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 }

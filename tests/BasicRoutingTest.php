@@ -20,6 +20,7 @@ use BlueMvc\Core\Tests\Helpers\TestControllers\PreAndPostActionEventController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\UppercaseActionTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ViewTestController;
 use BlueMvc\Core\Tests\Helpers\TestViewRenderers\BasicTestViewRenderer;
+use BlueMvc\Core\Tests\Helpers\TestViewRenderers\JsonTestViewRenderer;
 use DataTypes\FilePath;
 
 /**
@@ -187,9 +188,9 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
         ob_end_clean();
 
         self::assertContains('BlueMvc\Core\Exceptions\ViewFileNotFoundException', $responseOutput);
-        self::assertContains('Could not find view file &quot;' . $this->application->getViewPath() . 'ViewTest' . $DS . 'withnoviewfile.view&quot;', $responseOutput);
+        self::assertContains('Could not find view file &quot;' . $this->application->getViewPath() . 'ViewTest' . $DS . 'withnoviewfile.json&quot; or &quot;' . $this->application->getViewPath() . 'ViewTest' . $DS . 'withnoviewfile.view&quot;', $responseOutput);
         self::assertContains('BlueMvc\Core\Exceptions\ViewFileNotFoundException', $response->getContent());
-        self::assertContains('Could not find view file &quot;' . $this->application->getViewPath() . 'ViewTest' . $DS . 'withnoviewfile.view&quot;', $response->getContent());
+        self::assertContains('Could not find view file &quot;' . $this->application->getViewPath() . 'ViewTest' . $DS . 'withnoviewfile.json&quot; or &quot;' . $this->application->getViewPath() . 'ViewTest' . $DS . 'withnoviewfile.view&quot;', $response->getContent());
         self::assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
         self::assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
     }
@@ -208,6 +209,24 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
 
         self::assertSame('<html><body><h1>Custom view file</h1><span>' . $this->application->getDocumentRoot() . '</span><em>http://www.domain.com/view/withcustomviewfile</em><p>This is the model.</p></body></html>', $responseOutput);
         self::assertSame('<html><body><h1>Custom view file</h1><span>' . $this->application->getDocumentRoot() . '</span><em>http://www.domain.com/view/withcustomviewfile</em><p>This is the model.</p></body></html>', $response->getContent());
+        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Test get view with alternate view type.
+     */
+    public function testGetViewWithAlternateViewType()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/view/alternate', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        self::assertSame('{"Model":"This is the model.","ViewItems":{"Foo":"Bar"}}', $responseOutput);
+        self::assertSame('{"Model":"This is the model.","ViewItems":{"Foo":"Bar"}}', $response->getContent());
         self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
@@ -893,6 +912,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
         FakeHeaders::enable();
         $this->application = new BasicTestApplication(FilePath::parse(__DIR__ . DIRECTORY_SEPARATOR));
         $this->application->setViewPath(FilePath::parse('Helpers' . DIRECTORY_SEPARATOR . 'TestViews' . DIRECTORY_SEPARATOR));
+        $this->application->addViewRenderer(new JsonTestViewRenderer());
         $this->application->addViewRenderer(new BasicTestViewRenderer());
 
         $this->application->addRoute(new Route('', BasicTestController::class));
