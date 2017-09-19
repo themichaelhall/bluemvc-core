@@ -171,7 +171,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test update response method with alternate view renderer (basic test view renderer first)
+     * Test update response method with alternate view renderer (basic test view renderer first).
      */
     public function testUpdateResponseWithAlternativeViewRendererBasicFirst()
     {
@@ -196,7 +196,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test update response method with alternate view renderer (json test view renderer first)
+     * Test update response method with alternate view renderer (json test view renderer first).
      */
     public function testUpdateResponseWithAlternativeViewRendererJsonFirst()
     {
