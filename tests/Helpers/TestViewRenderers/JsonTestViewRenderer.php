@@ -34,7 +34,7 @@ class JsonTestViewRenderer extends AbstractViewRenderer
      *
      * @return string The rendered view.
      */
-    function renderView(ApplicationInterface $application, RequestInterface $request, FilePathInterface $viewFile, $model = null, ViewItemCollectionInterface $viewItems = null)
+    public function renderView(ApplicationInterface $application, RequestInterface $request, FilePathInterface $viewFile, $model = null, ViewItemCollectionInterface $viewItems = null)
     {
         $fileContent = file_get_contents($application->getViewPath()->withFilePath($viewFile));
         $result = str_replace(
