@@ -232,6 +232,24 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test get view with second choice view type.
+     */
+    public function testGetViewWithSecondChoiceViewType()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/view/onlyjson', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        self::assertSame('{"Model":"This is the model."}', $responseOutput);
+        self::assertSame('{"Model":"This is the model."}', $response->getContent());
+        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
      * Test get existing page for controller with default action.
      */
     public function testGetExistingPageForControllerWithDefaultAction()

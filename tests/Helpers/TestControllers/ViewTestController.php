@@ -33,6 +33,16 @@ class ViewTestController extends Controller
     }
 
     /**
+     * Action with only a second choice view type.
+     *
+     * @return View The view.
+     */
+    public function onlyjsonAction()
+    {
+        return new View('This is the model.');
+    }
+
+    /**
      * Action with model.
      *
      * @return View The view.

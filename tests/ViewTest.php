@@ -179,7 +179,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
-        $application->addViewRenderer(new BasicTestViewRenderer());
+        $application->addViewRenderer(new BasicTestViewRenderer()); // Use this.
         $application->addViewRenderer(new JsonTestViewRenderer());
 
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/alternate', 'REQUEST_METHOD' => 'GET']);
@@ -204,7 +204,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
-        $application->addViewRenderer(new JsonTestViewRenderer());
+        $application->addViewRenderer(new JsonTestViewRenderer()); // Use this.
         $application->addViewRenderer(new BasicTestViewRenderer());
 
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/alternate', 'REQUEST_METHOD' => 'GET']);
@@ -217,6 +217,31 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $view->updateResponse($application, $request, $response, $controller, 'alternate', $viewItems);
 
         self::assertSame('{"Model":"The Model","ViewItems":{"Foo":"The View Data"}}', $response->getContent());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Test update response method with alternate view renderer (only json test view renderer).
+     */
+    public function testUpdateResponseWithAlternativeViewRendererOnlyJson()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+
+        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
+        $application->addViewRenderer(new BasicTestViewRenderer()); // No view exist for this.
+        $application->addViewRenderer(new JsonTestViewRenderer()); // Use this.
+
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/onlyjson', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $controller = new ViewTestController();
+        $view = new View('The Model');
+        $viewItems = new ViewItemCollection();
+        $viewItems->set('Foo', 'The View Data');
+
+        $view->updateResponse($application, $request, $response, $controller, 'onlyjson', $viewItems);
+
+        self::assertSame('{"Model":"The Model"}', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 }
