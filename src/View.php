@@ -8,6 +8,7 @@
 namespace BlueMvc\Core;
 
 use BlueMvc\Core\Exceptions\InvalidViewFileException;
+use BlueMvc\Core\Exceptions\MissingViewRendererException;
 use BlueMvc\Core\Exceptions\ViewFileNotFoundException;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\Collections\ViewItemCollectionInterface;
@@ -86,8 +87,9 @@ class View implements ViewInterface
      * @param string                      $action      The action.
      * @param ViewItemCollectionInterface $viewItems   The view items.
      *
-     * @throws \InvalidArgumentException If the $action parameter is not a string.
-     * @throws ViewFileNotFoundException If a suitable view file could not be found.
+     * @throws \InvalidArgumentException    If the $action parameter is not a string.
+     * @throws MissingViewRendererException If no view renderer was added to the application.
+     * @throws ViewFileNotFoundException    If a suitable view file could not be found.
      */
     public function updateResponse(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, ControllerInterface $controller, $action, ViewItemCollectionInterface $viewItems)
     {
@@ -100,11 +102,14 @@ class View implements ViewInterface
             $controllerName = substr($controllerName, 0, -10);
         }
 
+        $viewRenderers = $application->getViewRenderers();
+        if (count($viewRenderers) === 0) {
+            throw new MissingViewRendererException('No view renderer was added to application.');
+        }
+
         // Try the view renderers until a match is found.
         $testedViewFiles = [];
-
-        // fixme: Exception if no view renderers are found.
-        foreach ($application->getViewRenderers() as $viewRenderer) {
+        foreach ($viewRenderers as $viewRenderer) {
             $viewFile = FilePath::parse($controllerName . DIRECTORY_SEPARATOR . ($this->getFile() ?: $action) . '.' . $viewRenderer->getViewFileExtension());
             $fullViewFile = $application->getViewPath()->withFilePath($viewFile);
 

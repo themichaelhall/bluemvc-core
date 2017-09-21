@@ -244,4 +244,26 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         self::assertSame('{"Model":"The Model"}', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
+
+    /**
+     * Test update response method with no view renderer.
+     *
+     * @expectedException \BlueMvc\Core\Exceptions\MissingViewRendererException
+     * @expectedExceptionMessage No view renderer was added to application.
+     */
+    public function testUpdateViewWithNoViewRenderer()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+
+        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
+
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $controller = new ViewTestController();
+        $view = new View();
+        $viewItems = new ViewItemCollection();
+
+        $view->updateResponse($application, $request, $response, $controller, 'index', $viewItems);
+    }
 }
