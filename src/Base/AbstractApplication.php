@@ -7,6 +7,7 @@
 
 namespace BlueMvc\Core\Base;
 
+use BlueMvc\Core\Collections\HeaderCollection;
 use BlueMvc\Core\Exceptions\InvalidControllerClassException;
 use BlueMvc\Core\Exceptions\InvalidFilePathException;
 use BlueMvc\Core\Http\StatusCode;
@@ -335,8 +336,8 @@ abstract class AbstractApplication implements ApplicationInterface
      */
     private function myExceptionToResponse(\Exception $exception, ResponseInterface $response)
     {
-        // fixme: clear headers.
         $response->setStatusCode(new StatusCode(StatusCode::INTERNAL_SERVER_ERROR));
+        $response->setHeaders(new HeaderCollection());
         $response->setContent($this->myExceptionToHtml($exception));
     }
 

@@ -16,6 +16,9 @@ class ExceptionTestController extends Controller
      */
     public function indexAction()
     {
+        $this->getResponse()->setHeader('X-Should-Be-Removed', '1');
+        $this->getResponse()->setContent('Should also be removed.');
+
         throw new \LogicException('Exception was thrown.');
     }
 }
