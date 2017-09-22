@@ -13,6 +13,7 @@ use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\DefaultActionTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\MultiLevelTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\PreAndPostActionEventController;
+use BlueMvc\Core\Tests\Helpers\TestControllers\SpecialActionNameTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\UppercaseActionTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ViewTestController;
 use BlueMvc\Core\Tests\Helpers\TestViewRenderers\BasicTestViewRenderer;
@@ -610,6 +611,43 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
             ['publicStatic', true, 'Public static action'],
             ['protectedStatic', true, 'Default action: Action=[protectedStatic]'],
             ['privateStatic', true, 'Default action: Action=[privateStatic]'],
+        ];
+    }
+
+    /**
+     * Test actions with special names.
+     *
+     * @dataProvider specialNameActionDataProvider
+     *
+     * @param string $action              The action.
+     * @param bool   $expectedIsProcessed True if the excepted result is that action is processed, false otherwise.
+     * @param string $expectedContent     The expected content.
+     */
+    public function testSpecialNameAction($action, $expectedIsProcessed, $expectedContent)
+    {
+        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/' . $action, 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $controller = new SpecialActionNameTestController();
+        $isProcessed = $controller->processRequest($application, $request, $response, $action, []);
+
+        self::assertSame($expectedIsProcessed, $isProcessed);
+        self::assertSame($expectedContent, $response->getContent());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Data provider for special action names tests.
+     */
+    public function specialNameActionDataProvider()
+    {
+        return [
+            ['index', true, '_index action'],
+            ['Index', false, ''],
+            ['', false, ''],
+            ['Default', true, '_Default action'],
+            ['default', false, ''],
+            ['foo', false, ''],
         ];
     }
 }

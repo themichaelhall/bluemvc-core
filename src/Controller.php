@@ -89,7 +89,7 @@ abstract class Controller extends AbstractController
         parent::processRequest($application, $request, $response, $action, $parameters);
 
         $isIndex = $action === '';
-        $actionName = $isIndex ? 'index' : $action;
+        $actionName = self::myGetActionName($action);
 
         // Try to invoke the action, and if that failed, try to invoke the default action.
         if (!$this->tryInvokeActionMethod($actionName, $parameters, !$isIndex, $result, $hasFoundActionMethod)) {
@@ -168,7 +168,32 @@ abstract class Controller extends AbstractController
     }
 
     /**
+     * Returns the action name for a specific action.
+     *
+     * @param string $action The action.
+     *
+     * @return string The action name.
+     */
+    private static function myGetActionName($action)
+    {
+        if ($action === '') {
+            return 'index';
+        }
+
+        if (in_array(strtolower($action), self::$myMagicActionMethods)) {
+            return '_' . $action;
+        }
+
+        return $action;
+    }
+
+    /**
      * @var ViewItemCollectionInterface My view items.
      */
     private $myViewItems;
+
+    /**
+     * @var array My magic action methods.
+     */
+    private static $myMagicActionMethods = ['index', 'default'];
 }
