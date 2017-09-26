@@ -20,6 +20,18 @@ use BlueMvc\Core\Interfaces\ResponseInterface;
 abstract class AbstractController implements ControllerInterface
 {
     /**
+     * Returns the action being processed or nu if no action is being processed.
+     *
+     * @since 1.0.0
+     *
+     * @return string|null The action being processed or nu if no action is being processed.
+     */
+    public function getAction()
+    {
+        return $this->myAction;
+    }
+
+    /**
      * Returns the application if controller is processing, null otherwise.
      *
      * @since 1.0.0
@@ -87,6 +99,7 @@ abstract class AbstractController implements ControllerInterface
         $this->myApplication = null;
         $this->myRequest = null;
         $this->myResponse = null;
+        $this->myAction = null;
     }
 
     /**
@@ -144,6 +157,8 @@ abstract class AbstractController implements ControllerInterface
             // Action method found, but parameters did not match.
             return false;
         }
+
+        $this->myAction = $action;
 
         // Handle pre-action event.
         $preActionResult = $this->onPreActionEvent();
@@ -244,4 +259,9 @@ abstract class AbstractController implements ControllerInterface
      * @var ResponseInterface|null My response.
      */
     private $myResponse;
+
+    /**
+     * @var string|null My action.
+     */
+    private $myAction;
 }

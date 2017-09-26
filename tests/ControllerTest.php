@@ -650,4 +650,60 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
             ['foo', false, ''],
         ];
     }
+
+    /**
+     * Test getAction method for index action.
+     */
+    public function testGetActionForIndexAction()
+    {
+        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $controller = new BasicTestController();
+        $controller->processRequest($application, $request, $response, '', []);
+
+        self::assertSame('index', $controller->getAction());
+    }
+
+    /**
+     * Test getAction method for custom action.
+     */
+    public function testGetActionForCustomAction()
+    {
+        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/int', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $controller = new BasicTestController();
+        $controller->processRequest($application, $request, $response, 'int', []);
+
+        self::assertSame('int', $controller->getAction());
+    }
+
+    /**
+     * Test getAction method for default action.
+     */
+    public function testGetActionForDefaultAction()
+    {
+        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/bar', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $controller = new DefaultActionTestController();
+        $controller->processRequest($application, $request, $response, 'bar', []);
+
+        self::assertSame('default', $controller->getAction());
+    }
+
+    /**
+     * Test getAction method for invalid action.
+     */
+    public function testGetActionForInvalidAction()
+    {
+        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response($request);
+        $controller = new BasicTestController();
+        $controller->processRequest($application, $request, $response, 'foo', []);
+
+        self::assertNull($controller->getAction());
+    }
 }
