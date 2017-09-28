@@ -662,7 +662,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, '', []);
 
-        self::assertSame('index', $controller->getAction());
+        self::assertSame('index', $controller->getActionName());
     }
 
     /**
@@ -676,7 +676,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, 'int', []);
 
-        self::assertSame('int', $controller->getAction());
+        self::assertSame('int', $controller->getActionName());
     }
 
     /**
@@ -690,7 +690,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $controller = new DefaultActionTestController();
         $controller->processRequest($application, $request, $response, 'bar', []);
 
-        self::assertSame('default', $controller->getAction());
+        self::assertSame('default', $controller->getActionName());
     }
 
     /**
@@ -704,6 +704,6 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, 'foo', []);
 
-        self::assertNull($controller->getAction());
+        self::assertNull($controller->getActionName());
     }
 }
