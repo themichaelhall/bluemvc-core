@@ -10,6 +10,7 @@ namespace BlueMvc\Core;
 use BlueMvc\Core\Base\AbstractController;
 use BlueMvc\Core\Collections\ViewItemCollection;
 use BlueMvc\Core\Exceptions\ViewFileNotFoundException;
+use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Interfaces\ActionResults\ActionResultInterface;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\Collections\ViewItemCollectionInterface;
@@ -77,8 +78,6 @@ abstract class Controller extends AbstractController
      *
      * @throws \InvalidArgumentException If the $action parameter is not a string.
      * @throws ViewFileNotFoundException If no suitable view file was found.
-     *
-     * @return bool True if request was actually processed, false otherwise.
      */
     public function processRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, $action, array $parameters = [])
     {
@@ -96,13 +95,17 @@ abstract class Controller extends AbstractController
             if ($hasFoundActionMethod) {
                 // If action method was found, but something else failed (e.g. parameter mismatch),
                 // do not try to invoke default method.
-                return false;
+                $response->setStatusCode(new StatusCode(StatusCode::NOT_FOUND));
+
+                return;
             }
 
             $actionName = 'default';
 
             if (!$this->tryInvokeActionMethod($actionName, array_merge([$action], $parameters), false, $result)) {
-                return false;
+                $response->setStatusCode(new StatusCode(StatusCode::NOT_FOUND));
+
+                return;
             }
         }
 
@@ -110,34 +113,30 @@ abstract class Controller extends AbstractController
         if ($result instanceof ViewInterface) {
             $result->updateResponse($application, $request, $response, $this, $actionName, $this->myViewItems);
 
-            return true;
+            return;
         }
 
         if ($result instanceof ActionResultInterface) {
             $result->updateResponse($application, $request, $response);
 
-            return true;
+            return;
         }
 
         if (is_bool($result)) {
             $response->setContent($result ? 'true' : 'false');
 
-            return true;
+            return;
         }
 
         if (is_scalar($result) || (is_object($result) && method_exists($result, '__toString'))) {
             $response->setContent((string) $result);
 
-            return true;
+            return;
         }
 
         if ($result !== null) {
             $response->setContent(gettype($result));
-
-            return true;
         }
-
-        return true;
     }
 
     /**

@@ -90,9 +90,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $controller = new BasicTestController();
-        $isProcessed = $controller->processRequest($application, $request, $response, '');
+        $controller->processRequest($application, $request, $response, '');
 
-        self::assertTrue($isProcessed);
         self::assertSame('Hello World!', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
@@ -106,11 +105,10 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/notfound', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $controller = new BasicTestController();
-        $isProcessed = $controller->processRequest($application, $request, $response, 'notfound');
+        $controller->processRequest($application, $request, $response, 'notfound');
 
-        self::assertFalse($isProcessed);
         self::assertSame('', $response->getContent());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -122,9 +120,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/123numeric', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $controller = new BasicTestController();
-        $isProcessed = $controller->processRequest($application, $request, $response, '123numeric');
+        $controller->processRequest($application, $request, $response, '123numeric');
 
-        self::assertTrue($isProcessed);
         self::assertSame('Numeric action result', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
@@ -138,9 +135,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $controller = new DefaultActionTestController();
-        $isProcessed = $controller->processRequest($application, $request, $response, 'foo');
+        $controller->processRequest($application, $request, $response, 'foo');
 
-        self::assertTrue($isProcessed);
         self::assertSame('Foo Action', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
@@ -154,9 +150,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/bar', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $controller = new DefaultActionTestController();
-        $isProcessed = $controller->processRequest($application, $request, $response, 'bar');
+        $controller->processRequest($application, $request, $response, 'bar');
 
-        self::assertTrue($isProcessed);
         self::assertSame('Default Action bar', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
@@ -170,9 +165,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/notfound', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $controller = new ActionResultTestController();
-        $isProcessed = $controller->processRequest($application, $request, $response, 'notfound');
+        $controller->processRequest($application, $request, $response, 'notfound');
 
-        self::assertTrue($isProcessed);
         self::assertSame('Page was not found', $response->getContent());
         self::assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
     }
@@ -191,9 +185,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $controller = new ViewTestController();
-        $isProcessed = $controller->processRequest($application, $request, $response, '');
+        $controller->processRequest($application, $request, $response, '');
 
-        self::assertTrue($isProcessed);
         self::assertSame('<html><body><h1>Index</h1><span>' . $application->getDocumentRoot() . '</span><em>http://www.domain.com/</em></body></html>', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
@@ -212,9 +205,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/withcustomviewfile', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $controller = new ViewTestController();
-        $isProcessed = $controller->processRequest($application, $request, $response, 'withcustomviewfile');
+        $controller->processRequest($application, $request, $response, 'withcustomviewfile');
 
-        self::assertTrue($isProcessed);
         self::assertSame('<html><body><h1>Custom view file</h1><span>' . $application->getDocumentRoot() . '</span><em>http://www.domain.com/withcustomviewfile</em><p>This is the model.</p></body></html>', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
@@ -228,9 +220,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $controller = new PreAndPostActionEventController();
-        $isProcessed = $controller->processRequest($application, $request, $response, '');
+        $controller->processRequest($application, $request, $response, '');
 
-        self::assertTrue($isProcessed);
         self::assertSame('Index action with pre- and post-action event', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
         self::assertSame('true', $response->getHeader('X-Pre-Action'));
@@ -246,9 +237,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $controller = new PreAndPostActionEventController();
-        $isProcessed = $controller->processRequest($application, $request, $response, 'foo');
+        $controller->processRequest($application, $request, $response, 'foo');
 
-        self::assertTrue($isProcessed);
         self::assertSame('Default action "foo" with pre- and post-action event', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
         self::assertSame('true', $response->getHeader('X-Pre-Action'));
@@ -264,9 +254,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $request = new Request(['HTTP_HOST' => 'www.domain.com:81', 'SERVER_PORT' => '81', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $controller = new PreAndPostActionEventController();
-        $isProcessed = $controller->processRequest($application, $request, $response, '');
+        $controller->processRequest($application, $request, $response, '');
 
-        self::assertTrue($isProcessed);
         self::assertSame('This is a pre-action result', $response->getContent());
         self::assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
         self::assertNull($response->getHeader('X-Pre-Action'));
@@ -282,9 +271,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $request = new Request(['HTTP_HOST' => 'www.domain.com:82', 'SERVER_PORT' => '82', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $controller = new PreAndPostActionEventController();
-        $isProcessed = $controller->processRequest($application, $request, $response, '');
+        $controller->processRequest($application, $request, $response, '');
 
-        self::assertTrue($isProcessed);
         self::assertSame('This is a post-action result', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
         self::assertSame('true', $response->getHeader('X-Pre-Action'));
@@ -350,9 +338,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/int', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $controller = new BasicTestController();
-        $isProcessed = $controller->processRequest($application, $request, $response, 'int');
+        $controller->processRequest($application, $request, $response, 'int');
 
-        self::assertTrue($isProcessed);
         self::assertSame('42', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
@@ -366,9 +353,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/false', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $controller = new BasicTestController();
-        $isProcessed = $controller->processRequest($application, $request, $response, 'false');
+        $controller->processRequest($application, $request, $response, 'false');
 
-        self::assertTrue($isProcessed);
         self::assertSame('false', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
@@ -382,9 +368,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/true', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $controller = new BasicTestController();
-        $isProcessed = $controller->processRequest($application, $request, $response, 'true');
+        $controller->processRequest($application, $request, $response, 'true');
 
-        self::assertTrue($isProcessed);
         self::assertSame('true', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
@@ -398,9 +383,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/null', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $controller = new BasicTestController();
-        $isProcessed = $controller->processRequest($application, $request, $response, 'null');
+        $controller->processRequest($application, $request, $response, 'null');
 
-        self::assertTrue($isProcessed);
         self::assertSame('Content set manually.', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
@@ -414,9 +398,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/object', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $controller = new BasicTestController();
-        $isProcessed = $controller->processRequest($application, $request, $response, 'object');
+        $controller->processRequest($application, $request, $response, 'object');
 
-        self::assertTrue($isProcessed);
         self::assertSame('object', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
@@ -430,9 +413,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/stringable', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $controller = new BasicTestController();
-        $isProcessed = $controller->processRequest($application, $request, $response, 'stringable');
+        $controller->processRequest($application, $request, $response, 'stringable');
 
-        self::assertTrue($isProcessed);
         self::assertSame('Text is "Bar"', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
@@ -446,9 +428,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $controller = new UppercaseActionTestController();
-        $isProcessed = $controller->processRequest($application, $request, $response, '');
+        $controller->processRequest($application, $request, $response, '');
 
-        self::assertTrue($isProcessed);
         self::assertSame('INDEX action', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
@@ -462,9 +443,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/bar', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $controller = new UppercaseActionTestController();
-        $isProcessed = $controller->processRequest($application, $request, $response, 'bar');
+        $controller->processRequest($application, $request, $response, 'bar');
 
-        self::assertTrue($isProcessed);
         self::assertSame('DEFAULT action "bar"', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
@@ -478,9 +458,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/FOO', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $controller = new UppercaseActionTestController();
-        $isProcessed = $controller->processRequest($application, $request, $response, 'FOO');
+        $controller->processRequest($application, $request, $response, 'FOO');
 
-        self::assertTrue($isProcessed);
         self::assertSame('FOO action', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
@@ -494,9 +473,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/FOO', 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $controller = new UppercaseActionTestController();
-        $isProcessed = $controller->processRequest($application, $request, $response, 'foo');
+        $controller->processRequest($application, $request, $response, 'foo');
 
-        self::assertTrue($isProcessed);
         self::assertSame('DEFAULT action "foo"', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
@@ -506,22 +484,21 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider multiLevelActionsDataProvider
      *
-     * @param string $action              The action.
-     * @param array  $parameters          The parameters.
-     * @param bool   $expectedIsProcessed True if the excepted result is that action is processed, false otherwise.
-     * @param string $expectedContent     The expected content.
+     * @param string $action             The action.
+     * @param array  $parameters         The parameters.
+     * @param int    $expectedStatusCode The expected status code.
+     * @param string $expectedContent    The expected content.
      */
-    public function testMultiLevelActions($action, array $parameters, $expectedIsProcessed, $expectedContent)
+    public function testMultiLevelActions($action, array $parameters, $expectedStatusCode, $expectedContent)
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/' . $action, 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $controller = new MultiLevelTestController();
-        $isProcessed = $controller->processRequest($application, $request, $response, $action, $parameters);
+        $controller->processRequest($application, $request, $response, $action, $parameters);
 
-        self::assertSame($expectedIsProcessed, $isProcessed);
+        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
         self::assertSame($expectedContent, $response->getContent());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -530,50 +507,50 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function multiLevelActionsDataProvider()
     {
         return [
-            ['noparams', [], true, 'No Parameters'],
-            ['noparams', ['param1'], false, ''],
-            ['noparams', ['param1', 'param2'], false, ''],
-            ['noparams', ['param1', 'param2', 'param3'], false, ''],
-            ['foo', [], false, ''],
-            ['foo', ['param1'], true, 'FooAction: Foo=[param1]'],
-            ['foo', ['param1', 'param2'], false, ''],
-            ['foo', ['param1', 'param2', 'param3'], false, ''],
-            ['foobar', [], false, ''],
-            ['foobar', ['param1'], false, ''],
-            ['foobar', ['param1', 'param2'], true, 'FooBarAction: Foo=[param1], Bar=[param2]'],
-            ['foobar', ['param1', 'param2', 'param3'], false, ''],
-            ['foobarbaz', [], false, ''],
-            ['foobarbaz', ['param1'], false, ''],
-            ['foobarbaz', ['param1', 'param2'], false, ''],
-            ['foobarbaz', ['param1', 'param2', 'param3'], true, 'FooBarBazAction: Foo=[param1], Bar=[param2], Baz=[param3]'],
-            ['foonull', [], true, 'FooNullAction: Foo=[*null*]'],
-            ['foonull', ['param1'], true, 'FooNullAction: Foo=[param1]'],
-            ['foonull', ['param1', 'param2'], false, ''],
-            ['foonull', ['param1', 'param2', 'param3'], false, ''],
-            ['foonullbarnull', [], true, 'FooNullBarNullAction: Foo=[*null*], Bar=[*null*]'],
-            ['foonullbarnull', ['param1'], true, 'FooNullBarNullAction: Foo=[param1], Bar=[*null*]'],
-            ['foonullbarnull', ['param1', 'param2'], true, 'FooNullBarNullAction: Foo=[param1], Bar=[param2]'],
-            ['foonullbarnull', ['param1', 'param2', 'param3'], false, ''],
-            ['foonullbarnullbaznull', [], true, 'FooNullBarNullBazNullAction: Foo=[*null*], Bar=[*null*], Baz=[*null*]'],
-            ['foonullbarnullbaznull', ['param1'], true, 'FooNullBarNullBazNullAction: Foo=[param1], Bar=[*null*], Baz=[*null*]'],
-            ['foonullbarnullbaznull', ['param1', 'param2'], true, 'FooNullBarNullBazNullAction: Foo=[param1], Bar=[param2], Baz=[*null*]'],
-            ['foonullbarnullbaznull', ['param1', 'param2', 'param3'], true, 'FooNullBarNullBazNullAction: Foo=[param1], Bar=[param2], Baz=[param3]'],
-            ['foobarnull', [], false, ''],
-            ['foobarnull', ['param1'], true, 'FooBarNullAction: Foo=[param1], Bar=[*null*]'],
-            ['foobarnull', ['param1', 'param2'], true, 'FooBarNullAction: Foo=[param1], Bar=[param2]'],
-            ['foobarnull', ['param1', 'param2', 'param3'], false, ''],
-            ['foobarnullbaznull', [], false, ''],
-            ['foobarnullbaznull', ['param1'], true, 'FooBarNullBazNullAction: Foo=[param1], Bar=[*null*], Baz=[*null*]'],
-            ['foobarnullbaznull', ['param1', 'param2'], true, 'FooBarNullBazNullAction: Foo=[param1], Bar=[param2], Baz=[*null*]'],
-            ['foobarnullbaznull', ['param1', 'param2', 'param3'], true, 'FooBarNullBazNullAction: Foo=[param1], Bar=[param2], Baz=[param3]'],
-            ['foobarbazstring', [], false, ''],
-            ['foobarbazstring', ['param1'], false, ''],
-            ['foobarbazstring', ['param1', 'param2'], true, 'FooBarBazStringAction: Foo=[param1], Bar=[param2], Baz=[default string]'],
-            ['foobarbazstring', ['param1', 'param2', 'param3'], true, 'FooBarBazStringAction: Foo=[param1], Bar=[param2], Baz=[param3]'],
-            ['nonexisting', [], false, ''],
-            ['nonexisting', ['param1'], true, 'DefaultAction: Foo=[nonexisting], Bar=[param1], Baz=[*null*]'],
-            ['nonexisting', ['param1', 'param2'], true, 'DefaultAction: Foo=[nonexisting], Bar=[param1], Baz=[param2]'],
-            ['nonexisting', ['param1', 'param2', 'param3'], false, ''],
+            ['noparams', [], StatusCode::OK, 'No Parameters'],
+            ['noparams', ['param1'], StatusCode::NOT_FOUND, ''],
+            ['noparams', ['param1', 'param2'], StatusCode::NOT_FOUND, ''],
+            ['noparams', ['param1', 'param2', 'param3'], StatusCode::NOT_FOUND, ''],
+            ['foo', [], StatusCode::NOT_FOUND, ''],
+            ['foo', ['param1'], StatusCode::OK, 'FooAction: Foo=[param1]'],
+            ['foo', ['param1', 'param2'], StatusCode::NOT_FOUND, ''],
+            ['foo', ['param1', 'param2', 'param3'], StatusCode::NOT_FOUND, ''],
+            ['foobar', [], StatusCode::NOT_FOUND, ''],
+            ['foobar', ['param1'], StatusCode::NOT_FOUND, ''],
+            ['foobar', ['param1', 'param2'], StatusCode::OK, 'FooBarAction: Foo=[param1], Bar=[param2]'],
+            ['foobar', ['param1', 'param2', 'param3'], StatusCode::NOT_FOUND, ''],
+            ['foobarbaz', [], StatusCode::NOT_FOUND, ''],
+            ['foobarbaz', ['param1'], StatusCode::NOT_FOUND, ''],
+            ['foobarbaz', ['param1', 'param2'], StatusCode::NOT_FOUND, ''],
+            ['foobarbaz', ['param1', 'param2', 'param3'], 200, 'FooBarBazAction: Foo=[param1], Bar=[param2], Baz=[param3]'],
+            ['foonull', [], StatusCode::OK, 'FooNullAction: Foo=[*null*]'],
+            ['foonull', ['param1'], StatusCode::OK, 'FooNullAction: Foo=[param1]'],
+            ['foonull', ['param1', 'param2'], StatusCode::NOT_FOUND, ''],
+            ['foonull', ['param1', 'param2', 'param3'], StatusCode::NOT_FOUND, ''],
+            ['foonullbarnull', [], StatusCode::OK, 'FooNullBarNullAction: Foo=[*null*], Bar=[*null*]'],
+            ['foonullbarnull', ['param1'], StatusCode::OK, 'FooNullBarNullAction: Foo=[param1], Bar=[*null*]'],
+            ['foonullbarnull', ['param1', 'param2'], StatusCode::OK, 'FooNullBarNullAction: Foo=[param1], Bar=[param2]'],
+            ['foonullbarnull', ['param1', 'param2', 'param3'], StatusCode::NOT_FOUND, ''],
+            ['foonullbarnullbaznull', [], StatusCode::OK, 'FooNullBarNullBazNullAction: Foo=[*null*], Bar=[*null*], Baz=[*null*]'],
+            ['foonullbarnullbaznull', ['param1'], StatusCode::OK, 'FooNullBarNullBazNullAction: Foo=[param1], Bar=[*null*], Baz=[*null*]'],
+            ['foonullbarnullbaznull', ['param1', 'param2'], StatusCode::OK, 'FooNullBarNullBazNullAction: Foo=[param1], Bar=[param2], Baz=[*null*]'],
+            ['foonullbarnullbaznull', ['param1', 'param2', 'param3'], StatusCode::OK, 'FooNullBarNullBazNullAction: Foo=[param1], Bar=[param2], Baz=[param3]'],
+            ['foobarnull', [], StatusCode::NOT_FOUND, ''],
+            ['foobarnull', ['param1'], StatusCode::OK, 'FooBarNullAction: Foo=[param1], Bar=[*null*]'],
+            ['foobarnull', ['param1', 'param2'], StatusCode::OK, 'FooBarNullAction: Foo=[param1], Bar=[param2]'],
+            ['foobarnull', ['param1', 'param2', 'param3'], StatusCode::NOT_FOUND, ''],
+            ['foobarnullbaznull', [], StatusCode::NOT_FOUND, ''],
+            ['foobarnullbaznull', ['param1'], StatusCode::OK, 'FooBarNullBazNullAction: Foo=[param1], Bar=[*null*], Baz=[*null*]'],
+            ['foobarnullbaznull', ['param1', 'param2'], StatusCode::OK, 'FooBarNullBazNullAction: Foo=[param1], Bar=[param2], Baz=[*null*]'],
+            ['foobarnullbaznull', ['param1', 'param2', 'param3'], StatusCode::OK, 'FooBarNullBazNullAction: Foo=[param1], Bar=[param2], Baz=[param3]'],
+            ['foobarbazstring', [], StatusCode::NOT_FOUND, ''],
+            ['foobarbazstring', ['param1'], StatusCode::NOT_FOUND, ''],
+            ['foobarbazstring', ['param1', 'param2'], StatusCode::OK, 'FooBarBazStringAction: Foo=[param1], Bar=[param2], Baz=[default string]'],
+            ['foobarbazstring', ['param1', 'param2', 'param3'], StatusCode::OK, 'FooBarBazStringAction: Foo=[param1], Bar=[param2], Baz=[param3]'],
+            ['nonexisting', [], StatusCode::NOT_FOUND, ''],
+            ['nonexisting', ['param1'], StatusCode::OK, 'DefaultAction: Foo=[nonexisting], Bar=[param1], Baz=[*null*]'],
+            ['nonexisting', ['param1', 'param2'], StatusCode::OK, 'DefaultAction: Foo=[nonexisting], Bar=[param1], Baz=[param2]'],
+            ['nonexisting', ['param1', 'param2', 'param3'], StatusCode::NOT_FOUND, ''],
         ];
     }
 
@@ -582,21 +559,20 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider actionMethodVisibilityDataProvider
      *
-     * @param string $action              The action.
-     * @param bool   $expectedIsProcessed True if the excepted result is that action is processed, false otherwise.
-     * @param string $expectedContent     The expected content.
+     * @param string $action             The action.
+     * @param int    $expectedStatusCode The expected status code.
+     * @param string $expectedContent    The expected content.
      */
-    public function testActionMethodVisibility($action, $expectedIsProcessed, $expectedContent)
+    public function testActionMethodVisibility($action, $expectedStatusCode, $expectedContent)
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/' . $action, 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $controller = new ActionMethodVisibilityTestController();
-        $isProcessed = $controller->processRequest($application, $request, $response, $action, []);
+        $controller->processRequest($application, $request, $response, $action, []);
 
-        self::assertSame($expectedIsProcessed, $isProcessed);
+        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
         self::assertSame($expectedContent, $response->getContent());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -605,12 +581,12 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function actionMethodVisibilityDataProvider()
     {
         return [
-            ['public', true, 'Public action'],
-            ['protected', true, 'Default action: Action=[protected]'],
-            ['private', true, 'Default action: Action=[private]'],
-            ['publicStatic', true, 'Public static action'],
-            ['protectedStatic', true, 'Default action: Action=[protectedStatic]'],
-            ['privateStatic', true, 'Default action: Action=[privateStatic]'],
+            ['public', StatusCode::OK, 'Public action'],
+            ['protected', StatusCode::OK, 'Default action: Action=[protected]'],
+            ['private', StatusCode::OK, 'Default action: Action=[private]'],
+            ['publicStatic', StatusCode::OK, 'Public static action'],
+            ['protectedStatic', StatusCode::OK, 'Default action: Action=[protectedStatic]'],
+            ['privateStatic', StatusCode::OK, 'Default action: Action=[privateStatic]'],
         ];
     }
 
@@ -619,21 +595,20 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider specialNameActionDataProvider
      *
-     * @param string $action              The action.
-     * @param bool   $expectedIsProcessed True if the excepted result is that action is processed, false otherwise.
-     * @param string $expectedContent     The expected content.
+     * @param string $action             The action.
+     * @param int    $expectedStatusCode The expected status code.
+     * @param string $expectedContent    The expected content.
      */
-    public function testSpecialNameAction($action, $expectedIsProcessed, $expectedContent)
+    public function testSpecialNameAction($action, $expectedStatusCode, $expectedContent)
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/' . $action, 'REQUEST_METHOD' => 'GET']);
         $response = new Response($request);
         $controller = new SpecialActionNameTestController();
-        $isProcessed = $controller->processRequest($application, $request, $response, $action, []);
+        $controller->processRequest($application, $request, $response, $action, []);
 
-        self::assertSame($expectedIsProcessed, $isProcessed);
+        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
         self::assertSame($expectedContent, $response->getContent());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
     /**
@@ -642,12 +617,12 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function specialNameActionDataProvider()
     {
         return [
-            ['index', true, '_index action'],
-            ['Index', false, ''],
-            ['', false, ''],
-            ['Default', true, '_Default action'],
-            ['default', false, ''],
-            ['foo', false, ''],
+            ['index', StatusCode::OK, '_index action'],
+            ['Index', StatusCode::NOT_FOUND, ''],
+            ['', StatusCode::NOT_FOUND, ''],
+            ['Default', StatusCode::OK, '_Default action'],
+            ['default', StatusCode::NOT_FOUND, ''],
+            ['foo', StatusCode::NOT_FOUND, ''],
         ];
     }
 

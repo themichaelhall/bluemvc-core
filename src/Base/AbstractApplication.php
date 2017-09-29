@@ -162,7 +162,7 @@ abstract class AbstractApplication implements ApplicationInterface
         $exception = null;
 
         try {
-            $requestIsProcessed = false;
+            $hasFoundController = false;
 
             foreach ($this->myRoutes as $route) {
                 $routeMatch = $route->matches($request);
@@ -172,13 +172,14 @@ abstract class AbstractApplication implements ApplicationInterface
                     $controller = new $controllerClass();
 
                     /** @var ControllerInterface $controller */
-                    $requestIsProcessed = $controller->processRequest($this, $request, $response, $routeMatch->getAction(), $routeMatch->getParameters());
+                    $controller->processRequest($this, $request, $response, $routeMatch->getAction(), $routeMatch->getParameters());
+                    $hasFoundController = true;
 
                     break;
                 }
             }
 
-            if (!$requestIsProcessed) {
+            if (!$hasFoundController) {
                 $response->setStatusCode(new StatusCode(StatusCode::NOT_FOUND));
             }
         } catch (\Exception $e) {
