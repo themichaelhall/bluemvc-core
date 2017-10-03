@@ -13,6 +13,7 @@ use BlueMvc\Core\Collections\RequestCookieCollection;
 use BlueMvc\Core\Collections\UploadedFileCollection;
 use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\ParameterCollectionInterface;
+use BlueMvc\Core\Interfaces\Collections\RequestCookieCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\UploadedFileCollectionInterface;
 use BlueMvc\Core\Interfaces\Http\MethodInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
@@ -202,7 +203,7 @@ abstract class AbstractRequest implements RequestInterface
         $this->setFormParameters(new ParameterCollection());
         $this->setQueryParameters(new ParameterCollection());
         $this->setUploadedFiles(new UploadedFileCollection());
-        $this->myCookies = new RequestCookieCollection();
+        $this->setCookies(new RequestCookieCollection());
     }
 
     /**
@@ -218,6 +219,18 @@ abstract class AbstractRequest implements RequestInterface
     protected function addHeader($name, $value)
     {
         $this->myHeaders->add($name, $value);
+    }
+
+    /**
+     * Sets the cookies.
+     *
+     * @since 1.0.0
+     *
+     * @param RequestCookieCollectionInterface $cookies The cookies.
+     */
+    protected function setCookies(RequestCookieCollectionInterface $cookies)
+    {
+        $this->myCookies = $cookies;
     }
 
     /**

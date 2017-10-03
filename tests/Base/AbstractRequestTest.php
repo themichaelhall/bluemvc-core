@@ -4,8 +4,10 @@ namespace BlueMvc\Core\Tests\Base;
 
 use BlueMvc\Core\Collections\HeaderCollection;
 use BlueMvc\Core\Collections\ParameterCollection;
+use BlueMvc\Core\Collections\RequestCookieCollection;
 use BlueMvc\Core\Collections\UploadedFileCollection;
 use BlueMvc\Core\Http\Method;
+use BlueMvc\Core\RequestCookie;
 use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
 use BlueMvc\Core\UploadedFile;
 use DataTypes\FilePath;
@@ -267,6 +269,23 @@ class AbstractRequestTest extends \PHPUnit_Framework_TestCase
     public function testGetCookies()
     {
         self::assertSame([], iterator_to_array($this->myRequest->getCookies()));
+    }
+
+    /**
+     * Test setCookies method.
+     */
+    public function testSetCookies()
+    {
+        $fooCookie = new RequestCookie('foo-value');
+        $barCookie = new RequestCookie('bar-value');
+
+        $cookies = new RequestCookieCollection();
+        $cookies->set('foo', $fooCookie);
+        $cookies->set('bar', $barCookie);
+
+        $this->myRequest->setCookies($cookies);
+
+        self::assertSame(['foo' => $fooCookie, 'bar' => $barCookie], iterator_to_array($this->myRequest->getCookies()));
     }
 
     /**
