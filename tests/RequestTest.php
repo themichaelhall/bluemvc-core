@@ -559,6 +559,22 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test getCookies method with no cookies set.
+     */
+    public function testGetCookiesWithNoCookiesSet()
+    {
+        $request = new Request(
+            [
+                'HTTP_HOST'      => 'www.domain.com',
+                'REQUEST_URI'    => '/foo/bar',
+                'REQUEST_METHOD' => 'GET',
+            ]
+        );
+
+        self::assertSame([], iterator_to_array($request->getCookies()));
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

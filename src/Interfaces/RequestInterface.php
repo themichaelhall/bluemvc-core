@@ -7,6 +7,7 @@
 
 namespace BlueMvc\Core\Interfaces;
 
+use BlueMvc\Core\Collections\RequestCookieCollection;
 use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\ParameterCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\UploadedFileCollectionInterface;
@@ -20,6 +21,15 @@ use DataTypes\Interfaces\UrlInterface;
  */
 interface RequestInterface
 {
+    /**
+     * Returns the cookies.
+     *
+     * @since 1.0.0
+     *
+     * @return RequestCookieCollection The cookies.
+     */
+    public function getCookies();
+
     /**
      * Returns a form parameter value by form parameter name if it exists, null otherwise.
      *

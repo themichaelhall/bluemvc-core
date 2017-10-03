@@ -9,6 +9,7 @@ namespace BlueMvc\Core\Base;
 
 use BlueMvc\Core\Collections\HeaderCollection;
 use BlueMvc\Core\Collections\ParameterCollection;
+use BlueMvc\Core\Collections\RequestCookieCollection;
 use BlueMvc\Core\Collections\UploadedFileCollection;
 use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\ParameterCollectionInterface;
@@ -25,6 +26,18 @@ use DataTypes\Interfaces\UrlInterface;
  */
 abstract class AbstractRequest implements RequestInterface
 {
+    /**
+     * Returns the cookies.
+     *
+     * @since 1.0.0
+     *
+     * @return RequestCookieCollection The cookies.
+     */
+    public function getCookies()
+    {
+        return $this->myCookies;
+    }
+
     /**
      * Returns a form parameter value by form parameter name if it exists, null otherwise.
      *
@@ -189,6 +202,7 @@ abstract class AbstractRequest implements RequestInterface
         $this->setFormParameters(new ParameterCollection());
         $this->setQueryParameters(new ParameterCollection());
         $this->setUploadedFiles(new UploadedFileCollection());
+        $this->myCookies = new RequestCookieCollection();
     }
 
     /**
@@ -337,6 +351,11 @@ abstract class AbstractRequest implements RequestInterface
     {
         $this->myUrl = $url;
     }
+
+    /**
+     * @var RequestCookieCollection My cookies.
+     */
+    private $myCookies;
 
     /**
      * @var ParameterCollectionInterface My form parameters.

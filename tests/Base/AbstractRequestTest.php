@@ -262,6 +262,14 @@ class AbstractRequestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test getCookies method.
+     */
+    public function testGetCookies()
+    {
+        self::assertSame([], iterator_to_array($this->myRequest->getCookies()));
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
