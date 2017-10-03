@@ -575,6 +575,35 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test getCookies method with cookies set.
+     */
+    public function testGetCookiesWithCookiesSet()
+    {
+        $request = new Request(
+            [
+                'HTTP_HOST'      => 'www.domain.com',
+                'REQUEST_URI'    => '/foo/bar',
+                'REQUEST_METHOD' => 'GET',
+            ],
+            [
+            ],
+            [
+            ],
+            [
+            ],
+            [
+                'Foo' => 'Bar',
+                1     => 2,
+            ]
+        );
+
+        $cookies = $request->getCookies();
+
+        self::assertSame('Bar', $cookies->get('Foo')->getValue());
+        self::assertSame('2', $cookies->get('1')->getValue());
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
