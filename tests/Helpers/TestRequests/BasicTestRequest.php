@@ -8,6 +8,7 @@ use BlueMvc\Core\Interfaces\Collections\ParameterCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\RequestCookieCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\UploadedFileCollectionInterface;
 use BlueMvc\Core\Interfaces\Http\MethodInterface;
+use BlueMvc\Core\Interfaces\RequestCookieInterface;
 use BlueMvc\Core\Interfaces\UploadedFileInterface;
 use DataTypes\Interfaces\UrlInterface;
 
@@ -36,6 +37,17 @@ class BasicTestRequest extends AbstractRequest
     public function addHeader($name, $value)
     {
         parent::addHeader($name, $value);
+    }
+
+    /**
+     * Sets a cookie.
+     *
+     * @param string                 $name   The cookie name.
+     * @param RequestCookieInterface $cookie The cookie.
+     */
+    public function setCookie($name, RequestCookieInterface $cookie)
+    {
+        parent::setCookie($name, $cookie);
     }
 
     /**

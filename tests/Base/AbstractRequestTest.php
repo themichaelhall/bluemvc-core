@@ -289,6 +289,21 @@ class AbstractRequestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test setCookie method.
+     */
+    public function testSetCookie()
+    {
+        $fooCookie = new RequestCookie('foo-value');
+        $barCookie = new RequestCookie('bar-value');
+
+        $this->myRequest->setCookie('foo', $barCookie);
+        $this->myRequest->setCookie('bar', $barCookie);
+        $this->myRequest->setCookie('foo', $fooCookie);
+
+        self::assertSame(['foo' => $fooCookie, 'bar' => $barCookie], iterator_to_array($this->myRequest->getCookies()));
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
