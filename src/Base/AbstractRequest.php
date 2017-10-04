@@ -29,6 +29,22 @@ use DataTypes\Interfaces\UrlInterface;
 abstract class AbstractRequest implements RequestInterface
 {
     /**
+     * Returns a cookie by cookie name if it exists, null otherwise.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name The cookie name.
+     *
+     * @throws \InvalidArgumentException If the $name parameter is not a string.
+     *
+     * @return RequestCookieInterface|null The cookie by cookie name if it exists, null otherwise.
+     */
+    public function getCookie($name)
+    {
+        return $this->myCookies->get($name);
+    }
+
+    /**
      * Returns the cookies.
      *
      * @since 1.0.0
