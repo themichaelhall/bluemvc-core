@@ -22,4 +22,13 @@ interface RequestCookieInterface
      * @return string The cookie value.
      */
     public function getValue();
+
+    /**
+     * Returns the cookie value.
+     *
+     * @since 1.0.0
+     *
+     * @return string The cookie value.
+     */
+    public function __toString();
 }

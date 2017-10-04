@@ -29,4 +29,14 @@ class RequestCookieTest extends \PHPUnit_Framework_TestCase
     {
         new RequestCookie(100);
     }
+
+    /**
+     * Test __toString method.
+     */
+    public function testToString()
+    {
+        $requestCookie = new RequestCookie('Foo');
+
+        self::assertSame('Foo', $requestCookie->__toString());
+    }
 }

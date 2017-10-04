@@ -47,6 +47,18 @@ class RequestCookie implements RequestCookieInterface
     }
 
     /**
+     * Returns the cookie value.
+     *
+     * @since 1.0.0
+     *
+     * @return string The cookie value.
+     */
+    public function __toString()
+    {
+        return $this->myValue;
+    }
+
+    /**
      * @var string My value.
      */
     private $myValue;
