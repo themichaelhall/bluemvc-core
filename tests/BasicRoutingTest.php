@@ -4,6 +4,7 @@ namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Request;
+use BlueMvc\Core\RequestCookie;
 use BlueMvc\Core\Response;
 use BlueMvc\Core\Route;
 use BlueMvc\Core\Tests\Helpers\Fakes\FakeHeaders;
@@ -11,6 +12,7 @@ use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ActionMethodVisibilityTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ActionResultTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
+use BlueMvc\Core\Tests\Helpers\TestControllers\CookieTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\DefaultActionTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\DefaultActionWithViewTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ErrorTestController;
@@ -964,6 +966,41 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test get page that displays request cookies.
+     *
+     * @dataProvider requestCookiePageDataProvider
+     *
+     * @param RequestCookie[] $requestCookies  The request cookies.
+     * @param string          $expectedContent The expected content.
+     */
+    public function testRequestCookiePage(array $requestCookies, $expectedContent)
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/cookies/', 'REQUEST_METHOD' => 'GET'], [], [], [], $requestCookies);
+        $response = new Response($request);
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        self::assertSame($expectedContent, $responseOutput);
+        self::assertSame($expectedContent, $response->getContent());
+        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Data provider for request cookie tests.
+     */
+    public function requestCookiePageDataProvider()
+    {
+        return [
+            [[], ''],
+            [['Foo' => 'Bar'], 'Foo=Bar'],
+            [[1 => 'Baz', 'Foo' => 2], '1=Baz,Foo=2'],
+        ];
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
@@ -985,6 +1022,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
         $this->application->addRoute(new Route('multilevel', MultiLevelTestController::class));
         $this->application->addRoute(new Route('actionMethodVisibility', ActionMethodVisibilityTestController::class));
         $this->application->addRoute(new Route('specialActionName', SpecialActionNameTestController::class));
+        $this->application->addRoute(new Route('cookies', CookieTestController::class));
     }
 
     /**
