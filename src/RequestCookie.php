@@ -7,6 +7,7 @@
 
 namespace BlueMvc\Core;
 
+use BlueMvc\Core\Base\AbstractCookie;
 use BlueMvc\Core\Interfaces\RequestCookieInterface;
 
 /**
@@ -14,7 +15,7 @@ use BlueMvc\Core\Interfaces\RequestCookieInterface;
  *
  * @since 1.0.0
  */
-class RequestCookie implements RequestCookieInterface
+class RequestCookie extends AbstractCookie implements RequestCookieInterface
 {
     /**
      * Constructs a request cookie.
@@ -27,39 +28,6 @@ class RequestCookie implements RequestCookieInterface
      */
     public function __construct($value)
     {
-        if (!is_string($value)) {
-            throw new \InvalidArgumentException('$value parameter is not a string.');
-        }
-
-        $this->myValue = $value;
+        parent::__construct($value);
     }
-
-    /**
-     * Returns the value.
-     *
-     * @since 1.0.0
-     *
-     * @return string The value.
-     */
-    public function getValue()
-    {
-        return $this->myValue;
-    }
-
-    /**
-     * Returns the cookie value.
-     *
-     * @since 1.0.0
-     *
-     * @return string The cookie value.
-     */
-    public function __toString()
-    {
-        return $this->myValue;
-    }
-
-    /**
-     * @var string My value.
-     */
-    private $myValue;
 }
