@@ -18,6 +18,15 @@ use DataTypes\Interfaces\FilePathInterface;
 interface ApplicationInterface
 {
     /**
+     * Adds a plugin.
+     *
+     * @since 1.0.0
+     *
+     * @param PluginInterface $plugin The plugin.
+     */
+    public function addPlugin(PluginInterface $plugin);
+
+    /**
      * Adds a route.
      *
      * @since 1.0.0

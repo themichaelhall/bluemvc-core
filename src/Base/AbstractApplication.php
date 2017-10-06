@@ -14,6 +14,7 @@ use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\ControllerInterface;
 use BlueMvc\Core\Interfaces\ErrorControllerInterface;
+use BlueMvc\Core\Interfaces\PluginInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
 use BlueMvc\Core\Interfaces\RouteInterface;
@@ -29,6 +30,18 @@ use DataTypes\Interfaces\FilePathInterface;
  */
 abstract class AbstractApplication implements ApplicationInterface
 {
+    /**
+     * Adds a plugin.
+     *
+     * @since 1.0.0
+     *
+     * @param PluginInterface $plugin The plugin.
+     */
+    public function addPlugin(PluginInterface $plugin)
+    {
+        $this->myPlugins[] = $plugin;
+    }
+
     /**
      * Adds a route.
      *
@@ -162,6 +175,14 @@ abstract class AbstractApplication implements ApplicationInterface
         $exception = null;
 
         try {
+            foreach ($this->myPlugins as $plugin) {
+                if ($plugin->onPreRequest($this, $request, $response)) {
+                    $response->output();
+
+                    return;
+                }
+            }
+
             $hasFoundController = false;
 
             foreach ($this->myRoutes as $route) {
@@ -181,6 +202,14 @@ abstract class AbstractApplication implements ApplicationInterface
 
             if (!$hasFoundController) {
                 $response->setStatusCode(new StatusCode(StatusCode::NOT_FOUND));
+            }
+
+            foreach ($this->myPlugins as $plugin) {
+                if ($plugin->onPostRequest($this, $request, $response)) {
+                    $response->output();
+
+                    return;
+                }
             }
         } catch (\Exception $e) {
             $this->myExceptionToResponse($e, $response);
@@ -293,6 +322,7 @@ abstract class AbstractApplication implements ApplicationInterface
         $this->myViewPath = null;
         $this->myIsDebug = false;
         $this->myErrorControllerClass = null;
+        $this->myPlugins = [];
     }
 
     /**
@@ -440,4 +470,9 @@ abstract class AbstractApplication implements ApplicationInterface
      * @var string|null My error controller class name.
      */
     private $myErrorControllerClass;
+
+    /**
+     * @var PluginInterface[] My plugins.
+     */
+    private $myPlugins;
 }
