@@ -175,65 +175,14 @@ abstract class AbstractApplication implements ApplicationInterface
         $exception = null;
 
         try {
-            foreach ($this->myPlugins as $plugin) {
-                if ($plugin->onPreRequest($this, $request, $response)) {
-                    $response->output();
-
-                    return;
-                }
-            }
-
-            $hasFoundController = false;
-
-            foreach ($this->myRoutes as $route) {
-                $routeMatch = $route->matches($request);
-
-                if ($routeMatch !== null) {
-                    $controllerClass = $routeMatch->getControllerClassName();
-                    $controller = new $controllerClass();
-
-                    /** @var ControllerInterface $controller */
-                    $controller->processRequest($this, $request, $response, $routeMatch->getAction(), $routeMatch->getParameters());
-                    $hasFoundController = true;
-
-                    break;
-                }
-            }
-
-            if (!$hasFoundController) {
-                $response->setStatusCode(new StatusCode(StatusCode::NOT_FOUND));
-            }
-
-            foreach ($this->myPlugins as $plugin) {
-                if ($plugin->onPostRequest($this, $request, $response)) {
-                    $response->output();
-
-                    return;
-                }
-            }
+            $this->myHandleRequest($request, $response);
         } catch (\Exception $e) {
             $this->myExceptionToResponse($e, $response);
             $exception = $e;
         }
 
-        // Error controller handling.
-        $responseCode = $response->getStatusCode();
-        if ($responseCode->isError()) {
-            $errorControllerClass = $this->getErrorControllerClass();
-
-            if ($errorControllerClass !== null) {
-                /** @var ErrorControllerInterface $errorController */
-                $errorController = new $errorControllerClass();
-                if ($exception !== null) {
-                    $errorController->setException($exception);
-                }
-
-                try {
-                    $errorController->processRequest($this, $request, $response, strval($responseCode->getCode()), []);
-                } catch (\Exception $e) {
-                    $this->myExceptionToResponse($e, $response);
-                }
-            }
+        if ($response->getStatusCode()->isError()) {
+            $this->myHandleError($request, $response, $exception);
         }
 
         $response->output();
@@ -357,6 +306,74 @@ abstract class AbstractApplication implements ApplicationInterface
         }
 
         $this->myDocumentRoot = $documentRoot;
+    }
+
+    /**
+     * Handles a request.
+     *
+     * @param RequestInterface  $request  The request.
+     * @param ResponseInterface $response The response.
+     */
+    private function myHandleRequest(RequestInterface $request, ResponseInterface $response)
+    {
+        foreach ($this->myPlugins as $plugin) {
+            if ($plugin->onPreRequest($this, $request, $response)) {
+                return;
+            }
+        }
+
+        $hasFoundController = false;
+
+        foreach ($this->myRoutes as $route) {
+            $routeMatch = $route->matches($request);
+
+            if ($routeMatch !== null) {
+                $controllerClass = $routeMatch->getControllerClassName();
+                $controller = new $controllerClass();
+
+                /** @var ControllerInterface $controller */
+                $controller->processRequest($this, $request, $response, $routeMatch->getAction(), $routeMatch->getParameters());
+                $hasFoundController = true;
+
+                break;
+            }
+        }
+
+        if (!$hasFoundController) {
+            $response->setStatusCode(new StatusCode(StatusCode::NOT_FOUND));
+        }
+
+        foreach ($this->myPlugins as $plugin) {
+            if ($plugin->onPostRequest($this, $request, $response)) {
+                return;
+            }
+        }
+    }
+
+    /**
+     * Handles an error.
+     *
+     * @param RequestInterface  $request   The request.
+     * @param ResponseInterface $response  The response.
+     * @param \Exception|null   $exception The exception or null if no exception.
+     */
+    private function myHandleError(RequestInterface $request, ResponseInterface $response, \Exception $exception = null)
+    {
+        $errorControllerClass = $this->getErrorControllerClass();
+
+        if ($errorControllerClass !== null) {
+            /** @var ErrorControllerInterface $errorController */
+            $errorController = new $errorControllerClass();
+            if ($exception !== null) {
+                $errorController->setException($exception);
+            }
+
+            try {
+                $errorController->processRequest($this, $request, $response, strval($response->getStatusCode()->getCode()), []);
+            } catch (\Exception $e) {
+                $this->myExceptionToResponse($e, $response);
+            }
+        }
     }
 
     /**
