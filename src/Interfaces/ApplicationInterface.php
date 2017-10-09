@@ -63,6 +63,15 @@ interface ApplicationInterface
     public function getErrorControllerClass();
 
     /**
+     * Returns the plugins.
+     *
+     * @since 1.0.0
+     *
+     * @return PluginInterface[] The plugins.
+     */
+    public function getPlugins();
+
+    /**
      * Returns the routes.
      *
      * @since 1.0.0

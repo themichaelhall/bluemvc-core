@@ -99,6 +99,28 @@ class PluginTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test getPlugins method for application with no plugins.
+     */
+    public function testGetPluginsForApplicationWithNoPlugins()
+    {
+        self::assertSame([], $this->myApplication->getPlugins());
+    }
+
+    /**
+     * Test getPlugins method for application with plugins.
+     */
+    public function testGetPluginsForApplicationWithPlugins()
+    {
+        $setHeaderTestPlugin = new SetHeaderTestPlugin(false, false);
+        $setContentTestPlugin = new SetContentTestPlugin(false, false);
+
+        $this->myApplication->addPlugin($setHeaderTestPlugin);
+        $this->myApplication->addPlugin($setContentTestPlugin);
+
+        self::assertSame([$setHeaderTestPlugin, $setContentTestPlugin], $this->myApplication->getPlugins());
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

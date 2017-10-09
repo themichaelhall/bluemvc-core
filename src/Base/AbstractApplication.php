@@ -91,6 +91,18 @@ abstract class AbstractApplication implements ApplicationInterface
     }
 
     /**
+     * Returns the plugins.
+     *
+     * @since 1.0.0
+     *
+     * @return PluginInterface[] The plugins.
+     */
+    public function getPlugins()
+    {
+        return $this->myPlugins;
+    }
+
+    /**
      * Returns the routes.
      *
      * @since 1.0.0
