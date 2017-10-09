@@ -9,6 +9,7 @@ use BlueMvc\Core\Interfaces\PluginInterface;
 use BlueMvc\Core\Route;
 use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
 use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
+use BlueMvc\Core\Tests\Helpers\TestPlugins\SetContentTestPlugin;
 use BlueMvc\Core\Tests\Helpers\TestPlugins\SetHeaderTestPlugin;
 use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
 use BlueMvc\Core\Tests\Helpers\TestResponses\BasicTestResponse;
@@ -58,6 +59,42 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             [[new SetHeaderTestPlugin(false, true)], 'Hello World!', ['X-PluginOnPreRequest' => '1', 'X-PluginOnPostRequest' => '1'], StatusCode::OK],
             [[new SetHeaderTestPlugin(true, false)], '', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
             [[new SetHeaderTestPlugin(true, true)], '', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
+            [[new SetContentTestPlugin(false, false)], 'Hello World!onPostRequest', [], StatusCode::OK],
+            [[new SetContentTestPlugin(false, true)], 'Hello World!onPostRequest', [], StatusCode::OK],
+            [[new SetContentTestPlugin(true, false)], 'onPreRequest', [], StatusCode::OK],
+            [[new SetContentTestPlugin(true, true)], 'onPreRequest', [], StatusCode::OK],
+            [[new SetHeaderTestPlugin(false, false), new SetContentTestPlugin(false, false)], 'Hello World!onPostRequest', ['X-PluginOnPreRequest' => '1', 'X-PluginOnPostRequest' => '1'], StatusCode::OK],
+            [[new SetHeaderTestPlugin(false, false), new SetContentTestPlugin(false, true)], 'Hello World!onPostRequest', ['X-PluginOnPreRequest' => '1', 'X-PluginOnPostRequest' => '1'], StatusCode::OK],
+            [[new SetHeaderTestPlugin(false, false), new SetContentTestPlugin(true, false)], 'onPreRequest', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
+            [[new SetHeaderTestPlugin(false, false), new SetContentTestPlugin(true, true)], 'onPreRequest', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
+            [[new SetHeaderTestPlugin(false, true), new SetContentTestPlugin(false, false)], 'Hello World!', ['X-PluginOnPreRequest' => '1', 'X-PluginOnPostRequest' => '1'], StatusCode::OK],
+            [[new SetHeaderTestPlugin(false, true), new SetContentTestPlugin(false, true)], 'Hello World!', ['X-PluginOnPreRequest' => '1', 'X-PluginOnPostRequest' => '1'], StatusCode::OK],
+            [[new SetHeaderTestPlugin(false, true), new SetContentTestPlugin(true, false)], 'onPreRequest', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
+            [[new SetHeaderTestPlugin(false, true), new SetContentTestPlugin(true, true)], 'onPreRequest', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
+            [[new SetHeaderTestPlugin(true, false), new SetContentTestPlugin(false, false)], '', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
+            [[new SetHeaderTestPlugin(true, false), new SetContentTestPlugin(false, true)], '', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
+            [[new SetHeaderTestPlugin(true, false), new SetContentTestPlugin(true, false)], '', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
+            [[new SetHeaderTestPlugin(true, false), new SetContentTestPlugin(true, true)], '', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
+            [[new SetHeaderTestPlugin(true, true), new SetContentTestPlugin(false, false)], '', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
+            [[new SetHeaderTestPlugin(true, true), new SetContentTestPlugin(false, true)], '', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
+            [[new SetHeaderTestPlugin(true, true), new SetContentTestPlugin(true, false)], '', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
+            [[new SetHeaderTestPlugin(true, true), new SetContentTestPlugin(true, true)], '', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
+            [[new SetContentTestPlugin(false, false), new SetHeaderTestPlugin(false, false)], 'Hello World!onPostRequest', ['X-PluginOnPreRequest' => '1', 'X-PluginOnPostRequest' => '1'], StatusCode::OK],
+            [[new SetContentTestPlugin(false, false), new SetHeaderTestPlugin(false, true)], 'Hello World!onPostRequest', ['X-PluginOnPreRequest' => '1', 'X-PluginOnPostRequest' => '1'], StatusCode::OK],
+            [[new SetContentTestPlugin(false, false), new SetHeaderTestPlugin(true, false)], 'onPreRequest', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
+            [[new SetContentTestPlugin(false, false), new SetHeaderTestPlugin(true, true)], 'onPreRequest', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
+            [[new SetContentTestPlugin(false, true), new SetHeaderTestPlugin(false, false)], 'Hello World!onPostRequest', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
+            [[new SetContentTestPlugin(false, true), new SetHeaderTestPlugin(false, true)], 'Hello World!onPostRequest', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
+            [[new SetContentTestPlugin(false, true), new SetHeaderTestPlugin(true, false)], 'onPreRequest', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
+            [[new SetContentTestPlugin(false, true), new SetHeaderTestPlugin(true, true)], 'onPreRequest', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
+            [[new SetContentTestPlugin(true, false), new SetHeaderTestPlugin(false, false)], 'onPreRequest', [], StatusCode::OK],
+            [[new SetContentTestPlugin(true, false), new SetHeaderTestPlugin(false, true)], 'onPreRequest', [], StatusCode::OK],
+            [[new SetContentTestPlugin(true, false), new SetHeaderTestPlugin(true, false)], 'onPreRequest', [], StatusCode::OK],
+            [[new SetContentTestPlugin(true, false), new SetHeaderTestPlugin(true, true)], 'onPreRequest', [], StatusCode::OK],
+            [[new SetContentTestPlugin(true, true), new SetHeaderTestPlugin(false, false)], 'onPreRequest', [], StatusCode::OK],
+            [[new SetContentTestPlugin(true, true), new SetHeaderTestPlugin(false, true)], 'onPreRequest', [], StatusCode::OK],
+            [[new SetContentTestPlugin(true, true), new SetHeaderTestPlugin(true, false)], 'onPreRequest', [], StatusCode::OK],
+            [[new SetContentTestPlugin(true, true), new SetHeaderTestPlugin(true, true)], 'onPreRequest', [], StatusCode::OK],
         ];
     }
 

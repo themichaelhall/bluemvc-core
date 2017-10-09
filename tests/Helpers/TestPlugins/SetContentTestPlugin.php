@@ -8,12 +8,12 @@ use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
 
 /**
- * Test plugin that sets headers.
+ * Test plugin that sets content.
  */
-class SetHeaderTestPlugin extends AbstractPlugin
+class SetContentTestPlugin extends AbstractPlugin
 {
     /**
-     * SetHeaderTestPlugin constructor.
+     * SetContentTestPlugin constructor.
      *
      * @param bool $stopAfterPreRequest  If true, request should stop processing after pre-request, false otherwise.
      * @param bool $stopAfterPostRequest If true, request should stop processing after post-request, false otherwise.
@@ -37,7 +37,7 @@ class SetHeaderTestPlugin extends AbstractPlugin
     {
         parent::onPreRequest($application, $request, $response);
 
-        $response->setHeader('X-PluginOnPreRequest', '1');
+        $response->setContent($response->getContent() . 'onPreRequest');
 
         return $this->myStopAfterPreRequest;
     }
@@ -55,7 +55,7 @@ class SetHeaderTestPlugin extends AbstractPlugin
     {
         parent::onPostRequest($application, $request, $response);
 
-        $response->setHeader('X-PluginOnPostRequest', '1');
+        $response->setContent($response->getContent() . 'onPostRequest');
 
         return $this->myStopAfterPostRequest;
     }
