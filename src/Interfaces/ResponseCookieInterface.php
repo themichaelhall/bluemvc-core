@@ -15,20 +15,29 @@ namespace BlueMvc\Core\Interfaces;
 interface ResponseCookieInterface
 {
     /**
-     * Returns the cookie value.
+     * Returns the expiry time or null if no expiry time.
      *
      * @since 1.0.0
      *
-     * @return string The cookie value.
+     * @return \DateTimeImmutable|null The expiry time or null if no expiry time.
+     */
+    public function getExpiry();
+
+    /**
+     * Returns the value.
+     *
+     * @since 1.0.0
+     *
+     * @return string The value.
      */
     public function getValue();
 
     /**
-     * Returns the cookie value.
+     * Returns the value.
      *
      * @since 1.0.0
      *
-     * @return string The cookie value.
+     * @return string The value.
      */
     public function __toString();
 }

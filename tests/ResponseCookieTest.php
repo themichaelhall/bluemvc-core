@@ -20,6 +20,27 @@ class ResponseCookieTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test getExpiry method with no expiry set.
+     */
+    public function testGetExpiryWithNoExpirySet()
+    {
+        $responseCookie = new ResponseCookie('Foo');
+
+        self::assertNull($responseCookie->getExpiry());
+    }
+
+    /**
+     * Test getExpiry method with expiry set.
+     */
+    public function testGetExpiryWithExpirySet()
+    {
+        $expiry = new \DateTimeImmutable();
+        $responseCookie = new ResponseCookie('Foo', $expiry);
+
+        self::assertSame($expiry, $responseCookie->getExpiry());
+    }
+
+    /**
      * Test constructor with invalid value parameter type.
      *
      * @expectedException \InvalidArgumentException

@@ -22,12 +22,30 @@ class ResponseCookie extends AbstractCookie implements ResponseCookieInterface
      *
      * @since 1.0.0
      *
-     * @param string $value The value.
-     *
-     * @throws \InvalidArgumentException If the $value parameter is not a string.
+     * @param string                  $value  The value.
+     * @param \DateTimeImmutable|null $expiry The expiry time or null if no expiry time.
      */
-    public function __construct($value)
+    public function __construct($value, \DateTimeImmutable $expiry = null)
     {
         parent::__construct($value);
+
+        $this->myExpiry = $expiry;
     }
+
+    /**
+     * Returns the expiry time or null if no expiry time.
+     *
+     * @since 1.0.0
+     *
+     * @return \DateTimeImmutable|null The expiry time or null if no expiry time.
+     */
+    public function getExpiry()
+    {
+        return $this->myExpiry;
+    }
+
+    /**
+     * @var \DateTimeImmutable|null My expiry time or null if no expiry time.
+     */
+    private $myExpiry;
 }
