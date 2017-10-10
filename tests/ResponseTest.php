@@ -4,7 +4,6 @@ namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\Collections\HeaderCollection;
 use BlueMvc\Core\Http\StatusCode;
-use BlueMvc\Core\Request;
 use BlueMvc\Core\Response;
 use BlueMvc\Core\Tests\Helpers\Fakes\FakeHeaders;
 
@@ -14,23 +13,11 @@ use BlueMvc\Core\Tests\Helpers\Fakes\FakeHeaders;
 class ResponseTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Test getRequest method.
-     */
-    public function testGetRequest()
-    {
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
-
-        self::assertSame($request, $response->getRequest());
-    }
-
-    /**
      * Test getContent method.
      */
     public function testGetContent()
     {
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
 
         self::assertSame('', $response->getContent());
     }
@@ -40,8 +27,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetContent()
     {
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $response->setContent('Hello world!');
 
         self::assertSame('Hello world!', $response->getContent());
@@ -55,8 +41,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetContentWithInvalidContentParameterType()
     {
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $response->setContent(12.34);
     }
 
@@ -65,8 +50,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetStatusCode()
     {
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
 
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
@@ -76,8 +60,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetStatusCode()
     {
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $response->setStatusCode(new StatusCode(StatusCode::INTERNAL_SERVER_ERROR));
 
         self::assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
@@ -88,8 +71,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testOutputForValidRequest()
     {
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $response->setContent('Hello world!');
 
         ob_start();
@@ -106,8 +88,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testOutputForInvalidRequest()
     {
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $response->setContent('Hello world!');
         $response->setStatusCode(new StatusCode(StatusCode::CONFLICT));
 
@@ -125,8 +106,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetHeadersForResponseWithNoAdditionalHeaders()
     {
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
 
         self::assertSame([], iterator_to_array($response->getHeaders()));
     }
@@ -136,8 +116,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetHeadersForResponseWithAdditionalHeaders()
     {
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $response->setHeader('Content-Type', 'text/plain');
 
         self::assertSame(['Content-Type' => 'text/plain'], iterator_to_array($response->getHeaders()));
@@ -148,8 +127,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testOutputForResponseWithAdditionalHeaders()
     {
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $response->setContent('You are being redirected.');
         $response->setStatusCode(new StatusCode(StatusCode::TEMPORARY_REDIRECT));
         $response->setHeader('Location', 'http://foo.bar.com/');
@@ -168,8 +146,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetHeader()
     {
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $response->setHeader('Content-Type', 'text/plain');
 
         self::assertSame('text/plain', $response->getHeader('content-type'));
@@ -181,8 +158,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetHeader()
     {
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $response->setHeader('allow', 'GET');
         $response->setHeader('Content-type', 'text/html');
         $response->setHeader('Content-Type', 'application/octet-stream');
@@ -195,8 +171,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddHeader()
     {
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $response->setHeader('allow', 'GET');
         $response->addHeader('Allow', 'POST');
 
@@ -208,8 +183,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetHeaders()
     {
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $headers = new HeaderCollection();
         $headers->set('Server', 'bluemvc-core');
         $response->setHeaders($headers);
@@ -222,8 +196,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetExpiryWithNullTime()
     {
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $response->setExpiry(null);
 
         self::assertSame($response->getHeader('Date'), $response->getHeader('Expires'));
@@ -235,8 +208,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetExpiryWithPastTime()
     {
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
 
         $expiry = (new \DateTimeImmutable())->sub(new \DateInterval('PT24H'));
         $response->setExpiry($expiry);
@@ -250,8 +222,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetExpiryWithFutureTime()
     {
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
 
         $expiry = (new \DateTimeImmutable())->add(new \DateInterval('PT24H'));
         $response->setExpiry($expiry);

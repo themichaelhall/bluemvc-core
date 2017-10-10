@@ -27,7 +27,7 @@ class ErrorHandlingTest extends \PHPUnit_Framework_TestCase
     {
         $this->application->setDebug(true);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/exception/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -48,7 +48,7 @@ class ErrorHandlingTest extends \PHPUnit_Framework_TestCase
     {
         $this->application->setDebug(false);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/exception/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -67,7 +67,7 @@ class ErrorHandlingTest extends \PHPUnit_Framework_TestCase
     {
         $this->application->setErrorControllerClass(ErrorTestController::class);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/exception/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -86,7 +86,7 @@ class ErrorHandlingTest extends \PHPUnit_Framework_TestCase
     {
         $this->application->setErrorControllerClass(ErrorTestController::class);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/non-existing', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -105,7 +105,7 @@ class ErrorHandlingTest extends \PHPUnit_Framework_TestCase
     {
         $this->application->setErrorControllerClass(ErrorTestController::class);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/notfound', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -124,7 +124,7 @@ class ErrorHandlingTest extends \PHPUnit_Framework_TestCase
     {
         $this->application->setErrorControllerClass(ErrorTestController::class);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -143,7 +143,7 @@ class ErrorHandlingTest extends \PHPUnit_Framework_TestCase
     {
         $this->application->setErrorControllerClass(ErrorTestController::class);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/forbidden', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -163,7 +163,7 @@ class ErrorHandlingTest extends \PHPUnit_Framework_TestCase
         $this->application->setDebug(true);
         $this->application->setErrorControllerClass(ErrorTestController::class);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/forbidden', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();

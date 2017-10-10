@@ -31,7 +31,7 @@ class JsonResultTest extends \PHPUnit_Framework_TestCase
                 'REQUEST_METHOD' => 'GET',
             ]
         );
-        $response = new Response($request);
+        $response = new Response();
         $actionResult = new JsonResult(['Foo' => 'Bar']);
         $actionResult->updateResponse($application, $request, $response);
 
@@ -58,7 +58,7 @@ class JsonResultTest extends \PHPUnit_Framework_TestCase
                 'REQUEST_METHOD' => 'GET',
             ]
         );
-        $response = new Response($request);
+        $response = new Response();
         $actionResult = new JsonResult(['Error' => 'Not Found'], new StatusCode(StatusCode::NOT_FOUND));
         $actionResult->updateResponse($application, $request, $response);
 
@@ -85,7 +85,7 @@ class JsonResultTest extends \PHPUnit_Framework_TestCase
                 'REQUEST_METHOD' => 'GET',
             ]
         );
-        $response = new Response($request);
+        $response = new Response();
         $actionResult = new JsonResult(new JsonSerializableTestClass(10, 'Foo'));
         $actionResult->updateResponse($application, $request, $response);
 

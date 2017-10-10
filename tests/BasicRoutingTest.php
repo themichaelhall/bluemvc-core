@@ -37,7 +37,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testGetIndexPage()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -55,7 +55,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testGetNonExistingAction()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/notfound', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -73,7 +73,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testGetNonExistingController()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/non-existing-controller/action', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -91,7 +91,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testGetServerErrorPage()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/serverError', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -109,7 +109,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testGetPageStartingWithNumericCharacter()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/123numeric', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -127,7 +127,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testGetViewIndexPage()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/view/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -145,7 +145,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testGetViewWithModelPage()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/view/withmodel', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -163,7 +163,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testGetViewWithViewDataPage()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/view/withviewdata', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -184,7 +184,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
         $this->application->setDebug(true);
 
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/view/withnoviewfile', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -204,7 +204,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testGetViewWithCustomViewFilePage()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/view/withcustomviewfile', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -222,7 +222,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testGetViewWithAlternateViewType()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/view/alternate', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -240,7 +240,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testGetViewWithSecondChoiceViewType()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/view/onlyjson', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -258,7 +258,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testGetExistingPageForControllerWithDefaultAction()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/default/foo', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -276,7 +276,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testGetDefaultPageForControllerWithDefaultAction()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/default/bar', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -294,7 +294,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testGetDefaultPageForControllerWithDefaultActionWithView()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/defaultview/foo', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -312,7 +312,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testGetPageWithNotFoundResult()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/notfound', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -330,7 +330,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testGetPageWithRedirectResult()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/redirect', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -348,7 +348,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testGetPageWithPermanentRedirectResult()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/permanentRedirect', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -366,7 +366,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testGetPageWithForbiddenResult()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/forbidden', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -384,7 +384,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testGetPageWithNoContentResult()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/nocontent', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -402,7 +402,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testGetPageWithNotModifiedResult()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/notmodified', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -420,7 +420,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testGetPageWithMethodNotAllowedResult()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/methodnotallowed', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -438,7 +438,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testGetPageWithJsonResult()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/json', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -456,7 +456,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testGetIndexPageForControllerWithPreActionEvent()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/preandpostactionevent/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -474,7 +474,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testGetDefaultPageForControllerWithPreActionEvent()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/preandpostactionevent/foo', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -492,7 +492,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testGetPageWithPreActionEventResult()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com:81', 'SERVER_PORT' => '81', 'REQUEST_URI' => '/preandpostactionevent/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -510,7 +510,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testGetPageWithPostActionEventResult()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com:82', 'SERVER_PORT' => '82', 'REQUEST_URI' => '/preandpostactionevent/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -529,7 +529,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     {
         $this->application->setErrorControllerClass(ErrorTestController::class);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/notfound', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -548,7 +548,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     {
         $this->application->setErrorControllerClass(ErrorTestController::class);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/exception/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -567,7 +567,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     {
         $this->application->setErrorControllerClass(ErrorTestController::class);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/forbidden', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -587,7 +587,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
         $this->application->setDebug(true);
         $this->application->setErrorControllerClass(ErrorTestController::class);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/forbidden', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -607,7 +607,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testGetIntegerResultPage()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/int', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -625,7 +625,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testGetFalseResultPage()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/false', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -643,7 +643,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testGetTrueResultPage()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/true', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -661,7 +661,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testGetNullResultPage()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/null', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -679,7 +679,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testGetObjectResultPage()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/object', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -697,7 +697,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testGetStringableResultPage()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/stringable', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -715,7 +715,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testUppercaseIndexPage()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/uppercase/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -733,7 +733,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testUppercaseDefaultPage()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/uppercase/bar', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -751,7 +751,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testUppercaseActionMethodPageWithLowercasePath()
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/uppercase/foo', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -776,7 +776,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testMultiLevelPages($url, $expectedContent, array $expectedHeaders, $expectedStatusCode)
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/multilevel/' . $url, 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -898,7 +898,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testActionMethodVisibilityPages($url, $expectedContent, array $expectedHeaders, $expectedStatusCode)
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionMethodVisibility/' . $url, 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -938,7 +938,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testSpecialActionNamePages($url, $expectedContent, array $expectedHeaders, $expectedStatusCode)
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/specialActionName/' . $url, 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();
@@ -976,7 +976,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     public function testRequestCookiePage(array $requestCookies, $expectedContent)
     {
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/cookies/', 'REQUEST_METHOD' => 'GET'], [], [], [], $requestCookies);
-        $response = new Response($request);
+        $response = new Response();
         ob_start();
         $this->application->run($request, $response);
         $responseOutput = ob_get_contents();

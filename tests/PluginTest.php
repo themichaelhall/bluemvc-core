@@ -38,7 +38,7 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         }
 
         $request = new BasicTestRequest(Url::parse('http://localhost/'), new Method('GET'));
-        $response = new BasicTestResponse($request);
+        $response = new BasicTestResponse();
         $this->myApplication->run($request, $response);
 
         self::assertSame($expectedContent, $response->getContent());

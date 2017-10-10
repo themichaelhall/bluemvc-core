@@ -29,7 +29,7 @@ class RedirectResultTest extends \PHPUnit_Framework_TestCase
                 'REQUEST_METHOD' => 'GET',
             ]
         );
-        $response = new Response($request);
+        $response = new Response();
         $actionResult = new RedirectResult('https://domain.org/baz?query');
         $actionResult->updateResponse($application, $request, $response);
 
@@ -56,7 +56,7 @@ class RedirectResultTest extends \PHPUnit_Framework_TestCase
                 'REQUEST_METHOD' => 'GET',
             ]
         );
-        $response = new Response($request);
+        $response = new Response();
         $actionResult = new RedirectResult('../baz');
         $actionResult->updateResponse($application, $request, $response);
 
@@ -87,7 +87,7 @@ class RedirectResultTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $response = new Response($request);
+        $response = new Response();
         $actionResult = new RedirectResult('foobar://localhost/');
         $actionResult->updateResponse($application, $request, $response);
     }
@@ -113,7 +113,7 @@ class RedirectResultTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $response = new Response($request);
+        $response = new Response();
         $actionResult = new RedirectResult('../../baz');
         $actionResult->updateResponse($application, $request, $response);
     }

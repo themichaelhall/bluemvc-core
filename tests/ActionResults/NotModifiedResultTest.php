@@ -29,7 +29,7 @@ class NotModifiedResultTest extends \PHPUnit_Framework_TestCase
                 'REQUEST_METHOD' => 'GET',
             ]
         );
-        $response = new Response($request);
+        $response = new Response();
         $actionResult = new NotModifiedResult();
         $actionResult->updateResponse($application, $request, $response);
 

@@ -29,7 +29,7 @@ class NotFoundResultTest extends \PHPUnit_Framework_TestCase
                 'REQUEST_METHOD' => 'GET',
             ]
         );
-        $response = new Response($request);
+        $response = new Response();
         $actionResult = new NotFoundResult();
         $actionResult->updateResponse($application, $request, $response);
 
@@ -55,7 +55,7 @@ class NotFoundResultTest extends \PHPUnit_Framework_TestCase
                 'REQUEST_METHOD' => 'GET',
             ]
         );
-        $response = new Response($request);
+        $response = new Response();
         $actionResult = new NotFoundResult('The page was not found.');
         $actionResult->updateResponse($application, $request, $response);
 

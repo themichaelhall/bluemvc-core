@@ -29,7 +29,7 @@ class MethodNotAllowedTest extends \PHPUnit_Framework_TestCase
                 'REQUEST_METHOD' => 'GET',
             ]
         );
-        $response = new Response($request);
+        $response = new Response();
         $actionResult = new MethodNotAllowedResult();
         $actionResult->updateResponse($application, $request, $response);
 
@@ -55,7 +55,7 @@ class MethodNotAllowedTest extends \PHPUnit_Framework_TestCase
                 'REQUEST_METHOD' => 'GET',
             ]
         );
-        $response = new Response($request);
+        $response = new Response();
         $actionResult = new MethodNotAllowedResult('Method is not allowed.');
         $actionResult->updateResponse($application, $request, $response);
 

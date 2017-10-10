@@ -3,7 +3,6 @@
 namespace BlueMvc\Core\Tests\Helpers\TestResponses;
 
 use BlueMvc\Core\Base\AbstractResponse;
-use BlueMvc\Core\Interfaces\RequestInterface;
 
 /**
  * Basic test response class.
@@ -12,12 +11,10 @@ class BasicTestResponse extends AbstractResponse
 {
     /**
      * Constructs the test response.
-     *
-     * @param RequestInterface $request
      */
-    public function __construct(RequestInterface $request)
+    public function __construct()
     {
-        parent::__construct($request);
+        parent::__construct();
     }
 
     /**

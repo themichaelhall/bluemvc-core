@@ -29,7 +29,7 @@ class ForbiddenResultTest extends \PHPUnit_Framework_TestCase
                 'REQUEST_METHOD' => 'GET',
             ]
         );
-        $response = new Response($request);
+        $response = new Response();
         $actionResult = new ForbiddenResult();
         $actionResult->updateResponse($application, $request, $response);
 
@@ -55,7 +55,7 @@ class ForbiddenResultTest extends \PHPUnit_Framework_TestCase
                 'REQUEST_METHOD' => 'GET',
             ]
         );
-        $response = new Response($request);
+        $response = new Response();
         $actionResult = new ForbiddenResult('You are forbidden to view this content.');
         $actionResult->updateResponse($application, $request, $response);
 

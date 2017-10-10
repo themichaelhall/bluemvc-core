@@ -31,7 +31,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, '');
 
@@ -45,7 +45,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, '');
 
@@ -59,7 +59,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, '');
 
@@ -76,7 +76,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/notfound', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, null);
     }
@@ -88,7 +88,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, '');
 
@@ -103,7 +103,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/notfound', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, 'notfound');
 
@@ -118,7 +118,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/123numeric', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, '123numeric');
 
@@ -133,7 +133,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new DefaultActionTestController();
         $controller->processRequest($application, $request, $response, 'foo');
 
@@ -148,7 +148,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/bar', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new DefaultActionTestController();
         $controller->processRequest($application, $request, $response, 'bar');
 
@@ -163,7 +163,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/notfound', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new ActionResultTestController();
         $controller->processRequest($application, $request, $response, 'notfound');
 
@@ -183,7 +183,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $application->addViewRenderer(new BasicTestViewRenderer());
 
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new ViewTestController();
         $controller->processRequest($application, $request, $response, '');
 
@@ -203,7 +203,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $application->addViewRenderer(new BasicTestViewRenderer());
 
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/withcustomviewfile', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new ViewTestController();
         $controller->processRequest($application, $request, $response, 'withcustomviewfile');
 
@@ -218,7 +218,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new PreAndPostActionEventController();
         $controller->processRequest($application, $request, $response, '');
 
@@ -235,7 +235,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new PreAndPostActionEventController();
         $controller->processRequest($application, $request, $response, 'foo');
 
@@ -252,7 +252,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com:81', 'SERVER_PORT' => '81', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new PreAndPostActionEventController();
         $controller->processRequest($application, $request, $response, '');
 
@@ -269,7 +269,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com:82', 'SERVER_PORT' => '82', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new PreAndPostActionEventController();
         $controller->processRequest($application, $request, $response, '');
 
@@ -336,7 +336,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/int', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, 'int');
 
@@ -351,7 +351,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/false', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, 'false');
 
@@ -366,7 +366,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/true', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, 'true');
 
@@ -381,7 +381,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/null', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, 'null');
 
@@ -396,7 +396,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/object', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, 'object');
 
@@ -411,7 +411,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/stringable', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, 'stringable');
 
@@ -426,7 +426,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new UppercaseActionTestController();
         $controller->processRequest($application, $request, $response, '');
 
@@ -441,7 +441,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/bar', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new UppercaseActionTestController();
         $controller->processRequest($application, $request, $response, 'bar');
 
@@ -456,7 +456,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/FOO', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new UppercaseActionTestController();
         $controller->processRequest($application, $request, $response, 'FOO');
 
@@ -471,7 +471,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/FOO', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new UppercaseActionTestController();
         $controller->processRequest($application, $request, $response, 'foo');
 
@@ -493,7 +493,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/' . $action, 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new MultiLevelTestController();
         $controller->processRequest($application, $request, $response, $action, $parameters);
 
@@ -567,7 +567,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/' . $action, 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new ActionMethodVisibilityTestController();
         $controller->processRequest($application, $request, $response, $action, []);
 
@@ -603,7 +603,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/' . $action, 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new SpecialActionNameTestController();
         $controller->processRequest($application, $request, $response, $action, []);
 
@@ -633,7 +633,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, '', []);
 
@@ -647,7 +647,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/int', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, 'int', []);
 
@@ -661,7 +661,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/bar', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new DefaultActionTestController();
         $controller->processRequest($application, $request, $response, 'bar', []);
 
@@ -675,7 +675,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     {
         $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, 'foo', []);
 

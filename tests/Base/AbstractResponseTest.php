@@ -3,11 +3,8 @@
 namespace BlueMvc\Core\Tests\Base;
 
 use BlueMvc\Core\Collections\HeaderCollection;
-use BlueMvc\Core\Http\Method;
 use BlueMvc\Core\Http\StatusCode;
-use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
 use BlueMvc\Core\Tests\Helpers\TestResponses\BasicTestResponse;
-use DataTypes\Url;
 
 /**
  * Test AbstractResponse class (via derived test class).
@@ -19,21 +16,9 @@ class AbstractResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetContent()
     {
-        $request = new BasicTestRequest(Url::parse('http://localhost/'), new Method('GET'));
-        $response = new BasicTestResponse($request);
+        $response = new BasicTestResponse();
 
         self::assertSame('', $response->getContent());
-    }
-
-    /**
-     * Test getRequest method.
-     */
-    public function testGetRequest()
-    {
-        $request = new BasicTestRequest(Url::parse('http://localhost/'), new Method('GET'));
-        $response = new BasicTestResponse($request);
-
-        self::assertSame($request, $response->getRequest());
     }
 
     /**
@@ -41,8 +26,7 @@ class AbstractResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetContent()
     {
-        $request = new BasicTestRequest(Url::parse('http://localhost/'), new Method('GET'));
-        $response = new BasicTestResponse($request);
+        $response = new BasicTestResponse();
         $response->setContent('Hello world!');
 
         self::assertSame('Hello world!', $response->getContent());
@@ -56,8 +40,7 @@ class AbstractResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetContentWithInvalidContentParameterType()
     {
-        $request = new BasicTestRequest(Url::parse('http://localhost/'), new Method('GET'));
-        $response = new BasicTestResponse($request);
+        $response = new BasicTestResponse();
         $response->setContent(false);
     }
 
@@ -66,8 +49,7 @@ class AbstractResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetStatusCode()
     {
-        $request = new BasicTestRequest(Url::parse('http://localhost/'), new Method('GET'));
-        $response = new BasicTestResponse($request);
+        $response = new BasicTestResponse();
 
         self::assertSame('200 OK', $response->getStatusCode()->__toString());
     }
@@ -77,8 +59,7 @@ class AbstractResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetStatusCode()
     {
-        $request = new BasicTestRequest(Url::parse('http://localhost/'), new Method('GET'));
-        $response = new BasicTestResponse($request);
+        $response = new BasicTestResponse();
         $response->setStatusCode(new StatusCode(StatusCode::GONE));
 
         self::assertSame('410 Gone', $response->getStatusCode()->__toString());
@@ -89,8 +70,7 @@ class AbstractResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetHeadersForResponseWithNoAdditionalHeaders()
     {
-        $request = new BasicTestRequest(Url::parse('http://localhost/'), new Method('GET'));
-        $response = new BasicTestResponse($request);
+        $response = new BasicTestResponse();
 
         self::assertSame([], iterator_to_array($response->getHeaders()));
     }
@@ -100,8 +80,7 @@ class AbstractResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetHeadersForResponseWithAdditionalHeaders()
     {
-        $request = new BasicTestRequest(Url::parse('http://localhost/'), new Method('GET'));
-        $response = new BasicTestResponse($request);
+        $response = new BasicTestResponse();
         $response->setHeader('Content-Type', 'text/plain');
 
         self::assertSame(['Content-Type' => 'text/plain'], iterator_to_array($response->getHeaders()));
@@ -112,8 +91,7 @@ class AbstractResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetHeader()
     {
-        $request = new BasicTestRequest(Url::parse('http://localhost/'), new Method('GET'));
-        $response = new BasicTestResponse($request);
+        $response = new BasicTestResponse();
         $response->setHeader('allow', 'GET');
         $response->setHeader('Content-Type', 'text/plain');
         $response->setHeader('Allow', 'POST');
@@ -126,8 +104,7 @@ class AbstractResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetHeader()
     {
-        $request = new BasicTestRequest(Url::parse('http://localhost/'), new Method('GET'));
-        $response = new BasicTestResponse($request);
+        $response = new BasicTestResponse();
         $response->setHeader('Content-Type', 'text/plain');
 
         self::assertSame('text/plain', $response->getHeader('content-type'));
@@ -139,8 +116,7 @@ class AbstractResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddHeader()
     {
-        $request = new BasicTestRequest(Url::parse('http://localhost/'), new Method('GET'));
-        $response = new BasicTestResponse($request);
+        $response = new BasicTestResponse();
         $response->setHeader('allow', 'GET');
         $response->addHeader('Allow', 'POST');
 
@@ -152,8 +128,7 @@ class AbstractResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetHeaders()
     {
-        $request = new BasicTestRequest(Url::parse('http://localhost/'), new Method('GET'));
-        $response = new BasicTestResponse($request);
+        $response = new BasicTestResponse();
         $headers = new HeaderCollection();
         $headers->set('Content-type', 'text/html');
         $headers->set('Cache-Control', 'max-age=0, must-revalidate');
@@ -167,8 +142,7 @@ class AbstractResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetExpiryWithNullTime()
     {
-        $request = new BasicTestRequest(Url::parse('http://localhost/'), new Method('GET'));
-        $response = new BasicTestResponse($request);
+        $response = new BasicTestResponse();
         $response->setExpiry(null);
 
         self::assertSame($response->getHeader('Date'), $response->getHeader('Expires'));
@@ -180,8 +154,7 @@ class AbstractResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetExpiryWithPastTime()
     {
-        $request = new BasicTestRequest(Url::parse('http://localhost/'), new Method('GET'));
-        $response = new BasicTestResponse($request);
+        $response = new BasicTestResponse();
 
         $expiry = (new \DateTimeImmutable())->sub(new \DateInterval('PT24H'));
         $response->setExpiry($expiry);
@@ -195,8 +168,7 @@ class AbstractResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetExpiryWithFutureTime()
     {
-        $request = new BasicTestRequest(Url::parse('http://localhost/'), new Method('GET'));
-        $response = new BasicTestResponse($request);
+        $response = new BasicTestResponse();
 
         $expiry = (new \DateTimeImmutable())->add(new \DateInterval('PT24H'));
         $response->setExpiry($expiry);

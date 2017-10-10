@@ -29,7 +29,7 @@ class NoContentResultTest extends \PHPUnit_Framework_TestCase
                 'REQUEST_METHOD' => 'GET',
             ]
         );
-        $response = new Response($request);
+        $response = new Response();
         $actionResult = new NoContentResult();
         $actionResult->updateResponse($application, $request, $response);
 

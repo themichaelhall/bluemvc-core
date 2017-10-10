@@ -77,7 +77,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $application->addViewRenderer(new BasicTestViewRenderer());
 
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new ViewTestController();
         $view = new View('The Model');
         $viewItems = new ViewItemCollection();
@@ -97,7 +97,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $application->addViewRenderer(new BasicTestViewRenderer());
 
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/withviewdata', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new ViewTestController();
         $view = new View('The Model');
         $viewItems = new ViewItemCollection();
@@ -121,7 +121,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $application->addViewRenderer(new BasicTestViewRenderer());
 
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/withnoviewfile', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new ViewTestController();
         $view = new View('The Model');
         $viewItems = new ViewItemCollection();
@@ -148,7 +148,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $application->addViewRenderer(new BasicTestViewRenderer());
 
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new ViewTestController();
         $view = new View('The Model', 'custom');
         $viewItems = new ViewItemCollection();
@@ -183,7 +183,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $application->addViewRenderer(new JsonTestViewRenderer());
 
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/alternate', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new ViewTestController();
         $view = new View('The Model');
         $viewItems = new ViewItemCollection();
@@ -208,7 +208,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $application->addViewRenderer(new BasicTestViewRenderer());
 
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/alternate', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new ViewTestController();
         $view = new View('The Model');
         $viewItems = new ViewItemCollection();
@@ -233,7 +233,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $application->addViewRenderer(new JsonTestViewRenderer()); // Use this.
 
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/onlyjson', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new ViewTestController();
         $view = new View('The Model');
         $viewItems = new ViewItemCollection();
@@ -259,7 +259,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
 
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response($request);
+        $response = new Response();
         $controller = new ViewTestController();
         $view = new View();
         $viewItems = new ViewItemCollection();

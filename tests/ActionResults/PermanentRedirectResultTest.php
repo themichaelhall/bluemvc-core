@@ -29,7 +29,7 @@ class PermanentRedirectResultTest extends \PHPUnit_Framework_TestCase
                 'REQUEST_METHOD' => 'GET',
             ]
         );
-        $response = new Response($request);
+        $response = new Response();
         $actionResult = new PermanentRedirectResult('https://domain.org/baz?query');
         $actionResult->updateResponse($application, $request, $response);
 
@@ -56,7 +56,7 @@ class PermanentRedirectResultTest extends \PHPUnit_Framework_TestCase
                 'REQUEST_METHOD' => 'GET',
             ]
         );
-        $response = new Response($request);
+        $response = new Response();
         $actionResult = new PermanentRedirectResult('../baz');
         $actionResult->updateResponse($application, $request, $response);
 
@@ -86,7 +86,7 @@ class PermanentRedirectResultTest extends \PHPUnit_Framework_TestCase
                 'REQUEST_METHOD' => 'GET',
             ]
         );
-        $response = new Response($request);
+        $response = new Response();
         $actionResult = new PermanentRedirectResult('foobar://localhost/');
         $actionResult->updateResponse($application, $request, $response);
     }
@@ -111,7 +111,7 @@ class PermanentRedirectResultTest extends \PHPUnit_Framework_TestCase
                 'REQUEST_METHOD' => 'GET',
             ]
         );
-        $response = new Response($request);
+        $response = new Response();
         $actionResult = new PermanentRedirectResult('../../baz');
         $actionResult->updateResponse($application, $request, $response);
     }

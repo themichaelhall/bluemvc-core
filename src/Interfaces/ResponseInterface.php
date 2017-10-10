@@ -57,15 +57,6 @@ interface ResponseInterface
     public function getHeaders();
 
     /**
-     * Returns the request.
-     *
-     * @since 1.0.0
-     *
-     * @return RequestInterface The request.
-     */
-    public function getRequest();
-
-    /**
      * Returns the status code.
      *
      * @since 1.0.0
