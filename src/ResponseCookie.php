@@ -10,7 +10,8 @@ namespace BlueMvc\Core;
 use BlueMvc\Core\Base\AbstractCookie;
 use BlueMvc\Core\Exceptions\InvalidResponseCookiePathException;
 use BlueMvc\Core\Interfaces\ResponseCookieInterface;
-use DataTypes\UrlPath;
+use DataTypes\Interfaces\HostInterface;
+use DataTypes\Interfaces\UrlPathInterface;
 
 /**
  * Class representing a response cookie.
@@ -25,12 +26,13 @@ class ResponseCookie extends AbstractCookie implements ResponseCookieInterface
      * @since 1.0.0
      *
      * @param string                  $value  The value.
-     * @param \DateTimeImmutable|null $expiry The expiry time or null if no expiry time.
-     * @param UrlPath|null            $path   The path or null if no path.
+     * @param \DateTimeInterface|null $expiry The expiry time or null if no expiry time.
+     * @param UrlPathInterface|null   $path   The path or null if no path.
+     * @param HostInterface|null      $domain The domain or null if no domain.
      *
      * @throws InvalidResponseCookiePathException If the path is not a directory or an absolute path.
      */
-    public function __construct($value, \DateTimeImmutable $expiry = null, UrlPath $path = null)
+    public function __construct($value, \DateTimeInterface $expiry = null, UrlPathInterface $path = null, HostInterface $domain = null)
     {
         parent::__construct($value);
 
@@ -46,6 +48,19 @@ class ResponseCookie extends AbstractCookie implements ResponseCookieInterface
 
         $this->myExpiry = $expiry;
         $this->myPath = $path;
+        $this->myDomain = $domain;
+    }
+
+    /**
+     * Returns the domain or null if no domain.
+     *
+     * @since 1.0.0
+     *
+     * @return HostInterface|null The domain or null if no domain.
+     */
+    public function getDomain()
+    {
+        return $this->myDomain;
     }
 
     /**
@@ -53,7 +68,7 @@ class ResponseCookie extends AbstractCookie implements ResponseCookieInterface
      *
      * @since 1.0.0
      *
-     * @return \DateTimeImmutable|null The expiry time or null if no expiry time.
+     * @return \DateTimeInterface|null The expiry time or null if no expiry time.
      */
     public function getExpiry()
     {
@@ -65,7 +80,7 @@ class ResponseCookie extends AbstractCookie implements ResponseCookieInterface
      *
      * @since 1.0.0
      *
-     * @return UrlPath|null The path or null if no path.
+     * @return UrlPathInterface|null The path or null if no path.
      */
     public function getPath()
     {
@@ -73,12 +88,17 @@ class ResponseCookie extends AbstractCookie implements ResponseCookieInterface
     }
 
     /**
-     * @var \DateTimeImmutable|null My expiry time or null if no expiry time.
+     * @var \DateTimeInterface|null My expiry time or null if no expiry time.
      */
     private $myExpiry;
 
     /**
-     * @var UrlPath|null My path or null if no path.
+     * @var UrlPathInterface|null My path or null if no path.
      */
     private $myPath;
+
+    /**
+     * @var HostInterface|null My domain or null if no domain.
+     */
+    private $myDomain;
 }

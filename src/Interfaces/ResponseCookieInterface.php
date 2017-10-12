@@ -7,7 +7,8 @@
 
 namespace BlueMvc\Core\Interfaces;
 
-use DataTypes\UrlPath;
+use DataTypes\Interfaces\HostInterface;
+use DataTypes\Interfaces\UrlPathInterface;
 
 /**
  * Interface for ResponseCookie class.
@@ -17,11 +18,20 @@ use DataTypes\UrlPath;
 interface ResponseCookieInterface
 {
     /**
+     * Returns the domain or null if no domain.
+     *
+     * @since 1.0.0
+     *
+     * @return HostInterface|null The domain or null if no domain.
+     */
+    public function getDomain();
+
+    /**
      * Returns the expiry time or null if no expiry time.
      *
      * @since 1.0.0
      *
-     * @return \DateTimeImmutable|null The expiry time or null if no expiry time.
+     * @return \DateTimeInterface|null The expiry time or null if no expiry time.
      */
     public function getExpiry();
 
@@ -30,7 +40,7 @@ interface ResponseCookieInterface
      *
      * @since 1.0.0
      *
-     * @return UrlPath|null The path or null if no path.
+     * @return UrlPathInterface|null The path or null if no path.
      */
     public function getPath();
 

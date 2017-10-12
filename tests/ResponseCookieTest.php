@@ -3,6 +3,7 @@
 namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\ResponseCookie;
+use DataTypes\Host;
 use DataTypes\UrlPath;
 
 /**
@@ -93,6 +94,27 @@ class ResponseCookieTest extends \PHPUnit_Framework_TestCase
     public function testConstructorWithNonDirectoryPathParameter()
     {
         new ResponseCookie('foo', null, UrlPath::parse('/foo/bar'));
+    }
+
+    /**
+     * Test getDomain method with no domain set.
+     */
+    public function testGetDomainWithNoDomainSet()
+    {
+        $responseCookie = new ResponseCookie('Foo');
+
+        self::assertNull($responseCookie->getDomain());
+    }
+
+    /**
+     * Test getDomain method with domain set.
+     */
+    public function testGetDomainWithDomainSet()
+    {
+        $domain = Host::parse('www.example.com');
+        $responseCookie = new ResponseCookie('Foo', null, null, $domain);
+
+        self::assertSame($domain, $responseCookie->getDomain());
     }
 
     /**
