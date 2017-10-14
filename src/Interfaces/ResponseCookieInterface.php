@@ -54,6 +54,15 @@ interface ResponseCookieInterface
     public function getValue();
 
     /**
+     * Returns true if cookie is secure, false otherwise.
+     *
+     * @since 1.0.0
+     *
+     * @return bool True if cookie is secure, false otherwise.
+     */
+    public function isSecure();
+
+    /**
      * Returns the value.
      *
      * @since 1.0.0

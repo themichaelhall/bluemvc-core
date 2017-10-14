@@ -64,12 +64,53 @@ class ResponseCookieTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test getDomain method with no domain set.
+     */
+    public function testGetDomainWithNoDomainSet()
+    {
+        $responseCookie = new ResponseCookie('Foo');
+
+        self::assertNull($responseCookie->getDomain());
+    }
+
+    /**
+     * Test getDomain method with domain set.
+     */
+    public function testGetDomainWithDomainSet()
+    {
+        $domain = Host::parse('www.example.com');
+        $responseCookie = new ResponseCookie('Foo', null, null, $domain);
+
+        self::assertSame($domain, $responseCookie->getDomain());
+    }
+
+    /**
+     * Test isSecure method with no is secure set.
+     */
+    public function testIsSecureWithNoIsSecureSet()
+    {
+        $responseCookie = new ResponseCookie('Foo');
+
+        self::assertFalse($responseCookie->isSecure());
+    }
+
+    /**
+     * Test isSecure method with is secure set.
+     */
+    public function testIsSecureWithIsSecureSet()
+    {
+        $responseCookie = new ResponseCookie('Foo', null, null, null, true);
+
+        self::assertTrue($responseCookie->isSecure());
+    }
+
+    /**
      * Test constructor with invalid value parameter type.
      *
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage $value parameter is not a string.
      */
-    public function testConstructorWithInvalidValueParameter()
+    public function testConstructorWithInvalidValueParameterType()
     {
         new ResponseCookie(100);
     }
@@ -97,24 +138,14 @@ class ResponseCookieTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test getDomain method with no domain set.
+     * Test constructor with invalid is secure parameter type.
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage $isSecure parameter is not a boolean.
      */
-    public function testGetDomainWithNoDomainSet()
+    public function testConstructorWithInvalidIsSecureParameterType()
     {
-        $responseCookie = new ResponseCookie('Foo');
-
-        self::assertNull($responseCookie->getDomain());
-    }
-
-    /**
-     * Test getDomain method with domain set.
-     */
-    public function testGetDomainWithDomainSet()
-    {
-        $domain = Host::parse('www.example.com');
-        $responseCookie = new ResponseCookie('Foo', null, null, $domain);
-
-        self::assertSame($domain, $responseCookie->getDomain());
+        new ResponseCookie('Foo', null, null, null, 10);
     }
 
     /**

@@ -25,15 +25,21 @@ class ResponseCookie extends AbstractCookie implements ResponseCookieInterface
      *
      * @since 1.0.0
      *
-     * @param string                  $value  The value.
-     * @param \DateTimeInterface|null $expiry The expiry time or null if no expiry time.
-     * @param UrlPathInterface|null   $path   The path or null if no path.
-     * @param HostInterface|null      $domain The domain or null if no domain.
+     * @param string                  $value    The value.
+     * @param \DateTimeInterface|null $expiry   The expiry time or null if no expiry time.
+     * @param UrlPathInterface|null   $path     The path or null if no path.
+     * @param HostInterface|null      $domain   The domain or null if no domain.
+     * @param bool                    $isSecure True if cookie is secure, false otherwise.
      *
+     * @throws \InvalidArgumentException          If the $isSecure parameter is not a boolean.
      * @throws InvalidResponseCookiePathException If the path is not a directory or an absolute path.
      */
-    public function __construct($value, \DateTimeInterface $expiry = null, UrlPathInterface $path = null, HostInterface $domain = null)
+    public function __construct($value, \DateTimeInterface $expiry = null, UrlPathInterface $path = null, HostInterface $domain = null, $isSecure = false)
     {
+        if (!is_bool($isSecure)) {
+            throw new \InvalidArgumentException('$isSecure parameter is not a boolean.');
+        }
+
         parent::__construct($value);
 
         if ($path !== null) {
@@ -49,6 +55,7 @@ class ResponseCookie extends AbstractCookie implements ResponseCookieInterface
         $this->myExpiry = $expiry;
         $this->myPath = $path;
         $this->myDomain = $domain;
+        $this->myIsSecure = $isSecure;
     }
 
     /**
@@ -88,6 +95,18 @@ class ResponseCookie extends AbstractCookie implements ResponseCookieInterface
     }
 
     /**
+     * Returns true if cookie is secure, false otherwise.
+     *
+     * @since 1.0.0
+     *
+     * @return bool True if cookie is secure, false otherwise.
+     */
+    public function isSecure()
+    {
+        return $this->myIsSecure;
+    }
+
+    /**
      * @var \DateTimeInterface|null My expiry time or null if no expiry time.
      */
     private $myExpiry;
@@ -101,4 +120,9 @@ class ResponseCookie extends AbstractCookie implements ResponseCookieInterface
      * @var HostInterface|null My domain or null if no domain.
      */
     private $myDomain;
+
+    /**
+     * @var bool True if cookie is secure, false otherwise.
+     */
+    private $myIsSecure;
 }
