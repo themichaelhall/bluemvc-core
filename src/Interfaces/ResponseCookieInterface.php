@@ -54,6 +54,15 @@ interface ResponseCookieInterface
     public function getValue();
 
     /**
+     * Returns true if cookie is http only, false otherwise.
+     *
+     * @since 1.0.0
+     *
+     * @return bool True if cookie is http only, false otherwise.
+     */
+    public function isHttpOnly();
+
+    /**
      * Returns true if cookie is secure, false otherwise.
      *
      * @since 1.0.0

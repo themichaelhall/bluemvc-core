@@ -105,6 +105,26 @@ class ResponseCookieTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test isHttpOnly method with no http only set.
+     */
+    public function testIsHttpOnlyWithNoHttpOnlySet()
+    {
+        $responseCookie = new ResponseCookie('Foo');
+
+        self::assertFalse($responseCookie->isHttpOnly());
+    }
+
+    /**
+     * Test isHttpOnly method with http only set.
+     */
+    public function testIsHttpOnlyWithHttpOnlySet()
+    {
+        $responseCookie = new ResponseCookie('Foo', null, null, null, false, true);
+
+        self::assertTrue($responseCookie->isHttpOnly());
+    }
+
+    /**
      * Test constructor with invalid value parameter type.
      *
      * @expectedException \InvalidArgumentException
@@ -146,6 +166,17 @@ class ResponseCookieTest extends \PHPUnit_Framework_TestCase
     public function testConstructorWithInvalidIsSecureParameterType()
     {
         new ResponseCookie('Foo', null, null, null, 10);
+    }
+
+    /**
+     * Test constructor with invalid is http only parameter type.
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage $isHttpOnly parameter is not a boolean.
+     */
+    public function testConstructorWithInvalidIsHttpOnlyParameterType()
+    {
+        new ResponseCookie('Foo', null, null, null, false, null);
     }
 
     /**

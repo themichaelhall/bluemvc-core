@@ -25,19 +25,24 @@ class ResponseCookie extends AbstractCookie implements ResponseCookieInterface
      *
      * @since 1.0.0
      *
-     * @param string                  $value    The value.
-     * @param \DateTimeInterface|null $expiry   The expiry time or null if no expiry time.
-     * @param UrlPathInterface|null   $path     The path or null if no path.
-     * @param HostInterface|null      $domain   The domain or null if no domain.
-     * @param bool                    $isSecure True if cookie is secure, false otherwise.
+     * @param string                  $value      The value.
+     * @param \DateTimeInterface|null $expiry     The expiry time or null if no expiry time.
+     * @param UrlPathInterface|null   $path       The path or null if no path.
+     * @param HostInterface|null      $domain     The domain or null if no domain.
+     * @param bool                    $isSecure   True if cookie is secure, false otherwise.
+     * @param bool                    $isHttpOnly True if cookie is http only, false otherwise.
      *
-     * @throws \InvalidArgumentException          If the $isSecure parameter is not a boolean.
      * @throws InvalidResponseCookiePathException If the path is not a directory or an absolute path.
+     * @throws \InvalidArgumentException          If the $isSecure or $isHttpOnly parameter is not a boolean.
      */
-    public function __construct($value, \DateTimeInterface $expiry = null, UrlPathInterface $path = null, HostInterface $domain = null, $isSecure = false)
+    public function __construct($value, \DateTimeInterface $expiry = null, UrlPathInterface $path = null, HostInterface $domain = null, $isSecure = false, $isHttpOnly = false)
     {
         if (!is_bool($isSecure)) {
             throw new \InvalidArgumentException('$isSecure parameter is not a boolean.');
+        }
+
+        if (!is_bool($isHttpOnly)) {
+            throw new \InvalidArgumentException('$isHttpOnly parameter is not a boolean.');
         }
 
         parent::__construct($value);
@@ -56,6 +61,7 @@ class ResponseCookie extends AbstractCookie implements ResponseCookieInterface
         $this->myPath = $path;
         $this->myDomain = $domain;
         $this->myIsSecure = $isSecure;
+        $this->myIsHttpOnly = $isHttpOnly;
     }
 
     /**
@@ -95,6 +101,18 @@ class ResponseCookie extends AbstractCookie implements ResponseCookieInterface
     }
 
     /**
+     * Returns true if cookie is http only, false otherwise.
+     *
+     * @since 1.0.0
+     *
+     * @return bool True if cookie is http only, false otherwise.
+     */
+    public function isHttpOnly()
+    {
+        return $this->myIsHttpOnly;
+    }
+
+    /**
      * Returns true if cookie is secure, false otherwise.
      *
      * @since 1.0.0
@@ -125,4 +143,9 @@ class ResponseCookie extends AbstractCookie implements ResponseCookieInterface
      * @var bool True if cookie is secure, false otherwise.
      */
     private $myIsSecure;
+
+    /**
+     * @var bool True if cookie is http only, false otherwise.
+     */
+    private $myIsHttpOnly;
 }
