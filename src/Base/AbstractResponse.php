@@ -8,8 +8,10 @@
 namespace BlueMvc\Core\Base;
 
 use BlueMvc\Core\Collections\HeaderCollection;
+use BlueMvc\Core\Collections\ResponseCookieCollection;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
+use BlueMvc\Core\Interfaces\Collections\ResponseCookieCollectionInterface;
 use BlueMvc\Core\Interfaces\Http\StatusCodeInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
 
@@ -45,6 +47,18 @@ abstract class AbstractResponse implements ResponseInterface
     public function getContent()
     {
         return $this->myContent;
+    }
+
+    /**
+     * Returns the cookies.
+     *
+     * @since 1.0.0
+     *
+     * @return ResponseCookieCollectionInterface The cookies.
+     */
+    public function getCookies()
+    {
+        return $this->myCookies;
     }
 
     /**
@@ -183,9 +197,10 @@ abstract class AbstractResponse implements ResponseInterface
      */
     protected function __construct()
     {
-        $this->myContent = '';
-        $this->myHeaders = new HeaderCollection();
-        $this->myStatusCode = new StatusCode(StatusCode::OK);
+        $this->setContent('');
+        $this->setHeaders(new HeaderCollection());
+        $this->setStatusCode(new StatusCode(StatusCode::OK));
+        $this->myCookies = new ResponseCookieCollection();
     }
 
     /**
@@ -194,7 +209,12 @@ abstract class AbstractResponse implements ResponseInterface
     private $myContent;
 
     /**
-     * @var HeaderCollection My headers.
+     * @var ResponseCookieCollectionInterface My cookies.
+     */
+    private $myCookies;
+
+    /**
+     * @var HeaderCollectionInterface My headers.
      */
     private $myHeaders;
 

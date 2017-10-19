@@ -8,6 +8,7 @@
 namespace BlueMvc\Core\Interfaces;
 
 use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
+use BlueMvc\Core\Interfaces\Collections\ResponseCookieCollectionInterface;
 use BlueMvc\Core\Interfaces\Http\StatusCodeInterface;
 
 /**
@@ -35,6 +36,15 @@ interface ResponseInterface
      * @return string The content.
      */
     public function getContent();
+
+    /**
+     * Returns the cookies.
+     *
+     * @since 1.0.0
+     *
+     * @return ResponseCookieCollectionInterface The cookies.
+     */
+    public function getCookies();
 
     /**
      * Returns a header value by header name if it exists, null otherwise.

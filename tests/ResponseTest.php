@@ -232,6 +232,16 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test getCookies method with no cookies set.
+     */
+    public function testGetCookiesWithNoCookiesSet()
+    {
+        $response = new Response();
+
+        self::assertSame([], iterator_to_array($response->getCookies()));
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
