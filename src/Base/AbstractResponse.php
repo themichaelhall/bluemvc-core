@@ -120,6 +120,18 @@ abstract class AbstractResponse implements ResponseInterface
     }
 
     /**
+     * Sets the cookies.
+     *
+     * @since 1.0.0
+     *
+     * @param ResponseCookieCollectionInterface $cookies The cookies.
+     */
+    public function setCookies(ResponseCookieCollectionInterface $cookies)
+    {
+        $this->myCookies = $cookies;
+    }
+
+    /**
      * Sets the expiry time.
      *
      * @since 1.0.0
@@ -200,7 +212,7 @@ abstract class AbstractResponse implements ResponseInterface
         $this->setContent('');
         $this->setHeaders(new HeaderCollection());
         $this->setStatusCode(new StatusCode(StatusCode::OK));
-        $this->myCookies = new ResponseCookieCollection();
+        $this->setCookies(new ResponseCookieCollection());
     }
 
     /**

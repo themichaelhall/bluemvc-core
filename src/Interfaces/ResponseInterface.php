@@ -85,6 +85,15 @@ interface ResponseInterface
     public function setContent($content);
 
     /**
+     * Sets the cookies.
+     *
+     * @since 1.0.0
+     *
+     * @param ResponseCookieCollectionInterface $cookies The cookies.
+     */
+    public function setCookies(ResponseCookieCollectionInterface $cookies);
+
+    /**
      * Sets the expiry time.
      *
      * @since 1.0.0

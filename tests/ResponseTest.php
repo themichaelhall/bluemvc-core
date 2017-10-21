@@ -3,9 +3,13 @@
 namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\Collections\HeaderCollection;
+use BlueMvc\Core\Collections\ResponseCookieCollection;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Response;
+use BlueMvc\Core\ResponseCookie;
 use BlueMvc\Core\Tests\Helpers\Fakes\FakeHeaders;
+use DataTypes\Host;
+use DataTypes\UrlPath;
 
 /**
  * Test Response class.
@@ -239,6 +243,22 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         $response = new Response();
 
         self::assertSame([], iterator_to_array($response->getCookies()));
+    }
+
+    /**
+     * Test setCookies method.
+     */
+    public function testSetCookies()
+    {
+        $response = new Response();
+        $cookies = new ResponseCookieCollection();
+        $fooCookie = new ResponseCookie('Foo', new \DateTimeImmutable(), UrlPath::parse('/bar/'), Host::parse('example.com'), true, true);
+        $barCookie = new ResponseCookie('Bar');
+        $cookies->set('foo', $fooCookie);
+        $cookies->set('bar', $barCookie);
+        $response->setCookies($cookies);
+
+        self::assertSame(['foo' => $fooCookie, 'bar' => $barCookie], iterator_to_array($response->getCookies()));
     }
 
     /**
