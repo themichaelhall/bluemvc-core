@@ -8,6 +8,7 @@
 namespace BlueMvc\Core;
 
 use BlueMvc\Core\Base\AbstractResponse;
+use BlueMvc\Core\Interfaces\ResponseCookieInterface;
 
 /**
  * Class representing a web response.
@@ -38,6 +39,20 @@ class Response extends AbstractResponse
         // Output headers.
         foreach ($this->getHeaders() as $headerName => $headerValue) {
             header($headerName . ': ' . $headerValue);
+        }
+
+        // Set cookies.
+        foreach ($this->getCookies() as $cookieName => $cookie) {
+            /** @var ResponseCookieInterface $cookie */
+            setcookie(
+                $cookieName,
+                $cookie->getValue(),
+                $cookie->getExpiry() !== null ? $cookie->getExpiry()->getTimestamp() : 0,
+                $cookie->getPath() !== null ? $cookie->getPath()->__toString() : '',
+                $cookie->getDomain() !== null ? $cookie->getDomain()->__toString() : '',
+                $cookie->isSecure(),
+                $cookie->isHttpOnly()
+            );
         }
 
         // Output content.

@@ -7,6 +7,7 @@ use BlueMvc\Core\Collections\ResponseCookieCollection;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Response;
 use BlueMvc\Core\ResponseCookie;
+use BlueMvc\Core\Tests\Helpers\Fakes\FakeCookies;
 use BlueMvc\Core\Tests\Helpers\Fakes\FakeHeaders;
 use DataTypes\Host;
 use DataTypes\UrlPath;
@@ -262,11 +263,40 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test output method for response with cookies.
+     */
+    public function testOutputForResponseWithCookies()
+    {
+        $response = new Response();
+        $response->setContent('Cookies are set.');
+        $cookies = new ResponseCookieCollection();
+        $fooExpiry = (new \DateTimeImmutable())->add(new \DateInterval('P1D'));
+        $fooCookie = new ResponseCookie('Foo', $fooExpiry, UrlPath::parse('/bar/'), Host::parse('example.com'), true, true);
+        $barCookie = new ResponseCookie('Bar');
+        $cookies->set('foo', $fooCookie);
+        $cookies->set('bar', $barCookie);
+        $response->setCookies($cookies);
+
+        ob_start();
+        $response->output();
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        self::assertSame(
+            [
+                ['name' => 'foo', 'value' => 'Foo', 'expire' => $fooExpiry->getTimestamp(), 'path' => '/bar/', 'domain' => 'example.com', 'secure' => true, 'httponly' => true],
+                ['name' => 'bar', 'value' => 'Bar', 'expire' => 0, 'path' => '', 'domain' => '', 'secure' => false, 'httponly' => false],
+            ], FakeCookies::get());
+        self::assertSame('Cookies are set.', $responseOutput);
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
     {
         FakeHeaders::enable();
+        FakeCookies::enable();
     }
 
     /**
@@ -275,5 +305,6 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     public function tearDown()
     {
         FakeHeaders::disable();
+        FakeCookies::disable();
     }
 }
