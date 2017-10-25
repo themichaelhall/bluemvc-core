@@ -13,6 +13,7 @@ use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\ResponseCookieCollectionInterface;
 use BlueMvc\Core\Interfaces\Http\StatusCodeInterface;
+use BlueMvc\Core\Interfaces\ResponseCookieInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
 
 /**
@@ -117,6 +118,21 @@ abstract class AbstractResponse implements ResponseInterface
         }
 
         $this->myContent = $content;
+    }
+
+    /**
+     * Sets a cookie.
+     *
+     * @since 1.0.0
+     *
+     * @param string                  $name   The cookie name.
+     * @param ResponseCookieInterface $cookie The cookie.
+     *
+     * @throws \InvalidArgumentException If the $name parameter is not a string.
+     */
+    public function setCookie($name, ResponseCookieInterface $cookie)
+    {
+        $this->myCookies->set($name, $cookie);
     }
 
     /**

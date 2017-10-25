@@ -85,6 +85,16 @@ interface ResponseInterface
     public function setContent($content);
 
     /**
+     * Sets a cookie.
+     *
+     * @since 1.0.0
+     *
+     * @param string                  $name   The cookie name.
+     * @param ResponseCookieInterface $cookie The cookie.
+     */
+    public function setCookie($name, ResponseCookieInterface $cookie);
+
+    /**
      * Sets the cookies.
      *
      * @since 1.0.0
