@@ -38,6 +38,17 @@ interface ResponseInterface
     public function getContent();
 
     /**
+     * Returns a cookie by cookie name if it exists, null otherwise.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name The cookie name.
+     *
+     * @return ResponseCookieInterface|null The cookie if it exists, null otherwise.
+     */
+    public function getCookie($name);
+
+    /**
      * Returns the cookies.
      *
      * @since 1.0.0

@@ -220,4 +220,19 @@ class AbstractResponseTest extends \PHPUnit_Framework_TestCase
 
         self::assertSame(['foo' => $barCookie], iterator_to_array($response->getCookies()));
     }
+
+    /**
+     * Test getCookie method.
+     */
+    public function testGetCookie()
+    {
+        $response = new BasicTestResponse();
+        $fooCookie = new ResponseCookie('Foo', new \DateTimeImmutable(), UrlPath::parse('/bar/'), Host::parse('example.com'), true, true);
+        $barCookie = new ResponseCookie('Bar');
+        $response->setCookie('foo', $fooCookie);
+        $response->setCookie('foo', $barCookie);
+
+        self::assertSame($barCookie, $response->getCookie('foo'));
+        self::assertNull($response->getCookie('bar'));
+    }
 }

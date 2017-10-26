@@ -303,6 +303,20 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test getCookie method.
+     */
+    public function testGetCookie()
+    {
+        $response = new Response();
+        $cookie = new ResponseCookie('Bar', null, UrlPath::parse('/foo/bar/'));
+        $response->setCookie('foo', $cookie);
+
+        self::assertSame($cookie, $response->getCookie('foo'));
+        self::assertNull($response->getCookie('Foo'));
+        self::assertNull($response->getCookie('Bar'));
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

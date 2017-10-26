@@ -44,7 +44,7 @@ class ResponseCookieCollection implements ResponseCookieCollectionInterface
      *
      * @since 1.0.0
      *
-     * @return string The current response cookie value.
+     * @return ResponseCookieInterface The current response cookie value.
      */
     public function current()
     {
