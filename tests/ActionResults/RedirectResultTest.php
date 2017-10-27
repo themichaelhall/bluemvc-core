@@ -67,6 +67,33 @@ class RedirectResultTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test with empty url.
+     */
+    public function testWithEmptyUrl()
+    {
+        $application = new Application(
+            [
+                'DOCUMENT_ROOT' => '/var/www/',
+            ]
+        );
+        $request = new Request(
+            [
+                'HTTP_HOST'      => 'www.domain.com',
+                'REQUEST_URI'    => '/foo/bar?baz',
+                'REQUEST_METHOD' => 'GET',
+            ]
+        );
+        $response = new Response();
+        $actionResult = new RedirectResult();
+        $actionResult->updateResponse($application, $request, $response);
+
+        self::assertSame(302, $response->getStatusCode()->getCode());
+        self::assertSame('Found', $response->getStatusCode()->getDescription());
+        self::assertSame('', $response->getContent());
+        self::assertSame('http://www.domain.com/foo/bar?baz', $response->getHeader('Location'));
+    }
+
+    /**
      * Test with invalid url parameter.
      *
      * @expectedException \DataTypes\Exceptions\UrlInvalidArgumentException
