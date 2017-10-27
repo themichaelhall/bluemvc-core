@@ -22,6 +22,17 @@ use DataTypes\Interfaces\UrlInterface;
 interface RequestInterface
 {
     /**
+     * Returns a cookie by cookie name if it exists, null otherwise.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name The cookie name.
+     *
+     * @return RequestCookieInterface|null The cookie by cookie name if it exists, null otherwise.
+     */
+    public function getCookie($name);
+
+    /**
      * Returns the cookies.
      *
      * @since 1.0.0
