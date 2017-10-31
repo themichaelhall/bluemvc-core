@@ -14,11 +14,11 @@ use BlueMvc\Core\Interfaces\ResponseInterface;
 use DataTypes\Url;
 
 /**
- * Abstract class representing a redirect action result.
+ * Abstract class representing an action result with a location.
  *
  * @since 1.0.0
  */
-class AbstractRedirectActionResult extends AbstractActionResult
+class AbstractLocationActionResult extends AbstractActionResult
 {
     /**
      * Constructs the action result.
@@ -26,19 +26,19 @@ class AbstractRedirectActionResult extends AbstractActionResult
      * @since 1.0.0
      *
      * @param StatusCodeInterface $statusCode The status code.
-     * @param string              $url        The url as an absolute or relative url.
+     * @param string              $location   The location as an absolute or relative url.
      *
-     * @throws \InvalidArgumentException If the url parameter is not a string.
+     * @throws \InvalidArgumentException If the location parameter is not a string.
      */
-    public function __construct(StatusCodeInterface $statusCode, $url = '')
+    public function __construct(StatusCodeInterface $statusCode, $location = '')
     {
-        if (!is_string($url)) {
-            throw new \InvalidArgumentException('$url parameter is not a string.');
+        if (!is_string($location)) {
+            throw new \InvalidArgumentException('$location parameter is not a string.');
         }
 
         parent::__construct('', $statusCode);
 
-        $this->myUrl = $url;
+        $this->myLocation = $location;
     }
 
     /**
@@ -54,12 +54,12 @@ class AbstractRedirectActionResult extends AbstractActionResult
     {
         parent::updateResponse($application, $request, $response);
 
-        $redirectUrl = Url::parseRelative($this->myUrl, $request->getUrl());
-        $response->setHeader('Location', $redirectUrl->__toString());
+        $locationUrl = Url::parseRelative($this->myLocation, $request->getUrl());
+        $response->setHeader('Location', $locationUrl->__toString());
     }
 
     /**
      * @var string My url.
      */
-    private $myUrl;
+    private $myLocation;
 }

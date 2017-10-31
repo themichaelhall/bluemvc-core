@@ -7,7 +7,7 @@
 
 namespace BlueMvc\Core\ActionResults;
 
-use BlueMvc\Core\Base\ActionResults\AbstractRedirectActionResult;
+use BlueMvc\Core\Base\ActionResults\AbstractLocationActionResult;
 use BlueMvc\Core\Http\StatusCode;
 
 /**
@@ -15,19 +15,19 @@ use BlueMvc\Core\Http\StatusCode;
  *
  * @since 1.0.0
  */
-class RedirectResult extends AbstractRedirectActionResult
+class RedirectResult extends AbstractLocationActionResult
 {
     /**
      * Constructs the action result.
      *
      * @since 1.0.0
      *
-     * @param string $url The url as an absolute or relative url.
+     * @param string $location The url as an absolute or relative url.
      *
-     * @throws \InvalidArgumentException If the url parameter is not a string.
+     * @throws \InvalidArgumentException If the location parameter is not a string.
      */
-    public function __construct($url = '')
+    public function __construct($location = '')
     {
-        parent::__construct(new StatusCode(StatusCode::FOUND), $url);
+        parent::__construct(new StatusCode(StatusCode::FOUND), $location);
     }
 }

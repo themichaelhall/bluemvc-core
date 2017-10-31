@@ -147,7 +147,7 @@ class PermanentRedirectResultTest extends \PHPUnit_Framework_TestCase
      * Test with invalid url parameter type.
      *
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $url parameter is not a string.
+     * @expectedExceptionMessage $location parameter is not a string.
      */
     public function testWithInvalidUrlParameterType()
     {

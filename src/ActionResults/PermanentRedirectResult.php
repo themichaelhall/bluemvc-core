@@ -7,7 +7,7 @@
 
 namespace BlueMvc\Core\ActionResults;
 
-use BlueMvc\Core\Base\ActionResults\AbstractRedirectActionResult;
+use BlueMvc\Core\Base\ActionResults\AbstractLocationActionResult;
 use BlueMvc\Core\Http\StatusCode;
 
 /**
@@ -15,19 +15,19 @@ use BlueMvc\Core\Http\StatusCode;
  *
  * @since 1.0.0
  */
-class PermanentRedirectResult extends AbstractRedirectActionResult
+class PermanentRedirectResult extends AbstractLocationActionResult
 {
     /**
      * Constructs the action result.
      *
      * @since 1.0.0
      *
-     * @param string $url The url as an absolute or relative url.
+     * @param string $location The location as an absolute or relative url.
      *
-     * @throws \InvalidArgumentException If the url parameter is not a string.
+     * @throws \InvalidArgumentException If the location parameter is not a string.
      */
-    public function __construct($url = '')
+    public function __construct($location = '')
     {
-        parent::__construct(new StatusCode(StatusCode::MOVED_PERMANENTLY), $url);
+        parent::__construct(new StatusCode(StatusCode::MOVED_PERMANENTLY), $location);
     }
 }
