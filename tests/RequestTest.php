@@ -377,7 +377,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
                     'size'     => '56789',
                     'error'    => '0',
                 ],
-                2     => [
+                12345 => [
                     'name'     => '..\\Bar.html',
                     'type'     => 'text/html; charset=utf-8',
                     'tmp_name' => '/tmp/bar456.htm',
@@ -393,9 +393,9 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         self::assertSame($DS . 'tmp' . $DS . 'foo123.doc', $uploadedFiles->get('foo')->getPath()->__toString());
         self::assertSame('Documents/Foo.doc', $uploadedFiles->get('foo')->getOriginalName());
         self::assertSame(56789, $uploadedFiles->get('foo')->getSize());
-        self::assertSame($DS . 'tmp' . $DS . 'bar456.htm', $uploadedFiles->get('2')->getPath()->__toString());
-        self::assertSame('..\\Bar.html', $uploadedFiles->get('2')->getOriginalName());
-        self::assertSame(42, $uploadedFiles->get('2')->getSize());
+        self::assertSame($DS . 'tmp' . $DS . 'bar456.htm', $uploadedFiles->get('12345')->getPath()->__toString());
+        self::assertSame('..\\Bar.html', $uploadedFiles->get('12345')->getOriginalName());
+        self::assertSame(42, $uploadedFiles->get('12345')->getSize());
     }
 
     /**
