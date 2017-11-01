@@ -2,6 +2,7 @@
 
 namespace BlueMvc\Core\Tests\Helpers\TestControllers;
 
+use BlueMvc\Core\ActionResults\CreatedResult;
 use BlueMvc\Core\ActionResults\ForbiddenResult;
 use BlueMvc\Core\ActionResults\JsonResult;
 use BlueMvc\Core\ActionResults\MethodNotAllowedResult;
@@ -95,5 +96,15 @@ class ActionResultTestController extends Controller
     public function jsonAction()
     {
         return new JsonResult(['Foo' => 1, 'Bar' => ['Baz' => 2]]);
+    }
+
+    /**
+     * Action returning a "201 Created" action result.
+     *
+     * @return CreatedResult The action result.
+     */
+    public function createdAction()
+    {
+        return new CreatedResult();
     }
 }

@@ -451,6 +451,24 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test get a page returning a CreatedResult.
+     */
+    public function testGetPageWithCreatedResult()
+    {
+        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/created', 'REQUEST_METHOD' => 'GET']);
+        $response = new Response();
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        self::assertSame('', $responseOutput);
+        self::assertSame('', $response->getContent());
+        self::assertSame(['HTTP/1.1 201 Created', 'Location: http://www.domain.com/actionresult/created'], FakeHeaders::get());
+        self::assertSame(StatusCode::CREATED, $response->getStatusCode()->getCode());
+    }
+
+    /**
      * Test get index page for controller with pre-action event.
      */
     public function testGetIndexPageForControllerWithPreActionEvent()
