@@ -8,6 +8,7 @@
 namespace BlueMvc\Core;
 
 use BlueMvc\Core\Base\AbstractApplication;
+use BlueMvc\Core\Collections\SessionItemCollection;
 use DataTypes\FilePath;
 
 /**
@@ -27,7 +28,7 @@ class Application extends AbstractApplication
     public function __construct(array $serverVars = null)
     {
         $serverVars = $serverVars !== null ? $serverVars : $_SERVER;
-        parent::__construct(FilePath::parse($serverVars['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR));
+        parent::__construct(FilePath::parse($serverVars['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR), new SessionItemCollection());
 
         $this->setDebug(isset($serverVars['BLUEMVC_DEBUG']));
     }

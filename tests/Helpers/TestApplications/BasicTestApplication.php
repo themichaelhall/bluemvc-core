@@ -5,6 +5,7 @@ namespace BlueMvc\Core\Tests\Helpers\TestApplications;
 use BlueMvc\Core\Base\AbstractApplication;
 use BlueMvc\Core\Interfaces\RouteInterface;
 use BlueMvc\Core\Interfaces\ViewRendererInterface;
+use BlueMvc\Core\Tests\Helpers\TestCollections\BasicTestSessionItemCollection;
 use DataTypes\Interfaces\FilePathInterface;
 
 /**
@@ -19,7 +20,7 @@ class BasicTestApplication extends AbstractApplication
      */
     public function __construct(FilePathInterface $documentRoot)
     {
-        parent::__construct($documentRoot);
+        parent::__construct($documentRoot, new BasicTestSessionItemCollection());
     }
 
     /**

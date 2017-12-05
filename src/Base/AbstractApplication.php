@@ -12,6 +12,7 @@ use BlueMvc\Core\Exceptions\InvalidControllerClassException;
 use BlueMvc\Core\Exceptions\InvalidFilePathException;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
+use BlueMvc\Core\Interfaces\Collections\SessionItemCollectionInterface;
 use BlueMvc\Core\Interfaces\ControllerInterface;
 use BlueMvc\Core\Interfaces\ErrorControllerInterface;
 use BlueMvc\Core\Interfaces\PluginInterface;
@@ -272,11 +273,15 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @since 1.0.0
      *
-     * @param FilePathInterface $documentRoot The document root.
+     * @param FilePathInterface              $documentRoot The document root.
+     * @param SessionItemCollectionInterface $sessionItems The session items.
+     *
+     * @throws InvalidFilePathException
      */
-    protected function __construct(FilePathInterface $documentRoot)
+    protected function __construct(FilePathInterface $documentRoot, SessionItemCollectionInterface $sessionItems)
     {
         $this->setDocumentRoot($documentRoot);
+        $this->mySessionItems = $sessionItems;
         $this->myRoutes = [];
         $this->myTempPath = null;
         $this->myViewRenderers = [];
@@ -469,6 +474,11 @@ abstract class AbstractApplication implements ApplicationInterface
      * @var FilePathInterface My document root.
      */
     private $myDocumentRoot;
+
+    /**
+     * @var SessionItemCollectionInterface My session items.
+     */
+    private $mySessionItems;
 
     /**
      * @var bool True if in debug mode, false otherwise.
