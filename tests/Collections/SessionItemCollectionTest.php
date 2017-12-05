@@ -3,12 +3,25 @@
 namespace BlueMvc\Core\Tests\Collections;
 
 use BlueMvc\Core\Collections\SessionItemCollection;
+use BlueMvc\Core\Interfaces\Collections\SessionItemCollectionInterface;
+use BlueMvc\Core\Tests\Helpers\Fakes\FakeSession;
 
 /**
  * Test SessionItemCollection class.
  */
 class SessionItemCollectionTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Test that session is not activated by default.
+     */
+    public function testSessionIsNotActivatedByDefault()
+    {
+        $sessionItemCollection = new SessionItemCollection();
+
+        self::assertInstanceOf(SessionItemCollectionInterface::class, $sessionItemCollection);
+        self::assertSame(PHP_SESSION_NONE, FakeSession::getStatus());
+    }
+
     /**
      * Test count for empty collection.
      */
@@ -17,6 +30,7 @@ class SessionItemCollectionTest extends \PHPUnit_Framework_TestCase
         $sessionItemCollection = new SessionItemCollection();
 
         self::assertSame(0, count($sessionItemCollection));
+        self::assertSame(PHP_SESSION_ACTIVE, FakeSession::getStatus());
     }
 
     /**
@@ -27,6 +41,7 @@ class SessionItemCollectionTest extends \PHPUnit_Framework_TestCase
         $sessionItemCollection = new SessionItemCollection();
 
         self::assertNull($sessionItemCollection->get('Foo'));
+        self::assertSame(PHP_SESSION_ACTIVE, FakeSession::getStatus());
     }
 
     /**
@@ -56,6 +71,7 @@ class SessionItemCollectionTest extends \PHPUnit_Framework_TestCase
         self::assertSame('xxx', $sessionItemCollection->get('Foo'));
         self::assertSame(false, $sessionItemCollection->get('bar'));
         self::assertSame(['One' => 1, 'Two' => 2], $sessionItemCollection->get('foo'));
+        self::assertSame(PHP_SESSION_ACTIVE, FakeSession::getStatus());
     }
 
     /**
@@ -84,6 +100,7 @@ class SessionItemCollectionTest extends \PHPUnit_Framework_TestCase
         $sessionItemCollection->remove('baz');
 
         self::assertSame(['bar' => false], iterator_to_array($sessionItemCollection));
+        self::assertSame(PHP_SESSION_ACTIVE, FakeSession::getStatus());
     }
 
     /**
@@ -109,6 +126,7 @@ class SessionItemCollectionTest extends \PHPUnit_Framework_TestCase
         $sessionItemArray = iterator_to_array($sessionItemCollection, true);
 
         self::assertSame([], $sessionItemArray);
+        self::assertSame(PHP_SESSION_ACTIVE, FakeSession::getStatus());
     }
 
     /**
@@ -123,5 +141,22 @@ class SessionItemCollectionTest extends \PHPUnit_Framework_TestCase
         $sessionItemArray = iterator_to_array($sessionItemCollection, true);
 
         self::assertSame(['Foo' => false, 'Bar' => 'Baz'], $sessionItemArray);
+        self::assertSame(PHP_SESSION_ACTIVE, FakeSession::getStatus());
+    }
+
+    /**
+     * Set up.
+     */
+    public function setUp()
+    {
+        FakeSession::enable();
+    }
+
+    /**
+     * Tear down.
+     */
+    public function tearDown()
+    {
+        FakeSession::disable();
     }
 }

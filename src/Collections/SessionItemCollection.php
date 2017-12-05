@@ -23,7 +23,6 @@ class SessionItemCollection implements SessionItemCollectionInterface
      */
     public function __construct()
     {
-        $this->myItems = [];
     }
 
     /**
@@ -35,7 +34,9 @@ class SessionItemCollection implements SessionItemCollectionInterface
      */
     public function count()
     {
-        return count($this->myItems);
+        self::myInit();
+
+        return count($_SESSION);
     }
 
     /**
@@ -47,7 +48,9 @@ class SessionItemCollection implements SessionItemCollectionInterface
      */
     public function current()
     {
-        return current($this->myItems);
+        self::myInit();
+
+        return current($_SESSION);
     }
 
     /**
@@ -67,11 +70,13 @@ class SessionItemCollection implements SessionItemCollectionInterface
             throw new \InvalidArgumentException('$name parameter is not a string.');
         }
 
-        if (!isset($this->myItems[$name])) {
+        self::myInit();
+
+        if (!isset($_SESSION[$name])) {
             return null;
         }
 
-        return $this->myItems[$name];
+        return $_SESSION[$name];
     }
 
     /**
@@ -83,7 +88,9 @@ class SessionItemCollection implements SessionItemCollectionInterface
      */
     public function key()
     {
-        return key($this->myItems);
+        self::myInit();
+
+        return key($_SESSION);
     }
 
     /**
@@ -93,7 +100,9 @@ class SessionItemCollection implements SessionItemCollectionInterface
      */
     public function next()
     {
-        next($this->myItems);
+        self::myInit();
+
+        next($_SESSION);
     }
 
     /**
@@ -111,7 +120,9 @@ class SessionItemCollection implements SessionItemCollectionInterface
             throw new \InvalidArgumentException('$name parameter is not a string.');
         }
 
-        unset($this->myItems[$name]);
+        self::myInit();
+
+        unset($_SESSION[$name]);
     }
 
     /**
@@ -121,7 +132,9 @@ class SessionItemCollection implements SessionItemCollectionInterface
      */
     public function rewind()
     {
-        reset($this->myItems);
+        self::myInit();
+
+        reset($_SESSION);
     }
 
     /**
@@ -140,7 +153,9 @@ class SessionItemCollection implements SessionItemCollectionInterface
             throw new \InvalidArgumentException('$name parameter is not a string.');
         }
 
-        $this->myItems[$name] = $value;
+        self::myInit();
+
+        $_SESSION[$name] = $value;
     }
 
     /**
@@ -152,11 +167,18 @@ class SessionItemCollection implements SessionItemCollectionInterface
      */
     public function valid()
     {
-        return key($this->myItems) !== null;
+        self::myInit();
+
+        return key($_SESSION) !== null;
     }
 
     /**
-     * @var array My session items.
+     * Initializes session if it is not already initialized.
      */
-    private $myItems;
+    private static function myInit()
+    {
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+    }
 }
