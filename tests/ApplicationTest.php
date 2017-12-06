@@ -5,6 +5,7 @@ namespace BlueMvc\Core\Tests;
 use BlueMvc\Core\Application;
 use BlueMvc\Core\Exceptions\InvalidFilePathException;
 use BlueMvc\Core\Route;
+use BlueMvc\Core\Tests\Helpers\Fakes\FakeSession;
 use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ErrorTestController;
 use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
@@ -268,6 +269,30 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test getSessionItems method with no session items set.
+     */
+    public function testGetSessionItemsWithNoSessionItemsSet()
+    {
+        $sessionItems = $this->myApplication->getSessionItems();
+
+        self::assertSame([], iterator_to_array($sessionItems));
+    }
+
+    /**
+     * Test getSessionItems method with session items set.
+     */
+    public function testGetSessionItemsWithSessionItemsSet()
+    {
+        $_SESSION = [
+            'Foo' => 'Bar',
+        ];
+
+        $sessionItems = $this->myApplication->getSessionItems();
+
+        self::assertSame(['Foo' => 'Bar'], iterator_to_array($sessionItems));
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
@@ -284,6 +309,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->myApplication->addViewRenderer(new BasicTestViewRenderer());
         $this->myApplication->addRoute(new Route('', BasicTestController::class));
         rmdir($this->myApplication->getTempPath());
+        FakeSession::enable();
     }
 
     /**
@@ -292,6 +318,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     public function tearDown()
     {
         $this->myApplication = null;
+        FakeSession::disable();
     }
 
     /**

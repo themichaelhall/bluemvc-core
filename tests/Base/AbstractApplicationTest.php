@@ -332,6 +332,16 @@ class AbstractApplicationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test getSessionItems method.
+     */
+    public function testGetSessionItems()
+    {
+        $sessionItems = $this->myApplication->getSessionItems();
+
+        self::assertSame([], iterator_to_array($sessionItems));
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

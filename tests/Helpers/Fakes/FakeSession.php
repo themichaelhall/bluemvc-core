@@ -24,7 +24,10 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
         {
             self::$isEnabled = true;
             self::$status = PHP_SESSION_NONE;
-            unset($_SESSION);
+
+            if (!isset($_SESSION)) {
+                $_SESSION = [];
+            }
         }
 
         /**
@@ -50,7 +53,6 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
          */
         public static function start()
         {
-            $_SESSION = [];
             self::$status = PHP_SESSION_ACTIVE;
         }
 

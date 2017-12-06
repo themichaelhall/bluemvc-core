@@ -8,6 +8,7 @@
 namespace BlueMvc\Core\Interfaces;
 
 use BlueMvc\Core\Exceptions\InvalidFilePathException;
+use BlueMvc\Core\Interfaces\Collections\SessionItemCollectionInterface;
 use DataTypes\Interfaces\FilePathInterface;
 
 /**
@@ -79,6 +80,15 @@ interface ApplicationInterface
      * @return RouteInterface[] The routes.
      */
     public function getRoutes();
+
+    /**
+     * Returns the session items.
+     *
+     * @since 1.0.0
+     *
+     * @return SessionItemCollectionInterface The session items.
+     */
+    public function getSessionItems();
 
     /**
      * Returns the path to the application-specific temporary directory.

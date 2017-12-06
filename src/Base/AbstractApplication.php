@@ -116,6 +116,18 @@ abstract class AbstractApplication implements ApplicationInterface
     }
 
     /**
+     * Returns the session items.
+     *
+     * @since 1.0.0
+     *
+     * @return SessionItemCollectionInterface The session items.
+     */
+    public function getSessionItems()
+    {
+        return $this->mySessionItems;
+    }
+
+    /**
      * Returns the path to the application-specific temporary directory.
      *
      * @since 1.0.0
