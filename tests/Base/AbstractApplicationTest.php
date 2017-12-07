@@ -5,6 +5,7 @@ namespace BlueMvc\Core\Tests\Base;
 use BlueMvc\Core\Exceptions\InvalidFilePathException;
 use BlueMvc\Core\Route;
 use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
+use BlueMvc\Core\Tests\Helpers\TestCollections\BasicTestSessionItemCollection;
 use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ErrorTestController;
 use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
@@ -383,6 +384,20 @@ class AbstractApplicationTest extends \PHPUnit_Framework_TestCase
         self::assertNull($this->myApplication->getSessionItem('Bar'));
         self::assertNull($this->myApplication->getSessionItem('Baz'));
         self::assertNull($this->myApplication->getSessionItem('bar'));
+    }
+
+    /**
+     * Test setSessionItems method.
+     */
+    public function testSetSessionItems()
+    {
+        $sessionItems = new BasicTestSessionItemCollection();
+        $sessionItems->set('Foo', 1);
+        $sessionItems->set('Bar', 2);
+
+        $this->myApplication->setSessionItems($sessionItems);
+
+        self::assertSame(['Foo' => 1, 'Bar' => 2], iterator_to_array($this->myApplication->getSessionItems()));
     }
 
     /**

@@ -338,7 +338,7 @@ abstract class AbstractApplication implements ApplicationInterface
     protected function __construct(FilePathInterface $documentRoot, SessionItemCollectionInterface $sessionItems)
     {
         $this->setDocumentRoot($documentRoot);
-        $this->mySessionItems = $sessionItems;
+        $this->setSessionItems($sessionItems);
         $this->myRoutes = [];
         $this->myTempPath = null;
         $this->myViewRenderers = [];
@@ -380,6 +380,18 @@ abstract class AbstractApplication implements ApplicationInterface
         }
 
         $this->myDocumentRoot = $documentRoot;
+    }
+
+    /**
+     * Sets the session items.
+     *
+     * @since 1.0.0
+     *
+     * @param SessionItemCollectionInterface $sessionItems The session items.
+     */
+    protected function setSessionItems(SessionItemCollectionInterface $sessionItems)
+    {
+        $this->mySessionItems = $sessionItems;
     }
 
     /**

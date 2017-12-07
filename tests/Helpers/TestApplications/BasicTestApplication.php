@@ -3,6 +3,7 @@
 namespace BlueMvc\Core\Tests\Helpers\TestApplications;
 
 use BlueMvc\Core\Base\AbstractApplication;
+use BlueMvc\Core\Interfaces\Collections\SessionItemCollectionInterface;
 use BlueMvc\Core\Interfaces\RouteInterface;
 use BlueMvc\Core\Interfaces\ViewRendererInterface;
 use BlueMvc\Core\Tests\Helpers\TestCollections\BasicTestSessionItemCollection;
@@ -71,6 +72,16 @@ class BasicTestApplication extends AbstractApplication
     public function setDocumentRoot(FilePathInterface $documentRoot)
     {
         parent::setDocumentRoot($documentRoot);
+    }
+
+    /**
+     * Sets the session items.
+     *
+     * @param SessionItemCollectionInterface $sessionItems The session items.
+     */
+    public function setSessionItems(SessionItemCollectionInterface $sessionItems)
+    {
+        parent::setSessionItems($sessionItems);
     }
 
     /**
