@@ -86,7 +86,7 @@ interface ApplicationInterface
      *
      * @since 1.0.0
      *
-     * @param string $name The name.
+     * @param string $name The session item name.
      *
      * @return mixed|null The session item if it exists, null otherwise.
      */
@@ -136,6 +136,15 @@ interface ApplicationInterface
      * @return bool True if in debug mode, false otherwise.
      */
     public function isDebug();
+
+    /**
+     * Removes a session item by name.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name The session item name.
+     */
+    public function removeSessionItem($name);
 
     /**
      * Runs a request.

@@ -204,6 +204,20 @@ abstract class AbstractApplication implements ApplicationInterface
     }
 
     /**
+     * Removes a session item by name.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name The session item name.
+     *
+     * @throws \InvalidArgumentException If the $name parameter is not a string.
+     */
+    public function removeSessionItem($name)
+    {
+        $this->mySessionItems->remove($name);
+    }
+
+    /**
      * Runs a request.
      *
      * @since 1.0.0

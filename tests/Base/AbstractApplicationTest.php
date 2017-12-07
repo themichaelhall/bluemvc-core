@@ -369,6 +369,23 @@ class AbstractApplicationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test removeSessionItem method.
+     */
+    public function testRemoveSessionItem()
+    {
+        $this->myApplication->setSessionItem('Foo', [1, 2]);
+        $this->myApplication->setSessionItem('Bar', true);
+
+        $this->myApplication->removeSessionItem('Bar');
+        $this->myApplication->removeSessionItem('Baz');
+
+        self::assertSame([1, 2], $this->myApplication->getSessionItem('Foo'));
+        self::assertNull($this->myApplication->getSessionItem('Bar'));
+        self::assertNull($this->myApplication->getSessionItem('Baz'));
+        self::assertNull($this->myApplication->getSessionItem('bar'));
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

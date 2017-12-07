@@ -326,6 +326,26 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test removeSessionItem method.
+     */
+    public function testRemoveSessionItem()
+    {
+        $_SESSION = [
+            'Foo' => 'Bar',
+            'Baz' => [true, false],
+        ];
+
+        $this->myApplication->removeSessionItem('Bar');
+        $this->myApplication->removeSessionItem('Baz');
+
+        self::assertSame('Bar', $this->myApplication->getSessionItem('Foo'));
+        self::assertNull($this->myApplication->getSessionItem('Baz'));
+        self::assertNull($this->myApplication->getSessionItem('Bar'));
+        self::assertNull($this->myApplication->getSessionItem('foo'));
+        self::assertSame(['Foo' => 'Bar'], $_SESSION);
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
