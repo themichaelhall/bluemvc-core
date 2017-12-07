@@ -82,6 +82,17 @@ interface ApplicationInterface
     public function getRoutes();
 
     /**
+     * Returns a session item by name if it exists, null otherwise.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name The name.
+     *
+     * @return mixed|null The session item if it exists, null otherwise.
+     */
+    public function getSessionItem($name);
+
+    /**
      * Returns the session items.
      *
      * @since 1.0.0

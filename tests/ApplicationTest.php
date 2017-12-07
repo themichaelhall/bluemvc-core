@@ -309,6 +309,23 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test getSessionItem method.
+     */
+    public function testGetSessionItem()
+    {
+        $_SESSION = [
+            'Foo' => 'Bar',
+            'Baz' => [true, false],
+        ];
+
+        self::assertSame('Bar', $this->myApplication->getSessionItem('Foo'));
+        self::assertSame([true, false], $this->myApplication->getSessionItem('Baz'));
+        self::assertNull($this->myApplication->getSessionItem('Bar'));
+        self::assertNull($this->myApplication->getSessionItem('foo'));
+        self::assertSame(['Foo' => 'Bar', 'Baz' => [true, false]], $_SESSION);
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

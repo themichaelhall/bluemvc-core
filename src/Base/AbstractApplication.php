@@ -116,6 +116,22 @@ abstract class AbstractApplication implements ApplicationInterface
     }
 
     /**
+     * Returns a session item by name if it exists, null otherwise.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name The name.
+     *
+     * @throws \InvalidArgumentException If the $name parameter is not a string.
+     *
+     * @return mixed|null The session item if it exists, null otherwise.
+     */
+    public function getSessionItem($name)
+    {
+        return $this->mySessionItems->get($name);
+    }
+
+    /**
      * Returns the session items.
      *
      * @since 1.0.0
