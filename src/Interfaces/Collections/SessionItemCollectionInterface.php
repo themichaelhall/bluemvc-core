@@ -21,7 +21,7 @@ interface SessionItemCollectionInterface extends \Countable, \Iterator
      *
      * @param string $name The session item name.
      *
-     * @return string|null The session item value by session item name if it exists, null otherwise.
+     * @return mixed|null The session item value by session item name if it exists, null otherwise.
      */
     public function get($name);
 
