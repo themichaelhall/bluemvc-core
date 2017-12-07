@@ -21,7 +21,7 @@ interface ViewItemCollectionInterface extends \Countable, \Iterator
      *
      * @param string $name The view item name.
      *
-     * @return string|null The view item value by view item name if it exists, null otherwise.
+     * @return mixed|null The view item value by view item name if it exists, null otherwise.
      */
     public function get($name);
 

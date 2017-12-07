@@ -43,7 +43,7 @@ class ViewItemCollection implements ViewItemCollectionInterface
      *
      * @since 1.0.0
      *
-     * @return string The current view item value.
+     * @return mixed The current view item value.
      */
     public function current()
     {
@@ -59,7 +59,7 @@ class ViewItemCollection implements ViewItemCollectionInterface
      *
      * @throws \InvalidArgumentException If the $name parameter is not a string.
      *
-     * @return string|null The view item value by view item name if it exists, null otherwise.
+     * @return mixed|null The view item value by view item name if it exists, null otherwise.
      */
     public function get($name)
     {
