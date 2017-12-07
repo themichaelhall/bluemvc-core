@@ -19,6 +19,7 @@ use BlueMvc\Core\Interfaces\Collections\RequestCookieCollectionInterface;
 use BlueMvc\Core\Interfaces\UploadedFileInterface;
 use DataTypes\FilePath;
 use DataTypes\Host;
+use DataTypes\Interfaces\UrlInterface;
 use DataTypes\Scheme;
 use DataTypes\Url;
 use DataTypes\UrlPath;
@@ -49,24 +50,36 @@ class Request extends AbstractRequest
         $filesVars = $filesVars ?: $_FILES;
         $cookiesVars = $cookiesVars ?: $_COOKIE;
 
+        parent::__construct(
+            self::myParseUrl($serverVars),
+            new Method($serverVars['REQUEST_METHOD']),
+            self::myParseHeaders($serverVars),
+            self::myParseParameters($getVars),
+            self::myParseParameters($postVars),
+            self::myParseUploadedFiles($filesVars),
+            self::myParseCookies($cookiesVars)
+        );
+    }
+
+    /**
+     * Parses an array with server variables into a url.
+     *
+     * @param array $serverVars The server variables.
+     *
+     * @return UrlInterface The url
+     */
+    private static function myParseUrl(array $serverVars)
+    {
         $uriAndQueryString = explode('?', $serverVars['REQUEST_URI'], 2);
         $hostAndPort = explode(':', $serverVars['HTTP_HOST'], 2);
 
-        parent::__construct(
-            Url::fromParts(
-                Scheme::parse('http' . (isset($serverVars['HTTPS']) && $serverVars['HTTPS'] !== '' ? 's' : '')),
-                Host::parse($hostAndPort[0]),
-                count($hostAndPort) > 1 ? intval($hostAndPort[1]) : null,
-                UrlPath::parse($uriAndQueryString[0]),
-                count($uriAndQueryString) > 1 ? $uriAndQueryString[1] : null
-            ), new Method($serverVars['REQUEST_METHOD'])
+        return Url::fromParts(
+            Scheme::parse('http' . (isset($serverVars['HTTPS']) && $serverVars['HTTPS'] !== '' ? 's' : '')),
+            Host::parse($hostAndPort[0]),
+            count($hostAndPort) > 1 ? intval($hostAndPort[1]) : null,
+            UrlPath::parse($uriAndQueryString[0]),
+            count($uriAndQueryString) > 1 ? $uriAndQueryString[1] : null
         );
-
-        $this->setHeaders(self::myParseHeaders($serverVars));
-        $this->setQueryParameters(self::myParseParameters($getVars));
-        $this->setFormParameters(self::myParseParameters($postVars));
-        $this->setUploadedFiles(self::myParseUploadedFiles($filesVars));
-        $this->setCookies(self::myParseCookies($cookiesVars));
     }
 
     /**

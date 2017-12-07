@@ -3,6 +3,10 @@
 namespace BlueMvc\Core\Tests\Helpers\TestRequests;
 
 use BlueMvc\Core\Base\AbstractRequest;
+use BlueMvc\Core\Collections\HeaderCollection;
+use BlueMvc\Core\Collections\ParameterCollection;
+use BlueMvc\Core\Collections\RequestCookieCollection;
+use BlueMvc\Core\Collections\UploadedFileCollection;
 use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\ParameterCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\RequestCookieCollectionInterface;
@@ -25,7 +29,15 @@ class BasicTestRequest extends AbstractRequest
      */
     public function __construct(UrlInterface $url, MethodInterface $method)
     {
-        parent::__construct($url, $method);
+        parent::__construct(
+            $url,
+            $method,
+            new HeaderCollection(),
+            new ParameterCollection(),
+            new ParameterCollection(),
+            new UploadedFileCollection(),
+            new RequestCookieCollection()
+        );
     }
 
     /**

@@ -7,10 +7,7 @@
 
 namespace BlueMvc\Core\Base;
 
-use BlueMvc\Core\Collections\HeaderCollection;
-use BlueMvc\Core\Collections\ParameterCollection;
 use BlueMvc\Core\Collections\RequestCookieCollection;
-use BlueMvc\Core\Collections\UploadedFileCollection;
 use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\ParameterCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\RequestCookieCollectionInterface;
@@ -209,18 +206,23 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @since 1.0.0
      *
-     * @param UrlInterface    $url    The url.
-     * @param MethodInterface $method The method.
+     * @param UrlInterface                     $url             The url.
+     * @param MethodInterface                  $method          The method.
+     * @param HeaderCollectionInterface        $headers         The headers.
+     * @param ParameterCollectionInterface     $queryParameters The query parameters.
+     * @param ParameterCollectionInterface     $formParameters  The form parameters.
+     * @param UploadedFileCollectionInterface  $uploadedFiles   The uploaded files.
+     * @param RequestCookieCollectionInterface $cookies         The cookies.
      */
-    protected function __construct(UrlInterface $url, MethodInterface $method)
+    protected function __construct(UrlInterface $url, MethodInterface $method, HeaderCollectionInterface $headers, ParameterCollectionInterface $queryParameters, ParameterCollectionInterface $formParameters, UploadedFileCollectionInterface $uploadedFiles, RequestCookieCollectionInterface $cookies)
     {
         $this->setUrl($url);
         $this->setMethod($method);
-        $this->setHeaders(new HeaderCollection());
-        $this->setFormParameters(new ParameterCollection());
-        $this->setQueryParameters(new ParameterCollection());
-        $this->setUploadedFiles(new UploadedFileCollection());
-        $this->setCookies(new RequestCookieCollection());
+        $this->setHeaders($headers);
+        $this->setQueryParameters($queryParameters);
+        $this->setFormParameters($formParameters);
+        $this->setUploadedFiles($uploadedFiles);
+        $this->setCookies($cookies);
     }
 
     /**
