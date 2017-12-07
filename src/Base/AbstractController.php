@@ -155,13 +155,25 @@ abstract class AbstractController implements ControllerInterface
         }
 
         $this->myActionName = $action;
+        $result = $this->myInvokeActionMethod($actionMethod, $parameters);
 
+        return true;
+    }
+
+    /**
+     * Invoke action method.
+     *
+     * @param \ReflectionMethod $actionMethod The action method.
+     * @param array             $parameters   The parameters.
+     *
+     * @return mixed|null The result.
+     */
+    private function myInvokeActionMethod(\ReflectionMethod $actionMethod, array $parameters)
+    {
         // Handle pre-action event.
         $preActionResult = $this->onPreActionEvent();
         if ($preActionResult !== null) {
-            $result = $preActionResult;
-
-            return true;
+            return $preActionResult;
         }
 
         // Handle action method.
@@ -170,12 +182,10 @@ abstract class AbstractController implements ControllerInterface
         // Handle post-action event.
         $postActionResult = $this->onPostActionEvent();
         if ($postActionResult !== null) {
-            $result = $postActionResult;
-
-            return true;
+            return $postActionResult;
         }
 
-        return true;
+        return $result;
     }
 
     /**
