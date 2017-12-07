@@ -237,6 +237,21 @@ abstract class AbstractApplication implements ApplicationInterface
     }
 
     /**
+     * Sets a session item.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name  The session item name.
+     * @param mixed  $value The session item value.
+     *
+     * @throws \InvalidArgumentException If the $name parameter is not a string.
+     */
+    public function setSessionItem($name, $value)
+    {
+        $this->mySessionItems->set($name, $value);
+    }
+
+    /**
      * Sets the path to the application-specific temporary directory.
      *
      * @since 1.0.0

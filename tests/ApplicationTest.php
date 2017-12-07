@@ -276,6 +276,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $sessionItems = $this->myApplication->getSessionItems();
 
         self::assertSame([], iterator_to_array($sessionItems));
+        self::assertSame([], $_SESSION);
     }
 
     /**
@@ -290,6 +291,21 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $sessionItems = $this->myApplication->getSessionItems();
 
         self::assertSame(['Foo' => 'Bar'], iterator_to_array($sessionItems));
+        self::assertSame(['Foo' => 'Bar'], $_SESSION);
+    }
+
+    /**
+     * Test setSessionItem method.
+     */
+    public function testSetSessionItem()
+    {
+        $this->myApplication->setSessionItem('Foo', 1);
+        $this->myApplication->setSessionItem('Bar', false);
+
+        $sessionItems = $this->myApplication->getSessionItems();
+
+        self::assertSame(['Foo' => 1, 'Bar' => false], iterator_to_array($sessionItems));
+        self::assertSame(['Foo' => 1, 'Bar' => false], $_SESSION);
     }
 
     /**

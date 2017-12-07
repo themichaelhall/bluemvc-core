@@ -342,6 +342,19 @@ class AbstractApplicationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test setSessionItem method.
+     */
+    public function testSetSessionItem()
+    {
+        $this->myApplication->setSessionItem('Foo', [1, 2]);
+        $this->myApplication->setSessionItem('Bar', true);
+
+        $sessionItems = $this->myApplication->getSessionItems();
+
+        self::assertSame(['Foo' => [1, 2], 'Bar' => true], iterator_to_array($sessionItems));
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

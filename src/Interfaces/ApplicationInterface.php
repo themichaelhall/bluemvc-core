@@ -146,6 +146,16 @@ interface ApplicationInterface
     public function setErrorControllerClass($errorControllerClass);
 
     /**
+     * Sets a session item.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name  The session item name.
+     * @param mixed  $value The session item value.
+     */
+    public function setSessionItem($name, $value);
+
+    /**
      * Sets the path to the application-specific temporary directory.
      *
      * @since 1.0.0
