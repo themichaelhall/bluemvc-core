@@ -109,34 +109,7 @@ abstract class Controller extends AbstractController
             }
         }
 
-        // Handle result.
-        if ($result instanceof ViewInterface) {
-            $result->updateResponse($application, $request, $response, $this, $actionName, $this->myViewItems);
-
-            return;
-        }
-
-        if ($result instanceof ActionResultInterface) {
-            $result->updateResponse($application, $request, $response);
-
-            return;
-        }
-
-        if (is_bool($result)) {
-            $response->setContent($result ? 'true' : 'false');
-
-            return;
-        }
-
-        if (is_scalar($result) || (is_object($result) && method_exists($result, '__toString'))) {
-            $response->setContent((string) $result);
-
-            return;
-        }
-
-        if ($result !== null) {
-            $response->setContent(gettype($result));
-        }
+        $this->myHandleResult($result, $application, $request, $response, $actionName);
     }
 
     /**
@@ -164,6 +137,46 @@ abstract class Controller extends AbstractController
     public function setViewItems(ViewItemCollectionInterface $viewItems)
     {
         $this->myViewItems = $viewItems;
+    }
+
+    /**
+     * Handles the result.
+     *
+     * @param mixed                $result      The result.
+     * @param ApplicationInterface $application The application.
+     * @param RequestInterface     $request     The request.
+     * @param ResponseInterface    $response    The response.
+     * @param string               $actionName  The action name.
+     */
+    private function myHandleResult($result, ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, $actionName)
+    {
+        if ($result instanceof ViewInterface) {
+            $result->updateResponse($application, $request, $response, $this, $actionName, $this->myViewItems);
+
+            return;
+        }
+
+        if ($result instanceof ActionResultInterface) {
+            $result->updateResponse($application, $request, $response);
+
+            return;
+        }
+
+        if (is_bool($result)) {
+            $response->setContent($result ? 'true' : 'false');
+
+            return;
+        }
+
+        if (is_scalar($result) || (is_object($result) && method_exists($result, '__toString'))) {
+            $response->setContent((string) $result);
+
+            return;
+        }
+
+        if ($result !== null) {
+            $response->setContent(gettype($result));
+        }
     }
 
     /**
