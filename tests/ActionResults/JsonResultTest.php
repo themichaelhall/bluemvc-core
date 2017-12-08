@@ -3,11 +3,12 @@
 namespace BlueMvc\Core\Tests\ActionResults;
 
 use BlueMvc\Core\ActionResults\JsonResult;
-use BlueMvc\Core\Application;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Request;
 use BlueMvc\Core\Response;
+use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
 use BlueMvc\Core\Tests\Helpers\TestClasses\JsonSerializableTestClass;
+use DataTypes\FilePath;
 
 /**
  * Test JsonResult class.
@@ -19,11 +20,7 @@ class JsonResultTest extends \PHPUnit_Framework_TestCase
      */
     public function testWithContent()
     {
-        $application = new Application(
-            [
-                'DOCUMENT_ROOT' => '/var/www/',
-            ]
-        );
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $request = new Request(
             [
                 'HTTP_HOST'      => 'www.domain.com',
@@ -46,11 +43,7 @@ class JsonResultTest extends \PHPUnit_Framework_TestCase
      */
     public function testWithStatusCode()
     {
-        $application = new Application(
-            [
-                'DOCUMENT_ROOT' => '/var/www/',
-            ]
-        );
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $request = new Request(
             [
                 'HTTP_HOST'      => 'www.domain.com',
@@ -73,11 +66,7 @@ class JsonResultTest extends \PHPUnit_Framework_TestCase
      */
     public function testWithJsonSerializable()
     {
-        $application = new Application(
-            [
-                'DOCUMENT_ROOT' => '/var/www/',
-            ]
-        );
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $request = new Request(
             [
                 'HTTP_HOST'      => 'www.domain.com',

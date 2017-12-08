@@ -66,12 +66,12 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $DS = DIRECTORY_SEPARATOR;
         $exceptionMessage = '';
 
+        $_SERVER = [
+            'DOCUMENT_ROOT' => 'var' . $DS . 'www',
+        ];
+
         try {
-            new Application(
-                [
-                    'DOCUMENT_ROOT' => 'var' . $DS . 'www',
-                ]
-            );
+            new Application();
         } catch (InvalidFilePathException $e) {
             $exceptionMessage = $e->getMessage();
         }
@@ -196,12 +196,12 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
-        $this->myApplication = new Application(
-            [
-                'DOCUMENT_ROOT' => $DS . 'var' . $DS . 'www',
-                'BLUEMVC_DEBUG' => '1',
-            ]
-        );
+        $_SERVER = [
+            'DOCUMENT_ROOT' => $DS . 'var' . $DS . 'www',
+            'BLUEMVC_DEBUG' => '1',
+        ];
+
+        $this->myApplication = new Application();
 
         self::assertTrue($this->myApplication->isDebug());
     }
@@ -352,11 +352,11 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
-        $this->myApplication = new Application(
-            [
-                'DOCUMENT_ROOT' => $DS . 'var' . $DS . 'www',
-            ]
-        );
+        $_SERVER = [
+            'DOCUMENT_ROOT' => $DS . 'var' . $DS . 'www',
+        ];
+
+        $this->myApplication = new Application();
 
         $this->myApplication->setViewPath(FilePath::parse('views' . $DS));
         $this->myApplication->addViewRenderer(new BasicTestViewRenderer());
@@ -370,6 +370,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function tearDown()
     {
+        $_SERVER = [];
         $this->myApplication = null;
         FakeSession::disable();
     }

@@ -3,9 +3,10 @@
 namespace BlueMvc\Core\Tests\ActionResults;
 
 use BlueMvc\Core\ActionResults\NotModifiedResult;
-use BlueMvc\Core\Application;
 use BlueMvc\Core\Request;
 use BlueMvc\Core\Response;
+use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
+use DataTypes\FilePath;
 
 /**
  * Test NotModifiedResult class.
@@ -17,11 +18,7 @@ class NotModifiedResultTest extends \PHPUnit_Framework_TestCase
      */
     public function testDefaultConstructor()
     {
-        $application = new Application(
-            [
-                'DOCUMENT_ROOT' => '/var/www/',
-            ]
-        );
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $request = new Request(
             [
                 'HTTP_HOST'      => 'www.domain.com',

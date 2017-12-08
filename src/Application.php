@@ -22,14 +22,14 @@ class Application extends AbstractApplication
      * Constructs the application.
      *
      * @since 1.0.0
-     *
-     * @param array|null $serverVars The server array or null to use the global $_SERVER array.
      */
-    public function __construct(array $serverVars = null)
+    public function __construct()
     {
-        $serverVars = $serverVars !== null ? $serverVars : $_SERVER;
-        parent::__construct(FilePath::parse($serverVars['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR), new SessionItemCollection());
+        parent::__construct(
+            FilePath::parse($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR),
+            new SessionItemCollection()
+        );
 
-        $this->setDebug(isset($serverVars['BLUEMVC_DEBUG']));
+        $this->setDebug(isset($_SERVER['BLUEMVC_DEBUG']));
     }
 }

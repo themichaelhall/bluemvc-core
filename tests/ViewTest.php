@@ -2,11 +2,11 @@
 
 namespace BlueMvc\Core\Tests;
 
-use BlueMvc\Core\Application;
 use BlueMvc\Core\Collections\ViewItemCollection;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Request;
 use BlueMvc\Core\Response;
+use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ViewTestController;
 use BlueMvc\Core\Tests\Helpers\TestViewRenderers\BasicTestViewRenderer;
 use BlueMvc\Core\Tests\Helpers\TestViewRenderers\JsonTestViewRenderer;
@@ -72,7 +72,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
-        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
         $application->addViewRenderer(new BasicTestViewRenderer());
 
@@ -92,7 +92,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
-        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
         $application->addViewRenderer(new BasicTestViewRenderer());
 
@@ -116,7 +116,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
-        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
         $application->addViewRenderer(new BasicTestViewRenderer());
 
@@ -143,7 +143,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
-        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
         $application->addViewRenderer(new BasicTestViewRenderer());
 
@@ -177,7 +177,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
-        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
         $application->addViewRenderer(new BasicTestViewRenderer()); // Use this.
         $application->addViewRenderer(new JsonTestViewRenderer());
@@ -202,7 +202,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
-        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
         $application->addViewRenderer(new JsonTestViewRenderer()); // Use this.
         $application->addViewRenderer(new BasicTestViewRenderer());
@@ -227,7 +227,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
-        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
         $application->addViewRenderer(new BasicTestViewRenderer()); // No view exist for this.
         $application->addViewRenderer(new JsonTestViewRenderer()); // Use this.
@@ -255,7 +255,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
-        $application = new Application(['DOCUMENT_ROOT' => '/var/www/']);
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
 
         $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);

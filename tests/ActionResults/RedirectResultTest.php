@@ -3,9 +3,10 @@
 namespace BlueMvc\Core\Tests\ActionResults;
 
 use BlueMvc\Core\ActionResults\RedirectResult;
-use BlueMvc\Core\Application;
 use BlueMvc\Core\Request;
 use BlueMvc\Core\Response;
+use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
+use DataTypes\FilePath;
 
 /**
  * Test RedirectResult class.
@@ -17,11 +18,7 @@ class RedirectResultTest extends \PHPUnit_Framework_TestCase
      */
     public function testWithAbsoluteUrl()
     {
-        $application = new Application(
-            [
-                'DOCUMENT_ROOT' => '/var/www/',
-            ]
-        );
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $request = new Request(
             [
                 'HTTP_HOST'      => 'www.domain.com',
@@ -44,11 +41,7 @@ class RedirectResultTest extends \PHPUnit_Framework_TestCase
      */
     public function testWithRelativeUrl()
     {
-        $application = new Application(
-            [
-                'DOCUMENT_ROOT' => '/var/www/',
-            ]
-        );
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $request = new Request(
             [
                 'HTTP_HOST'      => 'www.domain.com',
@@ -71,11 +64,7 @@ class RedirectResultTest extends \PHPUnit_Framework_TestCase
      */
     public function testWithEmptyUrl()
     {
-        $application = new Application(
-            [
-                'DOCUMENT_ROOT' => '/var/www/',
-            ]
-        );
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $request = new Request(
             [
                 'HTTP_HOST'      => 'www.domain.com',
@@ -101,11 +90,7 @@ class RedirectResultTest extends \PHPUnit_Framework_TestCase
      */
     public function testWithInvalidUrlParameter()
     {
-        $application = new Application(
-            [
-                'DOCUMENT_ROOT' => '/var/www/',
-            ]
-        );
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $request = new Request(
             [
                 'HTTP_HOST'      => 'www.domain.com',
@@ -127,11 +112,7 @@ class RedirectResultTest extends \PHPUnit_Framework_TestCase
      */
     public function testWithInvalidRelativeUrlParameter()
     {
-        $application = new Application(
-            [
-                'DOCUMENT_ROOT' => '/var/www/',
-            ]
-        );
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $request = new Request(
             [
                 'HTTP_HOST'      => 'www.domain.com',

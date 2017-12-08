@@ -3,9 +3,10 @@
 namespace BlueMvc\Core\Tests\ActionResults;
 
 use BlueMvc\Core\ActionResults\MethodNotAllowedResult;
-use BlueMvc\Core\Application;
 use BlueMvc\Core\Request;
 use BlueMvc\Core\Response;
+use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
+use DataTypes\FilePath;
 
 /**
  * Test MethodNotAllowed class.
@@ -17,11 +18,7 @@ class MethodNotAllowedTest extends \PHPUnit_Framework_TestCase
      */
     public function testDefaultConstructor()
     {
-        $application = new Application(
-            [
-                'DOCUMENT_ROOT' => '/var/www/',
-            ]
-        );
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $request = new Request(
             [
                 'HTTP_HOST'      => 'www.domain.com',
@@ -43,11 +40,7 @@ class MethodNotAllowedTest extends \PHPUnit_Framework_TestCase
      */
     public function testWithContent()
     {
-        $application = new Application(
-            [
-                'DOCUMENT_ROOT' => '/var/www/',
-            ]
-        );
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $request = new Request(
             [
                 'HTTP_HOST'      => 'www.domain.com',
