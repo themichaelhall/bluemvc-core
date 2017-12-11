@@ -3,15 +3,17 @@
 namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\Collections\ViewItemCollection;
+use BlueMvc\Core\Http\Method;
 use BlueMvc\Core\Http\StatusCode;
-use BlueMvc\Core\Request;
-use BlueMvc\Core\Response;
 use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ViewTestController;
+use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
+use BlueMvc\Core\Tests\Helpers\TestResponses\BasicTestResponse;
 use BlueMvc\Core\Tests\Helpers\TestViewRenderers\BasicTestViewRenderer;
 use BlueMvc\Core\Tests\Helpers\TestViewRenderers\JsonTestViewRenderer;
 use BlueMvc\Core\View;
 use DataTypes\FilePath;
+use DataTypes\Url;
 
 /**
  * Test View class.
@@ -76,8 +78,8 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
         $application->addViewRenderer(new BasicTestViewRenderer());
 
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('https://example.com/'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new ViewTestController();
         $view = new View('The Model');
         $viewItems = new ViewItemCollection();
@@ -96,8 +98,8 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
         $application->addViewRenderer(new BasicTestViewRenderer());
 
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/withviewdata', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('https://example.com/withviewdata'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new ViewTestController();
         $view = new View('The Model');
         $viewItems = new ViewItemCollection();
@@ -120,8 +122,8 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
         $application->addViewRenderer(new BasicTestViewRenderer());
 
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/withnoviewfile', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('https://example.com/withnoviewfile'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new ViewTestController();
         $view = new View('The Model');
         $viewItems = new ViewItemCollection();
@@ -147,15 +149,15 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
         $application->addViewRenderer(new BasicTestViewRenderer());
 
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('https://example.com/'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new ViewTestController();
         $view = new View('The Model', 'custom');
         $viewItems = new ViewItemCollection();
 
         $view->updateResponse($application, $request, $response, $controller, 'index', $viewItems);
 
-        self::assertSame('<html><body><h1>Custom view file</h1><span>' . $application->getDocumentRoot() . '</span><em>http://www.domain.com/</em><p>The Model</p></body></html>', $response->getContent());
+        self::assertSame('<html><body><h1>Custom view file</h1><span>' . $application->getDocumentRoot() . '</span><em>https://example.com/</em><p>The Model</p></body></html>', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
@@ -182,8 +184,8 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $application->addViewRenderer(new BasicTestViewRenderer()); // Use this.
         $application->addViewRenderer(new JsonTestViewRenderer());
 
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/alternate', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('https://example.com/altername'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new ViewTestController();
         $view = new View('The Model');
         $viewItems = new ViewItemCollection();
@@ -207,8 +209,8 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $application->addViewRenderer(new JsonTestViewRenderer()); // Use this.
         $application->addViewRenderer(new BasicTestViewRenderer());
 
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/alternate', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('https://example.com/altername'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new ViewTestController();
         $view = new View('The Model');
         $viewItems = new ViewItemCollection();
@@ -232,8 +234,8 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $application->addViewRenderer(new BasicTestViewRenderer()); // No view exist for this.
         $application->addViewRenderer(new JsonTestViewRenderer()); // Use this.
 
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/onlyjson', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('https://example.com/onlyjson'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new ViewTestController();
         $view = new View('The Model');
         $viewItems = new ViewItemCollection();
@@ -258,8 +260,8 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
 
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('https://example.com/'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new ViewTestController();
         $view = new View();
         $viewItems = new ViewItemCollection();

@@ -3,10 +3,12 @@
 namespace BlueMvc\Core\Tests\ActionResults;
 
 use BlueMvc\Core\ActionResults\PermanentRedirectResult;
-use BlueMvc\Core\Request;
-use BlueMvc\Core\Response;
+use BlueMvc\Core\Http\Method;
 use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
+use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
+use BlueMvc\Core\Tests\Helpers\TestResponses\BasicTestResponse;
 use DataTypes\FilePath;
+use DataTypes\Url;
 
 /**
  * Test PermanentRedirectResult class.
@@ -19,14 +21,8 @@ class PermanentRedirectResultTest extends \PHPUnit_Framework_TestCase
     public function testWithAbsoluteUrl()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'GET',
-            ]
-        );
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('https://www.example.com/foo/bar'), new Method('GET'));
+        $response = new BasicTestResponse();
         $actionResult = new PermanentRedirectResult('https://domain.org/baz?query');
         $actionResult->updateResponse($application, $request, $response);
 
@@ -42,21 +38,15 @@ class PermanentRedirectResultTest extends \PHPUnit_Framework_TestCase
     public function testWithRelativeUrl()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'GET',
-            ]
-        );
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('https://www.example.com/foo/bar'), new Method('GET'));
+        $response = new BasicTestResponse();
         $actionResult = new PermanentRedirectResult('../baz');
         $actionResult->updateResponse($application, $request, $response);
 
         self::assertSame(301, $response->getStatusCode()->getCode());
         self::assertSame('Moved Permanently', $response->getStatusCode()->getDescription());
         self::assertSame('', $response->getContent());
-        self::assertSame('http://www.domain.com/baz', $response->getHeader('Location'));
+        self::assertSame('https://www.example.com/baz', $response->getHeader('Location'));
     }
 
     /**
@@ -65,21 +55,15 @@ class PermanentRedirectResultTest extends \PHPUnit_Framework_TestCase
     public function testWithEmptyUrl()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar?baz',
-                'REQUEST_METHOD' => 'GET',
-            ]
-        );
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('https://www.example.com/foo/bar?baz'), new Method('GET'));
+        $response = new BasicTestResponse();
         $actionResult = new PermanentRedirectResult();
         $actionResult->updateResponse($application, $request, $response);
 
         self::assertSame(301, $response->getStatusCode()->getCode());
         self::assertSame('Moved Permanently', $response->getStatusCode()->getDescription());
         self::assertSame('', $response->getContent());
-        self::assertSame('http://www.domain.com/foo/bar?baz', $response->getHeader('Location'));
+        self::assertSame('https://www.example.com/foo/bar?baz', $response->getHeader('Location'));
     }
 
     /**
@@ -91,14 +75,8 @@ class PermanentRedirectResultTest extends \PHPUnit_Framework_TestCase
     public function testWithInvalidUrlParameter()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'GET',
-            ]
-        );
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('https://www.example.com/foo/bar'), new Method('GET'));
+        $response = new BasicTestResponse();
         $actionResult = new PermanentRedirectResult('foobar://localhost/');
         $actionResult->updateResponse($application, $request, $response);
     }
@@ -112,14 +90,8 @@ class PermanentRedirectResultTest extends \PHPUnit_Framework_TestCase
     public function testWithInvalidRelativeUrlParameter()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'GET',
-            ]
-        );
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('https://www.example.com/foo/bar'), new Method('GET'));
+        $response = new BasicTestResponse();
         $actionResult = new PermanentRedirectResult('../../baz');
         $actionResult->updateResponse($application, $request, $response);
     }

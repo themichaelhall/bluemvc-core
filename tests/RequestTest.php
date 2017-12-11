@@ -16,13 +16,14 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetUrl()
     {
-        $request = new Request(
+        $_SERVER =
             [
                 'HTTP_HOST'      => 'www.domain.com',
                 'REQUEST_URI'    => '/foo/bar',
                 'REQUEST_METHOD' => 'GET',
-            ]
-        );
+            ];
+
+        $request = new Request();
 
         self::assertSame('http://www.domain.com/foo/bar', $request->getUrl()->__toString());
     }
@@ -32,14 +33,15 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetUrlForHttpsRequest()
     {
-        $request = new Request(
+        $_SERVER =
             [
                 'HTTPS'          => 'On',
                 'HTTP_HOST'      => 'www.domain.com',
                 'REQUEST_URI'    => '/foo/bar',
                 'REQUEST_METHOD' => 'GET',
-            ]
-        );
+            ];
+
+        $request = new Request();
 
         self::assertSame('https://www.domain.com/foo/bar', $request->getUrl()->__toString());
     }
@@ -49,13 +51,14 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetUrlWithPort()
     {
-        $request = new Request(
+        $_SERVER =
             [
                 'HTTP_HOST'      => 'www.domain.com:8080',
                 'REQUEST_URI'    => '/foo/bar',
                 'REQUEST_METHOD' => 'GET',
-            ]
-        );
+            ];
+
+        $request = new Request();
 
         self::assertSame('http://www.domain.com:8080/foo/bar', $request->getUrl()->__toString());
     }
@@ -65,13 +68,14 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetUrlWithEmptyQueryString()
     {
-        $request = new Request(
+        $_SERVER =
             [
                 'HTTP_HOST'      => 'www.domain.com',
                 'REQUEST_URI'    => '/foo/bar?',
                 'REQUEST_METHOD' => 'GET',
-            ]
-        );
+            ];
+
+        $request = new Request();
 
         self::assertSame('http://www.domain.com/foo/bar?', $request->getUrl()->__toString());
     }
@@ -81,13 +85,14 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetUrlWithQueryString()
     {
-        $request = new Request(
+        $_SERVER =
             [
                 'HTTP_HOST'      => 'www.domain.com',
                 'REQUEST_URI'    => '/foo/bar?baz=true',
                 'REQUEST_METHOD' => 'GET',
-            ]
-        );
+            ];
+
+        $request = new Request();
 
         self::assertSame('http://www.domain.com/foo/bar?baz=true', $request->getUrl()->__toString());
     }
@@ -97,13 +102,14 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMethod()
     {
-        $request = new Request(
+        $_SERVER =
             [
                 'HTTP_HOST'      => 'www.domain.com',
                 'REQUEST_URI'    => '/foo/bar',
                 'REQUEST_METHOD' => 'POST',
-            ]
-        );
+            ];
+
+        $request = new Request();
 
         self::assertSame('POST', $request->getMethod()->__toString());
     }
@@ -113,14 +119,15 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetHeaders()
     {
-        $request = new Request(
+        $_SERVER =
             [
                 'HTTP_HOST'            => 'www.domain.com',
                 'REQUEST_URI'          => '/foo/bar',
                 'REQUEST_METHOD'       => 'GET',
                 'HTTP_ACCEPT_ENCODING' => 'gzip, deflate',
-            ]
-        );
+            ];
+
+        $request = new Request();
 
         self::assertSame(['Host' => 'www.domain.com', 'Accept-Encoding' => 'gzip, deflate'], iterator_to_array($request->getHeaders()));
     }
@@ -130,14 +137,15 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetHeader()
     {
-        $request = new Request(
+        $_SERVER =
             [
                 'HTTP_HOST'            => 'www.domain.com',
                 'REQUEST_URI'          => '/foo/bar',
                 'REQUEST_METHOD'       => 'GET',
                 'HTTP_ACCEPT_ENCODING' => 'gzip, deflate',
-            ]
-        );
+            ];
+
+        $request = new Request();
 
         self::assertSame('gzip, deflate', $request->getHeader('Accept-Encoding'));
         self::assertNull($request->getHeader('Foo-Bar'));
@@ -148,13 +156,14 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetUserAgentWithoutUserAgentSet()
     {
-        $request = new Request(
+        $_SERVER =
             [
                 'HTTP_HOST'      => 'www.domain.com',
                 'REQUEST_URI'    => '/foo/bar',
                 'REQUEST_METHOD' => 'GET',
-            ]
-        );
+            ];
+
+        $request = new Request();
 
         self::assertSame('', $request->getUserAgent());
     }
@@ -164,14 +173,15 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetUserAgentWithUserAgentSet()
     {
-        $request = new Request(
+        $_SERVER =
             [
                 'HTTP_HOST'       => 'www.domain.com',
                 'REQUEST_URI'     => '/foo/bar',
                 'REQUEST_METHOD'  => 'GET',
                 'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
-            ]
-        );
+            ];
+
+        $request = new Request();
 
         self::assertSame('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36', $request->getUserAgent());
     }
@@ -181,13 +191,14 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFormParametersWithoutFormParametersSet()
     {
-        $request = new Request(
+        $_SERVER =
             [
                 'HTTP_HOST'      => 'www.domain.com',
                 'REQUEST_URI'    => '/foo/bar',
                 'REQUEST_METHOD' => 'GET',
-            ]
-        );
+            ];
+
+        $request = new Request();
 
         self::assertSame([], iterator_to_array($request->getFormParameters()));
     }
@@ -197,19 +208,20 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFormParametersWithFormParametersSet()
     {
-        $request = new Request(
+        $_SERVER =
             [
                 'HTTP_HOST'      => 'www.domain.com',
                 'REQUEST_URI'    => '/foo/bar',
                 'REQUEST_METHOD' => 'GET',
-            ],
-            [
-            ],
+            ];
+
+        $_POST =
             [
                 'Foo' => '1',
                 'Bar' => ['2', '3'],
-            ]
-        );
+            ];
+
+        $request = new Request();
 
         self::assertSame(['Foo' => '1', 'Bar' => '2'], iterator_to_array($request->getFormParameters()));
     }
@@ -219,19 +231,20 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFormParameter()
     {
-        $request = new Request(
+        $_SERVER =
             [
                 'HTTP_HOST'      => 'www.domain.com',
                 'REQUEST_URI'    => '/foo/bar',
                 'REQUEST_METHOD' => 'GET',
-            ],
-            [
-            ],
+            ];
+
+        $_POST =
             [
                 'Foo' => '1',
                 'Bar' => ['2', '3'],
-            ]
-        );
+            ];
+
+        $request = new Request();
 
         self::assertSame('1', $request->getFormParameter('Foo'));
         self::assertSame('2', $request->getFormParameter('Bar'));
@@ -243,13 +256,14 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetQueryParametersWithoutQueryParametersSet()
     {
-        $request = new Request(
+        $_SERVER =
             [
                 'HTTP_HOST'      => 'www.domain.com',
                 'REQUEST_URI'    => '/foo/bar',
                 'REQUEST_METHOD' => 'GET',
-            ]
-        );
+            ];
+
+        $request = new Request();
 
         self::assertSame([], iterator_to_array($request->getQueryParameters()));
     }
@@ -259,17 +273,20 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetQueryParametersWithQueryParametersSet()
     {
-        $request = new Request(
+        $_SERVER =
             [
                 'HTTP_HOST'      => 'www.domain.com',
                 'REQUEST_URI'    => '/foo/bar',
                 'REQUEST_METHOD' => 'GET',
-            ],
+            ];
+
+        $_GET =
             [
                 'Foo' => '1',
                 'Bar' => ['2', '3'],
-            ]
-        );
+            ];
+
+        $request = new Request();
 
         self::assertSame(['Foo' => '1', 'Bar' => '2'], iterator_to_array($request->getQueryParameters()));
     }
@@ -279,17 +296,20 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetQueryParameter()
     {
-        $request = new Request(
+        $_SERVER =
             [
                 'HTTP_HOST'      => 'www.domain.com',
                 'REQUEST_URI'    => '/foo/bar',
                 'REQUEST_METHOD' => 'GET',
-            ],
+            ];
+
+        $_GET =
             [
                 'Foo' => '1',
                 'Bar' => ['2', '3'],
-            ]
-        );
+            ];
+
+        $request = new Request();
 
         self::assertSame('1', $request->getQueryParameter('Foo'));
         self::assertSame('2', $request->getQueryParameter('Bar'));
@@ -301,16 +321,19 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetQueryParameterWithNumericParameters()
     {
-        $request = new Request(
+        $_SERVER =
             [
                 'HTTP_HOST'      => 'www.domain.com',
                 'REQUEST_URI'    => '/foo/bar',
                 'REQUEST_METHOD' => 'GET',
-            ],
+            ];
+
+        $_GET =
             [
                 1 => 2,
-            ]
-        );
+            ];
+
+        $request = new Request();
 
         self::assertSame('2', $request->getQueryParameter('1'));
     }
@@ -320,18 +343,19 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFormParameterWithNumericParameters()
     {
-        $request = new Request(
+        $_SERVER =
             [
                 'HTTP_HOST'      => 'www.domain.com',
                 'REQUEST_URI'    => '/foo/bar',
                 'REQUEST_METHOD' => 'GET',
-            ],
-            [
-            ],
+            ];
+
+        $_POST =
             [
                 1 => 2,
-            ]
-        );
+            ];
+
+        $request = new Request();
 
         self::assertSame('2', $request->getFormParameter('1'));
     }
@@ -341,13 +365,14 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetUploadedFilesWithNoUploadedFiles()
     {
-        $request = new Request(
+        $_SERVER =
             [
                 'HTTP_HOST'      => 'www.domain.com',
                 'REQUEST_URI'    => '/foo/bar',
                 'REQUEST_METHOD' => 'GET',
-            ]
-        );
+            ];
+
+        $request = new Request();
 
         self::assertSame([], iterator_to_array($request->getUploadedFiles()));
     }
@@ -359,16 +384,14 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
-        $request = new Request(
+        $_SERVER =
             [
                 'HTTP_HOST'      => 'www.domain.com',
                 'REQUEST_URI'    => '/foo/bar',
                 'REQUEST_METHOD' => 'GET',
-            ],
-            [
-            ],
-            [
-            ],
+            ];
+
+        $_FILES =
             [
                 'foo' => [
                     'name'     => 'Documents/Foo.doc',
@@ -384,8 +407,9 @@ class RequestTest extends \PHPUnit_Framework_TestCase
                     'size'     => 42,
                     'error'    => 0,
                 ],
-            ]
-        );
+            ];
+
+        $request = new Request();
 
         $uploadedFiles = $request->getUploadedFiles();
 
@@ -405,16 +429,14 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
-        $request = new Request(
+        $_SERVER =
             [
                 'HTTP_HOST'      => 'www.domain.com',
                 'REQUEST_URI'    => '/foo/bar',
                 'REQUEST_METHOD' => 'GET',
-            ],
-            [
-            ],
-            [
-            ],
+            ];
+
+        $_FILES =
             [
                 'foo' => [
                     'name'     => 'Documents/Foo.doc',
@@ -423,8 +445,9 @@ class RequestTest extends \PHPUnit_Framework_TestCase
                     'size'     => '56789',
                     'error'    => '0',
                 ],
-            ]
-        );
+            ];
+
+        $request = new Request();
 
         self::assertSame($DS . 'tmp' . $DS . 'foo123.doc', $request->getUploadedFile('foo')->getPath()->__toString());
         self::assertSame('Documents/Foo.doc', $request->getUploadedFile('foo')->getOriginalName());
@@ -447,16 +470,14 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $exceptionMessage = null;
 
         try {
-            $request = new Request(
+            $_SERVER =
                 [
                     'HTTP_HOST'      => 'www.domain.com',
                     'REQUEST_URI'    => '/foo/bar',
                     'REQUEST_METHOD' => 'GET',
-                ],
-                [
-                ],
-                [
-                ],
+                ];
+
+            $_FILES =
                 [
                     'foo' => [
                         'name'     => 'Foo.txt',
@@ -465,8 +486,9 @@ class RequestTest extends \PHPUnit_Framework_TestCase
                         'size'     => '100',
                         'error'    => $error,
                     ],
-                ]
-            );
+                ];
+
+            $request = new Request();
         } catch (ServerEnvironmentException $exception) {
             $exceptionMessage = $exception->getMessage();
         }
@@ -500,16 +522,14 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
-        $request = new Request(
+        $_SERVER =
             [
                 'HTTP_HOST'      => 'www.domain.com',
                 'REQUEST_URI'    => '/foo/bar',
                 'REQUEST_METHOD' => 'GET',
-            ],
-            [
-            ],
-            [
-            ],
+            ];
+
+        $_FILES =
             [
                 'foo' => [
                     'name'     => ['Documents/Foo.doc', 'Documents/Bar.txt'],
@@ -518,8 +538,9 @@ class RequestTest extends \PHPUnit_Framework_TestCase
                     'size'     => [56789, 1234],
                     'error'    => [0, 0],
                 ],
-            ]
-        );
+            ];
+
+        $request = new Request();
 
         self::assertSame($DS . 'tmp' . $DS . 'foo123.doc', $request->getUploadedFile('foo')->getPath()->__toString());
         self::assertSame('Documents/Foo.doc', $request->getUploadedFile('foo')->getOriginalName());
@@ -533,16 +554,14 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetUploadedFileWithNotUploadedFile()
     {
-        $request = new Request(
+        $_SERVER =
             [
                 'HTTP_HOST'      => 'www.domain.com',
                 'REQUEST_URI'    => '/foo/bar',
                 'REQUEST_METHOD' => 'GET',
-            ],
-            [
-            ],
-            [
-            ],
+            ];
+
+        $_FILES =
             [
                 'foo' => [
                     'name'     => 'Documents/Foo.doc',
@@ -551,8 +570,9 @@ class RequestTest extends \PHPUnit_Framework_TestCase
                     'size'     => '56789',
                     'error'    => '0',
                 ],
-            ]
-        );
+            ];
+
+        $request = new Request();
 
         self::assertEmpty($request->getUploadedFiles());
         self::assertNull($request->getUploadedFile('foo'));
@@ -563,13 +583,14 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCookiesWithNoCookiesSet()
     {
-        $request = new Request(
+        $_SERVER =
             [
                 'HTTP_HOST'      => 'www.domain.com',
                 'REQUEST_URI'    => '/foo/bar',
                 'REQUEST_METHOD' => 'GET',
-            ]
-        );
+            ];
+
+        $request = new Request();
 
         self::assertSame([], iterator_to_array($request->getCookies()));
     }
@@ -579,24 +600,20 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCookiesWithCookiesSet()
     {
-        $request = new Request(
+        $_SERVER =
             [
                 'HTTP_HOST'      => 'www.domain.com',
                 'REQUEST_URI'    => '/foo/bar',
                 'REQUEST_METHOD' => 'GET',
-            ],
-            [
-            ],
-            [
-            ],
-            [
-            ],
+            ];
+
+        $_COOKIE =
             [
                 'Foo' => 'Bar',
                 1     => 2,
-            ]
-        );
+            ];
 
+        $request = new Request();
         $cookies = $request->getCookies();
 
         self::assertSame('Bar', $cookies->get('Foo')->getValue());
@@ -608,23 +625,20 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCookie()
     {
-        $request = new Request(
+        $_SERVER =
             [
                 'HTTP_HOST'      => 'www.domain.com',
                 'REQUEST_URI'    => '/foo/bar',
                 'REQUEST_METHOD' => 'GET',
-            ],
-            [
-            ],
-            [
-            ],
-            [
-            ],
+            ];
+
+        $_COOKIE =
             [
                 'Foo' => 'Bar',
                 1     => 2,
-            ]
-        );
+            ];
+
+        $request = new Request();
 
         self::assertSame('Bar', $request->getCookie('Foo')->getValue());
         self::assertSame('2', $request->getCookie('1')->getValue());
@@ -645,6 +659,12 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function tearDown()
     {
+        $_SERVER = [];
+        $_GET = [];
+        $_POST = [];
+        $_FILES = [];
+        $_COOKIE = [];
+
         FakeIsUploadedFile::disable();
     }
 }

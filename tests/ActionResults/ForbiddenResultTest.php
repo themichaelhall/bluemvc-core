@@ -3,10 +3,12 @@
 namespace BlueMvc\Core\Tests\ActionResults;
 
 use BlueMvc\Core\ActionResults\ForbiddenResult;
-use BlueMvc\Core\Request;
-use BlueMvc\Core\Response;
+use BlueMvc\Core\Http\Method;
 use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
+use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
+use BlueMvc\Core\Tests\Helpers\TestResponses\BasicTestResponse;
 use DataTypes\FilePath;
+use DataTypes\Url;
 
 /**
  * Test ForbiddenResult class.
@@ -19,14 +21,8 @@ class ForbiddenResultTest extends \PHPUnit_Framework_TestCase
     public function testDefaultConstructor()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'GET',
-            ]
-        );
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('https://www.example.com/foo/bar'), new Method('GET'));
+        $response = new BasicTestResponse();
         $actionResult = new ForbiddenResult();
         $actionResult->updateResponse($application, $request, $response);
 
@@ -41,14 +37,8 @@ class ForbiddenResultTest extends \PHPUnit_Framework_TestCase
     public function testWithContent()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'GET',
-            ]
-        );
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('https://www.example.com/foo/bar'), new Method('GET'));
+        $response = new BasicTestResponse();
         $actionResult = new ForbiddenResult('You are forbidden to view this content.');
         $actionResult->updateResponse($application, $request, $response);
 

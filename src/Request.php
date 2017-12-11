@@ -35,29 +35,17 @@ class Request extends AbstractRequest
      * Constructs the request.
      *
      * @since 1.0.0
-     *
-     * @param array|null $serverVars  The server array or null to use the global $_SERVER array.
-     * @param array|null $getVars     The get array or null to use the global $_GET array.
-     * @param array|null $postVars    The post array or null to use the global $_POST array.
-     * @param array|null $filesVars   The file array or null to use the global $_FILES array.
-     * @param array|null $cookiesVars The cookie array or null to use the global $_COOKIES array.
      */
-    public function __construct(array $serverVars = null, array $getVars = null, array $postVars = null, array $filesVars = null, array $cookiesVars = null)
+    public function __construct()
     {
-        $serverVars = $serverVars ?: $_SERVER;
-        $getVars = $getVars ?: $_GET;
-        $postVars = $postVars ?: $_POST;
-        $filesVars = $filesVars ?: $_FILES;
-        $cookiesVars = $cookiesVars ?: $_COOKIE;
-
         parent::__construct(
-            self::myParseUrl($serverVars),
-            new Method($serverVars['REQUEST_METHOD']),
-            self::myParseHeaders($serverVars),
-            self::myParseParameters($getVars),
-            self::myParseParameters($postVars),
-            self::myParseUploadedFiles($filesVars),
-            self::myParseCookies($cookiesVars)
+            self::myParseUrl($_SERVER),
+            new Method($_SERVER['REQUEST_METHOD']),
+            self::myParseHeaders($_SERVER),
+            self::myParseParameters($_GET),
+            self::myParseParameters($_POST),
+            self::myParseUploadedFiles($_FILES),
+            self::myParseCookies($_COOKIE)
         );
     }
 

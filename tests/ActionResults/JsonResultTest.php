@@ -3,12 +3,14 @@
 namespace BlueMvc\Core\Tests\ActionResults;
 
 use BlueMvc\Core\ActionResults\JsonResult;
+use BlueMvc\Core\Http\Method;
 use BlueMvc\Core\Http\StatusCode;
-use BlueMvc\Core\Request;
-use BlueMvc\Core\Response;
 use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
 use BlueMvc\Core\Tests\Helpers\TestClasses\JsonSerializableTestClass;
+use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
+use BlueMvc\Core\Tests\Helpers\TestResponses\BasicTestResponse;
 use DataTypes\FilePath;
+use DataTypes\Url;
 
 /**
  * Test JsonResult class.
@@ -21,14 +23,8 @@ class JsonResultTest extends \PHPUnit_Framework_TestCase
     public function testWithContent()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'GET',
-            ]
-        );
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('https://www.example.com/foo/bar'), new Method('GET'));
+        $response = new BasicTestResponse();
         $actionResult = new JsonResult(['Foo' => 'Bar']);
         $actionResult->updateResponse($application, $request, $response);
 
@@ -44,14 +40,8 @@ class JsonResultTest extends \PHPUnit_Framework_TestCase
     public function testWithStatusCode()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'GET',
-            ]
-        );
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('https://www.example.com/foo/bar'), new Method('GET'));
+        $response = new BasicTestResponse();
         $actionResult = new JsonResult(['Error' => 'Not Found'], new StatusCode(StatusCode::NOT_FOUND));
         $actionResult->updateResponse($application, $request, $response);
 
@@ -67,14 +57,8 @@ class JsonResultTest extends \PHPUnit_Framework_TestCase
     public function testWithJsonSerializable()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'GET',
-            ]
-        );
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('https://www.example.com/foo/bar'), new Method('GET'));
+        $response = new BasicTestResponse();
         $actionResult = new JsonResult(new JsonSerializableTestClass(10, 'Foo'));
         $actionResult->updateResponse($application, $request, $response);
 

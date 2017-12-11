@@ -3,9 +3,8 @@
 namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\Collections\ViewItemCollection;
+use BlueMvc\Core\Http\Method;
 use BlueMvc\Core\Http\StatusCode;
-use BlueMvc\Core\Request;
-use BlueMvc\Core\Response;
 use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ActionMethodVisibilityTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ActionResultTestController;
@@ -16,8 +15,11 @@ use BlueMvc\Core\Tests\Helpers\TestControllers\PreAndPostActionEventController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\SpecialActionNameTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\UppercaseActionTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ViewTestController;
+use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
+use BlueMvc\Core\Tests\Helpers\TestResponses\BasicTestResponse;
 use BlueMvc\Core\Tests\Helpers\TestViewRenderers\BasicTestViewRenderer;
 use DataTypes\FilePath;
+use DataTypes\Url;
 
 /**
  * Test Controller class.
@@ -30,8 +32,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function testGetApplication()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, '');
 
@@ -44,8 +46,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function testGetRequest()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, '');
 
@@ -58,8 +60,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function testGetResponse()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, '');
 
@@ -75,8 +77,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function testProcessRequestWithInvalidActionParameterType()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/notfound', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, null);
     }
@@ -87,8 +89,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function testProcessRequestForIndexPath()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, '');
 
@@ -102,8 +104,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function testProcessRequestForNonExistingPath()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/notfound', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/notfound'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, 'notfound');
 
@@ -117,8 +119,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function testActionStartingWithNumericCharacter()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/123numeric', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/123numeric'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, '123numeric');
 
@@ -132,8 +134,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function testExistingActionForControllerWithDefaultAction()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/foo'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new DefaultActionTestController();
         $controller->processRequest($application, $request, $response, 'foo');
 
@@ -147,8 +149,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function testNonExistingActionForControllerWithDefaultAction()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/bar', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/bar'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new DefaultActionTestController();
         $controller->processRequest($application, $request, $response, 'bar');
 
@@ -162,8 +164,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function testActionReturningActionResult()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/notfound', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/notfound'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new ActionResultTestController();
         $controller->processRequest($application, $request, $response, 'notfound');
 
@@ -182,8 +184,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
         $application->addViewRenderer(new BasicTestViewRenderer());
 
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new ViewTestController();
         $controller->processRequest($application, $request, $response, '');
 
@@ -202,8 +204,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
         $application->addViewRenderer(new BasicTestViewRenderer());
 
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/withcustomviewfile', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/withcustomviewfile'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new ViewTestController();
         $controller->processRequest($application, $request, $response, 'withcustomviewfile');
 
@@ -217,8 +219,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function testIndexActionWithControllerWithPreAndPostActionEventMethod()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new PreAndPostActionEventController();
         $controller->processRequest($application, $request, $response, '');
 
@@ -234,8 +236,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function testDefaultActionWithControllerWithPreAndPostActionEventMethod()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/foo'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new PreAndPostActionEventController();
         $controller->processRequest($application, $request, $response, 'foo');
 
@@ -251,8 +253,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function testPreActionEventReturningResult()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(['HTTP_HOST' => 'www.domain.com:81', 'SERVER_PORT' => '81', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com:81/'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new PreAndPostActionEventController();
         $controller->processRequest($application, $request, $response, '');
 
@@ -268,8 +270,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function testPostActionEventReturningResult()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(['HTTP_HOST' => 'www.domain.com:82', 'SERVER_PORT' => '82', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com:82/'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new PreAndPostActionEventController();
         $controller->processRequest($application, $request, $response, '');
 
@@ -335,8 +337,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function testActionReturningInteger()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/int', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/int'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, 'int');
 
@@ -350,8 +352,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function testActionReturningFalse()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/false', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/false'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, 'false');
 
@@ -365,8 +367,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function testActionReturningTrue()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/true', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/true'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, 'true');
 
@@ -380,8 +382,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function testActionReturningNull()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/null', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/null'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, 'null');
 
@@ -395,8 +397,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function testActionReturningObject()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/object', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/object'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, 'object');
 
@@ -410,8 +412,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function testActionReturningStringable()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/stringable', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/stringable'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, 'stringable');
 
@@ -425,8 +427,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function testUppercaseIndexAction()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new UppercaseActionTestController();
         $controller->processRequest($application, $request, $response, '');
 
@@ -440,8 +442,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function testUppercaseDefaultAction()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/bar', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/bar'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new UppercaseActionTestController();
         $controller->processRequest($application, $request, $response, 'bar');
 
@@ -455,8 +457,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function testUppercaseActionMethodWithUppercaseAction()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/FOO', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/FOO'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new UppercaseActionTestController();
         $controller->processRequest($application, $request, $response, 'FOO');
 
@@ -470,8 +472,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function testUppercaseActionMethodWithLowercaseAction()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/FOO', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/foo'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new UppercaseActionTestController();
         $controller->processRequest($application, $request, $response, 'foo');
 
@@ -492,8 +494,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function testMultiLevelActions($action, array $parameters, $expectedStatusCode, $expectedContent)
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/' . $action, 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new MultiLevelTestController();
         $controller->processRequest($application, $request, $response, $action, $parameters);
 
@@ -566,8 +568,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function testActionMethodVisibility($action, $expectedStatusCode, $expectedContent)
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/' . $action, 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new ActionMethodVisibilityTestController();
         $controller->processRequest($application, $request, $response, $action, []);
 
@@ -602,8 +604,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function testSpecialNameAction($action, $expectedStatusCode, $expectedContent)
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/' . $action, 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new SpecialActionNameTestController();
         $controller->processRequest($application, $request, $response, $action, []);
 
@@ -632,8 +634,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function testGetActionForIndexAction()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, '', []);
 
@@ -646,8 +648,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function testGetActionForCustomAction()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/int', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/int'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, 'int', []);
 
@@ -660,8 +662,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function testGetActionForDefaultAction()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/bar', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/bar'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new DefaultActionTestController();
         $controller->processRequest($application, $request, $response, 'bar', []);
 
@@ -674,8 +676,8 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     public function testGetActionForInvalidAction()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/foo', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/foo'), new Method('GET'));
+        $response = new BasicTestResponse();
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, 'foo', []);
 

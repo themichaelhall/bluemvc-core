@@ -2,18 +2,19 @@
 
 namespace BlueMvc\Core\Tests;
 
+use BlueMvc\Core\Http\Method;
 use BlueMvc\Core\Http\StatusCode;
-use BlueMvc\Core\Request;
-use BlueMvc\Core\Response;
 use BlueMvc\Core\Route;
-use BlueMvc\Core\Tests\Helpers\Fakes\FakeHeaders;
 use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ActionResultTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ErrorTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ExceptionTestController;
+use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
+use BlueMvc\Core\Tests\Helpers\TestResponses\BasicTestResponse;
 use BlueMvc\Core\Tests\Helpers\TestViewRenderers\BasicTestViewRenderer;
 use DataTypes\FilePath;
+use DataTypes\Url;
 
 /**
  * Test error handling.
@@ -26,18 +27,12 @@ class ErrorHandlingTest extends \PHPUnit_Framework_TestCase
     public function testServerErrorInDebugMode()
     {
         $this->application->setDebug(true);
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/exception/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
-        ob_start();
+        $request = new BasicTestRequest(Url::parse('https://www.example.com/exception/'), new Method('GET'));
+        $response = new BasicTestResponse();
         $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
 
-        self::assertContains('LogicException', $responseOutput);
-        self::assertContains('Exception was thrown.', $responseOutput);
         self::assertContains('LogicException', $response->getContent());
         self::assertContains('Exception was thrown.', $response->getContent());
-        self::assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
         self::assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
     }
 
@@ -47,16 +42,11 @@ class ErrorHandlingTest extends \PHPUnit_Framework_TestCase
     public function testServerErrorInReleaseMode()
     {
         $this->application->setDebug(false);
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/exception/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
-        ob_start();
+        $request = new BasicTestRequest(Url::parse('https://www.example.com/exception/'), new Method('GET'));
+        $response = new BasicTestResponse();
         $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
 
-        self::assertSame('', $responseOutput);
         self::assertSame('', $response->getContent());
-        self::assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
         self::assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
     }
 
@@ -66,16 +56,11 @@ class ErrorHandlingTest extends \PHPUnit_Framework_TestCase
     public function testServerErrorWithErrorControllerSet()
     {
         $this->application->setErrorControllerClass(ErrorTestController::class);
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/exception/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
-        ob_start();
+        $request = new BasicTestRequest(Url::parse('https://www.example.com/exception/'), new Method('GET'));
+        $response = new BasicTestResponse();
         $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
 
-        self::assertSame('<html><body><h1>Request Failed: Error: 500, Exception: LogicException, ExceptionMessage: Exception was thrown.</h1></body></html>', $responseOutput);
         self::assertSame('<html><body><h1>Request Failed: Error: 500, Exception: LogicException, ExceptionMessage: Exception was thrown.</h1></body></html>', $response->getContent());
-        self::assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
         self::assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
     }
 
@@ -85,16 +70,11 @@ class ErrorHandlingTest extends \PHPUnit_Framework_TestCase
     public function testNotFoundErrorWithErrorControllerSet()
     {
         $this->application->setErrorControllerClass(ErrorTestController::class);
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/non-existing', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
-        ob_start();
+        $request = new BasicTestRequest(Url::parse('https://www.example.com/non-existing'), new Method('GET'));
+        $response = new BasicTestResponse();
         $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
 
-        self::assertSame('<html><body><h1>Request Failed: Error: 404</h1></body></html>', $responseOutput);
         self::assertSame('<html><body><h1>Request Failed: Error: 404</h1></body></html>', $response->getContent());
-        self::assertSame(['HTTP/1.1 404 Not Found'], FakeHeaders::get());
         self::assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
     }
 
@@ -104,16 +84,11 @@ class ErrorHandlingTest extends \PHPUnit_Framework_TestCase
     public function testNotFoundErrorWithErrorControllerSet2()
     {
         $this->application->setErrorControllerClass(ErrorTestController::class);
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/notfound', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
-        ob_start();
+        $request = new BasicTestRequest(Url::parse('https://www.example.com/actionresult/notfound'), new Method('GET'));
+        $response = new BasicTestResponse();
         $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
 
-        self::assertSame('<html><body><h1>Request Failed: Error: 404</h1></body></html>', $responseOutput);
         self::assertSame('<html><body><h1>Request Failed: Error: 404</h1></body></html>', $response->getContent());
-        self::assertSame(['HTTP/1.1 404 Not Found'], FakeHeaders::get());
         self::assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
     }
 
@@ -123,16 +98,11 @@ class ErrorHandlingTest extends \PHPUnit_Framework_TestCase
     public function testNormalPageWithErrorControllerSet()
     {
         $this->application->setErrorControllerClass(ErrorTestController::class);
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
-        ob_start();
+        $request = new BasicTestRequest(Url::parse('https://www.example.com/'), new Method('GET'));
+        $response = new BasicTestResponse();
         $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
 
-        self::assertSame('Hello World!', $responseOutput);
         self::assertSame('Hello World!', $response->getContent());
-        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
@@ -142,16 +112,11 @@ class ErrorHandlingTest extends \PHPUnit_Framework_TestCase
     public function testErrorControllerThrowingExceptionInNonDebugMode()
     {
         $this->application->setErrorControllerClass(ErrorTestController::class);
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/forbidden', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
-        ob_start();
+        $request = new BasicTestRequest(Url::parse('https://www.example.com/actionresult/forbidden'), new Method('GET'));
+        $response = new BasicTestResponse();
         $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
 
-        self::assertSame('', $responseOutput);
         self::assertSame('', $response->getContent());
-        self::assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
         self::assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
     }
 
@@ -162,18 +127,12 @@ class ErrorHandlingTest extends \PHPUnit_Framework_TestCase
     {
         $this->application->setDebug(true);
         $this->application->setErrorControllerClass(ErrorTestController::class);
-        $request = new Request(['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/forbidden', 'REQUEST_METHOD' => 'GET']);
-        $response = new Response();
-        ob_start();
+        $request = new BasicTestRequest(Url::parse('https://www.example.com/actionresult/forbidden'), new Method('GET'));
+        $response = new BasicTestResponse();
         $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
 
-        self::assertContains('RuntimeException', $responseOutput);
-        self::assertContains('Exception thrown from 403 action.', $responseOutput);
         self::assertContains('RuntimeException', $response->getContent());
         self::assertContains('Exception thrown from 403 action.', $response->getContent());
-        self::assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
         self::assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
     }
 
@@ -182,7 +141,6 @@ class ErrorHandlingTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        FakeHeaders::enable();
         $this->application = new BasicTestApplication(FilePath::parse(__DIR__ . DIRECTORY_SEPARATOR));
         $this->application->setViewPath(FilePath::parse('Helpers' . DIRECTORY_SEPARATOR . 'TestViews' . DIRECTORY_SEPARATOR));
         $this->application->addViewRenderer(new BasicTestViewRenderer());
@@ -197,7 +155,6 @@ class ErrorHandlingTest extends \PHPUnit_Framework_TestCase
      */
     public function tearDown()
     {
-        FakeHeaders::disable();
         $this->application = null;
     }
 
