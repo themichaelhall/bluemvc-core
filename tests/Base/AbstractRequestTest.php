@@ -332,6 +332,27 @@ class AbstractRequestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test setRawContent method.
+     */
+    public function testSetRawContent()
+    {
+        $this->myRequest->setRawContent('{"Foo": "Bar"}');
+
+        self::assertSame('{"Foo": "Bar"}', $this->myRequest->getRawContent());
+    }
+
+    /**
+     * Test setRawContent method with invalid $content parameter type.
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage $content parameter is not a string.
+     */
+    public function testSetRawContentWithInvalidContentParameterType()
+    {
+        $this->myRequest->setRawContent(false);
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

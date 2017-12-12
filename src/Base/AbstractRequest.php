@@ -235,7 +235,7 @@ abstract class AbstractRequest implements RequestInterface
         $this->setFormParameters($formParameters);
         $this->setUploadedFiles($uploadedFiles);
         $this->setCookies($cookies);
-        $this->myRawContent = '';
+        $this->setRawContent('');
     }
 
     /**
@@ -371,6 +371,24 @@ abstract class AbstractRequest implements RequestInterface
     protected function setQueryParameters(ParameterCollectionInterface $parameters)
     {
         $this->myQueryParameters = $parameters;
+    }
+
+    /**
+     * Sets the raw content.
+     *
+     * @since 1.0.0
+     *
+     * @param string $content The raw content.
+     *
+     * @throws \InvalidArgumentException If the $content parameter is not a string.
+     */
+    protected function setRawContent($content)
+    {
+        if (!is_string($content)) {
+            throw new \InvalidArgumentException('$content parameter is not a string.');
+        }
+
+        $this->myRawContent = $content;
     }
 
     /**

@@ -146,6 +146,18 @@ class BasicTestRequest extends AbstractRequest
     }
 
     /**
+     * Sets the raw content.
+     *
+     * @param string $content The raw content.
+     *
+     * @throws \InvalidArgumentException If the $content parameter is not a string.
+     */
+    public function setRawContent($content)
+    {
+        parent::setRawContent($content);
+    }
+
+    /**
      * Sets the uploaded file.
      *
      * @param string                $name         The uploaded file name.
