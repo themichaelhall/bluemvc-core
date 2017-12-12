@@ -324,6 +324,14 @@ class AbstractRequestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test getRawContent method.
+     */
+    public function testGetRawContent()
+    {
+        self::assertSame('', $this->myRequest->getRawContent());
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

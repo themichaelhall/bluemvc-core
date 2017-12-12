@@ -150,6 +150,18 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
+     * Returns the raw content from request.
+     *
+     * @since 1.0.0
+     *
+     * @return string The raw content from request.
+     */
+    public function getRawContent()
+    {
+        return $this->myRawContent;
+    }
+
+    /**
      * Returns a uploaded file by name if it exists, null otherwise.
      *
      * @since 1.0.0
@@ -223,6 +235,7 @@ abstract class AbstractRequest implements RequestInterface
         $this->setFormParameters($formParameters);
         $this->setUploadedFiles($uploadedFiles);
         $this->setCookies($cookies);
+        $this->myRawContent = '';
     }
 
     /**
@@ -423,6 +436,11 @@ abstract class AbstractRequest implements RequestInterface
      * @var ParameterCollectionInterface My query parameters.
      */
     private $myQueryParameters;
+
+    /**
+     * @var string My raw content.
+     */
+    private $myRawContent;
 
     /**
      * @var UploadedFileCollectionInterface My uploaded files.

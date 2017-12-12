@@ -111,6 +111,15 @@ interface RequestInterface
     public function getQueryParameters();
 
     /**
+     * Returns the raw content from request.
+     *
+     * @since 1.0.0
+     *
+     * @return string The raw content from request.
+     */
+    public function getRawContent();
+
+    /**
      * Returns a uploaded file by name if it exists, null otherwise.
      *
      * @since 1.0.0
