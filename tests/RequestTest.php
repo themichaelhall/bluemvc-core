@@ -4,6 +4,7 @@ namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\Exceptions\ServerEnvironmentException;
 use BlueMvc\Core\Request;
+use BlueMvc\Core\Tests\Helpers\Fakes\FakeFileGetContentsPhpInput;
 use BlueMvc\Core\Tests\Helpers\Fakes\FakeIsUploadedFile;
 
 /**
@@ -647,11 +648,49 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test getRawContentMethod with no content set.
+     */
+    public function testGetRawContentWithNoContentSet()
+    {
+        $_SERVER =
+            [
+                'HTTP_HOST'      => 'www.domain.com',
+                'REQUEST_URI'    => '/foo/bar',
+                'REQUEST_METHOD' => 'GET',
+            ];
+
+        $request = new Request();
+
+        self::assertSame('', $request->getRawContent());
+    }
+
+    /**
+     * Test getRawContentMethod with content set.
+     */
+    public function testGetRawContentWithContentSet()
+    {
+        $_SERVER =
+            [
+                'HTTP_HOST'      => 'www.domain.com',
+                'REQUEST_URI'    => '/foo/bar',
+                'REQUEST_METHOD' => 'GET',
+            ];
+
+        FakeFileGetContentsPhpInput::setContent('<foo><bar>Baz</bar></foo>');
+
+        $request = new Request();
+
+        self::assertSame('<foo><bar>Baz</bar></foo>', $request->getRawContent());
+        self::assertSame('<foo><bar>Baz</bar></foo>', $request->getRawContent()); // Can be fetched multiple times.
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
     {
         FakeIsUploadedFile::enable();
+        FakeFileGetContentsPhpInput::enable();
     }
 
     /**
@@ -666,5 +705,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $_COOKIE = [];
 
         FakeIsUploadedFile::disable();
+        FakeFileGetContentsPhpInput::disable();
     }
 }

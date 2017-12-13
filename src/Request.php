@@ -47,6 +47,25 @@ class Request extends AbstractRequest
             self::myParseUploadedFiles($_FILES),
             self::myParseCookies($_COOKIE)
         );
+
+        $this->myRawContentIsFetched = false;
+    }
+
+    /**
+     * Returns the raw content from request.
+     *
+     * @since 1.0.0
+     *
+     * @return string The raw content from request.
+     */
+    public function getRawContent()
+    {
+        if (!$this->myRawContentIsFetched) {
+            $this->setRawContent(file_get_contents('php://input'));
+            $this->myRawContentIsFetched = true;
+        }
+
+        return parent::getRawContent();
     }
 
     /**
@@ -204,4 +223,9 @@ class Request extends AbstractRequest
         UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk (UPLOAD_ERR_CANT_WRITE).',
         UPLOAD_ERR_EXTENSION  => 'File upload stopped by extension (UPLOAD_ERR_EXTENSION).',
     ];
+
+    /**
+     * @var bool True if raw content is fetched, false otherwise.
+     */
+    private $myRawContentIsFetched;
 }
