@@ -178,7 +178,10 @@ class SessionItemCollection implements SessionItemCollectionInterface
     private static function myInit()
     {
         if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
+            session_start([
+                'cookie_httponly' => true,
+                'use_strict_mode' => true,
+            ]);
         }
     }
 }

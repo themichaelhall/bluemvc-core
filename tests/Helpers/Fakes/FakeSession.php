@@ -74,8 +74,10 @@ namespace BlueMvc\Core\Collections {
 
     /**
      * Fakes the session_start method.
+     *
+     * @param array $options The options.
      */
-    function session_start()
+    function session_start(array $options = [])
     {
         if (FakeSession::isEnabled()) {
             FakeSession::start();
@@ -83,7 +85,7 @@ namespace BlueMvc\Core\Collections {
             return;
         }
 
-        \session_start();
+        \session_start($options);
     }
 
     /**
