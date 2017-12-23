@@ -45,18 +45,6 @@ class Route extends AbstractRoute
     }
 
     /**
-     * Return the path.
-     *
-     * @since 1.0.0
-     *
-     * @return string The path.
-     */
-    public function getPath()
-    {
-        return $this->myPath;
-    }
-
-    /**
      * Check if a route matches a request.
      *
      * @since 1.0.0

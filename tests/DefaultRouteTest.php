@@ -45,108 +45,39 @@ class DefaultRouteTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test that all url matches.
+     * @dataProvider matchesDataProvider
+     *
+     * Test matches method.
+     *
+     * @param string $urlPath            The url path.
+     * @param string $expectedAction     The expected action.
+     * @param array  $expectedParameters The expected parameters.
      */
-    public function testAllUrlMatches()
+    public function testMatches($urlPath, $expectedAction, array $expectedParameters)
     {
         $route = new DefaultRoute(BasicTestController::class);
+        $routeMatch = $route->matches(new BasicTestRequest(Url::parse('https://example.com' . $urlPath), new Method('GET')));
 
-        self::assertNotNull($route->matches(new BasicTestRequest(Url::parse('https://www.example.com/'), new Method('GET'))));
-        self::assertNotNull($route->matches(new BasicTestRequest(Url::parse('https://www.example.com/foo'), new Method('GET'))));
-        self::assertNotNull($route->matches(new BasicTestRequest(Url::parse('https://www.example.com/foo/'), new Method('GET'))));
-        self::assertNotNull($route->matches(new BasicTestRequest(Url::parse('https://www.example.com/foo/bar'), new Method('GET'))));
-        self::assertNotNull($route->matches(new BasicTestRequest(Url::parse('https://www.example.com/foo/bar/'), new Method('GET'))));
+        self::assertSame($expectedAction, $routeMatch->getAction());
+        self::assertSame($expectedParameters, $routeMatch->getParameters());
     }
 
     /**
-     * Test route match result for index page.
+     * Data provider for matches test.
+     *
+     * @return array The data.
      */
-    public function testRouteMatchResultForIndexPage()
+    public function matchesDataProvider()
     {
-        $route = new DefaultRoute(BasicTestController::class);
-        $routeMatch = $route->matches(new BasicTestRequest(Url::parse('https://www.example.com/'), new Method('GET')));
-
-        self::assertSame(BasicTestController::class, $routeMatch->getControllerClassName());
-        self::assertSame('', $routeMatch->getAction());
-        self::assertSame([], $routeMatch->getParameters());
-    }
-
-    /**
-     * Test route match result for root page.
-     */
-    public function testRouteMatchResultForRootPage()
-    {
-        $route = new DefaultRoute(BasicTestController::class);
-        $routeMatch = $route->matches(new BasicTestRequest(Url::parse('https://www.example.com/foo'), new Method('GET')));
-
-        self::assertSame(BasicTestController::class, $routeMatch->getControllerClassName());
-        self::assertSame('foo', $routeMatch->getAction());
-        self::assertSame([], $routeMatch->getParameters());
-    }
-
-    /**
-     * Test route match result for first level index.
-     */
-    public function testRouteMatchResultForFirstLevelIndex()
-    {
-        $route = new DefaultRoute(BasicTestController::class);
-        $routeMatch = $route->matches(new BasicTestRequest(Url::parse('https://www.example.com/foo/'), new Method('GET')));
-
-        self::assertSame(BasicTestController::class, $routeMatch->getControllerClassName());
-        self::assertSame('foo', $routeMatch->getAction());
-        self::assertSame([''], $routeMatch->getParameters());
-    }
-
-    /**
-     * Test route match result for first level page.
-     */
-    public function testRouteMatchResultForFirstLevelPage()
-    {
-        $route = new DefaultRoute(BasicTestController::class);
-        $routeMatch = $route->matches(new BasicTestRequest(Url::parse('https://www.example.com/foo/bar'), new Method('GET')));
-
-        self::assertSame(BasicTestController::class, $routeMatch->getControllerClassName());
-        self::assertSame('foo', $routeMatch->getAction());
-        self::assertSame(['bar'], $routeMatch->getParameters());
-    }
-
-    /**
-     * Test route match result for second level index.
-     */
-    public function testRouteMatchResultForSecondLevelIndexOnPathController()
-    {
-        $route = new DefaultRoute(BasicTestController::class);
-        $routeMatch = $route->matches(new BasicTestRequest(Url::parse('https://www.example.com/foo/bar/'), new Method('GET')));
-
-        self::assertSame(BasicTestController::class, $routeMatch->getControllerClassName());
-        self::assertSame('foo', $routeMatch->getAction());
-        self::assertSame(['bar', ''], $routeMatch->getParameters());
-    }
-
-    /**
-     * Test route match result for second level page.
-     */
-    public function testRouteMatchResultForSecondLevelPage()
-    {
-        $route = new DefaultRoute(BasicTestController::class);
-        $routeMatch = $route->matches(new BasicTestRequest(Url::parse('https://www.example.com/foo/bar/baz'), new Method('GET')));
-
-        self::assertSame(BasicTestController::class, $routeMatch->getControllerClassName());
-        self::assertSame('foo', $routeMatch->getAction());
-        self::assertSame(['bar', 'baz'], $routeMatch->getParameters());
-    }
-
-    /**
-     * Test route match result for third level index.
-     */
-    public function testRouteMatchResultForThirdLevelIndex()
-    {
-        $route = new DefaultRoute(BasicTestController::class);
-        $routeMatch = $route->matches(new BasicTestRequest(Url::parse('https://www.example.com/foo/bar/baz/'), new Method('GET')));
-
-        self::assertSame(BasicTestController::class, $routeMatch->getControllerClassName());
-        self::assertSame('foo', $routeMatch->getAction());
-        self::assertSame(['bar', 'baz', ''], $routeMatch->getParameters());
+        return [
+            ['/', '', []],
+            ['/foo', 'foo', []],
+            ['/foo/', 'foo', ['']],
+            ['/foo/bar', 'foo', ['bar']],
+            ['/foo/bar/', 'foo', ['bar', '']],
+            ['/foo/bar/baz', 'foo', ['bar', 'baz']],
+            ['/foo/bar/baz/', 'foo', ['bar', 'baz', '']],
+        ];
     }
 
     /**
