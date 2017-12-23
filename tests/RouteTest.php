@@ -14,14 +14,25 @@ use DataTypes\Url;
 class RouteTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Test that invalid path is invalid.
+     * Test path with invalid character.
      *
      * @expectedException \BlueMvc\Core\Exceptions\InvalidRoutePathException
-     * @expectedExceptionMessage Path "Foo/Bar" contains invalid character "/".
+     * @expectedExceptionMessage Path "Foo*Bar" contains invalid character "*".
      */
-    public function testInvalidPathIsInvalid()
+    public function testPathWithInvalidCharacter()
     {
-        new Route('Foo/Bar', BasicTestController::class);
+        new Route('Foo*Bar', BasicTestController::class);
+    }
+
+    /**
+     * Test path with empty part.
+     *
+     * @expectedException \BlueMvc\Core\Exceptions\InvalidRoutePathException
+     * @expectedExceptionMessage Path "Foo//Bar" contains empty part.
+     */
+    public function testPathWithEmptyPart()
+    {
+        new Route('Foo//Bar', BasicTestController::class);
     }
 
     /**
@@ -105,6 +116,36 @@ class RouteTest extends \PHPUnit_Framework_TestCase
             ['bar', '/foo/bar/', false],
             ['bar', '/foo/bar/baz', false],
             ['bar', '/foo/bar/baz/', false],
+            ['foo/bar', '/', false],
+            ['foo/bar', '/foo', false],
+            ['foo/bar', '/foo/', false],
+            ['foo/bar', '/foo/bar', false],
+            ['foo/bar', '/foo/bar/', true, '', []],
+            ['foo/bar', '/foo/bar/baz', true, 'baz', []],
+            ['foo/bar', '/foo/bar/baz/', true, 'baz', ['']],
+            ['foo/bar', '/foo/bar/baz/1', true, 'baz', ['1']],
+            ['foo/bar', '/foo/bar/baz/1/', true, 'baz', ['1', '']],
+            ['foo/bar', '/foo/bar/baz/1/2', true, 'baz', ['1', '2']],
+            ['foo/baz', '/', false],
+            ['foo/baz', '/foo', false],
+            ['foo/baz', '/foo/', false],
+            ['foo/baz', '/foo/bar', false],
+            ['foo/baz', '/foo/bar/', false],
+            ['foo/baz', '/foo/bar/baz', false],
+            ['foo/baz', '/foo/bar/baz/', false],
+            ['foo/baz', '/foo/bar/baz/1', false],
+            ['foo/baz', '/foo/bar/baz/1/', false],
+            ['foo/baz', '/foo/bar/baz/1/2', false],
+            ['foo/bar/baz', '/', false],
+            ['foo/bar/baz', '/foo', false],
+            ['foo/bar/baz', '/foo/', false],
+            ['foo/bar/baz', '/foo/bar', false],
+            ['foo/bar/baz', '/foo/bar/', false],
+            ['foo/bar/baz', '/foo/bar/baz', false],
+            ['foo/bar/baz', '/foo/bar/baz/', true, '', []],
+            ['foo/bar/baz', '/foo/bar/baz/1', true, '1', []],
+            ['foo/bar/baz', '/foo/bar/baz/1/', true, '1', ['']],
+            ['foo/bar/baz', '/foo/bar/baz/1/2', true, '1', ['2']],
         ];
     }
 

@@ -39,9 +39,7 @@ class Route extends AbstractRoute
 
         parent::__construct($controllerClassName);
 
-        // Validate path.
-        self::myValidatePath($path);
-        $this->myPath = $path;
+        $this->myPath = self::mySplitPath($path);
     }
 
     /**
@@ -57,52 +55,76 @@ class Route extends AbstractRoute
     {
         $path = $request->getUrl()->getPath();
         $directoryParts = $path->getDirectoryParts();
+        $filename = $path->getFilename() ?: '';
 
-        if (count($directoryParts) === 0) {
-            // Root path, e.g. "/" or "/foo"
-            if ($this->myPath === '') {
-                $action = $path->getFilename() !== null ? $path->getFilename() : '';
-
-                return new RouteMatch($this->getControllerClassName(), $action);
+        if (count($this->myPath) === 0) {
+            // My path is empty, i.e. should only match root path.
+            if (count($directoryParts) !== 0) {
+                return null;
             }
-        } else {
-            // Subdirectory, e.g. "/foo/" or "/foo/bar/"
-            if ($directoryParts[0] === $this->myPath) {
-                if (count($directoryParts) > 1) {
-                    // Path is more than one level, e.g. "/foo/bar/" or "/foo/bar/baz".
-                    // This means that the first level directory is the action and the rest, including file name, are the parameters.
-                    $action = $directoryParts[1];
-                    $parameters = array_merge(array_slice($directoryParts, 2), [$path->getFilename() !== null ? $path->getFilename() : '']);
-                } else {
-                    // Path is one level, e.g. "/foo/" or "/foo/bar".
-                    // This means that the file name is the action and there are no parameters.
-                    $action = $path->getFilename() !== null ? $path->getFilename() : '';
-                    $parameters = [];
-                }
 
-                return new RouteMatch($this->getControllerClassName(), $action, $parameters);
-            }
+            return new RouteMatch($this->getControllerClassName(), $filename);
         }
 
-        return null;
+        if (count($this->myPath) > count($directoryParts)) {
+            // My path contains more than the path in request, e.g. path /foo/ should not match /bar
+            return null;
+        }
+
+        // Check each parts.
+        $index = 0;
+        foreach ($this->myPath as $pathPart) {
+            // Part of path does not match.
+            if ($pathPart !== $directoryParts[$index]) {
+                return null;
+            }
+
+            $index++;
+        }
+
+        if (count($directoryParts) > $index) {
+            $action = $directoryParts[$index];
+            $parameters = array_slice($directoryParts, $index + 1);
+            $parameters[] = $filename;
+        } else {
+            $action = $filename;
+            $parameters = [];
+        }
+
+        return new RouteMatch($this->getControllerClassName(), $action, $parameters);
     }
 
     /**
-     * Validates the path.
+     * Splits a path in parts.
      *
      * @param string $path The path.
      *
-     * @throws InvalidRoutePathException If the $path parameter is invalid.
+     * @throws InvalidRoutePathException If the path is invalid.
+     *
+     * @return string[] The path as parts.
      */
-    private static function myValidatePath($path)
+    private static function mySplitPath($path)
     {
-        if (preg_match('/[^a-zA-Z0-9._-]/', $path, $matches)) {
-            throw new InvalidRoutePathException('Path "' . $path . '" contains invalid character "' . $matches[0] . '".');
+        if ($path === '') {
+            return [];
         }
+
+        $result = explode('/', $path);
+
+        foreach ($result as $pathPart) {
+            if ($pathPart === '') {
+                throw new InvalidRoutePathException('Path "' . $path . '" contains empty part.');
+            }
+            if (preg_match('/[^a-zA-Z0-9._-]/', $pathPart, $matches)) {
+                throw new InvalidRoutePathException('Path "' . $path . '" contains invalid character "' . $matches[0] . '".');
+            }
+        }
+
+        return $result;
     }
 
     /**
-     * @var string My path.
+     * @var string[] My path.
      */
     private $myPath;
 }

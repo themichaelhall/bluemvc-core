@@ -56,7 +56,8 @@ class DefaultRoute extends AbstractRoute
         } else {
             // Subdirectory, e.g. "/foo/" or "/foo/bar/"
             $action = $directoryParts[0];
-            $parameters = array_merge(array_slice($directoryParts, 1), [$filename]);
+            $parameters = array_slice($directoryParts, 1);
+            $parameters[] = $filename;
         }
 
         return new RouteMatch($this->getControllerClassName(), $action, $parameters);
