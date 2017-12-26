@@ -140,6 +140,23 @@ abstract class Controller extends AbstractController
     }
 
     /**
+     * Returns the path to the view files.
+     *
+     * @since 1.0.0
+     *
+     * @return string The path to the view files.
+     */
+    protected function getViewPath()
+    {
+        $result = (new \ReflectionClass($this))->getShortName();
+        if (strlen($result) > 10 && substr(strtolower($result), -10) === 'controller') {
+            $result = substr($result, 0, -10);
+        }
+
+        return $result;
+    }
+
+    /**
      * Handles the result.
      *
      * @param mixed                $result      The result.
@@ -151,7 +168,7 @@ abstract class Controller extends AbstractController
     private function myHandleResult($result, ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, $actionName)
     {
         if ($result instanceof ViewInterface) {
-            $result->updateResponse($application, $request, $response, $this, $actionName, $this->myViewItems);
+            $result->updateResponse($application, $request, $response, $this->getViewPath(), $actionName, $this->myViewItems);
 
             return;
         }

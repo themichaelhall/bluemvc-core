@@ -6,7 +6,6 @@ use BlueMvc\Core\Collections\ViewItemCollection;
 use BlueMvc\Core\Http\Method;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
-use BlueMvc\Core\Tests\Helpers\TestControllers\ViewTestController;
 use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
 use BlueMvc\Core\Tests\Helpers\TestResponses\BasicTestResponse;
 use BlueMvc\Core\Tests\Helpers\TestViewRenderers\BasicTestViewRenderer;
@@ -80,11 +79,32 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
         $request = new BasicTestRequest(Url::parse('https://example.com/'), new Method('GET'));
         $response = new BasicTestResponse();
-        $controller = new ViewTestController();
         $view = new View('The Model');
         $viewItems = new ViewItemCollection();
 
-        $view->updateResponse($application, $request, $response, $controller, 0, $viewItems);
+        $view->updateResponse($application, $request, $response, 'ViewTest', 0, $viewItems);
+    }
+
+    /**
+     * Test update response method with invalid view path parameter.
+     *
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage $viewPath parameter is not a string.
+     */
+    public function testUpdateResponseWithInvalidViewPathParameter()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
+        $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
+        $application->addViewRenderer(new BasicTestViewRenderer());
+
+        $request = new BasicTestRequest(Url::parse('https://example.com/'), new Method('GET'));
+        $response = new BasicTestResponse();
+        $view = new View('The Model');
+        $viewItems = new ViewItemCollection();
+
+        $view->updateResponse($application, $request, $response, true, '', $viewItems);
     }
 
     /**
@@ -100,12 +120,11 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
         $request = new BasicTestRequest(Url::parse('https://example.com/withviewdata'), new Method('GET'));
         $response = new BasicTestResponse();
-        $controller = new ViewTestController();
         $view = new View('The Model');
         $viewItems = new ViewItemCollection();
         $viewItems->set('Foo', 'The View Data');
 
-        $view->updateResponse($application, $request, $response, $controller, 'withviewdata', $viewItems);
+        $view->updateResponse($application, $request, $response, 'ViewTest', 'withviewdata', $viewItems);
 
         self::assertSame('<html><body><h1>With model and view data</h1><span>' . $application->getDocumentRoot() . '</span><em>' . $request->getUrl() . '</em><p>The Model</p><i>The View Data</i></body></html>', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
@@ -124,13 +143,12 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
         $request = new BasicTestRequest(Url::parse('https://example.com/withnoviewfile'), new Method('GET'));
         $response = new BasicTestResponse();
-        $controller = new ViewTestController();
         $view = new View('The Model');
         $viewItems = new ViewItemCollection();
         $exception = null;
 
         try {
-            $view->updateResponse($application, $request, $response, $controller, 'withnoviewfile', $viewItems);
+            $view->updateResponse($application, $request, $response, 'ViewTest', 'withnoviewfile', $viewItems);
         } catch (\Exception $exception) {
         }
 
@@ -151,11 +169,10 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
         $request = new BasicTestRequest(Url::parse('https://example.com/'), new Method('GET'));
         $response = new BasicTestResponse();
-        $controller = new ViewTestController();
         $view = new View('The Model', 'custom');
         $viewItems = new ViewItemCollection();
 
-        $view->updateResponse($application, $request, $response, $controller, 'index', $viewItems);
+        $view->updateResponse($application, $request, $response, 'ViewTest', 'index', $viewItems);
 
         self::assertSame('<html><body><h1>Custom view file</h1><span>' . $application->getDocumentRoot() . '</span><em>https://example.com/</em><p>The Model</p></body></html>', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
@@ -186,12 +203,11 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
         $request = new BasicTestRequest(Url::parse('https://example.com/altername'), new Method('GET'));
         $response = new BasicTestResponse();
-        $controller = new ViewTestController();
         $view = new View('The Model');
         $viewItems = new ViewItemCollection();
         $viewItems->set('Foo', 'The View Data');
 
-        $view->updateResponse($application, $request, $response, $controller, 'alternate', $viewItems);
+        $view->updateResponse($application, $request, $response, 'ViewTest', 'alternate', $viewItems);
 
         self::assertSame('<html><body><h1>Alternate</h1><span>' . $application->getDocumentRoot() . '</span><em>' . $request->getUrl() . '</em><p>The Model</p><i>The View Data</i></body></html>', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
@@ -211,12 +227,11 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
         $request = new BasicTestRequest(Url::parse('https://example.com/altername'), new Method('GET'));
         $response = new BasicTestResponse();
-        $controller = new ViewTestController();
         $view = new View('The Model');
         $viewItems = new ViewItemCollection();
         $viewItems->set('Foo', 'The View Data');
 
-        $view->updateResponse($application, $request, $response, $controller, 'alternate', $viewItems);
+        $view->updateResponse($application, $request, $response, 'ViewTest', 'alternate', $viewItems);
 
         self::assertSame('{"Model":"The Model","ViewItems":{"Foo":"The View Data"}}', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
@@ -236,12 +251,11 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
         $request = new BasicTestRequest(Url::parse('https://example.com/onlyjson'), new Method('GET'));
         $response = new BasicTestResponse();
-        $controller = new ViewTestController();
         $view = new View('The Model');
         $viewItems = new ViewItemCollection();
         $viewItems->set('Foo', 'The View Data');
 
-        $view->updateResponse($application, $request, $response, $controller, 'onlyjson', $viewItems);
+        $view->updateResponse($application, $request, $response, 'ViewTest', 'onlyjson', $viewItems);
 
         self::assertSame('{"Model":"The Model"}', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
@@ -262,10 +276,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
         $request = new BasicTestRequest(Url::parse('https://example.com/'), new Method('GET'));
         $response = new BasicTestResponse();
-        $controller = new ViewTestController();
         $view = new View();
         $viewItems = new ViewItemCollection();
 
-        $view->updateResponse($application, $request, $response, $controller, 'index', $viewItems);
+        $view->updateResponse($application, $request, $response, 'ViewTest', 'index', $viewItems);
     }
 }

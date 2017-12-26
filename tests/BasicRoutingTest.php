@@ -13,6 +13,7 @@ use BlueMvc\Core\Tests\Helpers\TestControllers\ActionMethodVisibilityTestControl
 use BlueMvc\Core\Tests\Helpers\TestControllers\ActionResultTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\CookieTestController;
+use BlueMvc\Core\Tests\Helpers\TestControllers\CustomViewPathTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\DefaultActionTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\DefaultActionWithViewTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ErrorTestController;
@@ -232,6 +233,26 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
 
         self::assertSame('<html><body><h1>Custom view file</h1><span>' . $this->application->getDocumentRoot() . '</span><em>http://www.domain.com/view/withcustomviewfile</em><p>This is the model.</p></body></html>', $responseOutput);
         self::assertSame('<html><body><h1>Custom view file</h1><span>' . $this->application->getDocumentRoot() . '</span><em>http://www.domain.com/view/withcustomviewfile</em><p>This is the model.</p></body></html>', $response->getContent());
+        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Test get view with custom view path.
+     */
+    public function testGetViewWithCustomViewFilePath()
+    {
+        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/customViewPath/', 'REQUEST_METHOD' => 'GET'];
+
+        $request = new Request();
+        $response = new Response();
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        self::assertSame('<html><body><h1>View in custom view path</h1></body></html>', $responseOutput);
+        self::assertSame('<html><body><h1>View in custom view path</h1></body></html>', $response->getContent());
         self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
@@ -1178,6 +1199,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
 
         $this->application->addRoute(new Route('', BasicTestController::class));
         $this->application->addRoute(new Route('view', ViewTestController::class));
+        $this->application->addRoute(new Route('customViewPath', CustomViewPathTestController::class));
         $this->application->addRoute(new Route('default', DefaultActionTestController::class));
         $this->application->addRoute(new Route('defaultview', DefaultActionWithViewTestController::class));
         $this->application->addRoute(new Route('actionresult', ActionResultTestController::class));

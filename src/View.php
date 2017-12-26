@@ -12,7 +12,6 @@ use BlueMvc\Core\Exceptions\MissingViewRendererException;
 use BlueMvc\Core\Exceptions\ViewFileNotFoundException;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\Collections\ViewItemCollectionInterface;
-use BlueMvc\Core\Interfaces\ControllerInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
 use BlueMvc\Core\Interfaces\ViewInterface;
@@ -83,23 +82,22 @@ class View implements ViewInterface
      * @param ApplicationInterface        $application The application.
      * @param RequestInterface            $request     The request.
      * @param ResponseInterface           $response    The response.
-     * @param ControllerInterface         $controller  The controller.
+     * @param string                      $viewPath    The relative path to the view.
      * @param string                      $action      The action.
      * @param ViewItemCollectionInterface $viewItems   The view items.
      *
-     * @throws \InvalidArgumentException    If the $action parameter is not a string.
+     * @throws \InvalidArgumentException    If any of the parameters are of invalid type.
      * @throws MissingViewRendererException If no view renderer was added to the application.
      * @throws ViewFileNotFoundException    If a suitable view file could not be found.
      */
-    public function updateResponse(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, ControllerInterface $controller, $action, ViewItemCollectionInterface $viewItems)
+    public function updateResponse(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, $viewPath, $action, ViewItemCollectionInterface $viewItems)
     {
-        if (!is_string($action)) {
-            throw new \InvalidArgumentException('$action parameter is not a string.');
+        if (!is_string($viewPath)) {
+            throw new \InvalidArgumentException('$viewPath parameter is not a string.');
         }
 
-        $controllerName = (new \ReflectionClass($controller))->getShortName();
-        if (strlen($controllerName) > 10 && substr(strtolower($controllerName), -10) === 'controller') {
-            $controllerName = substr($controllerName, 0, -10);
+        if (!is_string($action)) {
+            throw new \InvalidArgumentException('$action parameter is not a string.');
         }
 
         $viewRenderers = $application->getViewRenderers();
@@ -110,7 +108,7 @@ class View implements ViewInterface
         // Try the view renderers until a match is found.
         $testedViewFiles = [];
         foreach ($viewRenderers as $viewRenderer) {
-            $viewFile = FilePath::parse($controllerName . DIRECTORY_SEPARATOR . ($this->getFile() ?: $action) . '.' . $viewRenderer->getViewFileExtension());
+            $viewFile = FilePath::parse($viewPath . DIRECTORY_SEPARATOR . ($this->getFile() ?: $action) . '.' . $viewRenderer->getViewFileExtension());
             $fullViewFile = $application->getViewPath()->withFilePath($viewFile);
 
             if (file_exists($fullViewFile->__toString())) {

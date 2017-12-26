@@ -9,6 +9,7 @@ use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ActionMethodVisibilityTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ActionResultTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
+use BlueMvc\Core\Tests\Helpers\TestControllers\CustomViewPathTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\DefaultActionTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\MultiLevelTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\PreAndPostActionEventController;
@@ -210,6 +211,26 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $controller->processRequest($application, $request, $response, 'withcustomviewfile');
 
         self::assertSame('<html><body><h1>Custom view file</h1><span>' . $application->getDocumentRoot() . '</span><em>http://www.domain.com/withcustomviewfile</em><p>This is the model.</p></body></html>', $response->getContent());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Test an action returning a custom view file.
+     */
+    public function testControllerWithCustomViewPath()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
+        $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
+        $application->addViewRenderer(new BasicTestViewRenderer());
+
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
+        $response = new BasicTestResponse();
+        $controller = new CustomViewPathTestController();
+        $controller->processRequest($application, $request, $response, '');
+
+        self::assertSame('<html><body><h1>View in custom view path</h1></body></html>', $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
