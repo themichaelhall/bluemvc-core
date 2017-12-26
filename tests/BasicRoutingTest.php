@@ -1114,6 +1114,58 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test get page with multiple level route path.
+     *
+     * @dataProvider multipleLevelRoutePathDataProvider
+     *
+     * @param string $url                The (relative) url.
+     * @param string $expectedContent    The expected content.
+     * @param array  $expectedHeaders    The expected headers.
+     * @param int    $expectedStatusCode The expected status code.
+     */
+    public function testMultipleLevelRoutePathPage($url, $expectedContent, array $expectedHeaders, $expectedStatusCode)
+    {
+        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/multiple/level/' . $url, 'REQUEST_METHOD' => 'GET'];
+
+        $request = new Request();
+        $response = new Response();
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        self::assertSame($expectedContent, $responseOutput);
+        self::assertSame($expectedContent, $response->getContent());
+        self::assertSame($expectedHeaders, FakeHeaders::get());
+        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Data provider for multiple level route path tests.
+     *
+     * @return array The data.
+     */
+    public function multipleLevelRoutePathDataProvider()
+    {
+        return [
+            ['noparams', 'No Parameters', ['HTTP/1.1 200 OK'], 200],
+            ['noparams/', '', ['HTTP/1.1 404 Not Found'], 404],
+            ['foo', '', ['HTTP/1.1 404 Not Found'], 404],
+            ['foo/', 'FooAction: Foo=[]', ['HTTP/1.1 200 OK'], 200],
+            ['foo/param1', 'FooAction: Foo=[param1]', ['HTTP/1.1 200 OK'], 200],
+            ['foo/param1/', '', ['HTTP/1.1 404 Not Found'], 404],
+            ['foobar/param1', '', ['HTTP/1.1 404 Not Found'], 404],
+            ['foobar/param1/', 'FooBarAction: Foo=[param1], Bar=[]', ['HTTP/1.1 200 OK'], 200],
+            ['foobar/param1/param2', 'FooBarAction: Foo=[param1], Bar=[param2]', ['HTTP/1.1 200 OK'], 200],
+            ['foobar/param1/param2/', '', ['HTTP/1.1 404 Not Found'], 404],
+            ['foobarbaz/param1/param2', '', ['HTTP/1.1 404 Not Found'], 404],
+            ['foobarbaz/param1/param2/', 'FooBarBazAction: Foo=[param1], Bar=[param2], Baz=[]', ['HTTP/1.1 200 OK'], 200],
+            ['foobarbaz/param1/param2/param3', 'FooBarBazAction: Foo=[param1], Bar=[param2], Baz=[param3]', ['HTTP/1.1 200 OK'], 200],
+            ['foobarbaz/param1/param2/param3/', '', ['HTTP/1.1 404 Not Found'], 404],
+        ];
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
@@ -1136,6 +1188,7 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
         $this->application->addRoute(new Route('actionMethodVisibility', ActionMethodVisibilityTestController::class));
         $this->application->addRoute(new Route('specialActionName', SpecialActionNameTestController::class));
         $this->application->addRoute(new Route('cookies', CookieTestController::class));
+        $this->application->addRoute(new Route('multiple/level', MultiLevelTestController::class));
     }
 
     /**
