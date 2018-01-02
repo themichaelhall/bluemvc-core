@@ -650,9 +650,9 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test getAction method for index action.
+     * Test getActionMethod method for index action.
      */
-    public function testGetActionForIndexAction()
+    public function testGetActionMethodForIndexAction()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
@@ -660,13 +660,13 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, '', []);
 
-        self::assertSame('index', $controller->getActionName());
+        self::assertSame('indexAction', $controller->getActionMethod()->getName());
     }
 
     /**
-     * Test getAction method for custom action.
+     * Test getActionMethod method for custom action.
      */
-    public function testGetActionForCustomAction()
+    public function testGetActionMethodForCustomAction()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $request = new BasicTestRequest(Url::parse('http://www.domain.com/int'), new Method('GET'));
@@ -674,13 +674,13 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, 'int', []);
 
-        self::assertSame('int', $controller->getActionName());
+        self::assertSame('intAction', $controller->getActionMethod()->getName());
     }
 
     /**
-     * Test getAction method for default action.
+     * Test getActionMethod method for default action.
      */
-    public function testGetActionForDefaultAction()
+    public function testGetActionMethodForDefaultAction()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $request = new BasicTestRequest(Url::parse('http://www.domain.com/bar'), new Method('GET'));
@@ -688,13 +688,13 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $controller = new DefaultActionTestController();
         $controller->processRequest($application, $request, $response, 'bar', []);
 
-        self::assertSame('default', $controller->getActionName());
+        self::assertSame('defaultAction', $controller->getActionMethod()->getName());
     }
 
     /**
-     * Test getAction method for invalid action.
+     * Test getActionMethod method for invalid action.
      */
-    public function testGetActionForInvalidAction()
+    public function testGetActionMethodForInvalidAction()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $request = new BasicTestRequest(Url::parse('http://www.domain.com/foo'), new Method('GET'));
@@ -702,6 +702,6 @@ class ControllerTest extends \PHPUnit_Framework_TestCase
         $controller = new BasicTestController();
         $controller->processRequest($application, $request, $response, 'foo', []);
 
-        self::assertNull($controller->getActionName());
+        self::assertNull($controller->getActionMethod());
     }
 }

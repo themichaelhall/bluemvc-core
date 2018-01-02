@@ -20,15 +20,15 @@ use BlueMvc\Core\Interfaces\ResponseInterface;
 abstract class AbstractController implements ControllerInterface
 {
     /**
-     * Returns the name of the action being processed or null if no action is being processed.
+     * Returns the method of the action being processed or null if no action is being processed.
      *
      * @since 1.0.0
      *
-     * @return string|null The name of the action being processed or null if no action is being processed.
+     * @return \ReflectionMethod|null The method of the action being processed or null if no action is being processed.
      */
-    public function getActionName()
+    public function getActionMethod()
     {
-        return $this->myActionName;
+        return $this->myActionMethod;
     }
 
     /**
@@ -95,7 +95,7 @@ abstract class AbstractController implements ControllerInterface
         $this->myApplication = null;
         $this->myRequest = null;
         $this->myResponse = null;
-        $this->myActionName = null;
+        $this->myActionMethod = null;
     }
 
     /**
@@ -154,7 +154,6 @@ abstract class AbstractController implements ControllerInterface
             return false;
         }
 
-        $this->myActionName = $action;
         $result = $this->myInvokeActionMethod($actionMethod, $parameters);
 
         return true;
@@ -170,6 +169,8 @@ abstract class AbstractController implements ControllerInterface
      */
     private function myInvokeActionMethod(\ReflectionMethod $actionMethod, array $parameters)
     {
+        $this->myActionMethod = $actionMethod;
+
         // Handle pre-action event.
         $preActionResult = $this->onPreActionEvent();
         if ($preActionResult !== null) {
@@ -267,7 +268,7 @@ abstract class AbstractController implements ControllerInterface
     private $myResponse;
 
     /**
-     * @var string|null My action name.
+     * @var \ReflectionMethod|null My action method.
      */
-    private $myActionName;
+    private $myActionMethod;
 }
