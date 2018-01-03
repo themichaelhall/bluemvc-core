@@ -229,6 +229,12 @@ abstract class AbstractApplication implements ApplicationInterface
     {
         $exception = null;
 
+        foreach ($this->myPlugins as $plugin) {
+            if ($plugin->onPreRequest($this, $request, $response)) {
+                return;
+            }
+        }
+
         try {
             $this->myHandleRequest($request, $response);
         } catch (\Exception $e) {
@@ -236,8 +242,17 @@ abstract class AbstractApplication implements ApplicationInterface
             $exception = $e;
         }
 
+        $hasHandledResponse = true;
         if ($response->getStatusCode()->isError()) {
-            $this->myHandleError($request, $response, $exception);
+            $hasHandledResponse = $this->myHandleError($request, $response, $exception);
+        }
+
+        if ($hasHandledResponse) {
+            foreach ($this->myPlugins as $plugin) {
+                if ($plugin->onPostRequest($this, $request, $response)) {
+                    return;
+                }
+            }
         }
 
         $response->output();
@@ -402,12 +417,6 @@ abstract class AbstractApplication implements ApplicationInterface
      */
     private function myHandleRequest(RequestInterface $request, ResponseInterface $response)
     {
-        foreach ($this->myPlugins as $plugin) {
-            if ($plugin->onPreRequest($this, $request, $response)) {
-                return;
-            }
-        }
-
         $hasFoundController = false;
 
         foreach ($this->myRoutes as $route) {
@@ -428,12 +437,6 @@ abstract class AbstractApplication implements ApplicationInterface
         if (!$hasFoundController) {
             $response->setStatusCode(new StatusCode(StatusCode::NOT_FOUND));
         }
-
-        foreach ($this->myPlugins as $plugin) {
-            if ($plugin->onPostRequest($this, $request, $response)) {
-                return;
-            }
-        }
     }
 
     /**
@@ -442,6 +445,8 @@ abstract class AbstractApplication implements ApplicationInterface
      * @param RequestInterface  $request   The request.
      * @param ResponseInterface $response  The response.
      * @param \Exception|null   $exception The exception or null if no exception.
+     *
+     * @return bool True if response was handled, false otherwise.
      */
     private function myHandleError(RequestInterface $request, ResponseInterface $response, \Exception $exception = null)
     {
@@ -456,10 +461,14 @@ abstract class AbstractApplication implements ApplicationInterface
 
             try {
                 $errorController->processRequest($this, $request, $response, strval($response->getStatusCode()->getCode()), []);
+
+                return true;
             } catch (\Exception $e) {
                 $this->myExceptionToResponse($e, $response);
             }
         }
+
+        return false;
     }
 
     /**
