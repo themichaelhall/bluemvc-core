@@ -231,6 +231,8 @@ abstract class AbstractApplication implements ApplicationInterface
 
         foreach ($this->myPlugins as $plugin) {
             if ($plugin->onPreRequest($this, $request, $response)) {
+                $response->output();
+
                 return;
             }
         }
@@ -250,6 +252,8 @@ abstract class AbstractApplication implements ApplicationInterface
         if ($hasHandledResponse) {
             foreach ($this->myPlugins as $plugin) {
                 if ($plugin->onPostRequest($this, $request, $response)) {
+                    $response->output();
+
                     return;
                 }
             }
