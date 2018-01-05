@@ -3,6 +3,7 @@
 namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\Http\StatusCode;
+use BlueMvc\Core\Interfaces\PluginInterface;
 use BlueMvc\Core\Request;
 use BlueMvc\Core\RequestCookie;
 use BlueMvc\Core\Response;
@@ -23,6 +24,8 @@ use BlueMvc\Core\Tests\Helpers\TestControllers\PreAndPostActionEventController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\SpecialActionNameTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\UppercaseActionTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ViewTestController;
+use BlueMvc\Core\Tests\Helpers\TestPlugins\SetContentTestPlugin;
+use BlueMvc\Core\Tests\Helpers\TestPlugins\SetHeaderTestPlugin;
 use BlueMvc\Core\Tests\Helpers\TestViewRenderers\BasicTestViewRenderer;
 use BlueMvc\Core\Tests\Helpers\TestViewRenderers\JsonTestViewRenderer;
 use DataTypes\FilePath;
@@ -1183,6 +1186,53 @@ class BasicRoutingTest extends \PHPUnit_Framework_TestCase
             ['foobarbaz/param1/param2/', 'FooBarBazAction: Foo=[param1], Bar=[param2], Baz=[]', ['HTTP/1.1 200 OK'], 200],
             ['foobarbaz/param1/param2/param3', 'FooBarBazAction: Foo=[param1], Bar=[param2], Baz=[param3]', ['HTTP/1.1 200 OK'], 200],
             ['foobarbaz/param1/param2/param3/', '', ['HTTP/1.1 404 Not Found'], 404],
+        ];
+    }
+
+    /**
+     * Test page with plugin.
+     *
+     * @dataProvider pageWithPluginDataProvider
+     *
+     * @param PluginInterface $plugin             The plugin.
+     * @param string          $expectedContent    The expected content.
+     * @param array           $expectedHeaders    The expected headers.
+     * @param int             $expectedStatusCode The expected status code.
+     */
+    public function testPageWithPlugin(PluginInterface $plugin, $expectedContent, array $expectedHeaders, $expectedStatusCode)
+    {
+        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET'];
+
+        $this->application->addPlugin($plugin);
+        $request = new Request();
+        $response = new Response();
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        self::assertSame($expectedContent, $responseOutput);
+        self::assertSame($expectedContent, $response->getContent());
+        self::assertSame($expectedHeaders, FakeHeaders::get());
+        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Data provider for page with plugin tests.
+     *
+     * @return array The data.
+     */
+    public function pageWithPluginDataProvider()
+    {
+        return [
+            [new SetHeaderTestPlugin(false, false), 'Hello World!', ['HTTP/1.1 200 OK', 'X-PluginOnPreRequest: 1', 'X-PluginOnPostRequest: 1'], 200],
+            [new SetHeaderTestPlugin(false, true), 'Hello World!', ['HTTP/1.1 200 OK', 'X-PluginOnPreRequest: 1', 'X-PluginOnPostRequest: 1'], 200],
+            [new SetHeaderTestPlugin(true, false), '', ['HTTP/1.1 200 OK', 'X-PluginOnPreRequest: 1'], 200],
+            [new SetHeaderTestPlugin(true, true), '', ['HTTP/1.1 200 OK', 'X-PluginOnPreRequest: 1'], 200],
+            [new SetContentTestPlugin(false, false), 'Hello World!onPostRequest', ['HTTP/1.1 200 OK'], 200],
+            [new SetContentTestPlugin(false, true), 'Hello World!onPostRequest', ['HTTP/1.1 200 OK'], 200],
+            [new SetContentTestPlugin(true, false), 'onPreRequest', ['HTTP/1.1 200 OK'], 200],
+            [new SetContentTestPlugin(true, true), 'onPreRequest', ['HTTP/1.1 200 OK'], 200],
         ];
     }
 
