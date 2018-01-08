@@ -5,5 +5,7 @@
 [![Maintainability](https://api.codeclimate.com/v1/badges/cb863a07a7f70172269f/maintainability)](https://codeclimate.com/github/themichaelhall/bluemvc-core/maintainability)
 [![StyleCI](https://styleci.io/repos/61732117/shield?style=flat)](https://styleci.io/repos/61732117)
 [![License](https://poser.pugx.org/bluemvc/bluemvc-core/license)](https://packagist.org/packages/bluemvc/bluemvc-core)
+[![Latest Stable Version](https://poser.pugx.org/bluemvc/bluemvc-core/v/stable)](https://packagist.org/packages/bluemvc/bluemvc-core)
+[![Total Downloads](https://poser.pugx.org/bluemvc/bluemvc-core/downloads)](https://packagist.org/packages/bluemvc/bluemvc-core)
 
 This project is under construction and is not yet complete. Please check back later.
