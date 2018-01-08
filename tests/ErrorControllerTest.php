@@ -3,11 +3,12 @@
 namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\Tests\Helpers\TestControllers\ErrorTestController;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test ErrorController class.
  */
-class ErrorControllerTest extends \PHPUnit_Framework_TestCase
+class ErrorControllerTest extends TestCase
 {
     /**
      * Test getException method.

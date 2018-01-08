@@ -7,11 +7,12 @@ use BlueMvc\Core\Route;
 use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
 use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
 use DataTypes\Url;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test Route class.
  */
-class RouteTest extends \PHPUnit_Framework_TestCase
+class RouteTest extends TestCase
 {
     /**
      * Test path with invalid character.

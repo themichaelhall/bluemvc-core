@@ -3,11 +3,12 @@
 namespace BlueMvc\Core\Tests\Base;
 
 use BlueMvc\Core\Tests\Helpers\TestViewRenderers\BasicTestViewRenderer;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test AbstractViewRenderer class.
  */
-class AbstractViewRendererTest extends \PHPUnit_Framework_TestCase
+class AbstractViewRendererTest extends TestCase
 {
     /**
      * Test getViewFileExtension method.

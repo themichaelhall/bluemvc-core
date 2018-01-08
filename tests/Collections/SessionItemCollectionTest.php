@@ -5,11 +5,12 @@ namespace BlueMvc\Core\Tests\Collections;
 use BlueMvc\Core\Collections\SessionItemCollection;
 use BlueMvc\Core\Interfaces\Collections\SessionItemCollectionInterface;
 use BlueMvc\Core\Tests\Helpers\Fakes\FakeSession;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test SessionItemCollection class.
  */
-class SessionItemCollectionTest extends \PHPUnit_Framework_TestCase
+class SessionItemCollectionTest extends TestCase
 {
     /**
      * Test that session is not activated by default.

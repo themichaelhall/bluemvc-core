@@ -9,11 +9,12 @@ use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
 use BlueMvc\Core\Tests\Helpers\TestResponses\BasicTestResponse;
 use DataTypes\FilePath;
 use DataTypes\Url;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test ForbiddenResult class.
  */
-class ForbiddenResultTest extends \PHPUnit_Framework_TestCase
+class ForbiddenResultTest extends TestCase
 {
     /**
      * Test default constructor.

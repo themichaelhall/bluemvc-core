@@ -4,11 +4,12 @@ namespace BlueMvc\Core\Tests\Collections;
 
 use BlueMvc\Core\Collections\RequestCookieCollection;
 use BlueMvc\Core\RequestCookie;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test RequestCookieCollection class.
  */
-class RequestCookieCollectionTest extends \PHPUnit_Framework_TestCase
+class RequestCookieCollectionTest extends TestCase
 {
     /**
      * Test count for empty collection.

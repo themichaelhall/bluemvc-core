@@ -9,11 +9,12 @@ use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
 use BlueMvc\Core\Tests\Helpers\TestResponses\BasicTestResponse;
 use DataTypes\FilePath;
 use DataTypes\Url;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test CreatedResult class.
  */
-class CreatedResultTest extends \PHPUnit_Framework_TestCase
+class CreatedResultTest extends TestCase
 {
     /**
      * Test with absolute url.

@@ -18,11 +18,12 @@ use BlueMvc\Core\Tests\Helpers\TestResponses\BasicTestResponse;
 use BlueMvc\Core\Tests\Helpers\TestViewRenderers\BasicTestViewRenderer;
 use DataTypes\FilePath;
 use DataTypes\Url;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test plugin.
  */
-class PluginTest extends \PHPUnit_Framework_TestCase
+class PluginTest extends TestCase
 {
     /**
      * Test plugin handling.

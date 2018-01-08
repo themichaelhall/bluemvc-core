@@ -9,11 +9,12 @@ use BlueMvc\Core\ResponseCookie;
 use BlueMvc\Core\Tests\Helpers\TestResponses\BasicTestResponse;
 use DataTypes\Host;
 use DataTypes\UrlPath;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test AbstractResponse class (via derived test class).
  */
-class AbstractResponseTest extends \PHPUnit_Framework_TestCase
+class AbstractResponseTest extends TestCase
 {
     /**
      * Test getContent method.

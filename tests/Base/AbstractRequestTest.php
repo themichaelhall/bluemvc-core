@@ -12,11 +12,12 @@ use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
 use BlueMvc\Core\UploadedFile;
 use DataTypes\FilePath;
 use DataTypes\Url;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test AbstractRequest class (via derived test class).
  */
-class AbstractRequestTest extends \PHPUnit_Framework_TestCase
+class AbstractRequestTest extends TestCase
 {
     /**
      * Test getUrl method.

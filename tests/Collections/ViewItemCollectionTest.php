@@ -3,11 +3,12 @@
 namespace BlueMvc\Core\Tests\Collections;
 
 use BlueMvc\Core\Collections\ViewItemCollection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test ViewItemCollection class.
  */
-class ViewItemCollectionTest extends \PHPUnit_Framework_TestCase
+class ViewItemCollectionTest extends TestCase
 {
     /**
      * Test count for empty collection.

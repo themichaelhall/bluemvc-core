@@ -11,11 +11,12 @@ use BlueMvc\Core\Tests\Helpers\TestControllers\ErrorTestController;
 use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
 use BlueMvc\Core\Tests\Helpers\TestViewRenderers\BasicTestViewRenderer;
 use DataTypes\FilePath;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test AbstractApplication class (via derived test class).
  */
-class AbstractApplicationTest extends \PHPUnit_Framework_TestCase
+class AbstractApplicationTest extends TestCase
 {
     /**
      * Test getDocumentRoot method.

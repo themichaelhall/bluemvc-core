@@ -11,11 +11,12 @@ use BlueMvc\Core\Tests\Helpers\Fakes\FakeCookies;
 use BlueMvc\Core\Tests\Helpers\Fakes\FakeHeaders;
 use DataTypes\Host;
 use DataTypes\UrlPath;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test Response class.
  */
-class ResponseTest extends \PHPUnit_Framework_TestCase
+class ResponseTest extends TestCase
 {
     /**
      * Test getContent method.

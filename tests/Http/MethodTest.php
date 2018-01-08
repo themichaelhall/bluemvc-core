@@ -3,11 +3,12 @@
 namespace BlueMvc\Core\Tests\Http;
 
 use BlueMvc\Core\Http\Method;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test Method class.
  */
-class MethodTest extends \PHPUnit_Framework_TestCase
+class MethodTest extends TestCase
 {
     /**
      * Test __toString method.

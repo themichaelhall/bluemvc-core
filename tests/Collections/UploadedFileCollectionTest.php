@@ -5,11 +5,12 @@ namespace BlueMvc\Core\Tests\Collections;
 use BlueMvc\Core\Collections\UploadedFileCollection;
 use BlueMvc\Core\UploadedFile;
 use DataTypes\FilePath;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test UploadedFileCollection class.
  */
-class UploadedFileCollectionTest extends \PHPUnit_Framework_TestCase
+class UploadedFileCollectionTest extends TestCase
 {
     /**
      * Test count for empty collection.

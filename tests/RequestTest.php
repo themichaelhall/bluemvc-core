@@ -6,11 +6,12 @@ use BlueMvc\Core\Exceptions\ServerEnvironmentException;
 use BlueMvc\Core\Request;
 use BlueMvc\Core\Tests\Helpers\Fakes\FakeFileGetContentsPhpInput;
 use BlueMvc\Core\Tests\Helpers\Fakes\FakeIsUploadedFile;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test Request class.
  */
-class RequestTest extends \PHPUnit_Framework_TestCase
+class RequestTest extends TestCase
 {
     /**
      * Test getUrl method.

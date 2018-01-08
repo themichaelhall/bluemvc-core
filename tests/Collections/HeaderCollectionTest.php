@@ -3,11 +3,12 @@
 namespace BlueMvc\Core\Tests\Collections;
 
 use BlueMvc\Core\Collections\HeaderCollection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test HeaderCollection class.
  */
-class HeaderCollectionTest extends \PHPUnit_Framework_TestCase
+class HeaderCollectionTest extends TestCase
 {
     /**
      * Test count for empty collection.

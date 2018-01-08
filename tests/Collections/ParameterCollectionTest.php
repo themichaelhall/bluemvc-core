@@ -3,11 +3,12 @@
 namespace BlueMvc\Core\Tests\Collections;
 
 use BlueMvc\Core\Collections\ParameterCollection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test ParameterCollection class.
  */
-class ParameterCollectionTest extends \PHPUnit_Framework_TestCase
+class ParameterCollectionTest extends TestCase
 {
     /**
      * Test count for empty collection.

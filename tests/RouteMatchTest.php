@@ -4,11 +4,12 @@ namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\RouteMatch;
 use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test RouteMatchTest class.
  */
-class RouteMatchTest extends \PHPUnit_Framework_TestCase
+class RouteMatchTest extends TestCase
 {
     /**
      * Test getControllerClassName method.

@@ -5,11 +5,12 @@ namespace BlueMvc\Core\Tests;
 use BlueMvc\Core\Exceptions\InvalidFilePathException;
 use BlueMvc\Core\UploadedFile;
 use DataTypes\FilePath;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test UploadedFile class.
  */
-class UploadedFileTest extends \PHPUnit_Framework_TestCase
+class UploadedFileTest extends TestCase
 {
     /**
      * Test getPath method.

@@ -11,11 +11,12 @@ use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
 use BlueMvc\Core\Tests\Helpers\TestResponses\BasicTestResponse;
 use DataTypes\FilePath;
 use DataTypes\Url;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test JsonResult class.
  */
-class JsonResultTest extends \PHPUnit_Framework_TestCase
+class JsonResultTest extends TestCase
 {
     /**
      * Test with content.

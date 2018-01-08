@@ -5,11 +5,12 @@ namespace BlueMvc\Core\Tests;
 use BlueMvc\Core\ResponseCookie;
 use DataTypes\Host;
 use DataTypes\UrlPath;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test ResponseCookie class.
  */
-class ResponseCookieTest extends \PHPUnit_Framework_TestCase
+class ResponseCookieTest extends TestCase
 {
     /**
      * Test getValue method.

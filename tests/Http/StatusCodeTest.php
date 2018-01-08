@@ -3,11 +3,12 @@
 namespace BlueMvc\Core\Tests\Http;
 
 use BlueMvc\Core\Http\StatusCode;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test StatusCode class.
  */
-class StatusCodeTest extends \PHPUnit_Framework_TestCase
+class StatusCodeTest extends TestCase
 {
     /**
      * Test getCode method.

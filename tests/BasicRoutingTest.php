@@ -29,11 +29,12 @@ use BlueMvc\Core\Tests\Helpers\TestPlugins\SetHeaderTestPlugin;
 use BlueMvc\Core\Tests\Helpers\TestViewRenderers\BasicTestViewRenderer;
 use BlueMvc\Core\Tests\Helpers\TestViewRenderers\JsonTestViewRenderer;
 use DataTypes\FilePath;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test basic routing for a application.
  */
-class BasicRoutingTest extends \PHPUnit_Framework_TestCase
+class BasicRoutingTest extends TestCase
 {
     /**
      * Test get index page.

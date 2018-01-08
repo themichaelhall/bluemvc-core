@@ -6,11 +6,12 @@ use BlueMvc\Core\Collections\ResponseCookieCollection;
 use BlueMvc\Core\ResponseCookie;
 use DataTypes\Host;
 use DataTypes\UrlPath;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test ResponseCookieCollection class.
  */
-class ResponseCookieCollectionTest extends \PHPUnit_Framework_TestCase
+class ResponseCookieCollectionTest extends TestCase
 {
     /**
      * Test count for empty collection.

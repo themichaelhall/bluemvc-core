@@ -7,11 +7,12 @@ use BlueMvc\Core\Http\Method;
 use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
 use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
 use DataTypes\Url;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test DefaultRoute class.
  */
-class DefaultRouteTest extends \PHPUnit_Framework_TestCase
+class DefaultRouteTest extends TestCase
 {
     /**
      * Test getControllerClassName method.

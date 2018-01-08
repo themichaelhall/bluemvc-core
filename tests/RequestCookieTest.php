@@ -3,11 +3,12 @@
 namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\RequestCookie;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test RequestCookie class.
  */
-class RequestCookieTest extends \PHPUnit_Framework_TestCase
+class RequestCookieTest extends TestCase
 {
     /**
      * Test getValue method.

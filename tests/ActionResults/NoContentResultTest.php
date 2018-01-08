@@ -9,11 +9,12 @@ use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
 use BlueMvc\Core\Tests\Helpers\TestResponses\BasicTestResponse;
 use DataTypes\FilePath;
 use DataTypes\Url;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test NoContentResult class.
  */
-class NoContentResultTest extends \PHPUnit_Framework_TestCase
+class NoContentResultTest extends TestCase
 {
     /**
      * Test default constructor.

@@ -9,11 +9,12 @@ use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
 use BlueMvc\Core\Tests\Helpers\TestResponses\BasicTestResponse;
 use DataTypes\FilePath;
 use DataTypes\Url;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test NotModifiedResult class.
  */
-class NotModifiedResultTest extends \PHPUnit_Framework_TestCase
+class NotModifiedResultTest extends TestCase
 {
     /**
      * Test default constructor.

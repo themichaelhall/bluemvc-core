@@ -9,11 +9,12 @@ use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
 use BlueMvc\Core\Tests\Helpers\TestViewRenderers\BasicTestViewRenderer;
 use DataTypes\FilePath;
 use DataTypes\Url;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test ViewRenderer class.
  */
-class ViewRendererTest extends \PHPUnit_Framework_TestCase
+class ViewRendererTest extends TestCase
 {
     /**
      * Test renderView method with empty model.
