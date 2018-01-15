@@ -497,26 +497,10 @@ abstract class AbstractApplication implements ApplicationInterface
             "      <meta charset=\"utf-8\">\n" .
             '      <title>' . htmlentities($exception->getMessage()) . "</title>\n" .
             "      <style>\n" .
-            "         html, body, h1, p, code, pre {\n" .
-            "            margin:0;\n" .
-            "            padding:0;\n" .
-            "            font-size:16px;\n" .
-            "            font-family:Arial, Helvetica, sans-serif;\n" .
-            "            color:#555;\n" .
-            "         }\n" .
-            "         h1 {\n" .
-            "            font-size:2em;\n" .
-            "            margin:.5em;\n" .
-            "            color:#338;\n" .
-            "         }\n" .
-            "         p, pre {\n" .
-            "            font-size:1em;\n" .
-            "            margin:1em;\n" .
-            "         }\n" .
-            "         pre, code {\n" .
-            "            font-family:monospace;\n" .
-            "            color:#000;\n" .
-            "         }\n" .
+            "         html, body, h1, p, code, pre {margin:0; padding:0; font-size:16px; font-family:Arial, Helvetica, sans-serif; color:#555;}\n" .
+            "         h1 {font-size:2em; margin:.5em; color:#338;}\n" .
+            "         p, pre {font-size:1em; margin:1em;}\n" .
+            "         pre, code {font-family:monospace; color:#000;}\n" .
             "      </style>\n" .
             "   </head>\n" .
             "   <body>\n" .
