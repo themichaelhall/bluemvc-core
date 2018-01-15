@@ -242,18 +242,15 @@ abstract class AbstractApplication implements ApplicationInterface
             $exception = $e;
         }
 
-        $hasHandledResponse = true;
         if ($response->getStatusCode()->isError()) {
-            $hasHandledResponse = $this->myHandleError($request, $response, $exception);
+            $this->myHandleError($request, $response, $exception);
         }
 
-        if ($hasHandledResponse) {
-            foreach ($this->myPlugins as $plugin) {
-                if ($plugin->onPostRequest($this, $request, $response)) {
-                    $response->output();
+        foreach ($this->myPlugins as $plugin) {
+            if ($plugin->onPostRequest($this, $request, $response)) {
+                $response->output();
 
-                    return;
-                }
+                return;
             }
         }
 
@@ -447,8 +444,6 @@ abstract class AbstractApplication implements ApplicationInterface
      * @param RequestInterface  $request   The request.
      * @param ResponseInterface $response  The response.
      * @param \Exception|null   $exception The exception or null if no exception.
-     *
-     * @return bool True if response was handled, false otherwise.
      */
     private function myHandleError(RequestInterface $request, ResponseInterface $response, \Exception $exception = null)
     {
@@ -463,14 +458,10 @@ abstract class AbstractApplication implements ApplicationInterface
 
             try {
                 $errorController->processRequest($this, $request, $response, strval($response->getStatusCode()->getCode()), []);
-
-                return true;
             } catch (\Exception $e) {
                 $this->myExceptionToResponse($e, $response);
             }
         }
-
-        return false;
     }
 
     /**
