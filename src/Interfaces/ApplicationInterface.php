@@ -188,6 +188,15 @@ interface ApplicationInterface
     public function setCustomItem($name, $value);
 
     /**
+     * Sets the custom items.
+     *
+     * @since 1.0.0
+     *
+     * @param CustomItemCollectionInterface $customItems The custom items.
+     */
+    public function setCustomItems(CustomItemCollectionInterface $customItems);
+
+    /**
      * Sets the error controller class name.
      *
      * @since 1.0.0

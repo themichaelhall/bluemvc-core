@@ -3,6 +3,7 @@
 namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\Application;
+use BlueMvc\Core\Collections\CustomItemCollection;
 use BlueMvc\Core\Exceptions\InvalidFilePathException;
 use BlueMvc\Core\Route;
 use BlueMvc\Core\Tests\Helpers\Fakes\FakeSession;
@@ -381,6 +382,19 @@ class ApplicationTest extends TestCase
         self::assertTrue($this->myApplication->getCustomItem('Bar'));
         self::assertNull($this->myApplication->getCustomItem('FOO'));
         self::assertNull($this->myApplication->getCustomItem('Baz'));
+    }
+
+    /**
+     * Test setCustomItems method.
+     */
+    public function testSetCustomItems()
+    {
+        $customItems = new CustomItemCollection();
+        $customItems->set('Foo', 'Bar');
+
+        $this->myApplication->setCustomItems($customItems);
+
+        self::assertSame(['Foo' => 'Bar'], iterator_to_array($this->myApplication->getCustomItems()));
     }
 
     /**

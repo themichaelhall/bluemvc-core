@@ -2,6 +2,7 @@
 
 namespace BlueMvc\Core\Tests\Base;
 
+use BlueMvc\Core\Collections\CustomItemCollection;
 use BlueMvc\Core\Exceptions\InvalidFilePathException;
 use BlueMvc\Core\Route;
 use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
@@ -436,6 +437,20 @@ class AbstractApplicationTest extends TestCase
         self::assertSame([1, 2], $this->myApplication->getCustomItem('baz'));
         self::assertNull($this->myApplication->getCustomItem('Foo'));
         self::assertNull($this->myApplication->getCustomItem('bar'));
+    }
+
+    /**
+     * Test setCustomItems method.
+     */
+    public function testSetCustomItems()
+    {
+        $customItems = new CustomItemCollection();
+        $customItems->set('foo', 1);
+        $customItems->set('bar', ['baz']);
+
+        $this->myApplication->setCustomItems($customItems);
+
+        self::assertSame(['foo' => 1, 'bar' => ['baz']], iterator_to_array($this->myApplication->getCustomItems()));
     }
 
     /**
