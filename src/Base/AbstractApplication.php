@@ -244,6 +244,21 @@ abstract class AbstractApplication implements ApplicationInterface
     }
 
     /**
+     * Sets a custom item.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name  The custom item name.
+     * @param mixed  $value The custom item value.
+     *
+     * @throws \InvalidArgumentException If the $name parameter is not a string.
+     */
+    public function setCustomItem($name, $value)
+    {
+        $this->myCustomItems->set($name, $value);
+    }
+
+    /**
      * Sets the error controller class name.
      *
      * @since 1.0.0

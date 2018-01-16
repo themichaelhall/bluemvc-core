@@ -412,6 +412,19 @@ class AbstractApplicationTest extends TestCase
     }
 
     /**
+     * Test setCustomItem method.
+     */
+    public function testSetCustomItem()
+    {
+        $this->myApplication->setCustomItem('foo', 'bar');
+        $this->myApplication->setCustomItem('baz', [1, 2]);
+
+        $customItems = $this->myApplication->getCustomItems();
+
+        self::assertSame(['foo' => 'bar', 'baz' => [1, 2]], iterator_to_array($customItems));
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

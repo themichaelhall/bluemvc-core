@@ -167,6 +167,16 @@ interface ApplicationInterface
     public function run(RequestInterface $request, ResponseInterface $response);
 
     /**
+     * Sets a custom item.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name  The custom item name.
+     * @param mixed  $value The custom item value.
+     */
+    public function setCustomItem($name, $value);
+
+    /**
      * Sets the error controller class name.
      *
      * @since 1.0.0
