@@ -47,6 +47,17 @@ interface ApplicationInterface
     public function addViewRenderer(ViewRendererInterface $viewRenderer);
 
     /**
+     * Returns a custom item by name if it exists, null otherwise.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name The custom item name.
+     *
+     * @return mixed|null The custom item if it exists, null otherwise.
+     */
+    public function getCustomItem($name);
+
+    /**
      * Returns the custom items.
      *
      * @since 1.0.0

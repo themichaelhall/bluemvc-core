@@ -425,6 +425,20 @@ class AbstractApplicationTest extends TestCase
     }
 
     /**
+     * Test getCustomItem method.
+     */
+    public function testGetCustomItem()
+    {
+        $this->myApplication->setCustomItem('foo', 'bar');
+        $this->myApplication->setCustomItem('baz', [1, 2]);
+
+        self::assertSame('bar', $this->myApplication->getCustomItem('foo'));
+        self::assertSame([1, 2], $this->myApplication->getCustomItem('baz'));
+        self::assertNull($this->myApplication->getCustomItem('Foo'));
+        self::assertNull($this->myApplication->getCustomItem('bar'));
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

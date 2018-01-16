@@ -370,6 +370,20 @@ class ApplicationTest extends TestCase
     }
 
     /**
+     * Test getCustomItem method.
+     */
+    public function testGetCustomItem()
+    {
+        $this->myApplication->setCustomItem('Foo', false);
+        $this->myApplication->setCustomItem('Bar', true);
+
+        self::assertFalse($this->myApplication->getCustomItem('Foo'));
+        self::assertTrue($this->myApplication->getCustomItem('Bar'));
+        self::assertNull($this->myApplication->getCustomItem('FOO'));
+        self::assertNull($this->myApplication->getCustomItem('Baz'));
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

@@ -70,6 +70,22 @@ abstract class AbstractApplication implements ApplicationInterface
     }
 
     /**
+     * Returns a custom item by name if it exists, null otherwise.
+     *
+     * @since 1.0.0
+     *
+     * @param string $name The custom item name.
+     *
+     * @throws \InvalidArgumentException If the $name parameter is not a string.
+     *
+     * @return mixed|null The custom item if it exists, null otherwise.
+     */
+    public function getCustomItem($name)
+    {
+        return $this->myCustomItems->get($name);
+    }
+
+    /**
      * Returns the custom items.
      *
      * @since 1.0.0
