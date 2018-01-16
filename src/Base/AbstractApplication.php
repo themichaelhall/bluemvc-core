@@ -225,35 +225,7 @@ abstract class AbstractApplication implements ApplicationInterface
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
-        $exception = null;
-
-        foreach ($this->myPlugins as $plugin) {
-            if ($plugin->onPreRequest($this, $request, $response)) {
-                $response->output();
-
-                return;
-            }
-        }
-
-        try {
-            $this->myHandleRequest($request, $response);
-        } catch (\Exception $e) {
-            $this->myExceptionToResponse($e, $response);
-            $exception = $e;
-        }
-
-        if ($response->getStatusCode()->isError()) {
-            $this->myHandleError($request, $response, $exception);
-        }
-
-        foreach ($this->myPlugins as $plugin) {
-            if ($plugin->onPostRequest($this, $request, $response)) {
-                $response->output();
-
-                return;
-            }
-        }
-
+        $this->myRun($request, $response);
         $response->output();
     }
 
@@ -409,6 +381,40 @@ abstract class AbstractApplication implements ApplicationInterface
     }
 
     /**
+     * Runs a request.
+     *
+     * @param RequestInterface  $request  The request.
+     * @param ResponseInterface $response The response.
+     */
+    private function myRun(RequestInterface $request, ResponseInterface $response)
+    {
+        $exception = null;
+
+        foreach ($this->myPlugins as $plugin) {
+            if ($plugin->onPreRequest($this, $request, $response)) {
+                return;
+            }
+        }
+
+        try {
+            $this->myHandleRequest($request, $response);
+        } catch (\Exception $e) {
+            $this->myExceptionToResponse($e, $response);
+            $exception = $e;
+        }
+
+        if ($response->getStatusCode()->isError()) {
+            $this->myHandleError($request, $response, $exception);
+        }
+
+        foreach ($this->myPlugins as $plugin) {
+            if ($plugin->onPostRequest($this, $request, $response)) {
+                return;
+            }
+        }
+    }
+
+    /**
      * Handles a request.
      *
      * @param RequestInterface  $request  The request.
@@ -416,26 +422,23 @@ abstract class AbstractApplication implements ApplicationInterface
      */
     private function myHandleRequest(RequestInterface $request, ResponseInterface $response)
     {
-        $hasFoundController = false;
-
         foreach ($this->myRoutes as $route) {
             $routeMatch = $route->matches($request);
 
-            if ($routeMatch !== null) {
-                $controllerClass = $routeMatch->getControllerClassName();
-                $controller = new $controllerClass();
-
-                /** @var ControllerInterface $controller */
-                $controller->processRequest($this, $request, $response, $routeMatch->getAction(), $routeMatch->getParameters());
-                $hasFoundController = true;
-
-                break;
+            if ($routeMatch === null) {
+                continue;
             }
+
+            $controllerClass = $routeMatch->getControllerClassName();
+            $controller = new $controllerClass();
+
+            /** @var ControllerInterface $controller */
+            $controller->processRequest($this, $request, $response, $routeMatch->getAction(), $routeMatch->getParameters());
+
+            return;
         }
 
-        if (!$hasFoundController) {
-            $response->setStatusCode(new StatusCode(StatusCode::NOT_FOUND));
-        }
+        $response->setStatusCode(new StatusCode(StatusCode::NOT_FOUND));
     }
 
     /**
