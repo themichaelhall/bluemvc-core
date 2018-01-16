@@ -402,6 +402,16 @@ class AbstractApplicationTest extends TestCase
     }
 
     /**
+     * Test getCustomItems method.
+     */
+    public function testGetCustomItems()
+    {
+        $customItems = $this->myApplication->getCustomItems();
+
+        self::assertSame([], iterator_to_array($customItems));
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

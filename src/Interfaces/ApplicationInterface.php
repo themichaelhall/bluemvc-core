@@ -8,6 +8,7 @@
 namespace BlueMvc\Core\Interfaces;
 
 use BlueMvc\Core\Exceptions\InvalidFilePathException;
+use BlueMvc\Core\Interfaces\Collections\CustomItemCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\SessionItemCollectionInterface;
 use DataTypes\Interfaces\FilePathInterface;
 
@@ -44,6 +45,15 @@ interface ApplicationInterface
      * @param ViewRendererInterface $viewRenderer The view renderer.
      */
     public function addViewRenderer(ViewRendererInterface $viewRenderer);
+
+    /**
+     * Returns the custom items.
+     *
+     * @since 1.0.0
+     *
+     * @return CustomItemCollectionInterface The custom items.
+     */
+    public function getCustomItems();
 
     /**
      * Returns the document root.

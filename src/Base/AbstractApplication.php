@@ -7,11 +7,13 @@
 
 namespace BlueMvc\Core\Base;
 
+use BlueMvc\Core\Collections\CustomItemCollection;
 use BlueMvc\Core\Collections\HeaderCollection;
 use BlueMvc\Core\Exceptions\InvalidControllerClassException;
 use BlueMvc\Core\Exceptions\InvalidFilePathException;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
+use BlueMvc\Core\Interfaces\Collections\CustomItemCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\SessionItemCollectionInterface;
 use BlueMvc\Core\Interfaces\ControllerInterface;
 use BlueMvc\Core\Interfaces\ErrorControllerInterface;
@@ -65,6 +67,18 @@ abstract class AbstractApplication implements ApplicationInterface
     public function addViewRenderer(ViewRendererInterface $viewRenderer)
     {
         $this->myViewRenderers[] = $viewRenderer;
+    }
+
+    /**
+     * Returns the custom items.
+     *
+     * @since 1.0.0
+     *
+     * @return CustomItemCollectionInterface The custom items.
+     */
+    public function getCustomItems()
+    {
+        return $this->myCustomItems;
     }
 
     /**
@@ -332,6 +346,7 @@ abstract class AbstractApplication implements ApplicationInterface
         $this->myIsDebug = false;
         $this->myErrorControllerClass = null;
         $this->myPlugins = [];
+        $this->myCustomItems = new CustomItemCollection();
     }
 
     /**
@@ -572,4 +587,9 @@ abstract class AbstractApplication implements ApplicationInterface
      * @var PluginInterface[] My plugins.
      */
     private $myPlugins;
+
+    /**
+     * @var CustomItemCollectionInterface My custom items.
+     */
+    private $myCustomItems;
 }
