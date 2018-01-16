@@ -21,4 +21,14 @@ class ExceptionTestController extends Controller
 
         throw new \LogicException('Exception was thrown.');
     }
+
+    /**
+     * DomainException action.
+     *
+     * @throws \DomainException
+     */
+    public function domainExceptionAction()
+    {
+        throw new \DomainException('DomainException was thrown.');
+    }
 }

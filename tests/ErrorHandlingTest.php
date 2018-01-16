@@ -32,8 +32,7 @@ class ErrorHandlingTest extends TestCase
         $response = new BasicTestResponse();
         $this->application->run($request, $response);
 
-        self::assertContains('LogicException', $response->getContent());
-        self::assertContains('Exception was thrown.', $response->getContent());
+        self::assertContains('<title>Exception was thrown.</title>', $response->getContent());
         self::assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
     }
 
@@ -62,6 +61,21 @@ class ErrorHandlingTest extends TestCase
         $this->application->run($request, $response);
 
         self::assertSame('<html><body><h1>Request Failed: Error: 500, Exception: LogicException, ExceptionMessage: Exception was thrown.</h1></body></html>', $response->getContent());
+        self::assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Test server error with error controller returning null.
+     */
+    public function testServerErrorWithErrorControllerReturningNull()
+    {
+        $this->application->setDebug(true);
+        $this->application->setErrorControllerClass(ErrorTestController::class);
+        $request = new BasicTestRequest(Url::parse('https://www.example.com/exception/domainException'), new Method('GET'));
+        $response = new BasicTestResponse();
+        $this->application->run($request, $response);
+
+        self::assertContains('<title>DomainException was thrown.</title>', $response->getContent());
         self::assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
     }
 

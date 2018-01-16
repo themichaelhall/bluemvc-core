@@ -31,6 +31,11 @@ class ErrorTestController extends ErrorController
         $errorText = 'Error: ' . $statusCode;
         $exception = $this->getException();
         if ($exception !== null) {
+            // Use standard error page for DomainException.
+            if ($exception instanceof \DomainException) {
+                return null;
+            }
+
             $errorText .= ', Exception: ' . get_class($exception) . ', ExceptionMessage: ' . $exception->getMessage();
         }
 
