@@ -1,3 +1,7 @@
+<p align="center">
+   <img src="https://bm.staticfiles.se/img/logo-320x50.png" width="320" height="50" alt="BlueMvc logo">
+</p>
+
 # BlueMvc Core
 
 [![Build Status](https://travis-ci.org/themichaelhall/bluemvc-core.svg?branch=master)](https://travis-ci.org/themichaelhall/bluemvc-core)
@@ -8,4 +12,24 @@
 [![Latest Stable Version](https://poser.pugx.org/bluemvc/bluemvc-core/v/stable)](https://packagist.org/packages/bluemvc/bluemvc-core)
 [![Total Downloads](https://poser.pugx.org/bluemvc/bluemvc-core/downloads)](https://packagist.org/packages/bluemvc/bluemvc-core)
 
-This project is under construction and is not yet complete. Please check back later.
+Core functionality for the [BlueMvc PHP framework](https://github.com/themichaelhall/bluemvc).
+
+## Requirements
+
+- PHP >= 5.6
+
+## Install with Composer
+
+``` bash
+$ composer require bluemvc/bluemvc-core
+```
+
+## Documentation
+
+The official documentation is located at [bluemvc.com](https://bluemvc.com/)
+
+- [Get started](https://bluemvc.com/get-started/)
+
+## License
+
+MIT
