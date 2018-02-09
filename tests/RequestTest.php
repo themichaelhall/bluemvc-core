@@ -702,6 +702,23 @@ class RequestTest extends TestCase
     }
 
     /**
+     * Test getClientIp with address set.
+     */
+    public function testGetClientIpWithAddressSet()
+    {
+        $_SERVER = [
+            'HTTP_HOST'      => 'www.domain.com',
+            'REQUEST_URI'    => '/foo/bar',
+            'REQUEST_METHOD' => 'GET',
+            'REMOTE_ADDR'    => '10.20.30.40',
+        ];
+
+        $request = new Request();
+
+        self::assertSame('10.20.30.40', $request->getClientIp()->__toString());
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
