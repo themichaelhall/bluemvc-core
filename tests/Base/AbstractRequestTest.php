@@ -354,6 +354,14 @@ class AbstractRequestTest extends TestCase
     }
 
     /**
+     * Test getClientIp method.
+     */
+    public function testGetClientIp()
+    {
+        self::assertSame('0.0.0.0', $this->myRequest->getClientIp()->__toString());
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

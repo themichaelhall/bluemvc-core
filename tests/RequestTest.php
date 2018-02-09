@@ -686,6 +686,22 @@ class RequestTest extends TestCase
     }
 
     /**
+     * Test getClientIp with no address set.
+     */
+    public function testGetClientIpWithNoAddressSet()
+    {
+        $_SERVER = [
+            'HTTP_HOST'      => 'www.domain.com',
+            'REQUEST_URI'    => '/foo/bar',
+            'REQUEST_METHOD' => 'GET',
+        ];
+
+        $request = new Request();
+
+        self::assertSame('0.0.0.0', $request->getClientIp()->__toString());
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
