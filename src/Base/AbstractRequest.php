@@ -250,7 +250,7 @@ abstract class AbstractRequest implements RequestInterface
         $this->setUploadedFiles($uploadedFiles);
         $this->setCookies($cookies);
         $this->setRawContent('');
-        $this->myClientIp = IPAddress::fromParts([0, 0, 0, 0]);
+        $this->setClientIp(IPAddress::fromParts([0, 0, 0, 0]));
     }
 
     /**
@@ -266,6 +266,18 @@ abstract class AbstractRequest implements RequestInterface
     protected function addHeader($name, $value)
     {
         $this->myHeaders->add($name, $value);
+    }
+
+    /**
+     * Sets the client IP address.
+     *
+     * @since 1.1.0
+     *
+     * @param IPAddressInterface $clientIp The client IP address.
+     */
+    protected function setClientIp(IPAddressInterface $clientIp)
+    {
+        $this->myClientIp = $clientIp;
     }
 
     /**
