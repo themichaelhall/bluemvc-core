@@ -14,6 +14,7 @@ use BlueMvc\Core\Interfaces\Collections\UploadedFileCollectionInterface;
 use BlueMvc\Core\Interfaces\Http\MethodInterface;
 use BlueMvc\Core\Interfaces\RequestCookieInterface;
 use BlueMvc\Core\Interfaces\UploadedFileInterface;
+use DataTypes\Interfaces\IPAddressInterface;
 use DataTypes\Interfaces\UrlInterface;
 
 /**
@@ -49,6 +50,16 @@ class BasicTestRequest extends AbstractRequest
     public function addHeader($name, $value)
     {
         parent::addHeader($name, $value);
+    }
+
+    /**
+     * Sets the client IP address.
+     *
+     * @param IPAddressInterface $clientIp The client IP address.
+     */
+    public function setClientIp(IPAddressInterface $clientIp)
+    {
+        parent::setClientIp($clientIp);
     }
 
     /**

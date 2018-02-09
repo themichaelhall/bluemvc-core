@@ -12,6 +12,7 @@ use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\ParameterCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\UploadedFileCollectionInterface;
 use BlueMvc\Core\Interfaces\Http\MethodInterface;
+use DataTypes\Interfaces\IPAddressInterface;
 use DataTypes\Interfaces\UrlInterface;
 
 /**
@@ -21,6 +22,15 @@ use DataTypes\Interfaces\UrlInterface;
  */
 interface RequestInterface
 {
+    /**
+     * Returns the client IP address.
+     *
+     * @since 1.1.0
+     *
+     * @return IPAddressInterface The client IP address.
+     */
+    public function getClientIp();
+
     /**
      * Returns a cookie by cookie name if it exists, null otherwise.
      *
