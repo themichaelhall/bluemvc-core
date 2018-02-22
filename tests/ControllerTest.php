@@ -236,71 +236,50 @@ class ControllerTest extends TestCase
     }
 
     /**
-     * Test index action with controller with a pre- and post- action event method.
+     * Test pre- and post-action event.
+     *
+     * @dataProvider preAndPostActionEventDataProvider
+     *
+     * @param string $action             The action.
+     * @param int    $port               The port.
+     * @param int    $expectedStatusCode The expected status code.
+     * @param array  $expectedHeaders    The expected headers.
+     * @param string $expectedContent    The expected content.
      */
-    public function testIndexActionWithControllerWithPreAndPostActionEventMethod()
+    public function testPreAndPostActionEvent($action, $port, $expectedStatusCode, $expectedHeaders, $expectedContent)
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com:' . $port . '/' . $action), new Method('GET'));
         $response = new BasicTestResponse();
         $controller = new PreAndPostActionEventController();
-        $controller->processRequest($application, $request, $response, '');
+        $controller->processRequest($application, $request, $response, $action);
 
-        self::assertSame('Index action with pre- and post-action event', $response->getContent());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-        self::assertSame('true', $response->getHeader('X-Pre-Action'));
-        self::assertSame('true', $response->getHeader('X-Post-Action'));
+        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
+        self::assertSame($expectedHeaders, iterator_to_array($response->getHeaders()));
+        self::assertSame($expectedContent, $response->getContent());
     }
 
     /**
-     * Test default action with controller with a pre- and post- action event method.
+     * Data provider for pre- and post-action event tests.
+     *
+     * @return array The data.
      */
-    public function testDefaultActionWithControllerWithPreAndPostActionEventMethod()
+    public function preAndPostActionEventDataProvider()
     {
-        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com/foo'), new Method('GET'));
-        $response = new BasicTestResponse();
-        $controller = new PreAndPostActionEventController();
-        $controller->processRequest($application, $request, $response, 'foo');
-
-        self::assertSame('Default action "foo" with pre- and post-action event', $response->getContent());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-        self::assertSame('true', $response->getHeader('X-Pre-Action'));
-        self::assertSame('true', $response->getHeader('X-Post-Action'));
-    }
-
-    /**
-     * Test a pre-action event returning a result.
-     */
-    public function testPreActionEventReturningResult()
-    {
-        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com:81/'), new Method('GET'));
-        $response = new BasicTestResponse();
-        $controller = new PreAndPostActionEventController();
-        $controller->processRequest($application, $request, $response, '');
-
-        self::assertSame('This is a pre-action result', $response->getContent());
-        self::assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
-        self::assertNull($response->getHeader('X-Pre-Action'));
-        self::assertNull($response->getHeader('X-Post-Action'));
-    }
-
-    /**
-     * Test a post-action event returning a result.
-     */
-    public function testPostActionEventReturningResult()
-    {
-        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com:82/'), new Method('GET'));
-        $response = new BasicTestResponse();
-        $controller = new PreAndPostActionEventController();
-        $controller->processRequest($application, $request, $response, '');
-
-        self::assertSame('This is a post-action result', $response->getContent());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-        self::assertSame('true', $response->getHeader('X-Pre-Action'));
-        self::assertNull($response->getHeader('X-Post-Action'));
+        return [
+            ['', 80, StatusCode::OK, ['X-Pre-Action' => 'true', 'X-Post-Action' => 'true'], 'Index action with pre- and post-action event'],
+            ['foo', 80, StatusCode::OK, ['X-Pre-Action' => 'true', 'X-Post-Action' => 'true'], 'Default action "foo" with pre- and post-action event'],
+            ['', 81, StatusCode::NOT_FOUND, [], 'This is a pre-action result'],
+            ['foo', 81, StatusCode::NOT_FOUND, [], 'This is a pre-action result'],
+            ['', 82, StatusCode::OK, ['X-Pre-Action' => 'true'], 'This is a post-action result'],
+            ['foo', 82, StatusCode::OK, ['X-Pre-Action' => 'true'], 'This is a post-action result'],
+            ['', 83, StatusCode::OK, ['X-Post-Action' => 'true'], 'Index action with pre- and post-action event'],
+            ['foo', 83, StatusCode::OK, ['X-Post-Action' => 'true'], 'Default action "foo" with pre- and post-action event'],
+            ['', 84, StatusCode::OK, ['X-Pre-Action' => 'true'], 'Index action with pre- and post-action event'],
+            ['foo', 84, StatusCode::OK, ['X-Pre-Action' => 'true'], 'Default action "foo" with pre- and post-action event'],
+            ['', 85, StatusCode::OK, [], 'Index action with pre- and post-action event'],
+            ['foo', 85, StatusCode::OK, [], 'Default action "foo" with pre- and post-action event'],
+        ];
     }
 
     /**
