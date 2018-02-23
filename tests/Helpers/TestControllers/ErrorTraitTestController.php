@@ -2,14 +2,18 @@
 
 namespace BlueMvc\Core\Tests\Helpers\TestControllers;
 
-use BlueMvc\Core\ErrorController;
+use BlueMvc\Core\Controller;
+use BlueMvc\Core\Interfaces\ErrorControllerInterface;
+use BlueMvc\Core\Traits\ErrorControllerTrait;
 use BlueMvc\Core\View;
 
 /**
- * Test controller that handles errors.
+ * Test controller that handles errors via ErrorControllerTrait.
  */
-class ErrorTestController extends ErrorController
+class ErrorTraitTestController extends Controller implements ErrorControllerInterface
 {
+    use ErrorControllerTrait;
+
     /**
      * 403 Forbidden action.
      */
@@ -51,7 +55,7 @@ class ErrorTestController extends ErrorController
     {
         parent::onPreActionEvent();
 
-        $this->getResponse()->addHeader('X-Error-PreActionEvent', '1');
+        $this->getResponse()->addHeader('X-ErrorTrait-PreActionEvent', '1');
 
         return null;
     }
@@ -65,7 +69,7 @@ class ErrorTestController extends ErrorController
     {
         parent::onPostActionEvent();
 
-        $this->getResponse()->addHeader('X-Error-PostActionEvent', '1');
+        $this->getResponse()->addHeader('X-ErrorTrait-PostActionEvent', '1');
 
         return null;
     }

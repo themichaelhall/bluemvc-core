@@ -542,11 +542,19 @@ class BasicRoutingTest extends TestCase
     }
 
     /**
-     * Test get index page for controller with pre-action event.
+     * Test get pages with pre- and post-action event.
+     *
+     * @dataProvider preAndPostActionEventDataProvider
+     *
+     * @param string $action             The action.
+     * @param int    $port               The port.
+     * @param int    $expectedStatusCode The expected status code.
+     * @param array  $expectedHeaders    The expected headers.
+     * @param string $expectedContent    The expected content.
      */
-    public function testGetIndexPageForControllerWithPreActionEvent()
+    public function testGetPagesWithPreAndPostActionEvent($action, $port, $expectedStatusCode, $expectedHeaders, $expectedContent)
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/preandpostactionevent/', 'REQUEST_METHOD' => 'GET'];
+        $_SERVER = ['HTTP_HOST' => 'www.domain.com:' . $port, 'REQUEST_URI' => '/preandpostactionevent/' . $action, 'REQUEST_METHOD' => 'GET'];
 
         $request = new Request();
         $response = new Response();
@@ -555,70 +563,33 @@ class BasicRoutingTest extends TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        self::assertSame('Index action with pre- and post-action event', $responseOutput);
-        self::assertSame('Index action with pre- and post-action event', $response->getContent());
-        self::assertSame(['HTTP/1.1 200 OK', 'X-Pre-Action: true', 'X-Post-Action: true'], FakeHeaders::get());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
+        self::assertSame($expectedHeaders, FakeHeaders::get());
+        self::assertSame($expectedContent, $responseOutput);
+        self::assertSame($expectedContent, $response->getContent());
     }
 
     /**
-     * Test get default page for controller with pre-action event.
+     * Data provider for pre- and post-action event tests.
+     *
+     * @return array The data.
      */
-    public function testGetDefaultPageForControllerWithPreActionEvent()
+    public function preAndPostActionEventDataProvider()
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/preandpostactionevent/foo', 'REQUEST_METHOD' => 'GET'];
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('Default action "foo" with pre- and post-action event', $responseOutput);
-        self::assertSame('Default action "foo" with pre- and post-action event', $response->getContent());
-        self::assertSame(['HTTP/1.1 200 OK', 'X-Pre-Action: true', 'X-Post-Action: true'], FakeHeaders::get());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get a page with pre-action event result.
-     */
-    public function testGetPageWithPreActionEventResult()
-    {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com:81', 'SERVER_PORT' => '81', 'REQUEST_URI' => '/preandpostactionevent/', 'REQUEST_METHOD' => 'GET'];
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('This is a pre-action result', $responseOutput);
-        self::assertSame('This is a pre-action result', $response->getContent());
-        self::assertSame(['HTTP/1.1 404 Not Found'], FakeHeaders::get());
-        self::assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get a page with post-action event result.
-     */
-    public function testGetPageWithPostActionEventResult()
-    {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com:82', 'SERVER_PORT' => '82', 'REQUEST_URI' => '/preandpostactionevent/', 'REQUEST_METHOD' => 'GET'];
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('This is a post-action result', $responseOutput);
-        self::assertSame('This is a post-action result', $response->getContent());
-        self::assertSame(['HTTP/1.1 200 OK', 'X-Pre-Action: true'], FakeHeaders::get());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        return [
+            ['', 80, 200, ['HTTP/1.1 200 OK', 'X-Pre-Action: true', 'X-Post-Action: true'], 'Index action with pre- and post-action event'],
+            ['foo', 80, 200, ['HTTP/1.1 200 OK', 'X-Pre-Action: true', 'X-Post-Action: true'], 'Default action "foo" with pre- and post-action event'],
+            ['', 81, 404, ['HTTP/1.1 404 Not Found'], 'This is a pre-action result'],
+            ['foo', 81, 404, ['HTTP/1.1 404 Not Found'], 'This is a pre-action result'],
+            ['', 82, 200, ['HTTP/1.1 200 OK', 'X-Pre-Action: true'], 'This is a post-action result'],
+            ['foo', 82, 200, ['HTTP/1.1 200 OK', 'X-Pre-Action: true'], 'This is a post-action result'],
+            ['', 83, 200, ['HTTP/1.1 200 OK', 'X-Post-Action: true'], 'Index action with pre- and post-action event'],
+            ['foo', 83, 200, ['HTTP/1.1 200 OK', 'X-Post-Action: true'], 'Default action "foo" with pre- and post-action event'],
+            ['', 84, 200, ['HTTP/1.1 200 OK', 'X-Pre-Action: true'], 'Index action with pre- and post-action event'],
+            ['foo', 84, 200, ['HTTP/1.1 200 OK', 'X-Pre-Action: true'], 'Default action "foo" with pre- and post-action event'],
+            ['', 85, 200, ['HTTP/1.1 200 OK'], 'Index action with pre- and post-action event'],
+            ['foo', 85, 200, ['HTTP/1.1 200 OK'], 'Default action "foo" with pre- and post-action event'],
+        ];
     }
 
     /**
@@ -639,7 +610,7 @@ class BasicRoutingTest extends TestCase
 
         self::assertSame('<html><body><h1>Request Failed: Error: 404</h1></body></html>', $responseOutput);
         self::assertSame('<html><body><h1>Request Failed: Error: 404</h1></body></html>', $response->getContent());
-        self::assertSame(['HTTP/1.1 404 Not Found'], FakeHeaders::get());
+        self::assertSame(['HTTP/1.1 404 Not Found', 'X-Error-PreActionEvent: 1', 'X-Error-PostActionEvent: 1'], FakeHeaders::get());
         self::assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
     }
 
