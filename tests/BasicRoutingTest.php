@@ -610,7 +610,7 @@ class BasicRoutingTest extends TestCase
 
         self::assertSame('<html><body><h1>Request Failed: Error: 404</h1></body></html>', $responseOutput);
         self::assertSame('<html><body><h1>Request Failed: Error: 404</h1></body></html>', $response->getContent());
-        self::assertSame(['HTTP/1.1 404 Not Found'], FakeHeaders::get());
+        self::assertSame(['HTTP/1.1 404 Not Found', 'X-Error-PreActionEvent: 1', 'X-Error-PostActionEvent: 1'], FakeHeaders::get());
         self::assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
     }
 

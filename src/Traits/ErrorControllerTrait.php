@@ -39,6 +39,30 @@ trait ErrorControllerTrait
     }
 
     /**
+     * Returns true if post-action event is enabled, false otherwise.
+     *
+     * @since 1.1.0
+     *
+     * @return bool True if post-action event is enabled, false otherwise.
+     */
+    protected function isPostActionEventEnabled()
+    {
+        return $this->myException === null;
+    }
+
+    /**
+     * Returns true if pre-action event is enabled, false otherwise.
+     *
+     * @since 1.1.0
+     *
+     * @return bool True if pre-action event is enabled, false otherwise.
+     */
+    protected function isPreActionEventEnabled()
+    {
+        return $this->myException === null;
+    }
+
+    /**
      * @var \Exception|null My exception or null if no exception.
      */
     private $myException = null;

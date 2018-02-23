@@ -55,7 +55,7 @@ class ErrorTraitTestController extends Controller implements ErrorControllerInte
     {
         parent::onPreActionEvent();
 
-        $this->getResponse()->addHeader('X-Error-PreActionEvent', '1');
+        $this->getResponse()->addHeader('X-ErrorTrait-PreActionEvent', '1');
 
         return null;
     }
@@ -69,7 +69,7 @@ class ErrorTraitTestController extends Controller implements ErrorControllerInte
     {
         parent::onPostActionEvent();
 
-        $this->getResponse()->addHeader('X-Error-PostActionEvent', '1');
+        $this->getResponse()->addHeader('X-ErrorTrait-PostActionEvent', '1');
 
         return null;
     }

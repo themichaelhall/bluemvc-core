@@ -41,4 +41,32 @@ class ErrorTestController extends ErrorController
 
         return new View($errorText);
     }
+
+    /**
+     * Pre action event.
+     *
+     * @return null
+     */
+    protected function onPreActionEvent()
+    {
+        parent::onPreActionEvent();
+
+        $this->getResponse()->addHeader('X-Error-PreActionEvent', '1');
+
+        return null;
+    }
+
+    /**
+     * Post action event.
+     *
+     * @return null
+     */
+    protected function onPostActionEvent()
+    {
+        parent::onPostActionEvent();
+
+        $this->getResponse()->addHeader('X-Error-PostActionEvent', '1');
+
+        return null;
+    }
 }
