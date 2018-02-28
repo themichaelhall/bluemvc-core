@@ -19,6 +19,7 @@ use BlueMvc\Core\Interfaces\UploadedFileInterface;
 use DataTypes\Interfaces\IPAddressInterface;
 use DataTypes\Interfaces\UrlInterface;
 use DataTypes\IPAddress;
+use DataTypes\Url;
 
 /**
  * Abstract class representing a web request.
@@ -173,6 +174,23 @@ abstract class AbstractRequest implements RequestInterface
     public function getRawContent()
     {
         return $this->myRawContent;
+    }
+
+    /**
+     * Returns the referrer or null if request has no or invalid referrer.
+     *
+     * @since 1.1.0
+     *
+     * @return UrlInterface|null The referrer or null if request has no or invalid referrer.
+     */
+    public function getReferrer()
+    {
+        $referrerHeader = $this->getHeader('Referer');
+        if ($referrerHeader === null) {
+            return null;
+        }
+
+        return Url::tryParse($referrerHeader);
     }
 
     /**

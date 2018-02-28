@@ -719,6 +719,56 @@ class RequestTest extends TestCase
     }
 
     /**
+     * Test getReferrer with no referrer set.
+     */
+    public function testGetReferrerWithNoReferrerSet()
+    {
+        $_SERVER = [
+            'HTTP_HOST'      => 'www.domain.com',
+            'REQUEST_URI'    => '/foo/bar',
+            'REQUEST_METHOD' => 'GET',
+        ];
+
+        $request = new Request();
+
+        self::assertNull($request->getReferrer());
+    }
+
+    /**
+     * Test getReferrer with invalid referrer.
+     */
+    public function testGetReferrerWithInvalidReferrer()
+    {
+        $_SERVER = [
+            'HTTP_HOST'      => 'www.domain.com',
+            'REQUEST_URI'    => '/foo/bar',
+            'REQUEST_METHOD' => 'GET',
+            'HTTP_REFERER'   => 'FooBar',
+        ];
+
+        $request = new Request();
+
+        self::assertNull($request->getReferrer());
+    }
+
+    /**
+     * Test getReferrer with valid referrer.
+     */
+    public function testGetReferrerWithValidReferrer()
+    {
+        $_SERVER = [
+            'HTTP_HOST'      => 'www.domain.com',
+            'REQUEST_URI'    => '/foo/bar',
+            'REQUEST_METHOD' => 'GET',
+            'HTTP_REFERER'   => 'https://example.com:8080/foo/bar?baz',
+        ];
+
+        $request = new Request();
+
+        self::assertSame('https://example.com:8080/foo/bar?baz', $request->getReferrer()->__toString());
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
