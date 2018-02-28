@@ -130,6 +130,15 @@ interface RequestInterface
     public function getRawContent();
 
     /**
+     * Returns the referrer or null if request has no or invalid referrer.
+     *
+     * @since 1.1.0
+     *
+     * @return UrlInterface|null The referrer or null if request has no or invalid referrer.
+     */
+    public function getReferrer();
+
+    /**
      * Returns a uploaded file by name if it exists, null otherwise.
      *
      * @since 1.0.0

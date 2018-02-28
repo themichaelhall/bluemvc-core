@@ -355,6 +355,34 @@ class AbstractRequestTest extends TestCase
     }
 
     /**
+     * Test getReferrer method with empty referrer.
+     */
+    public function testGetReferrerWithEmptyReferrer()
+    {
+        self::assertNull($this->myRequest->getReferrer());
+    }
+
+    /**
+     * Test getReferrer method with invalid referrer.
+     */
+    public function testGetReferrerWithInvalidReferrer()
+    {
+        $this->myRequest->setHeader('Referer', 'foo');
+
+        self::assertNull($this->myRequest->getReferrer());
+    }
+
+    /**
+     * Test getReferrer method with empty referrer.
+     */
+    public function testGetReferrerWithValidReferrer()
+    {
+        $this->myRequest->setHeader('Referer', 'https://example.com/foo');
+
+        self::assertSame('https://example.com/foo', $this->myRequest->getReferrer()->__toString());
+    }
+
+    /**
      * Test getClientIp method.
      */
     public function testGetClientIp()
