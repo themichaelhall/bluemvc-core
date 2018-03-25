@@ -326,6 +326,26 @@ class AbstractRequestTest extends TestCase
     }
 
     /**
+     * Test getCookieValue method.
+     */
+    public function testGetCookieValue()
+    {
+        $fooCookie = new RequestCookie('foo-value');
+        $barCookie = new RequestCookie('bar-value');
+
+        $cookies = new RequestCookieCollection();
+        $cookies->set('foo', $fooCookie);
+        $cookies->set('bar', $barCookie);
+
+        $this->myRequest->setCookies($cookies);
+
+        self::assertSame('foo-value', $this->myRequest->getCookieValue('foo'));
+        self::assertSame('bar-value', $this->myRequest->getCookieValue('bar'));
+        self::assertNull($this->myRequest->getCookieValue('Foo'));
+        self::assertNull($this->myRequest->getCookieValue('baz'));
+    }
+
+    /**
      * Test getRawContent method.
      */
     public function testGetRawContent()

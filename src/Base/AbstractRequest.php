@@ -69,6 +69,24 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
+     * Returns the cookie value by cookie name if it exists, null otherwise.
+     *
+     * @since 1.1.0
+     *
+     * @param string $name The cookie name.
+     *
+     * @throws \InvalidArgumentException If the $name parameter is not a string.
+     *
+     * @return string|null The cookie value by cookie name if it exists, false otherwise.
+     */
+    public function getCookieValue($name)
+    {
+        $cookie = $this->myCookies->get($name);
+
+        return $cookie !== null ? $cookie->getValue() : null;
+    }
+
+    /**
      * Returns a form parameter value by form parameter name if it exists, null otherwise.
      *
      * @since 1.0.0
