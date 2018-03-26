@@ -318,6 +318,23 @@ class ResponseTest extends TestCase
     }
 
     /**
+     * Test setCookieValue method.
+     */
+    public function testSetCookieValue()
+    {
+        $response = new Response();
+        $response->setCookieValue('foo', 'bar', new \DateTimeImmutable('2030-01-02 03:04:05'), UrlPath::parse('/foo/'), Host::parse('example.com'), true, true);
+        $cookie = $response->getCookie('foo');
+
+        self::assertSame('bar', $cookie->getValue());
+        self::assertSame('2030-01-02 03:04:05', $cookie->getExpiry()->format('Y-m-d H:i:s'));
+        self::assertSame('/foo/', $cookie->getPath()->__toString());
+        self::assertSame('example.com', $cookie->getDomain()->__toString());
+        self::assertTrue($cookie->isSecure());
+        self::assertTrue($cookie->isHttpOnly());
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

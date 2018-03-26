@@ -9,12 +9,16 @@ namespace BlueMvc\Core\Base;
 
 use BlueMvc\Core\Collections\HeaderCollection;
 use BlueMvc\Core\Collections\ResponseCookieCollection;
+use BlueMvc\Core\Exceptions\InvalidResponseCookiePathException;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\ResponseCookieCollectionInterface;
 use BlueMvc\Core\Interfaces\Http\StatusCodeInterface;
 use BlueMvc\Core\Interfaces\ResponseCookieInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
+use BlueMvc\Core\ResponseCookie;
+use DataTypes\Interfaces\HostInterface;
+use DataTypes\Interfaces\UrlPathInterface;
 
 /**
  * Abstract class representing a web response.
@@ -161,6 +165,27 @@ abstract class AbstractResponse implements ResponseInterface
     public function setCookies(ResponseCookieCollectionInterface $cookies)
     {
         $this->myCookies = $cookies;
+    }
+
+    /**
+     * Sets a cookie value.
+     *
+     * @since 1.1.0
+     *
+     * @param string                  $name       The name.
+     * @param string                  $value      The value.
+     * @param \DateTimeInterface|null $expiry     The expiry time or null if no expiry time.
+     * @param UrlPathInterface|null   $path       The path or null if no path.
+     * @param HostInterface|null      $domain     The domain or null if no domain.
+     * @param bool                    $isSecure   True if cookie is secure, false otherwise.
+     * @param bool                    $isHttpOnly True if cookie is http only, false otherwise.
+     *
+     * @throws InvalidResponseCookiePathException If the path is not a directory or an absolute path.
+     * @throws \InvalidArgumentException          If any of the parameters are of wrong type.
+     */
+    public function setCookieValue($name, $value, \DateTimeInterface $expiry = null, UrlPathInterface $path = null, HostInterface $domain = null, $isSecure = false, $isHttpOnly = false)
+    {
+        $this->myCookies->set($name, new ResponseCookie($value, $expiry, $path, $domain, $isSecure, $isHttpOnly));
     }
 
     /**
