@@ -649,6 +649,32 @@ class RequestTest extends TestCase
     }
 
     /**
+     * Test getCookieValue method.
+     */
+    public function testGetCookieValue()
+    {
+        $_SERVER =
+            [
+                'HTTP_HOST'      => 'www.domain.com',
+                'REQUEST_URI'    => '/foo/bar',
+                'REQUEST_METHOD' => 'GET',
+            ];
+
+        $_COOKIE =
+            [
+                'Foo' => 'Bar',
+                1     => 2,
+            ];
+
+        $request = new Request();
+
+        self::assertSame('Bar', $request->getCookieValue('Foo'));
+        self::assertSame('2', $request->getCookieValue('1'));
+        self::assertNull($request->getCookieValue('foo'));
+        self::assertNull($request->getCookieValue('baz'));
+    }
+
+    /**
      * Test getRawContentMethod with no content set.
      */
     public function testGetRawContentWithNoContentSet()

@@ -52,6 +52,17 @@ interface RequestInterface
     public function getCookies();
 
     /**
+     * Returns the cookie value by cookie name if it exists, null otherwise.
+     *
+     * @since 1.1.0
+     *
+     * @param string $name The cookie name.
+     *
+     * @return string|null The cookie value by cookie name if it exists, false otherwise.
+     */
+    public function getCookieValue($name);
+
+    /**
      * Returns a form parameter value by form parameter name if it exists, null otherwise.
      *
      * @since 1.0.0
