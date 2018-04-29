@@ -402,6 +402,8 @@ class ApplicationTest extends TestCase
      */
     public function setUp()
     {
+        $this->myRequestTimeFloat = $_SERVER['REQUEST_TIME_FLOAT'];
+
         $DS = DIRECTORY_SEPARATOR;
 
         $_SERVER = [
@@ -425,10 +427,17 @@ class ApplicationTest extends TestCase
         $_SERVER = [];
         $this->myApplication = null;
         FakeSession::disable();
+
+        $_SERVER['REQUEST_TIME_FLOAT'] = $this->myRequestTimeFloat;
     }
 
     /**
      * @var Application My application.
      */
     private $myApplication;
+
+    /**
+     * @var float My request time.
+     */
+    private $myRequestTimeFloat;
 }

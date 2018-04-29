@@ -16,7 +16,10 @@ use BlueMvc\Core\Interfaces\Http\MethodInterface;
 use BlueMvc\Core\Interfaces\RequestCookieInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\UploadedFileInterface;
+use DataTypes\Interfaces\IPAddressInterface;
 use DataTypes\Interfaces\UrlInterface;
+use DataTypes\IPAddress;
+use DataTypes\Url;
 
 /**
  * Abstract class representing a web request.
@@ -25,6 +28,18 @@ use DataTypes\Interfaces\UrlInterface;
  */
 abstract class AbstractRequest implements RequestInterface
 {
+    /**
+     * Returns the client IP address.
+     *
+     * @since 1.1.0
+     *
+     * @return IPAddressInterface The client IP address.
+     */
+    public function getClientIp()
+    {
+        return $this->myClientIp;
+    }
+
     /**
      * Returns a cookie by cookie name if it exists, null otherwise.
      *
@@ -51,6 +66,24 @@ abstract class AbstractRequest implements RequestInterface
     public function getCookies()
     {
         return $this->myCookies;
+    }
+
+    /**
+     * Returns the cookie value by cookie name if it exists, null otherwise.
+     *
+     * @since 1.1.0
+     *
+     * @param string $name The cookie name.
+     *
+     * @throws \InvalidArgumentException If the $name parameter is not a string.
+     *
+     * @return string|null The cookie value by cookie name if it exists, false otherwise.
+     */
+    public function getCookieValue($name)
+    {
+        $cookie = $this->myCookies->get($name);
+
+        return $cookie !== null ? $cookie->getValue() : null;
     }
 
     /**
@@ -162,6 +195,23 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
+     * Returns the referrer or null if request has no or invalid referrer.
+     *
+     * @since 1.1.0
+     *
+     * @return UrlInterface|null The referrer or null if request has no or invalid referrer.
+     */
+    public function getReferrer()
+    {
+        $referrerHeader = $this->getHeader('Referer');
+        if ($referrerHeader === null) {
+            return null;
+        }
+
+        return Url::tryParse($referrerHeader);
+    }
+
+    /**
      * Returns a uploaded file by name if it exists, null otherwise.
      *
      * @since 1.0.0
@@ -236,6 +286,7 @@ abstract class AbstractRequest implements RequestInterface
         $this->setUploadedFiles($uploadedFiles);
         $this->setCookies($cookies);
         $this->setRawContent('');
+        $this->setClientIp(IPAddress::fromParts([0, 0, 0, 0]));
     }
 
     /**
@@ -251,6 +302,18 @@ abstract class AbstractRequest implements RequestInterface
     protected function addHeader($name, $value)
     {
         $this->myHeaders->add($name, $value);
+    }
+
+    /**
+     * Sets the client IP address.
+     *
+     * @since 1.1.0
+     *
+     * @param IPAddressInterface $clientIp The client IP address.
+     */
+    protected function setClientIp(IPAddressInterface $clientIp)
+    {
+        $this->myClientIp = $clientIp;
     }
 
     /**
@@ -469,4 +532,9 @@ abstract class AbstractRequest implements RequestInterface
      * @var UrlInterface My url.
      */
     private $myUrl;
+
+    /**
+     * @var IPAddressInterface My client ip address.
+     */
+    private $myClientIp;
 }

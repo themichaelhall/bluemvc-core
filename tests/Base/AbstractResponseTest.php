@@ -236,4 +236,21 @@ class AbstractResponseTest extends TestCase
         self::assertSame($barCookie, $response->getCookie('foo'));
         self::assertNull($response->getCookie('bar'));
     }
+
+    /**
+     * Test setCookieValue method.
+     */
+    public function testSetCookieValue()
+    {
+        $response = new BasicTestResponse();
+        $response->setCookieValue('foo', 'bar');
+        $cookie = $response->getCookie('foo');
+
+        self::assertSame('bar', $cookie->getValue());
+        self::assertNull($cookie->getExpiry());
+        self::assertNull($cookie->getPath());
+        self::assertNull($cookie->getDomain());
+        self::assertFalse($cookie->isSecure());
+        self::assertFalse($cookie->isHttpOnly());
+    }
 }

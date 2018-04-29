@@ -67,4 +67,28 @@ class PreAndPostActionEventController extends Controller
 
         return null;
     }
+
+    /** @noinspection PhpMissingParentCallCommonInspection */
+
+    /**
+     * Returns true if pre-action event is enabled, false otherwise.
+     *
+     * @return bool True if pre-action event is enabled, false otherwise.
+     */
+    protected function isPreActionEventEnabled()
+    {
+        return !in_array($this->getRequest()->getUrl()->getPort(), [83, 85]);
+    }
+
+    /** @noinspection PhpMissingParentCallCommonInspection */
+
+    /**
+     * Returns true if post-action event is enabled, false otherwise.
+     *
+     * @return bool True if post-action event is enabled, false otherwise.
+     */
+    protected function isPostActionEventEnabled()
+    {
+        return !in_array($this->getRequest()->getUrl()->getPort(), [84, 85]);
+    }
 }

@@ -12,6 +12,7 @@ use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\ParameterCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\UploadedFileCollectionInterface;
 use BlueMvc\Core\Interfaces\Http\MethodInterface;
+use DataTypes\Interfaces\IPAddressInterface;
 use DataTypes\Interfaces\UrlInterface;
 
 /**
@@ -21,6 +22,15 @@ use DataTypes\Interfaces\UrlInterface;
  */
 interface RequestInterface
 {
+    /**
+     * Returns the client IP address.
+     *
+     * @since 1.1.0
+     *
+     * @return IPAddressInterface The client IP address.
+     */
+    public function getClientIp();
+
     /**
      * Returns a cookie by cookie name if it exists, null otherwise.
      *
@@ -40,6 +50,17 @@ interface RequestInterface
      * @return RequestCookieCollection The cookies.
      */
     public function getCookies();
+
+    /**
+     * Returns the cookie value by cookie name if it exists, null otherwise.
+     *
+     * @since 1.1.0
+     *
+     * @param string $name The cookie name.
+     *
+     * @return string|null The cookie value by cookie name if it exists, false otherwise.
+     */
+    public function getCookieValue($name);
 
     /**
      * Returns a form parameter value by form parameter name if it exists, null otherwise.
@@ -118,6 +139,15 @@ interface RequestInterface
      * @return string The raw content from request.
      */
     public function getRawContent();
+
+    /**
+     * Returns the referrer or null if request has no or invalid referrer.
+     *
+     * @since 1.1.0
+     *
+     * @return UrlInterface|null The referrer or null if request has no or invalid referrer.
+     */
+    public function getReferrer();
 
     /**
      * Returns a uploaded file by name if it exists, null otherwise.

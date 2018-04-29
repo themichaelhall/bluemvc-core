@@ -99,27 +99,45 @@ abstract class AbstractController implements ControllerInterface
     }
 
     /**
+     * Returns true if post-action event is enabled, false otherwise.
+     *
+     * @since 1.1.0
+     *
+     * @return bool True if post-action event is enabled, false otherwise.
+     */
+    protected function isPostActionEventEnabled()
+    {
+        return true;
+    }
+
+    /**
+     * Returns true if pre-action event is enabled, false otherwise.
+     *
+     * @since 1.1.0
+     *
+     * @return bool True if pre-action event is enabled, false otherwise.
+     */
+    protected function isPreActionEventEnabled()
+    {
+        return true;
+    }
+
+    /**
      * Post-action event.
      *
      * @since 1.0.0
-     *
-     * @return null
      */
     protected function onPostActionEvent()
     {
-        return null;
     }
 
     /**
      * Pre-action event.
      *
      * @since 1.0.0
-     *
-     * @return null
      */
     protected function onPreActionEvent()
     {
-        return null;
     }
 
     /**
@@ -172,7 +190,7 @@ abstract class AbstractController implements ControllerInterface
         $this->myActionMethod = $actionMethod;
 
         // Handle pre-action event.
-        $preActionResult = $this->onPreActionEvent();
+        $preActionResult = $this->isPreActionEventEnabled() ? $this->onPreActionEvent() : null;
         if ($preActionResult !== null) {
             return $preActionResult;
         }
@@ -181,7 +199,7 @@ abstract class AbstractController implements ControllerInterface
         $result = $actionMethod->invokeArgs($this, $parameters);
 
         // Handle post-action event.
-        $postActionResult = $this->onPostActionEvent();
+        $postActionResult = $this->isPostActionEventEnabled() ? $this->onPostActionEvent() : null;
         if ($postActionResult !== null) {
             return $postActionResult;
         }

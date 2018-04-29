@@ -20,6 +20,7 @@ use BlueMvc\Core\Interfaces\UploadedFileInterface;
 use DataTypes\FilePath;
 use DataTypes\Host;
 use DataTypes\Interfaces\UrlInterface;
+use DataTypes\IPAddress;
 use DataTypes\Scheme;
 use DataTypes\Url;
 use DataTypes\UrlPath;
@@ -47,6 +48,11 @@ class Request extends AbstractRequest
             self::myParseUploadedFiles($_FILES),
             self::myParseCookies($_COOKIE)
         );
+
+        $clientIp = IPAddress::tryParse(isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '');
+        if ($clientIp !== null) {
+            $this->setClientIp($clientIp);
+        }
 
         $this->myRawContentIsFetched = false;
     }

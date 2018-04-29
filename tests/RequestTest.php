@@ -649,6 +649,32 @@ class RequestTest extends TestCase
     }
 
     /**
+     * Test getCookieValue method.
+     */
+    public function testGetCookieValue()
+    {
+        $_SERVER =
+            [
+                'HTTP_HOST'      => 'www.domain.com',
+                'REQUEST_URI'    => '/foo/bar',
+                'REQUEST_METHOD' => 'GET',
+            ];
+
+        $_COOKIE =
+            [
+                'Foo' => 'Bar',
+                1     => 2,
+            ];
+
+        $request = new Request();
+
+        self::assertSame('Bar', $request->getCookieValue('Foo'));
+        self::assertSame('2', $request->getCookieValue('1'));
+        self::assertNull($request->getCookieValue('foo'));
+        self::assertNull($request->getCookieValue('baz'));
+    }
+
+    /**
      * Test getRawContentMethod with no content set.
      */
     public function testGetRawContentWithNoContentSet()
@@ -686,10 +712,95 @@ class RequestTest extends TestCase
     }
 
     /**
+     * Test getClientIp with no address set.
+     */
+    public function testGetClientIpWithNoAddressSet()
+    {
+        $_SERVER = [
+            'HTTP_HOST'      => 'www.domain.com',
+            'REQUEST_URI'    => '/foo/bar',
+            'REQUEST_METHOD' => 'GET',
+        ];
+
+        $request = new Request();
+
+        self::assertSame('0.0.0.0', $request->getClientIp()->__toString());
+    }
+
+    /**
+     * Test getClientIp with address set.
+     */
+    public function testGetClientIpWithAddressSet()
+    {
+        $_SERVER = [
+            'HTTP_HOST'      => 'www.domain.com',
+            'REQUEST_URI'    => '/foo/bar',
+            'REQUEST_METHOD' => 'GET',
+            'REMOTE_ADDR'    => '10.20.30.40',
+        ];
+
+        $request = new Request();
+
+        self::assertSame('10.20.30.40', $request->getClientIp()->__toString());
+    }
+
+    /**
+     * Test getReferrer with no referrer set.
+     */
+    public function testGetReferrerWithNoReferrerSet()
+    {
+        $_SERVER = [
+            'HTTP_HOST'      => 'www.domain.com',
+            'REQUEST_URI'    => '/foo/bar',
+            'REQUEST_METHOD' => 'GET',
+        ];
+
+        $request = new Request();
+
+        self::assertNull($request->getReferrer());
+    }
+
+    /**
+     * Test getReferrer with invalid referrer.
+     */
+    public function testGetReferrerWithInvalidReferrer()
+    {
+        $_SERVER = [
+            'HTTP_HOST'      => 'www.domain.com',
+            'REQUEST_URI'    => '/foo/bar',
+            'REQUEST_METHOD' => 'GET',
+            'HTTP_REFERER'   => 'FooBar',
+        ];
+
+        $request = new Request();
+
+        self::assertNull($request->getReferrer());
+    }
+
+    /**
+     * Test getReferrer with valid referrer.
+     */
+    public function testGetReferrerWithValidReferrer()
+    {
+        $_SERVER = [
+            'HTTP_HOST'      => 'www.domain.com',
+            'REQUEST_URI'    => '/foo/bar',
+            'REQUEST_METHOD' => 'GET',
+            'HTTP_REFERER'   => 'https://example.com:8080/foo/bar?baz',
+        ];
+
+        $request = new Request();
+
+        self::assertSame('https://example.com:8080/foo/bar?baz', $request->getReferrer()->__toString());
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
     {
+        $this->myRequestTimeFloat = $_SERVER['REQUEST_TIME_FLOAT'];
+
         FakeIsUploadedFile::enable();
         FakeFileGetContentsPhpInput::enable();
     }
@@ -707,5 +818,12 @@ class RequestTest extends TestCase
 
         FakeIsUploadedFile::disable();
         FakeFileGetContentsPhpInput::disable();
+
+        $_SERVER['REQUEST_TIME_FLOAT'] = $this->myRequestTimeFloat;
     }
+
+    /**
+     * @var float My request time.
+     */
+    private $myRequestTimeFloat;
 }

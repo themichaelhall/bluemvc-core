@@ -11,6 +11,7 @@ use BlueMvc\Core\RequestCookie;
 use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
 use BlueMvc\Core\UploadedFile;
 use DataTypes\FilePath;
+use DataTypes\IPAddress;
 use DataTypes\Url;
 use PHPUnit\Framework\TestCase;
 
@@ -325,6 +326,26 @@ class AbstractRequestTest extends TestCase
     }
 
     /**
+     * Test getCookieValue method.
+     */
+    public function testGetCookieValue()
+    {
+        $fooCookie = new RequestCookie('foo-value');
+        $barCookie = new RequestCookie('bar-value');
+
+        $cookies = new RequestCookieCollection();
+        $cookies->set('foo', $fooCookie);
+        $cookies->set('bar', $barCookie);
+
+        $this->myRequest->setCookies($cookies);
+
+        self::assertSame('foo-value', $this->myRequest->getCookieValue('foo'));
+        self::assertSame('bar-value', $this->myRequest->getCookieValue('bar'));
+        self::assertNull($this->myRequest->getCookieValue('Foo'));
+        self::assertNull($this->myRequest->getCookieValue('baz'));
+    }
+
+    /**
      * Test getRawContent method.
      */
     public function testGetRawContent()
@@ -351,6 +372,53 @@ class AbstractRequestTest extends TestCase
     public function testSetRawContentWithInvalidContentParameterType()
     {
         $this->myRequest->setRawContent(false);
+    }
+
+    /**
+     * Test getReferrer method with empty referrer.
+     */
+    public function testGetReferrerWithEmptyReferrer()
+    {
+        self::assertNull($this->myRequest->getReferrer());
+    }
+
+    /**
+     * Test getReferrer method with invalid referrer.
+     */
+    public function testGetReferrerWithInvalidReferrer()
+    {
+        $this->myRequest->setHeader('Referer', 'foo');
+
+        self::assertNull($this->myRequest->getReferrer());
+    }
+
+    /**
+     * Test getReferrer method with empty referrer.
+     */
+    public function testGetReferrerWithValidReferrer()
+    {
+        $this->myRequest->setHeader('Referer', 'https://example.com/foo');
+
+        self::assertSame('https://example.com/foo', $this->myRequest->getReferrer()->__toString());
+    }
+
+    /**
+     * Test getClientIp method.
+     */
+    public function testGetClientIp()
+    {
+        self::assertSame('0.0.0.0', $this->myRequest->getClientIp()->__toString());
+    }
+
+    /**
+     * Test setClientIp method.
+     */
+    public function testSetClientIp()
+    {
+        $clientIp = IPAddress::parse('1.2.3.4');
+        $this->myRequest->setClientIp($clientIp);
+
+        self::assertSame($clientIp, $this->myRequest->getClientIp());
     }
 
     /**
