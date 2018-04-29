@@ -1213,6 +1213,8 @@ class BasicRoutingTest extends TestCase
      */
     public function setUp()
     {
+        $this->myRequestTimeFloat = $_SERVER['REQUEST_TIME_FLOAT'];
+
         FakeHeaders::enable();
         $this->application = new BasicTestApplication(FilePath::parse(__DIR__ . DIRECTORY_SEPARATOR));
         $this->application->setViewPath(FilePath::parse('Helpers' . DIRECTORY_SEPARATOR . 'TestViews' . DIRECTORY_SEPARATOR));
@@ -1245,10 +1247,17 @@ class BasicRoutingTest extends TestCase
 
         FakeHeaders::disable();
         $this->application = null;
+
+        $_SERVER['REQUEST_TIME_FLOAT'] = $this->myRequestTimeFloat;
     }
 
     /**
      * @var BasicTestApplication My application.
      */
     private $application;
+
+    /**
+     * @var float My request time.
+     */
+    private $myRequestTimeFloat;
 }

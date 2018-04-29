@@ -799,6 +799,8 @@ class RequestTest extends TestCase
      */
     public function setUp()
     {
+        $this->myRequestTimeFloat = $_SERVER['REQUEST_TIME_FLOAT'];
+
         FakeIsUploadedFile::enable();
         FakeFileGetContentsPhpInput::enable();
     }
@@ -816,5 +818,12 @@ class RequestTest extends TestCase
 
         FakeIsUploadedFile::disable();
         FakeFileGetContentsPhpInput::disable();
+
+        $_SERVER['REQUEST_TIME_FLOAT'] = $this->myRequestTimeFloat;
     }
+
+    /**
+     * @var float My request time.
+     */
+    private $myRequestTimeFloat;
 }
