@@ -1,4 +1,4 @@
-## Unreleased
+## [1.1.0] 2018-04-29
 - Added getClientIp method to Request.
 - Added getReferrer method to Request.
 - Added getCookieValue method to Request.
@@ -9,3 +9,5 @@
 
 ## 1.0.0 - 2018-02-03
 - First stable revision.
+
+[1.1.0]: https://github.com/themichaelhall/bluemvc-core/compare/v1.0.0...v1.1.0
