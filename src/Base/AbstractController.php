@@ -126,24 +126,18 @@ abstract class AbstractController implements ControllerInterface
      * Post-action event.
      *
      * @since 1.0.0
-     *
-     * @return null
      */
     protected function onPostActionEvent()
     {
-        return null;
     }
 
     /**
      * Pre-action event.
      *
      * @since 1.0.0
-     *
-     * @return null
      */
     protected function onPreActionEvent()
     {
-        return null;
     }
 
     /**
