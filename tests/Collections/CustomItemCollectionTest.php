@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests\Collections;
 
 use BlueMvc\Core\Collections\CustomItemCollection;
@@ -31,19 +33,6 @@ class CustomItemCollectionTest extends TestCase
     }
 
     /**
-     * Test get method with invalid name parameter type.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $name parameter is not a string.
-     */
-    public function testGetMethodWithInvalidNameParameterType()
-    {
-        $customItemCollection = new CustomItemCollection();
-
-        $customItemCollection->get(true);
-    }
-
-    /**
      * Test set method.
      */
     public function testSet()
@@ -52,24 +41,13 @@ class CustomItemCollectionTest extends TestCase
         $customItemCollection->set('Foo', 'xxx');
         $customItemCollection->set('bar', false);
         $customItemCollection->set('foo', ['One' => 1, 'Two' => 2]);
+        $customItemCollection->set('1', '2');
 
-        self::assertSame(3, count($customItemCollection));
+        self::assertSame(4, count($customItemCollection));
         self::assertSame('xxx', $customItemCollection->get('Foo'));
         self::assertSame(false, $customItemCollection->get('bar'));
         self::assertSame(['One' => 1, 'Two' => 2], $customItemCollection->get('foo'));
-    }
-
-    /**
-     * Test set method with invalid name parameter type.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $name parameter is not a string.
-     */
-    public function testSetMethodWithInvalidNameParameterType()
-    {
-        $customItemCollection = new CustomItemCollection();
-
-        $customItemCollection->set(10, 'Foo');
+        self::assertSame('2', $customItemCollection->get('1'));
     }
 
     /**
@@ -92,9 +70,10 @@ class CustomItemCollectionTest extends TestCase
         $customItemCollection = new CustomItemCollection();
         $customItemCollection->set('Foo', false);
         $customItemCollection->set('Bar', 'Baz');
+        $customItemCollection->set('1', '2');
 
         $customItemArray = iterator_to_array($customItemCollection, true);
 
-        self::assertSame(['Foo' => false, 'Bar' => 'Baz'], $customItemArray);
+        self::assertSame(['Foo' => false, 'Bar' => 'Baz', 1 => '2'], $customItemArray);
     }
 }

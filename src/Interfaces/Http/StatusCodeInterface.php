@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces\Http;
 
@@ -21,7 +22,7 @@ interface StatusCodeInterface
      *
      * @return int The code.
      */
-    public function getCode();
+    public function getCode(): int;
 
     /**
      * Returns the description.
@@ -30,7 +31,7 @@ interface StatusCodeInterface
      *
      * @return string The description.
      */
-    public function getDescription();
+    public function getDescription(): string;
 
     /**
      * Returns true if this is an error code, false otherwise.
@@ -39,7 +40,7 @@ interface StatusCodeInterface
      *
      * @return bool True if this is an error code, false otherwise.
      */
-    public function isError();
+    public function isError(): bool;
 
     /**
      * Returns the status code as as string.
@@ -48,5 +49,5 @@ interface StatusCodeInterface
      *
      * @return string The status code as a string.
      */
-    public function __toString();
+    public function __toString(): string;
 }

@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces;
 
@@ -25,7 +26,7 @@ interface PluginInterface
      *
      * @return bool True if request should stop processing, false otherwise.
      */
-    public function onPreRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response);
+    public function onPreRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response): bool;
 
     /**
      * Called after a request is processed.
@@ -38,5 +39,5 @@ interface PluginInterface
      *
      * @return bool True if request should stop processing, false otherwise.
      */
-    public function onPostRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response);
+    public function onPostRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response): bool;
 }

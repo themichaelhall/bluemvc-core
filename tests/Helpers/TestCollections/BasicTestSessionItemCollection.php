@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests\Helpers\TestCollections;
 
 use BlueMvc\Core\Interfaces\Collections\SessionItemCollectionInterface;
@@ -14,7 +16,7 @@ class BasicTestSessionItemCollection implements SessionItemCollectionInterface
      */
     public function __construct()
     {
-        $this->myItems = [];
+        $this->items = [];
     }
 
     /**
@@ -22,19 +24,19 @@ class BasicTestSessionItemCollection implements SessionItemCollectionInterface
      *
      * @return int The number of session items.
      */
-    public function count()
+    public function count(): int
     {
-        return count($this->myItems);
+        return count($this->items);
     }
 
     /**
      * Returns the current session item value.
      *
-     * @return string The current session item value.
+     * @return mixed The current session item value.
      */
     public function current()
     {
-        return current($this->myItems);
+        return current($this->items);
     }
 
     /**
@@ -42,15 +44,15 @@ class BasicTestSessionItemCollection implements SessionItemCollectionInterface
      *
      * @param string $name The session item name.
      *
-     * @return string|null The session item value by session item name if it exists, null otherwise.
+     * @return mixed|null The session item value by session item name if it exists, null otherwise.
      */
-    public function get($name)
+    public function get(string $name)
     {
-        if (!isset($this->myItems[$name])) {
+        if (!isset($this->items[$name])) {
             return null;
         }
 
-        return $this->myItems[$name];
+        return $this->items[$name];
     }
 
     /**
@@ -58,17 +60,17 @@ class BasicTestSessionItemCollection implements SessionItemCollectionInterface
      *
      * @return string The current session item name.
      */
-    public function key()
+    public function key(): string
     {
-        return key($this->myItems);
+        return strval(key($this->items));
     }
 
     /**
      * Moves forwards to the next session item.
      */
-    public function next()
+    public function next(): void
     {
-        next($this->myItems);
+        next($this->items);
     }
 
     /**
@@ -76,17 +78,17 @@ class BasicTestSessionItemCollection implements SessionItemCollectionInterface
      *
      * @param string $name The session item name.
      */
-    public function remove($name)
+    public function remove(string $name): void
     {
-        unset($this->myItems[$name]);
+        unset($this->items[$name]);
     }
 
     /**
      * Rewinds the session item collection to to first element.
      */
-    public function rewind()
+    public function rewind(): void
     {
-        reset($this->myItems);
+        reset($this->items);
     }
 
     /**
@@ -95,9 +97,9 @@ class BasicTestSessionItemCollection implements SessionItemCollectionInterface
      * @param string $name  The session item name.
      * @param mixed  $value The session item value.
      */
-    public function set($name, $value)
+    public function set(string $name, $value): void
     {
-        $this->myItems[$name] = $value;
+        $this->items[$name] = $value;
     }
 
     /**
@@ -105,13 +107,13 @@ class BasicTestSessionItemCollection implements SessionItemCollectionInterface
      *
      * @return bool True if the current session item is valid.
      */
-    public function valid()
+    public function valid(): bool
     {
-        return key($this->myItems) !== null;
+        return key($this->items) !== null;
     }
 
     /**
      * @var array My session items.
      */
-    private $myItems;
+    private $items;
 }

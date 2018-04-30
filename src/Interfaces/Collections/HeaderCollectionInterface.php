@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces\Collections;
 
@@ -22,7 +23,7 @@ interface HeaderCollectionInterface extends \Countable, \Iterator
      * @param string $name  The header name.
      * @param string $value The header value.
      */
-    public function add($name, $value);
+    public function add(string $name, string $value): void;
 
     /**
      * Returns the header value by header name if it exists, null otherwise.
@@ -33,7 +34,7 @@ interface HeaderCollectionInterface extends \Countable, \Iterator
      *
      * @return string|null The header value by header name if it exists, null otherwise.
      */
-    public function get($name);
+    public function get(string $name): ?string;
 
     /**
      * Sets a header value by header name.
@@ -43,5 +44,5 @@ interface HeaderCollectionInterface extends \Countable, \Iterator
      * @param string $name  The header name.
      * @param string $value The header value.
      */
-    public function set($name, $value);
+    public function set(string $name, string $value): void;
 }

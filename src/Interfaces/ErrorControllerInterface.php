@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces;
 
@@ -21,7 +22,7 @@ interface ErrorControllerInterface extends ControllerInterface
      *
      * @return \Exception|null The exception or null if no exception.
      */
-    public function getException();
+    public function getException(): ?\Exception;
 
     /**
      * Sets the exception.
@@ -30,5 +31,5 @@ interface ErrorControllerInterface extends ControllerInterface
      *
      * @param \Exception $exception The exception.
      */
-    public function setException(\Exception $exception);
+    public function setException(\Exception $exception): void;
 }

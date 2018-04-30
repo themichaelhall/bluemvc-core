@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests\Helpers\TestPlugins;
 
 use BlueMvc\Core\Base\AbstractPlugin;
@@ -18,10 +20,10 @@ class SetHeaderTestPlugin extends AbstractPlugin
      * @param bool $stopAfterPreRequest  If true, request should stop processing after pre-request, false otherwise.
      * @param bool $stopAfterPostRequest If true, request should stop processing after post-request, false otherwise.
      */
-    public function __construct($stopAfterPreRequest, $stopAfterPostRequest)
+    public function __construct(bool $stopAfterPreRequest, bool $stopAfterPostRequest)
     {
-        $this->myStopAfterPreRequest = $stopAfterPreRequest;
-        $this->myStopAfterPostRequest = $stopAfterPostRequest;
+        $this->stopAfterPreRequest = $stopAfterPreRequest;
+        $this->stopAfterPostRequest = $stopAfterPostRequest;
     }
 
     /**
@@ -33,13 +35,13 @@ class SetHeaderTestPlugin extends AbstractPlugin
      *
      * @return bool True if request should stop processing, false otherwise.
      */
-    public function onPreRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response)
+    public function onPreRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response): bool
     {
         parent::onPreRequest($application, $request, $response);
 
         $response->setHeader('X-PluginOnPreRequest', '1');
 
-        return $this->myStopAfterPreRequest;
+        return $this->stopAfterPreRequest;
     }
 
     /**
@@ -51,22 +53,22 @@ class SetHeaderTestPlugin extends AbstractPlugin
      *
      * @return bool True if request should stop processing, false otherwise.
      */
-    public function onPostRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response)
+    public function onPostRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response): bool
     {
         parent::onPostRequest($application, $request, $response);
 
         $response->setHeader('X-PluginOnPostRequest', '1');
 
-        return $this->myStopAfterPostRequest;
+        return $this->stopAfterPostRequest;
     }
 
     /**
      * @var bool If true, request should stop processing after pre-request, false otherwise.
      */
-    private $myStopAfterPreRequest;
+    private $stopAfterPreRequest;
 
     /**
      * @var bool If true, request should stop processing after post-request, false otherwise.
      */
-    private $myStopAfterPostRequest;
+    private $stopAfterPostRequest;
 }

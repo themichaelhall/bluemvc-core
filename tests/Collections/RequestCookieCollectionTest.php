@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests\Collections;
 
 use BlueMvc\Core\Collections\RequestCookieCollection;
@@ -32,19 +34,6 @@ class RequestCookieCollectionTest extends TestCase
     }
 
     /**
-     * Test get method with invalid name parameter type.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $name parameter is not a string.
-     */
-    public function testGetMethodWithInvalidNameParameterType()
-    {
-        $requestCookieCollection = new RequestCookieCollection();
-
-        $requestCookieCollection->get(true);
-    }
-
-    /**
      * Test set method.
      */
     public function testSet()
@@ -60,19 +49,6 @@ class RequestCookieCollectionTest extends TestCase
         self::assertSame($cookieFoo, $requestCookieCollection->get('Foo'));
         self::assertSame($cookieBar, $requestCookieCollection->get('bar'));
         self::assertNull($requestCookieCollection->get('foo'));
-    }
-
-    /**
-     * Test set method with invalid name parameter type.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $name parameter is not a string.
-     */
-    public function testSetMethodWithInvalidNameParameterType()
-    {
-        $requestCookieCollection = new RequestCookieCollection();
-
-        $requestCookieCollection->set(false, new RequestCookie(''));
     }
 
     /**

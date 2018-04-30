@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces\Collections;
 
@@ -23,7 +24,7 @@ interface ViewItemCollectionInterface extends \Countable, \Iterator
      *
      * @return mixed|null The view item value by view item name if it exists, null otherwise.
      */
-    public function get($name);
+    public function get(string $name);
 
     /**
      * Sets a view item value by view item name.
@@ -33,5 +34,5 @@ interface ViewItemCollectionInterface extends \Countable, \Iterator
      * @param string $name  The view item name.
      * @param mixed  $value The view item value.
      */
-    public function set($name, $value);
+    public function set(string $name, $value): void;
 }

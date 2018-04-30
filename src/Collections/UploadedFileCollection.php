@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Collections;
 
@@ -24,7 +25,7 @@ class UploadedFileCollection implements UploadedFileCollectionInterface
      */
     public function __construct()
     {
-        $this->myUploadedFiles = [];
+        $this->uploadedFiles = [];
     }
 
     /**
@@ -34,9 +35,9 @@ class UploadedFileCollection implements UploadedFileCollectionInterface
      *
      * @return int The number of uploaded files.
      */
-    public function count()
+    public function count(): int
     {
-        return count($this->myUploadedFiles);
+        return count($this->uploadedFiles);
     }
 
     /**
@@ -44,11 +45,11 @@ class UploadedFileCollection implements UploadedFileCollectionInterface
      *
      * @since 1.0.0
      *
-     * @return string The current uploaded file value.
+     * @return UploadedFileInterface The current uploaded file value.
      */
-    public function current()
+    public function current(): UploadedFileInterface
     {
-        return current($this->myUploadedFiles);
+        return current($this->uploadedFiles);
     }
 
     /**
@@ -58,21 +59,15 @@ class UploadedFileCollection implements UploadedFileCollectionInterface
      *
      * @param string $name The name.
      *
-     * @throws \InvalidArgumentException If the $name parameter is not a string.
-     *
      * @return UploadedFileInterface|null The the uploaded file by name if it exists, null otherwise.
      */
-    public function get($name)
+    public function get(string $name): ?UploadedFileInterface
     {
-        if (!is_string($name)) {
-            throw new \InvalidArgumentException('$name parameter is not a string.');
-        }
-
-        if (!isset($this->myUploadedFiles[$name])) {
+        if (!isset($this->uploadedFiles[$name])) {
             return null;
         }
 
-        return $this->myUploadedFiles[$name];
+        return $this->uploadedFiles[$name];
     }
 
     /**
@@ -82,9 +77,9 @@ class UploadedFileCollection implements UploadedFileCollectionInterface
      *
      * @return string The current uploaded file name.
      */
-    public function key()
+    public function key(): string
     {
-        return key($this->myUploadedFiles);
+        return strval(key($this->uploadedFiles));
     }
 
     /**
@@ -92,9 +87,9 @@ class UploadedFileCollection implements UploadedFileCollectionInterface
      *
      * @since 1.0.0
      */
-    public function next()
+    public function next(): void
     {
-        next($this->myUploadedFiles);
+        next($this->uploadedFiles);
     }
 
     /**
@@ -102,9 +97,9 @@ class UploadedFileCollection implements UploadedFileCollectionInterface
      *
      * @since 1.0.0
      */
-    public function rewind()
+    public function rewind(): void
     {
-        reset($this->myUploadedFiles);
+        reset($this->uploadedFiles);
     }
 
     /**
@@ -114,16 +109,10 @@ class UploadedFileCollection implements UploadedFileCollectionInterface
      *
      * @param string                $name         The name.
      * @param UploadedFileInterface $uploadedFile The uploaded file.
-     *
-     * @throws \InvalidArgumentException If the $name parameter is not a string.
      */
-    public function set($name, UploadedFileInterface $uploadedFile)
+    public function set(string $name, UploadedFileInterface $uploadedFile): void
     {
-        if (!is_string($name)) {
-            throw new \InvalidArgumentException('$name parameter is not a string.');
-        }
-
-        $this->myUploadedFiles[$name] = $uploadedFile;
+        $this->uploadedFiles[$name] = $uploadedFile;
     }
 
     /**
@@ -133,13 +122,13 @@ class UploadedFileCollection implements UploadedFileCollectionInterface
      *
      * @return bool True if the current uploaded file is valid.
      */
-    public function valid()
+    public function valid(): bool
     {
-        return key($this->myUploadedFiles) !== null;
+        return key($this->uploadedFiles) !== null;
     }
 
     /**
      * @var UploadedFileInterface[] My uploaded files.
      */
-    private $myUploadedFiles;
+    private $uploadedFiles;
 }

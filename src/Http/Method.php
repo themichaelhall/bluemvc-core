@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Http;
 
@@ -24,20 +25,15 @@ class Method implements MethodInterface
      *
      * @param string $name The method name.
      *
-     * @throws \InvalidArgumentException  If the $name parameter is not a string.
      * @throws InvalidMethodNameException If the method name is invalid.
      */
-    public function __construct($name)
+    public function __construct(string $name)
     {
-        if (!is_string($name)) {
-            throw new \InvalidArgumentException('$name parameter is not a string.');
-        }
-
         if (preg_match('/[^a-zA-Z0-9]/', $name, $matches)) {
             throw new InvalidMethodNameException('Method "' . $name . '" contains invalid character "' . $matches[0] . '".');
         }
 
-        $this->myName = $name;
+        $this->name = $name;
     }
 
     /**
@@ -47,9 +43,9 @@ class Method implements MethodInterface
      *
      * @return string The method name.
      */
-    public function getName()
+    public function getName(): string
     {
-        return $this->myName;
+        return $this->name;
     }
 
     /**
@@ -59,9 +55,9 @@ class Method implements MethodInterface
      *
      * @return bool True if this is a DELETE method, false otherwise.
      */
-    public function isDelete()
+    public function isDelete(): bool
     {
-        return $this->myName === 'DELETE';
+        return $this->name === 'DELETE';
     }
 
     /**
@@ -71,9 +67,9 @@ class Method implements MethodInterface
      *
      * @return bool True if this is a GET method, false otherwise.
      */
-    public function isGet()
+    public function isGet(): bool
     {
-        return $this->myName === 'GET';
+        return $this->name === 'GET';
     }
 
     /**
@@ -83,9 +79,9 @@ class Method implements MethodInterface
      *
      * @return bool True if this is a POST method, false otherwise.
      */
-    public function isPost()
+    public function isPost(): bool
     {
-        return $this->myName === 'POST';
+        return $this->name === 'POST';
     }
 
     /**
@@ -95,9 +91,9 @@ class Method implements MethodInterface
      *
      * @return bool True if this is a PUT method, false otherwise.
      */
-    public function isPut()
+    public function isPut(): bool
     {
-        return $this->myName === 'PUT';
+        return $this->name === 'PUT';
     }
 
     /**
@@ -107,13 +103,13 @@ class Method implements MethodInterface
      *
      * @return string The method as a string.
      */
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->myName;
+        return $this->name;
     }
 
     /**
      * @var string My method name.
      */
-    private $myName;
+    private $name;
 }
