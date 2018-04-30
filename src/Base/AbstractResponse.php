@@ -200,8 +200,8 @@ abstract class AbstractResponse implements ResponseInterface
         $date = new \DateTimeImmutable();
         $expiry = $expiry ?: $date;
 
-        $this->setHeader('Date', $date->setTimeZone(new \DateTimeZone('UTC'))->format('D, d M Y H:i:s \G\M\T'));
-        $this->setHeader('Expires', $expiry->setTimeZone(new \DateTimeZone('UTC'))->format('D, d M Y H:i:s \G\M\T'));
+        $this->setHeader('Date', $date->setTimezone(new \DateTimeZone('UTC'))->format('D, d M Y H:i:s \G\M\T'));
+        $this->setHeader('Expires', $expiry->setTimezone(new \DateTimeZone('UTC'))->format('D, d M Y H:i:s \G\M\T'));
 
         if ($expiry <= $date) {
             $this->setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');

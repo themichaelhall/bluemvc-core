@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests\ActionResults;
 
 use BlueMvc\Core\ActionResults\NotFoundResult;
@@ -46,16 +48,5 @@ class NotFoundResultTest extends TestCase
         self::assertSame(404, $response->getStatusCode()->getCode());
         self::assertSame('Not Found', $response->getStatusCode()->getDescription());
         self::assertSame('The page was not found.', $response->getContent());
-    }
-
-    /**
-     * Test with invalid content parameter type.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $content parameter is not a string.
-     */
-    public function testWithInvalidContentParameterType()
-    {
-        new NotFoundResult(null);
     }
 }

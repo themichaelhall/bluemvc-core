@@ -164,7 +164,7 @@ class AbstractResponseTest extends TestCase
         $expiry = (new \DateTimeImmutable())->sub(new \DateInterval('PT24H'));
         $response->setExpiry($expiry);
 
-        self::assertSame($expiry->setTimeZone(new \DateTimeZone('UTC'))->format('D, d M Y H:i:s \G\M\T'), $response->getHeader('Expires'));
+        self::assertSame($expiry->setTimezone(new \DateTimeZone('UTC'))->format('D, d M Y H:i:s \G\M\T'), $response->getHeader('Expires'));
         self::assertSame('no-cache, no-store, must-revalidate, max-age=0', $response->getHeader('Cache-Control'));
     }
 
@@ -178,7 +178,7 @@ class AbstractResponseTest extends TestCase
         $expiry = (new \DateTimeImmutable())->add(new \DateInterval('PT24H'));
         $response->setExpiry($expiry);
 
-        self::assertSame($expiry->setTimeZone(new \DateTimeZone('UTC'))->format('D, d M Y H:i:s \G\M\T'), $response->getHeader('Expires'));
+        self::assertSame($expiry->setTimezone(new \DateTimeZone('UTC'))->format('D, d M Y H:i:s \G\M\T'), $response->getHeader('Expires'));
         self::assertSame('public, max-age=86400', $response->getHeader('Cache-Control'));
     }
 
