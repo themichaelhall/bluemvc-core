@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests\Base;
 
 use BlueMvc\Core\Tests\Helpers\TestViewRenderers\BasicTestViewRenderer;

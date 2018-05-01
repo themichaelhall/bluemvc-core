@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Base;
 
@@ -40,9 +41,9 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @param PluginInterface $plugin The plugin.
      */
-    public function addPlugin(PluginInterface $plugin)
+    public function addPlugin(PluginInterface $plugin): void
     {
-        $this->myPlugins[] = $plugin;
+        $this->plugins[] = $plugin;
     }
 
     /**
@@ -52,9 +53,9 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @param RouteInterface $route The route.
      */
-    public function addRoute(RouteInterface $route)
+    public function addRoute(RouteInterface $route): void
     {
-        $this->myRoutes[] = $route;
+        $this->routes[] = $route;
     }
 
     /**
@@ -64,9 +65,9 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @param ViewRendererInterface $viewRenderer The view renderer.
      */
-    public function addViewRenderer(ViewRendererInterface $viewRenderer)
+    public function addViewRenderer(ViewRendererInterface $viewRenderer): void
     {
-        $this->myViewRenderers[] = $viewRenderer;
+        $this->viewRenderers[] = $viewRenderer;
     }
 
     /**
@@ -76,13 +77,11 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @param string $name The custom item name.
      *
-     * @throws \InvalidArgumentException If the $name parameter is not a string.
-     *
      * @return mixed|null The custom item if it exists, null otherwise.
      */
-    public function getCustomItem($name)
+    public function getCustomItem(string $name)
     {
-        return $this->myCustomItems->get($name);
+        return $this->customItems->get($name);
     }
 
     /**
@@ -92,9 +91,9 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @return CustomItemCollectionInterface The custom items.
      */
-    public function getCustomItems()
+    public function getCustomItems(): CustomItemCollectionInterface
     {
-        return $this->myCustomItems;
+        return $this->customItems;
     }
 
     /**
@@ -104,9 +103,9 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @return FilePathInterface The document root.
      */
-    public function getDocumentRoot()
+    public function getDocumentRoot(): FilePathInterface
     {
-        return $this->myDocumentRoot;
+        return $this->documentRoot;
     }
 
     /**
@@ -116,9 +115,9 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @return string|null The error controller class name or null if not specified.
      */
-    public function getErrorControllerClass()
+    public function getErrorControllerClass(): ?string
     {
-        return $this->myErrorControllerClass;
+        return $this->errorControllerClass;
     }
 
     /**
@@ -128,9 +127,9 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @return PluginInterface[] The plugins.
      */
-    public function getPlugins()
+    public function getPlugins(): array
     {
-        return $this->myPlugins;
+        return $this->plugins;
     }
 
     /**
@@ -140,9 +139,9 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @return RouteInterface[] The routes.
      */
-    public function getRoutes()
+    public function getRoutes(): array
     {
-        return $this->myRoutes;
+        return $this->routes;
     }
 
     /**
@@ -152,13 +151,11 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @param string $name The name.
      *
-     * @throws \InvalidArgumentException If the $name parameter is not a string.
-     *
      * @return mixed|null The session item if it exists, null otherwise.
      */
-    public function getSessionItem($name)
+    public function getSessionItem(string $name)
     {
-        return $this->mySessionItems->get($name);
+        return $this->sessionItems->get($name);
     }
 
     /**
@@ -168,9 +165,9 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @return SessionItemCollectionInterface The session items.
      */
-    public function getSessionItems()
+    public function getSessionItems(): SessionItemCollectionInterface
     {
-        return $this->mySessionItems;
+        return $this->sessionItems;
     }
 
     /**
@@ -180,15 +177,15 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @return FilePathInterface The path to the application-specific temporary directory.
      */
-    public function getTempPath()
+    public function getTempPath(): FilePathInterface
     {
-        if ($this->myTempPath === null) {
+        if ($this->tempPath === null) {
             // Generate a default temporary directory by document root.
-            $this->myTempPath = FilePath::parse(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'bluemvc' . DIRECTORY_SEPARATOR . sha1($this->myDocumentRoot->__toString()) . DIRECTORY_SEPARATOR);
-            self::myEnsureDirectoryExists($this->myTempPath);
+            $this->tempPath = FilePath::parse(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'bluemvc' . DIRECTORY_SEPARATOR . sha1($this->documentRoot->__toString()) . DIRECTORY_SEPARATOR);
+            self::ensureDirectoryExists($this->tempPath);
         }
 
-        return $this->myTempPath;
+        return $this->tempPath;
     }
 
     /**
@@ -198,13 +195,13 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @return FilePathInterface The view files path.
      */
-    public function getViewPath()
+    public function getViewPath(): FilePathInterface
     {
-        if ($this->myViewPath === null) {
-            return $this->myDocumentRoot;
+        if ($this->viewPath === null) {
+            return $this->documentRoot;
         }
 
-        return $this->myViewPath;
+        return $this->viewPath;
     }
 
     /**
@@ -214,9 +211,9 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @return ViewRendererInterface[] The view renderers.
      */
-    public function getViewRenderers()
+    public function getViewRenderers(): array
     {
-        return $this->myViewRenderers;
+        return $this->viewRenderers;
     }
 
     /**
@@ -226,9 +223,9 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @return bool True if in debug mode, false otherwise.
      */
-    public function isDebug()
+    public function isDebug(): bool
     {
-        return $this->myIsDebug;
+        return $this->isDebug;
     }
 
     /**
@@ -237,12 +234,10 @@ abstract class AbstractApplication implements ApplicationInterface
      * @since 1.0.0
      *
      * @param string $name The session item name.
-     *
-     * @throws \InvalidArgumentException If the $name parameter is not a string.
      */
-    public function removeSessionItem($name)
+    public function removeSessionItem(string $name): void
     {
-        $this->mySessionItems->remove($name);
+        $this->sessionItems->remove($name);
     }
 
     /**
@@ -253,9 +248,9 @@ abstract class AbstractApplication implements ApplicationInterface
      * @param RequestInterface  $request  The request.
      * @param ResponseInterface $response The response.
      */
-    public function run(RequestInterface $request, ResponseInterface $response)
+    public function run(RequestInterface $request, ResponseInterface $response): void
     {
-        $this->myRun($request, $response);
+        $this->doRun($request, $response);
         $response->output();
     }
 
@@ -266,12 +261,10 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @param string $name  The custom item name.
      * @param mixed  $value The custom item value.
-     *
-     * @throws \InvalidArgumentException If the $name parameter is not a string.
      */
-    public function setCustomItem($name, $value)
+    public function setCustomItem(string $name, $value): void
     {
-        $this->myCustomItems->set($name, $value);
+        $this->customItems->set($name, $value);
     }
 
     /**
@@ -281,9 +274,9 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @param CustomItemCollectionInterface $customItems The custom items.
      */
-    public function setCustomItems(CustomItemCollectionInterface $customItems)
+    public function setCustomItems(CustomItemCollectionInterface $customItems): void
     {
-        $this->myCustomItems = $customItems;
+        $this->customItems = $customItems;
     }
 
     /**
@@ -293,20 +286,15 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @param string $errorControllerClass The error controller class name.
      *
-     * @throws \InvalidArgumentException       If the class name is not a string.
      * @throws InvalidControllerClassException If the class name is not a valid controller class.
      */
-    public function setErrorControllerClass($errorControllerClass)
+    public function setErrorControllerClass(string $errorControllerClass): void
     {
-        if (!is_string($errorControllerClass)) {
-            throw new \InvalidArgumentException('$errorControllerClass parameter is not a string.');
-        }
-
         if (!is_a($errorControllerClass, ErrorControllerInterface::class, true)) {
             throw new InvalidControllerClassException('"' . $errorControllerClass . '" is not a valid error controller class.');
         }
 
-        $this->myErrorControllerClass = $errorControllerClass;
+        $this->errorControllerClass = $errorControllerClass;
     }
 
     /**
@@ -316,12 +304,10 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @param string $name  The session item name.
      * @param mixed  $value The session item value.
-     *
-     * @throws \InvalidArgumentException If the $name parameter is not a string.
      */
-    public function setSessionItem($name, $value)
+    public function setSessionItem(string $name, $value): void
     {
-        $this->mySessionItems->set($name, $value);
+        $this->sessionItems->set($name, $value);
     }
 
     /**
@@ -333,14 +319,14 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @throws InvalidFilePathException If the $tempPath parameter is invalid.
      */
-    public function setTempPath(FilePathInterface $tempPath)
+    public function setTempPath(FilePathInterface $tempPath): void
     {
         if (!$tempPath->isDirectory()) {
             throw new InvalidFilePathException('Temp path "' . $tempPath . '" is not a directory.');
         }
 
         try {
-            $this->myTempPath = $this->myDocumentRoot->withFilePath($tempPath);
+            $this->tempPath = $this->documentRoot->withFilePath($tempPath);
         } catch (FilePathLogicException $e) {
             throw new InvalidFilePathException($e->getMessage());
         }
@@ -355,14 +341,14 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @throws InvalidFilePathException If the $viewPath parameter is invalid.
      */
-    public function setViewPath(FilePathInterface $viewPath)
+    public function setViewPath(FilePathInterface $viewPath): void
     {
         if (!$viewPath->isDirectory()) {
             throw new InvalidFilePathException('View path "' . $viewPath . '" is not a directory.');
         }
 
         try {
-            $this->myViewPath = $this->myDocumentRoot->withFilePath($viewPath);
+            $this->viewPath = $this->documentRoot->withFilePath($viewPath);
         } catch (FilePathLogicException $e) {
             throw new InvalidFilePathException($e->getMessage());
         }
@@ -382,14 +368,14 @@ abstract class AbstractApplication implements ApplicationInterface
     {
         $this->setDocumentRoot($documentRoot);
         $this->setSessionItems($sessionItems);
-        $this->myRoutes = [];
-        $this->myTempPath = null;
-        $this->myViewRenderers = [];
-        $this->myViewPath = null;
-        $this->myIsDebug = false;
-        $this->myErrorControllerClass = null;
-        $this->myPlugins = [];
-        $this->myCustomItems = new CustomItemCollection();
+        $this->routes = [];
+        $this->tempPath = null;
+        $this->viewRenderers = [];
+        $this->viewPath = null;
+        $this->isDebug = false;
+        $this->errorControllerClass = null;
+        $this->plugins = [];
+        $this->customItems = new CustomItemCollection();
     }
 
     /**
@@ -399,9 +385,9 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @param bool $isDebug The debug mode.
      */
-    protected function setDebug($isDebug)
+    protected function setDebug(bool $isDebug): void
     {
-        $this->myIsDebug = $isDebug;
+        $this->isDebug = $isDebug;
     }
 
     /**
@@ -413,7 +399,7 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @throws InvalidFilePathException If the $documentRoot parameter is invalid.
      */
-    protected function setDocumentRoot(FilePathInterface $documentRoot)
+    protected function setDocumentRoot(FilePathInterface $documentRoot): void
     {
         if (!$documentRoot->isDirectory()) {
             throw new InvalidFilePathException('Document root "' . $documentRoot . '" is not a directory.');
@@ -423,7 +409,7 @@ abstract class AbstractApplication implements ApplicationInterface
             throw new InvalidFilePathException('Document root "' . $documentRoot . '" is not an absolute path.');
         }
 
-        $this->myDocumentRoot = $documentRoot;
+        $this->documentRoot = $documentRoot;
     }
 
     /**
@@ -433,9 +419,9 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @param SessionItemCollectionInterface $sessionItems The session items.
      */
-    protected function setSessionItems(SessionItemCollectionInterface $sessionItems)
+    protected function setSessionItems(SessionItemCollectionInterface $sessionItems): void
     {
-        $this->mySessionItems = $sessionItems;
+        $this->sessionItems = $sessionItems;
     }
 
     /**
@@ -444,28 +430,28 @@ abstract class AbstractApplication implements ApplicationInterface
      * @param RequestInterface  $request  The request.
      * @param ResponseInterface $response The response.
      */
-    private function myRun(RequestInterface $request, ResponseInterface $response)
+    private function doRun(RequestInterface $request, ResponseInterface $response): void
     {
         $exception = null;
 
-        foreach ($this->myPlugins as $plugin) {
+        foreach ($this->plugins as $plugin) {
             if ($plugin->onPreRequest($this, $request, $response)) {
                 return;
             }
         }
 
         try {
-            $this->myHandleRequest($request, $response);
+            $this->handleRequest($request, $response);
         } catch (\Exception $e) {
-            $this->myExceptionToResponse($e, $response);
+            $this->exceptionToResponse($e, $response);
             $exception = $e;
         }
 
         if ($response->getStatusCode()->isError()) {
-            $this->myHandleError($request, $response, $exception);
+            $this->handleError($request, $response, $exception);
         }
 
-        foreach ($this->myPlugins as $plugin) {
+        foreach ($this->plugins as $plugin) {
             if ($plugin->onPostRequest($this, $request, $response)) {
                 return;
             }
@@ -478,9 +464,9 @@ abstract class AbstractApplication implements ApplicationInterface
      * @param RequestInterface  $request  The request.
      * @param ResponseInterface $response The response.
      */
-    private function myHandleRequest(RequestInterface $request, ResponseInterface $response)
+    private function handleRequest(RequestInterface $request, ResponseInterface $response): void
     {
-        foreach ($this->myRoutes as $route) {
+        foreach ($this->routes as $route) {
             $routeMatch = $route->matches($request);
 
             if ($routeMatch === null) {
@@ -506,7 +492,7 @@ abstract class AbstractApplication implements ApplicationInterface
      * @param ResponseInterface $response  The response.
      * @param \Exception|null   $exception The exception or null if no exception.
      */
-    private function myHandleError(RequestInterface $request, ResponseInterface $response, \Exception $exception = null)
+    private function handleError(RequestInterface $request, ResponseInterface $response, \Exception $exception = null): void
     {
         $errorControllerClass = $this->getErrorControllerClass();
 
@@ -520,7 +506,7 @@ abstract class AbstractApplication implements ApplicationInterface
             try {
                 $errorController->processRequest($this, $request, $response, strval($response->getStatusCode()->getCode()), []);
             } catch (\Exception $e) {
-                $this->myExceptionToResponse($e, $response);
+                $this->exceptionToResponse($e, $response);
             }
         }
     }
@@ -531,11 +517,11 @@ abstract class AbstractApplication implements ApplicationInterface
      * @param \Exception        $exception The exception.
      * @param ResponseInterface $response  The response.
      */
-    private function myExceptionToResponse(\Exception $exception, ResponseInterface $response)
+    private function exceptionToResponse(\Exception $exception, ResponseInterface $response): void
     {
         $response->setStatusCode(new StatusCode(StatusCode::INTERNAL_SERVER_ERROR));
         $response->setHeaders(new HeaderCollection());
-        $response->setContent($this->myExceptionToHtml($exception));
+        $response->setContent($this->exceptionToHtml($exception));
     }
 
     /**
@@ -545,9 +531,9 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @return string The html.
      */
-    private function myExceptionToHtml(\Exception $exception)
+    private function exceptionToHtml(\Exception $exception): string
     {
-        if (!$this->myIsDebug) {
+        if (!$this->isDebug) {
             return '';
         }
 
@@ -567,7 +553,7 @@ abstract class AbstractApplication implements ApplicationInterface
             "   <body>\n" .
             '      <h1>' . htmlentities($exception->getMessage()) . "</h1>\n" .
             "      <p>\n" .
-            '         <code>' . htmlentities(get_class($exception)) . '</code> was thrown from <code>' . htmlentities($exception->getFile()) . ':' . htmlentities($exception->getLine()) . '</code> with message <code>' . htmlentities($exception->getMessage()) . ' (' . htmlentities($exception->getCode()) . ")</code>\n" .
+            '         <code>' . htmlentities(get_class($exception)) . '</code> was thrown from <code>' . htmlentities($exception->getFile()) . ':' . htmlentities(strval($exception->getLine())) . '</code> with message <code>' . htmlentities($exception->getMessage()) . ' (' . htmlentities(strval($exception->getCode())) . ")</code>\n" .
             "      </p>\n" .
             '      <pre>' . htmlentities($exception->getTraceAsString()) . "</pre>\n" .
             "   </body>\n" .
@@ -579,7 +565,7 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @param FilePathInterface $directory The directory.
      */
-    private static function myEnsureDirectoryExists(FilePathInterface $directory)
+    private static function ensureDirectoryExists(FilePathInterface $directory): void
     {
         if (!is_dir($directory->__toString())) {
             mkdir($directory->__toString(), 0700, true);
@@ -589,50 +575,50 @@ abstract class AbstractApplication implements ApplicationInterface
     /**
      * @var FilePathInterface My document root.
      */
-    private $myDocumentRoot;
+    private $documentRoot;
 
     /**
      * @var SessionItemCollectionInterface My session items.
      */
-    private $mySessionItems;
+    private $sessionItems;
 
     /**
      * @var bool True if in debug mode, false otherwise.
      */
-    private $myIsDebug;
+    private $isDebug;
 
     /**
      * @var RouteInterface[] My routes.
      */
-    private $myRoutes;
+    private $routes;
 
     /**
      * @var FilePathInterface Path to the application-specific temporary directory.
      */
-    private $myTempPath;
+    private $tempPath;
 
     /**
      * @var FilePathInterface My view files path.
      */
-    private $myViewPath;
+    private $viewPath;
 
     /**
      * @var ViewRendererInterface[] My view renderers.
      */
-    private $myViewRenderers;
+    private $viewRenderers;
 
     /**
      * @var string|null My error controller class name.
      */
-    private $myErrorControllerClass;
+    private $errorControllerClass;
 
     /**
      * @var PluginInterface[] My plugins.
      */
-    private $myPlugins;
+    private $plugins;
 
     /**
      * @var CustomItemCollectionInterface My custom items.
      */
-    private $myCustomItems;
+    private $customItems;
 }
