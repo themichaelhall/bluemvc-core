@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests\Helpers\TestResponses;
 
 use BlueMvc\Core\Base\AbstractResponse;
@@ -20,7 +22,7 @@ class BasicTestResponse extends AbstractResponse
     /**
      * Does nothing.
      */
-    public function output()
+    public function output(): void
     {
     }
 }

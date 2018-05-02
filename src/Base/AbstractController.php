@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Base;
 
@@ -26,9 +27,9 @@ abstract class AbstractController implements ControllerInterface
      *
      * @return \ReflectionMethod|null The method of the action being processed or null if no action is being processed.
      */
-    public function getActionMethod()
+    public function getActionMethod(): ?\ReflectionMethod
     {
-        return $this->myActionMethod;
+        return $this->actionMethod;
     }
 
     /**
@@ -38,9 +39,9 @@ abstract class AbstractController implements ControllerInterface
      *
      * @return ApplicationInterface|null The application if controller is processing, null otherwise.
      */
-    public function getApplication()
+    public function getApplication(): ?ApplicationInterface
     {
-        return $this->myApplication;
+        return $this->application;
     }
 
     /**
@@ -50,9 +51,9 @@ abstract class AbstractController implements ControllerInterface
      *
      * @return RequestInterface|null The request if controller is processing, null otherwise.
      */
-    public function getRequest()
+    public function getRequest(): ?RequestInterface
     {
-        return $this->myRequest;
+        return $this->request;
     }
 
     /**
@@ -62,9 +63,9 @@ abstract class AbstractController implements ControllerInterface
      *
      * @return ResponseInterface|null The response if controller is processing, null otherwise.
      */
-    public function getResponse()
+    public function getResponse(): ?ResponseInterface
     {
-        return $this->myResponse;
+        return $this->response;
     }
 
     /**
@@ -78,11 +79,11 @@ abstract class AbstractController implements ControllerInterface
      * @param string               $action      The action.
      * @param array                $parameters  The parameters.
      */
-    public function processRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, $action, array $parameters = [])
+    public function processRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, string $action, array $parameters = []): void
     {
-        $this->myApplication = $application;
-        $this->myRequest = $request;
-        $this->myResponse = $response;
+        $this->application = $application;
+        $this->request = $request;
+        $this->response = $response;
     }
 
     /**
@@ -92,10 +93,10 @@ abstract class AbstractController implements ControllerInterface
      */
     protected function __construct()
     {
-        $this->myApplication = null;
-        $this->myRequest = null;
-        $this->myResponse = null;
-        $this->myActionMethod = null;
+        $this->application = null;
+        $this->request = null;
+        $this->response = null;
+        $this->actionMethod = null;
     }
 
     /**
@@ -105,7 +106,7 @@ abstract class AbstractController implements ControllerInterface
      *
      * @return bool True if post-action event is enabled, false otherwise.
      */
-    protected function isPostActionEventEnabled()
+    protected function isPostActionEventEnabled(): bool
     {
         return true;
     }
@@ -117,7 +118,7 @@ abstract class AbstractController implements ControllerInterface
      *
      * @return bool True if pre-action event is enabled, false otherwise.
      */
-    protected function isPreActionEventEnabled()
+    protected function isPreActionEventEnabled(): bool
     {
         return true;
     }
@@ -153,11 +154,11 @@ abstract class AbstractController implements ControllerInterface
      *
      * @return bool True if action method was invoked successfully, false otherwise.
      */
-    protected function tryInvokeActionMethod($action, array $parameters, $isCaseSensitive, &$result, &$hasFoundActionMethod = null)
+    protected function tryInvokeActionMethod(string $action, array $parameters, bool $isCaseSensitive, &$result, ?bool &$hasFoundActionMethod = null): bool
     {
         $reflectionClass = new \ReflectionClass($this);
 
-        $actionMethod = self::myFindActionMethod($reflectionClass, $action, $isCaseSensitive);
+        $actionMethod = self::findActionMethod($reflectionClass, $action, $isCaseSensitive);
         if ($actionMethod === null) {
             // Suitable action method not found.
             $hasFoundActionMethod = false;
@@ -167,12 +168,12 @@ abstract class AbstractController implements ControllerInterface
 
         $hasFoundActionMethod = true;
 
-        if (!self::myActionMethodMatchesParameters($actionMethod, $parameters)) {
+        if (!self::actionMethodMatchesParameters($actionMethod, $parameters)) {
             // Action method found, but parameters did not match.
             return false;
         }
 
-        $result = $this->myInvokeActionMethod($actionMethod, $parameters);
+        $result = $this->invokeActionMethod($actionMethod, $parameters);
 
         return true;
     }
@@ -185,9 +186,9 @@ abstract class AbstractController implements ControllerInterface
      *
      * @return mixed|null The result.
      */
-    private function myInvokeActionMethod(\ReflectionMethod $actionMethod, array $parameters)
+    private function invokeActionMethod(\ReflectionMethod $actionMethod, array $parameters)
     {
-        $this->myActionMethod = $actionMethod;
+        $this->actionMethod = $actionMethod;
 
         // Handle pre-action event.
         $preActionResult = $this->isPreActionEventEnabled() ? $this->onPreActionEvent() : null;
@@ -215,7 +216,7 @@ abstract class AbstractController implements ControllerInterface
      *
      * @return bool True if action method matches the parameters, false otherwise.
      */
-    private static function myActionMethodMatchesParameters(\ReflectionMethod $reflectionMethod, array $parameters)
+    private static function actionMethodMatchesParameters(\ReflectionMethod $reflectionMethod, array $parameters): bool
     {
         $parametersCount = count($parameters);
 
@@ -244,7 +245,7 @@ abstract class AbstractController implements ControllerInterface
      *
      * @return \ReflectionMethod|null The action method or null if no action method was found.
      */
-    private static function myFindActionMethod(\ReflectionClass $reflectionClass, $action, $isCaseSensitive)
+    private static function findActionMethod(\ReflectionClass $reflectionClass, string $action, bool $isCaseSensitive): ?\ReflectionMethod
     {
         $actionMethod = null;
 
@@ -273,20 +274,20 @@ abstract class AbstractController implements ControllerInterface
     /**
      * @var ApplicationInterface|null My application.
      */
-    private $myApplication;
+    private $application;
 
     /**
      * @var RequestInterface|null My request.
      */
-    private $myRequest;
+    private $request;
 
     /**
      * @var ResponseInterface|null My response.
      */
-    private $myResponse;
+    private $response;
 
     /**
      * @var \ReflectionMethod|null My action method.
      */
-    private $myActionMethod;
+    private $actionMethod;
 }

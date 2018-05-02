@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests\Helpers\TestControllers;
 
 use BlueMvc\Core\ActionResults\NotFoundResult;
@@ -75,7 +77,7 @@ class PreAndPostActionEventController extends Controller
      *
      * @return bool True if pre-action event is enabled, false otherwise.
      */
-    protected function isPreActionEventEnabled()
+    protected function isPreActionEventEnabled(): bool
     {
         return !in_array($this->getRequest()->getUrl()->getPort(), [83, 85]);
     }
@@ -87,7 +89,7 @@ class PreAndPostActionEventController extends Controller
      *
      * @return bool True if post-action event is enabled, false otherwise.
      */
-    protected function isPostActionEventEnabled()
+    protected function isPostActionEventEnabled(): bool
     {
         return !in_array($this->getRequest()->getUrl()->getPort(), [84, 85]);
     }

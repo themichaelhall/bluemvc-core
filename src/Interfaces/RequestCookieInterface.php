@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces;
 
@@ -21,7 +22,7 @@ interface RequestCookieInterface
      *
      * @return string The cookie value.
      */
-    public function getValue();
+    public function getValue(): string;
 
     /**
      * Returns the cookie value.
@@ -30,5 +31,5 @@ interface RequestCookieInterface
      *
      * @return string The cookie value.
      */
-    public function __toString();
+    public function __toString(): string;
 }

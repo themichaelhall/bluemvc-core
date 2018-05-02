@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\Collections\HeaderCollection;
@@ -37,18 +39,6 @@ class ResponseTest extends TestCase
         $response->setContent('Hello world!');
 
         self::assertSame('Hello world!', $response->getContent());
-    }
-
-    /**
-     * Test setContent method with invalid content parameter type.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $content parameter is not a string.
-     */
-    public function testSetContentWithInvalidContentParameterType()
-    {
-        $response = new Response();
-        $response->setContent(12.34);
     }
 
     /**

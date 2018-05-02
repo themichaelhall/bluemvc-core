@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\Exceptions\InvalidFilePathException;
@@ -54,28 +56,6 @@ class UploadedFileTest extends TestCase
         self::assertSame($DS . 'foo' . $DS . 'bar.txt', $uploadedFile->getPath()->__toString());
         self::assertSame('', $uploadedFile->getOriginalName());
         self::assertSame(0, $uploadedFile->getSize());
-    }
-
-    /**
-     * Test create with invalid original name parameter type.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $originalName parameter is not a string.
-     */
-    public function testCreateWithInvalidOriginalNameParameterType()
-    {
-        new UploadedFile(FilePath::parse('/foo/bar.txt'), 0);
-    }
-
-    /**
-     * Test create with invalid size parameter type.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $size parameter is not an integer.
-     */
-    public function testCreateWithInvalidSizeParameterType()
-    {
-        new UploadedFile(FilePath::parse('/foo/bar.txt'), 'FooBar.txt', true);
     }
 
     /**

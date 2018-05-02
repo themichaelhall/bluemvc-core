@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\RequestCookie;
@@ -18,17 +20,6 @@ class RequestCookieTest extends TestCase
         $requestCookie = new RequestCookie('Foo');
 
         self::assertSame('Foo', $requestCookie->getValue());
-    }
-
-    /**
-     * Test constructor with invalid value parameter type.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $value parameter is not a string.
-     */
-    public function testConstructorWithInvalidValueParameter()
-    {
-        new RequestCookie(100);
     }
 
     /**

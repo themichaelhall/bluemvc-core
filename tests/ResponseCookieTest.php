@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\ResponseCookie;
@@ -126,17 +128,6 @@ class ResponseCookieTest extends TestCase
     }
 
     /**
-     * Test constructor with invalid value parameter type.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $value parameter is not a string.
-     */
-    public function testConstructorWithInvalidValueParameterType()
-    {
-        new ResponseCookie(100);
-    }
-
-    /**
      * Test constructor with non-absolute path parameter.
      *
      * @expectedException \BlueMvc\Core\Exceptions\InvalidResponseCookiePathException
@@ -156,28 +147,6 @@ class ResponseCookieTest extends TestCase
     public function testConstructorWithNonDirectoryPathParameter()
     {
         new ResponseCookie('foo', null, UrlPath::parse('/foo/bar'));
-    }
-
-    /**
-     * Test constructor with invalid is secure parameter type.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $isSecure parameter is not a boolean.
-     */
-    public function testConstructorWithInvalidIsSecureParameterType()
-    {
-        new ResponseCookie('Foo', null, null, null, 10);
-    }
-
-    /**
-     * Test constructor with invalid is http only parameter type.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $isHttpOnly parameter is not a boolean.
-     */
-    public function testConstructorWithInvalidIsHttpOnlyParameterType()
-    {
-        new ResponseCookie('Foo', null, null, null, false, null);
     }
 
     /**

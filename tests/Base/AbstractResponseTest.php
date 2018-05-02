@@ -40,18 +40,6 @@ class AbstractResponseTest extends TestCase
     }
 
     /**
-     * Test setContent method with invalid content parameter type.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $content parameter is not a string.
-     */
-    public function testSetContentWithInvalidContentParameterType()
-    {
-        $response = new BasicTestResponse();
-        $response->setContent(false);
-    }
-
-    /**
      * Test getStatusCode method.
      */
     public function testGetStatusCode()

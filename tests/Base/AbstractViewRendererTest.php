@@ -32,15 +32,4 @@ class AbstractViewRendererTest extends TestCase
     {
         new BasicTestViewRenderer('foo$bar');
     }
-
-    /**
-     * Test create view renderer with invalid argument type.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $viewFileExtension parameter is not a string.
-     */
-    public function testCreateWithInvalidArgumentType()
-    {
-        new BasicTestViewRenderer([]);
-    }
 }

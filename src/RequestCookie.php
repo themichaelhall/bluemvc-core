@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core;
 
@@ -23,10 +24,8 @@ class RequestCookie extends AbstractCookie implements RequestCookieInterface
      * @since 1.0.0
      *
      * @param string $value The value.
-     *
-     * @throws \InvalidArgumentException If the $value parameter is not a string.
      */
-    public function __construct($value)
+    public function __construct(string $value)
     {
         parent::__construct($value);
     }
