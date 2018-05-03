@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests\Helpers\Fakes {
 
     /**
@@ -18,9 +20,9 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
          * @param bool   $secure   True if cookie should only be used on secure connection, false otherwise.
          * @param bool   $httponly True if cookie should only be accessible through the http protocol, false otherwise.
          */
-        public static function add($name, $value, $expire, $path, $domain, $secure, $httponly)
+        public static function add(string $name, string $value, int $expire, string $path, string $domain, bool $secure, bool $httponly): void
         {
-            self::$myCookies[] = [
+            self::$cookies[] = [
                 'name'     => $name,
                 'value'    => $value,
                 'expire'   => $expire,
@@ -34,7 +36,7 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
         /**
          * Disable fake cookies.
          */
-        public static function disable()
+        public static function disable(): void
         {
             self::$isEnabled = false;
         }
@@ -42,24 +44,24 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
         /**
          * Enable fake cookies.
          */
-        public static function enable()
+        public static function enable(): void
         {
-            self::$myCookies = [];
+            self::$cookies = [];
             self::$isEnabled = true;
         }
 
         /**
          * @return array The cookies.
          */
-        public static function get()
+        public static function get(): array
         {
-            return self::$myCookies;
+            return self::$cookies;
         }
 
         /**
          * @return bool True if fake cookies is enabled, false otherwise.
          */
-        public static function isEnabled()
+        public static function isEnabled(): bool
         {
             return self::$isEnabled;
         }
@@ -67,7 +69,7 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
         /**
          * @var array My cookies.
          */
-        private static $myCookies = [];
+        private static $cookies = [];
 
         /**
          * @var bool True if fake cookies is enabled, false otherwise.
@@ -91,7 +93,7 @@ namespace BlueMvc\Core {
      * @param bool   $secure   True if cookie should only be used on secure connection, false otherwise.
      * @param bool   $httponly True if cookie should only be accessible through the http protocol, false otherwise.
      */
-    function setcookie($name, $value = '', $expire = 0, $path = '', $domain = '', $secure = false, $httponly = false)
+    function setcookie(string $name, string $value = '', int $expire = 0, string $path = '', string $domain = '', bool $secure = false, bool $httponly = false)
     {
         if (FakeCookies::isEnabled()) {
             FakeCookies::add($name, $value, $expire, $path, $domain, $secure, $httponly);

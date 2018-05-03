@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests\Helpers\TestClasses;
 
 /**
@@ -13,7 +15,7 @@ class JsonSerializableTestClass implements \JsonSerializable
      * @param int    $intVal    The integer value.
      * @param string $stringVal The string value.
      */
-    public function __construct($intVal, $stringVal)
+    public function __construct(int $intVal, string $stringVal)
     {
         $this->intVal = $intVal;
         $this->stringVal = $stringVal;

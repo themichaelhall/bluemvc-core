@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\Http\Method;
@@ -36,7 +38,7 @@ class ErrorHandlingTest extends TestCase
      * @param string      $expectedContent      The expected content.
      * @param int         $expectedStatusCode   The expected status code.
      */
-    public function testErrorHandling($isDebug, $path, $errorControllerClass, array $expectedHeaders, $expectedContent, $expectedStatusCode)
+    public function testErrorHandling(bool $isDebug, string $path, ?string $errorControllerClass, array $expectedHeaders, string $expectedContent, int $expectedStatusCode)
     {
         if ($errorControllerClass !== null) {
             $this->application->setErrorControllerClass($errorControllerClass);

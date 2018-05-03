@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces;
 
@@ -21,7 +22,7 @@ interface RouteInterface
      *
      * @return string The controller class name.
      */
-    public function getControllerClassName();
+    public function getControllerClassName(): string;
 
     /**
      * Check if a route matches a request.
@@ -32,5 +33,5 @@ interface RouteInterface
      *
      * @return RouteMatchInterface|null The route match if route matches request, null otherwise.
      */
-    public function matches(RequestInterface $request);
+    public function matches(RequestInterface $request): ?RouteMatchInterface;
 }

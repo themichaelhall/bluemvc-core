@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests\Helpers\Fakes {
 
     /**
@@ -10,7 +12,7 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
         /**
          * Disable fake session.
          */
-        public static function disable()
+        public static function disable(): void
         {
             self::$isEnabled = false;
             self::$status = PHP_SESSION_NONE;
@@ -20,7 +22,7 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
         /**
          * Enable fake session.
          */
-        public static function enable()
+        public static function enable(): void
         {
             self::$isEnabled = true;
             self::$status = PHP_SESSION_NONE;
@@ -35,7 +37,7 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
          *
          * @return int The session status.
          */
-        public static function getStatus()
+        public static function getStatus(): int
         {
             return self::$status;
         }
@@ -43,7 +45,7 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
         /**
          * @return bool True if fake cookies is enabled, false otherwise.
          */
-        public static function isEnabled()
+        public static function isEnabled(): bool
         {
             return self::$isEnabled;
         }
@@ -51,7 +53,7 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
         /**
          * Starts the session.
          */
-        public static function start()
+        public static function start(): void
         {
             self::$status = PHP_SESSION_ACTIVE;
         }
@@ -76,16 +78,18 @@ namespace BlueMvc\Core\Collections {
      * Fakes the session_start method.
      *
      * @param array $options The options.
+     *
+     * @return bool True if session was started, false otherwise.
      */
-    function session_start(array $options = [])
+    function session_start(array $options = []): bool
     {
         if (FakeSession::isEnabled()) {
             FakeSession::start();
 
-            return;
+            return true;
         }
 
-        \session_start($options);
+        return \session_start($options);
     }
 
     /**
@@ -93,7 +97,7 @@ namespace BlueMvc\Core\Collections {
      *
      * @return int The session status.
      */
-    function session_status()
+    function session_status(): int
     {
         if (FakeSession::isEnabled()) {
             return FakeSession::getStatus();

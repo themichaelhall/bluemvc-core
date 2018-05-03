@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\RouteMatch;
@@ -39,27 +41,5 @@ class RouteMatchTest extends TestCase
         $routeMatch = new RouteMatch(BasicTestController::class, '', ['foo', 'bar']);
 
         self::assertSame(['foo', 'bar'], $routeMatch->getParameters());
-    }
-
-    /**
-     * Test create route match with invalid controller class name parameter type.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $controllerClassName parameter is not a string.
-     */
-    public function testCreateWithInvalidControllerClassNameParameterType()
-    {
-        new RouteMatch(false);
-    }
-
-    /**
-     * Test create route match with invalid action parameter type.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $action parameter is not a string.
-     */
-    public function testCreateWithInvalidActionParameterType()
-    {
-        new RouteMatch(BasicTestController::class, -42);
     }
 }

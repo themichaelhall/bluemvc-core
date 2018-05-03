@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\Exceptions\ServerEnvironmentException;
@@ -799,7 +801,7 @@ class RequestTest extends TestCase
      */
     public function setUp()
     {
-        $this->myRequestTimeFloat = $_SERVER['REQUEST_TIME_FLOAT'];
+        $this->requestTimeFloat = $_SERVER['REQUEST_TIME_FLOAT'];
 
         FakeIsUploadedFile::enable();
         FakeFileGetContentsPhpInput::enable();
@@ -819,11 +821,11 @@ class RequestTest extends TestCase
         FakeIsUploadedFile::disable();
         FakeFileGetContentsPhpInput::disable();
 
-        $_SERVER['REQUEST_TIME_FLOAT'] = $this->myRequestTimeFloat;
+        $_SERVER['REQUEST_TIME_FLOAT'] = $this->requestTimeFloat;
     }
 
     /**
      * @var float My request time.
      */
-    private $myRequestTimeFloat;
+    private $requestTimeFloat;
 }

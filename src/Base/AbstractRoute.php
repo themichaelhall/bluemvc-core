@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Base;
 
@@ -27,9 +28,9 @@ abstract class AbstractRoute implements RouteInterface
      *
      * @return string The controller class name.
      */
-    public function getControllerClassName()
+    public function getControllerClassName(): string
     {
-        return $this->myControllerClassName;
+        return $this->controllerClassName;
     }
 
     /**
@@ -41,7 +42,7 @@ abstract class AbstractRoute implements RouteInterface
      *
      * @return RouteMatchInterface|null The route match if rout matches request, null otherwise.
      */
-    abstract public function matches(RequestInterface $request);
+    abstract public function matches(RequestInterface $request): ?RouteMatchInterface;
 
     /**
      * Constructs a route.
@@ -50,24 +51,19 @@ abstract class AbstractRoute implements RouteInterface
      *
      * @param string $controllerClassName The controller class name.
      *
-     * @throws \InvalidArgumentException       If the $controllerClassName is not a string.
      * @throws InvalidControllerClassException If the controller class name is invalid.
      */
-    protected function __construct($controllerClassName)
+    protected function __construct(string $controllerClassName)
     {
-        if (!is_string($controllerClassName)) {
-            throw new \InvalidArgumentException('$controllerClassName parameter is not a string.');
-        }
-
         if (!is_a($controllerClassName, ControllerInterface::class, true)) {
             throw new InvalidControllerClassException('"' . $controllerClassName . '" is not a valid controller class.');
         }
 
-        $this->myControllerClassName = $controllerClassName;
+        $this->controllerClassName = $controllerClassName;
     }
 
     /**
      * @var string My controller class name.
      */
-    private $myControllerClassName;
+    private $controllerClassName;
 }

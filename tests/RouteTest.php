@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\Http\Method;
@@ -64,6 +66,7 @@ class RouteTest extends TestCase
     public function testGetControllerClassName()
     {
         $route = new Route('', BasicTestController::class);
+
         self::assertSame(BasicTestController::class, $route->getControllerClassName());
     }
 
@@ -78,7 +81,7 @@ class RouteTest extends TestCase
      * @param string|null $expectedAction     The expected action or null if no match.
      * @param array|null  $expectedParameters The expected parameters or null if no match.
      */
-    public function testMatches($path, $urlPath, $expectedMatch, $expectedAction = null, array $expectedParameters = null)
+    public function testMatches(string $path, string $urlPath, bool $expectedMatch, ?string $expectedAction = null, ?array $expectedParameters = null)
     {
         $route = new Route($path, BasicTestController::class);
         $routeMatch = $route->matches(new BasicTestRequest(Url::parse('https://example.com' . $urlPath), new Method('GET')));
@@ -148,27 +151,5 @@ class RouteTest extends TestCase
             ['foo/bar/baz', '/foo/bar/baz/1/', true, '1', ['']],
             ['foo/bar/baz', '/foo/bar/baz/1/2', true, '1', ['2']],
         ];
-    }
-
-    /**
-     * Test create route with invalid path parameter type.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $path parameter is not a string.
-     */
-    public function testCreateWithInvalidPathParameterType()
-    {
-        new Route(null, BasicTestController::class);
-    }
-
-    /**
-     * Test create route with invalid controller class name parameter type.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $controllerClassName parameter is not a string.
-     */
-    public function testCreateWithInvalidControllerClassNameParameterType()
-    {
-        new Route('', true);
     }
 }
