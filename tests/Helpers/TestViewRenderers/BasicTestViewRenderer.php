@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests\Helpers\TestViewRenderers;
 
 use BlueMvc\Core\Base\AbstractViewRenderer;
@@ -16,9 +18,9 @@ class BasicTestViewRenderer extends AbstractViewRenderer
     /**
      * Constructs the view renderer.
      *
-     * @param mixed $viewFileExtension The view file extension.
+     * @param string $viewFileExtension The view file extension.
      */
-    public function __construct($viewFileExtension = 'view')
+    public function __construct(string $viewFileExtension = 'view')
     {
         parent::__construct($viewFileExtension);
     }
@@ -26,17 +28,17 @@ class BasicTestViewRenderer extends AbstractViewRenderer
     /**
      * Renders the view.
      *
-     * @param ApplicationInterface        $application The application.
-     * @param RequestInterface            $request     The request.
-     * @param FilePathInterface           $viewFile    The view file.
-     * @param mixed                       $model       The model or null if there is no model.
-     * @param ViewItemCollectionInterface $viewItems   The view items or null if there is no view items.
+     * @param ApplicationInterface             $application The application.
+     * @param RequestInterface                 $request     The request.
+     * @param FilePathInterface                $viewFile    The view file.
+     * @param mixed|null                       $model       The model or null if there is no model.
+     * @param ViewItemCollectionInterface|null $viewItems   The view items or null if there is no view items.
      *
      * @return string The rendered view.
      */
-    public function renderView(ApplicationInterface $application, RequestInterface $request, FilePathInterface $viewFile, $model = null, ViewItemCollectionInterface $viewItems = null)
+    public function renderView(ApplicationInterface $application, RequestInterface $request, FilePathInterface $viewFile, $model = null, ?ViewItemCollectionInterface $viewItems = null): string
     {
-        $fileContent = file_get_contents($application->getViewPath()->withFilePath($viewFile));
+        $fileContent = file_get_contents($application->getViewPath()->withFilePath($viewFile)->__toString());
         $result = str_replace(
             [
                 '{ROOT}',

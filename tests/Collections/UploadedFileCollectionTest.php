@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests\Collections;
 
 use BlueMvc\Core\Collections\UploadedFileCollection;
@@ -33,47 +35,24 @@ class UploadedFileCollectionTest extends TestCase
     }
 
     /**
-     * Test get method with invalid name parameter type.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $name parameter is not a string.
-     */
-    public function testGetMethodWithInvalidNameParameterType()
-    {
-        $uploadedFileCollection = new UploadedFileCollection();
-
-        $uploadedFileCollection->get(10);
-    }
-
-    /**
      * Test set method.
      */
     public function testSet()
     {
         $fileFoo = new UploadedFile(FilePath::parse('/tmp/foo.txt'), 'Foo', 1234);
         $fileBar = new UploadedFile(FilePath::parse('/tmp/bar.dat'));
+        $fileBaz = new UploadedFile(FilePath::parse('/tmp/baz.ico'));
 
         $uploadedFileCollection = new UploadedFileCollection();
         $uploadedFileCollection->set('Foo', $fileFoo);
         $uploadedFileCollection->set('bar', $fileBar);
+        $uploadedFileCollection->set('1', $fileBaz);
 
-        self::assertSame(2, count($uploadedFileCollection));
+        self::assertSame(3, count($uploadedFileCollection));
         self::assertSame($fileFoo, $uploadedFileCollection->get('Foo'));
         self::assertSame($fileBar, $uploadedFileCollection->get('bar'));
         self::assertNull($uploadedFileCollection->get('foo'));
-    }
-
-    /**
-     * Test set method with invalid name parameter type.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $name parameter is not a string.
-     */
-    public function testSetMethodWithInvalidNameParameterType()
-    {
-        $uploadedFileCollection = new UploadedFileCollection();
-
-        $uploadedFileCollection->set(false, new UploadedFile(FilePath::parse('/tmp/foo')));
+        self::assertSame($fileBaz, $uploadedFileCollection->get('1'));
     }
 
     /**
@@ -95,13 +74,15 @@ class UploadedFileCollectionTest extends TestCase
     {
         $fileFoo = new UploadedFile(FilePath::parse('/tmp/foo.txt'), 'Foo', 1234);
         $fileBar = new UploadedFile(FilePath::parse('/tmp/bar.dat'));
+        $fileBaz = new UploadedFile(FilePath::parse('/tmp/baz.ico'));
 
         $uploadedFileCollection = new UploadedFileCollection();
         $uploadedFileCollection->set('Foo', $fileFoo);
         $uploadedFileCollection->set('bar', $fileBar);
+        $uploadedFileCollection->set('1', $fileBaz);
 
         $uploadedFileArray = iterator_to_array($uploadedFileCollection, true);
 
-        self::assertSame(['Foo' => $fileFoo, 'bar' => $fileBar], $uploadedFileArray);
+        self::assertSame(['Foo' => $fileFoo, 'bar' => $fileBar, 1 => $fileBaz], $uploadedFileArray);
     }
 }

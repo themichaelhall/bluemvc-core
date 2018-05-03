@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests\Base;
 
 use BlueMvc\Core\Collections\CustomItemCollection;
@@ -26,7 +28,7 @@ class AbstractApplicationTest extends TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
-        self::assertSame($DS . 'var' . $DS . 'www' . $DS, $this->myApplication->getDocumentRoot()->__toString());
+        self::assertSame($DS . 'var' . $DS . 'www' . $DS, $this->application->getDocumentRoot()->__toString());
     }
 
     /**
@@ -34,7 +36,7 @@ class AbstractApplicationTest extends TestCase
      */
     public function testGetViewRenderers()
     {
-        $viewRenderers = $this->myApplication->getViewRenderers();
+        $viewRenderers = $this->application->getViewRenderers();
 
         self::assertSame(1, count($viewRenderers));
         self::assertInstanceOf(BasicTestViewRenderer::class, $viewRenderers[0]);
@@ -47,7 +49,7 @@ class AbstractApplicationTest extends TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
-        self::assertSame($DS . 'var' . $DS . 'www' . $DS, $this->myApplication->getViewPath()->__toString());
+        self::assertSame($DS . 'var' . $DS . 'www' . $DS, $this->application->getViewPath()->__toString());
     }
 
     /**
@@ -55,7 +57,7 @@ class AbstractApplicationTest extends TestCase
      */
     public function testGetRoutes()
     {
-        $routes = $this->myApplication->getRoutes();
+        $routes = $this->application->getRoutes();
 
         self::assertSame(1, count($routes));
     }
@@ -67,9 +69,9 @@ class AbstractApplicationTest extends TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
-        $this->myApplication->setViewPath(FilePath::parse($DS . 'bluemvc' . $DS . 'html' . $DS));
+        $this->application->setViewPath(FilePath::parse($DS . 'bluemvc' . $DS . 'html' . $DS));
 
-        self::assertSame($DS . 'bluemvc' . $DS . 'html' . $DS, $this->myApplication->getViewPath()->__toString());
+        self::assertSame($DS . 'bluemvc' . $DS . 'html' . $DS, $this->application->getViewPath()->__toString());
     }
 
     /**
@@ -79,9 +81,9 @@ class AbstractApplicationTest extends TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
-        $this->myApplication->setViewPath(FilePath::parse('..' . $DS . 'bluemvc' . $DS . 'html' . $DS));
+        $this->application->setViewPath(FilePath::parse('..' . $DS . 'bluemvc' . $DS . 'html' . $DS));
 
-        self::assertSame($DS . 'var' . $DS . 'bluemvc' . $DS . 'html' . $DS, $this->myApplication->getViewPath()->__toString());
+        self::assertSame($DS . 'var' . $DS . 'bluemvc' . $DS . 'html' . $DS, $this->application->getViewPath()->__toString());
     }
 
     /**
@@ -110,7 +112,7 @@ class AbstractApplicationTest extends TestCase
         $exceptionMessage = '';
 
         try {
-            $this->myApplication->setDocumentRoot(FilePath::parse($DS . 'var' . $DS . 'www' . $DS . 'file.txt'));
+            $this->application->setDocumentRoot(FilePath::parse($DS . 'var' . $DS . 'www' . $DS . 'file.txt'));
         } catch (InvalidFilePathException $e) {
             $exceptionMessage = $e->getMessage();
         }
@@ -144,7 +146,7 @@ class AbstractApplicationTest extends TestCase
         $exceptionMessage = '';
 
         try {
-            $this->myApplication->setDocumentRoot(FilePath::parse('var' . $DS . 'www' . $DS));
+            $this->application->setDocumentRoot(FilePath::parse('var' . $DS . 'www' . $DS));
         } catch (InvalidFilePathException $e) {
             $exceptionMessage = $e->getMessage();
         }
@@ -161,7 +163,7 @@ class AbstractApplicationTest extends TestCase
         $exceptionMessage = '';
 
         try {
-            $this->myApplication->setViewPath(FilePath::parse($DS . 'views' . $DS . 'file.txt'));
+            $this->application->setViewPath(FilePath::parse($DS . 'views' . $DS . 'file.txt'));
         } catch (InvalidFilePathException $e) {
             $exceptionMessage = $e->getMessage();
         }
@@ -178,7 +180,7 @@ class AbstractApplicationTest extends TestCase
         $exceptionMessage = '';
 
         try {
-            $this->myApplication->setViewPath(FilePath::parse('..' . $DS . '..' . $DS . '..' . $DS . 'views' . $DS));
+            $this->application->setViewPath(FilePath::parse('..' . $DS . '..' . $DS . '..' . $DS . 'views' . $DS));
         } catch (InvalidFilePathException $e) {
             $exceptionMessage = $e->getMessage();
         }
@@ -193,7 +195,7 @@ class AbstractApplicationTest extends TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
-        self::assertSame(sys_get_temp_dir() . $DS . 'bluemvc' . $DS . sha1($this->myApplication->getDocumentRoot()->__toString()) . $DS, $this->myApplication->getTempPath()->__toString());
+        self::assertSame(sys_get_temp_dir() . $DS . 'bluemvc' . $DS . sha1($this->application->getDocumentRoot()->__toString()) . $DS, $this->application->getTempPath()->__toString());
     }
 
     /**
@@ -203,9 +205,9 @@ class AbstractApplicationTest extends TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
-        $this->myApplication->setTempPath(FilePath::parse($DS . 'tmp' . $DS . 'bluemvc' . $DS));
+        $this->application->setTempPath(FilePath::parse($DS . 'tmp' . $DS . 'bluemvc' . $DS));
 
-        self::assertSame($DS . 'tmp' . $DS . 'bluemvc' . $DS, $this->myApplication->getTempPath()->__toString());
+        self::assertSame($DS . 'tmp' . $DS . 'bluemvc' . $DS, $this->application->getTempPath()->__toString());
     }
 
     /**
@@ -215,9 +217,9 @@ class AbstractApplicationTest extends TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
-        $this->myApplication->setTempPath(FilePath::parse('tmp' . $DS . 'bluemvc' . $DS));
+        $this->application->setTempPath(FilePath::parse('tmp' . $DS . 'bluemvc' . $DS));
 
-        self::assertSame($DS . 'var' . $DS . 'www' . $DS . 'tmp' . $DS . 'bluemvc' . $DS, $this->myApplication->getTempPath()->__toString());
+        self::assertSame($DS . 'var' . $DS . 'www' . $DS . 'tmp' . $DS . 'bluemvc' . $DS, $this->application->getTempPath()->__toString());
     }
 
     /**
@@ -229,7 +231,7 @@ class AbstractApplicationTest extends TestCase
         $exceptionMessage = '';
 
         try {
-            $this->myApplication->setTempPath(FilePath::parse($DS . 'tmp' . $DS . 'file.txt'));
+            $this->application->setTempPath(FilePath::parse($DS . 'tmp' . $DS . 'file.txt'));
         } catch (InvalidFilePathException $e) {
             $exceptionMessage = $e->getMessage();
         }
@@ -246,7 +248,7 @@ class AbstractApplicationTest extends TestCase
         $exceptionMessage = '';
 
         try {
-            $this->myApplication->setTempPath(FilePath::parse('..' . $DS . '..' . $DS . '..' . $DS . 'tmp' . $DS));
+            $this->application->setTempPath(FilePath::parse('..' . $DS . '..' . $DS . '..' . $DS . 'tmp' . $DS));
         } catch (InvalidFilePathException $e) {
             $exceptionMessage = $e->getMessage();
         }
@@ -259,7 +261,7 @@ class AbstractApplicationTest extends TestCase
      */
     public function testIsDebug()
     {
-        self::assertFalse($this->myApplication->isDebug());
+        self::assertFalse($this->application->isDebug());
     }
 
     /**
@@ -267,9 +269,9 @@ class AbstractApplicationTest extends TestCase
      */
     public function testSetDebug()
     {
-        $this->myApplication->setDebug(true);
+        $this->application->setDebug(true);
 
-        self::assertTrue($this->myApplication->isDebug());
+        self::assertTrue($this->application->isDebug());
     }
 
     /**
@@ -277,7 +279,7 @@ class AbstractApplicationTest extends TestCase
      */
     public function testGetErrorControllerClass()
     {
-        self::assertNull($this->myApplication->getErrorControllerClass());
+        self::assertNull($this->application->getErrorControllerClass());
     }
 
     /**
@@ -285,20 +287,9 @@ class AbstractApplicationTest extends TestCase
      */
     public function testSetErrorControllerClass()
     {
-        $this->myApplication->setErrorControllerClass(ErrorTestController::class);
+        $this->application->setErrorControllerClass(ErrorTestController::class);
 
-        self::assertSame(ErrorTestController::class, $this->myApplication->getErrorControllerClass());
-    }
-
-    /**
-     * Test setErrorControllerClass method with non-existing class name.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $errorControllerClass parameter is not a string.
-     */
-    public function testSetErrorControllerClassWithInvalidParameterType()
-    {
-        $this->myApplication->setErrorControllerClass(false);
+        self::assertSame(ErrorTestController::class, $this->application->getErrorControllerClass());
     }
 
     /**
@@ -309,7 +300,7 @@ class AbstractApplicationTest extends TestCase
      */
     public function testSetErrorControllerClassWithNonExistingClassName()
     {
-        $this->myApplication->setErrorControllerClass('BlueMvc\\Core\\FooBar');
+        $this->application->setErrorControllerClass('BlueMvc\\Core\\FooBar');
     }
 
     /**
@@ -320,7 +311,7 @@ class AbstractApplicationTest extends TestCase
      */
     public function testSetErrorControllerClassWithInvalidClassName()
     {
-        $this->myApplication->setErrorControllerClass(BasicTestRequest::class);
+        $this->application->setErrorControllerClass(BasicTestRequest::class);
     }
 
     /**
@@ -331,7 +322,7 @@ class AbstractApplicationTest extends TestCase
      */
     public function testSetErrorControllerClassWithOrdinaryControllerClassName()
     {
-        $this->myApplication->setErrorControllerClass(BasicTestController::class);
+        $this->application->setErrorControllerClass(BasicTestController::class);
     }
 
     /**
@@ -339,7 +330,7 @@ class AbstractApplicationTest extends TestCase
      */
     public function testGetSessionItems()
     {
-        $sessionItems = $this->myApplication->getSessionItems();
+        $sessionItems = $this->application->getSessionItems();
 
         self::assertSame([], iterator_to_array($sessionItems));
     }
@@ -349,10 +340,10 @@ class AbstractApplicationTest extends TestCase
      */
     public function testSetSessionItem()
     {
-        $this->myApplication->setSessionItem('Foo', [1, 2]);
-        $this->myApplication->setSessionItem('Bar', true);
+        $this->application->setSessionItem('Foo', [1, 2]);
+        $this->application->setSessionItem('Bar', true);
 
-        $sessionItems = $this->myApplication->getSessionItems();
+        $sessionItems = $this->application->getSessionItems();
 
         self::assertSame(['Foo' => [1, 2], 'Bar' => true], iterator_to_array($sessionItems));
     }
@@ -362,13 +353,13 @@ class AbstractApplicationTest extends TestCase
      */
     public function testGetSessionItem()
     {
-        $this->myApplication->setSessionItem('Foo', [1, 2]);
-        $this->myApplication->setSessionItem('Bar', true);
+        $this->application->setSessionItem('Foo', [1, 2]);
+        $this->application->setSessionItem('Bar', true);
 
-        self::assertSame([1, 2], $this->myApplication->getSessionItem('Foo'));
-        self::assertSame(true, $this->myApplication->getSessionItem('Bar'));
-        self::assertNull($this->myApplication->getSessionItem('Baz'));
-        self::assertNull($this->myApplication->getSessionItem('bar'));
+        self::assertSame([1, 2], $this->application->getSessionItem('Foo'));
+        self::assertSame(true, $this->application->getSessionItem('Bar'));
+        self::assertNull($this->application->getSessionItem('Baz'));
+        self::assertNull($this->application->getSessionItem('bar'));
     }
 
     /**
@@ -376,16 +367,16 @@ class AbstractApplicationTest extends TestCase
      */
     public function testRemoveSessionItem()
     {
-        $this->myApplication->setSessionItem('Foo', [1, 2]);
-        $this->myApplication->setSessionItem('Bar', true);
+        $this->application->setSessionItem('Foo', [1, 2]);
+        $this->application->setSessionItem('Bar', true);
 
-        $this->myApplication->removeSessionItem('Bar');
-        $this->myApplication->removeSessionItem('Baz');
+        $this->application->removeSessionItem('Bar');
+        $this->application->removeSessionItem('Baz');
 
-        self::assertSame([1, 2], $this->myApplication->getSessionItem('Foo'));
-        self::assertNull($this->myApplication->getSessionItem('Bar'));
-        self::assertNull($this->myApplication->getSessionItem('Baz'));
-        self::assertNull($this->myApplication->getSessionItem('bar'));
+        self::assertSame([1, 2], $this->application->getSessionItem('Foo'));
+        self::assertNull($this->application->getSessionItem('Bar'));
+        self::assertNull($this->application->getSessionItem('Baz'));
+        self::assertNull($this->application->getSessionItem('bar'));
     }
 
     /**
@@ -397,9 +388,9 @@ class AbstractApplicationTest extends TestCase
         $sessionItems->set('Foo', 1);
         $sessionItems->set('Bar', 2);
 
-        $this->myApplication->setSessionItems($sessionItems);
+        $this->application->setSessionItems($sessionItems);
 
-        self::assertSame(['Foo' => 1, 'Bar' => 2], iterator_to_array($this->myApplication->getSessionItems()));
+        self::assertSame(['Foo' => 1, 'Bar' => 2], iterator_to_array($this->application->getSessionItems()));
     }
 
     /**
@@ -407,7 +398,7 @@ class AbstractApplicationTest extends TestCase
      */
     public function testGetCustomItems()
     {
-        $customItems = $this->myApplication->getCustomItems();
+        $customItems = $this->application->getCustomItems();
 
         self::assertSame([], iterator_to_array($customItems));
     }
@@ -417,10 +408,10 @@ class AbstractApplicationTest extends TestCase
      */
     public function testSetCustomItem()
     {
-        $this->myApplication->setCustomItem('foo', 'bar');
-        $this->myApplication->setCustomItem('baz', [1, 2]);
+        $this->application->setCustomItem('foo', 'bar');
+        $this->application->setCustomItem('baz', [1, 2]);
 
-        $customItems = $this->myApplication->getCustomItems();
+        $customItems = $this->application->getCustomItems();
 
         self::assertSame(['foo' => 'bar', 'baz' => [1, 2]], iterator_to_array($customItems));
     }
@@ -430,13 +421,13 @@ class AbstractApplicationTest extends TestCase
      */
     public function testGetCustomItem()
     {
-        $this->myApplication->setCustomItem('foo', 'bar');
-        $this->myApplication->setCustomItem('baz', [1, 2]);
+        $this->application->setCustomItem('foo', 'bar');
+        $this->application->setCustomItem('baz', [1, 2]);
 
-        self::assertSame('bar', $this->myApplication->getCustomItem('foo'));
-        self::assertSame([1, 2], $this->myApplication->getCustomItem('baz'));
-        self::assertNull($this->myApplication->getCustomItem('Foo'));
-        self::assertNull($this->myApplication->getCustomItem('bar'));
+        self::assertSame('bar', $this->application->getCustomItem('foo'));
+        self::assertSame([1, 2], $this->application->getCustomItem('baz'));
+        self::assertNull($this->application->getCustomItem('Foo'));
+        self::assertNull($this->application->getCustomItem('bar'));
     }
 
     /**
@@ -448,9 +439,9 @@ class AbstractApplicationTest extends TestCase
         $customItems->set('foo', 1);
         $customItems->set('bar', ['baz']);
 
-        $this->myApplication->setCustomItems($customItems);
+        $this->application->setCustomItems($customItems);
 
-        self::assertSame(['foo' => 1, 'bar' => ['baz']], iterator_to_array($this->myApplication->getCustomItems()));
+        self::assertSame(['foo' => 1, 'bar' => ['baz']], iterator_to_array($this->application->getCustomItems()));
     }
 
     /**
@@ -460,10 +451,10 @@ class AbstractApplicationTest extends TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
-        $this->myApplication = new BasicTestApplication(FilePath::parse($DS . 'var' . $DS . 'www' . $DS));
-        $this->myApplication->addViewRenderer(new BasicTestViewRenderer());
-        $this->myApplication->addRoute(new Route('', BasicTestController::class));
-        rmdir($this->myApplication->getTempPath());
+        $this->application = new BasicTestApplication(FilePath::parse($DS . 'var' . $DS . 'www' . $DS));
+        $this->application->addViewRenderer(new BasicTestViewRenderer());
+        $this->application->addRoute(new Route('', BasicTestController::class));
+        rmdir($this->application->getTempPath()->__toString());
     }
 
     /**
@@ -471,11 +462,11 @@ class AbstractApplicationTest extends TestCase
      */
     public function tearDown()
     {
-        $this->myApplication = null;
+        $this->application = null;
     }
 
     /**
      * @var BasicTestApplication My application.
      */
-    private $myApplication;
+    private $application;
 }

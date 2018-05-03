@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core;
 
@@ -27,19 +28,10 @@ class UploadedFile implements UploadedFileInterface
      * @param string            $originalName The original name of the file.
      * @param int               $size         The size of the file.
      *
-     * @throws \InvalidArgumentException If any of the parameters are of invalid type.
-     * @throws InvalidFilePathException  If the path is not file or an absolute path.
+     * @throws InvalidFilePathException If the path is not file or an absolute path.
      */
-    public function __construct(FilePathInterface $path, $originalName = '', $size = 0)
+    public function __construct(FilePathInterface $path, string $originalName = '', int $size = 0)
     {
-        if (!is_string($originalName)) {
-            throw new \InvalidArgumentException('$originalName parameter is not a string.');
-        }
-
-        if (!is_int($size)) {
-            throw new \InvalidArgumentException('$size parameter is not an integer.');
-        }
-
         if (!$path->isFile()) {
             throw new InvalidFilePathException('Path "' . $path . '" is not a file.');
         }
@@ -48,9 +40,9 @@ class UploadedFile implements UploadedFileInterface
             throw new InvalidFilePathException('Path "' . $path . '" is not an absolute path.');
         }
 
-        $this->myPath = $path;
-        $this->myOriginalName = $originalName;
-        $this->mySize = $size;
+        $this->path = $path;
+        $this->originalName = $originalName;
+        $this->size = $size;
     }
 
     /**
@@ -60,9 +52,9 @@ class UploadedFile implements UploadedFileInterface
      *
      * @return string The original name of the file.
      */
-    public function getOriginalName()
+    public function getOriginalName(): string
     {
-        return $this->myOriginalName;
+        return $this->originalName;
     }
 
     /**
@@ -72,9 +64,9 @@ class UploadedFile implements UploadedFileInterface
      *
      * @return FilePathInterface The path to the file.
      */
-    public function getPath()
+    public function getPath(): FilePathInterface
     {
-        return $this->myPath;
+        return $this->path;
     }
 
     /**
@@ -84,23 +76,23 @@ class UploadedFile implements UploadedFileInterface
      *
      * @return int The size of the file.
      */
-    public function getSize()
+    public function getSize(): int
     {
-        return $this->mySize;
+        return $this->size;
     }
 
     /**
      * @var FilePathInterface My path to the file.
      */
-    private $myPath;
+    private $path;
 
     /**
      * @var string My original name of the file.
      */
-    private $myOriginalName;
+    private $originalName;
 
     /**
      * @var int My size of the file.
      */
-    private $mySize;
+    private $size;
 }

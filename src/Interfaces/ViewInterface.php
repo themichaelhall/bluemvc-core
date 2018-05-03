@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces;
 
@@ -28,5 +29,5 @@ interface ViewInterface
      * @param string                      $action      The action.
      * @param ViewItemCollectionInterface $viewItems   The view items.
      */
-    public function updateResponse(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, $viewPath, $action, ViewItemCollectionInterface $viewItems);
+    public function updateResponse(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, string $viewPath, string $action, ViewItemCollectionInterface $viewItems): void;
 }

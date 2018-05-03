@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\Collections\ViewItemCollection;
@@ -68,21 +70,6 @@ class ControllerTest extends TestCase
         $controller->processRequest($application, $request, $response, '');
 
         self::assertSame($response, $controller->getResponse());
-    }
-
-    /**
-     * Test processRequest method with invalid action parameter type.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $action parameter is not a string.
-     */
-    public function testProcessRequestWithInvalidActionParameterType()
-    {
-        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
-        $response = new BasicTestResponse();
-        $controller = new BasicTestController();
-        $controller->processRequest($application, $request, $response, null);
     }
 
     /**
@@ -246,7 +233,7 @@ class ControllerTest extends TestCase
      * @param array  $expectedHeaders    The expected headers.
      * @param string $expectedContent    The expected content.
      */
-    public function testPreAndPostActionEvent($action, $port, $expectedStatusCode, $expectedHeaders, $expectedContent)
+    public function testPreAndPostActionEvent(string $action, int $port, int $expectedStatusCode, array $expectedHeaders, string $expectedContent)
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $request = new BasicTestRequest(Url::parse('http://www.domain.com:' . $port . '/' . $action), new Method('GET'));
@@ -492,7 +479,7 @@ class ControllerTest extends TestCase
      * @param int    $expectedStatusCode The expected status code.
      * @param string $expectedContent    The expected content.
      */
-    public function testMultiLevelActions($action, array $parameters, $expectedStatusCode, $expectedContent)
+    public function testMultiLevelActions(string $action, array $parameters, int $expectedStatusCode, string $expectedContent)
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
@@ -566,7 +553,7 @@ class ControllerTest extends TestCase
      * @param int    $expectedStatusCode The expected status code.
      * @param string $expectedContent    The expected content.
      */
-    public function testActionMethodVisibility($action, $expectedStatusCode, $expectedContent)
+    public function testActionMethodVisibility(string $action, int $expectedStatusCode, string $expectedContent)
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
@@ -602,7 +589,7 @@ class ControllerTest extends TestCase
      * @param int    $expectedStatusCode The expected status code.
      * @param string $expectedContent    The expected content.
      */
-    public function testSpecialNameAction($action, $expectedStatusCode, $expectedContent)
+    public function testSpecialNameAction(string $action, int $expectedStatusCode, string $expectedContent)
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));

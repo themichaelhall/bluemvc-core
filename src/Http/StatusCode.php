@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Http;
 
@@ -430,21 +431,16 @@ class StatusCode implements StatusCodeInterface
      *
      * @param int $code The code.
      *
-     * @throws \InvalidArgumentException  If the $code parameter is not an integer.
      * @throws InvalidStatusCodeException If the code is invalid.
      */
-    public function __construct($code)
+    public function __construct(int $code)
     {
-        if (!is_int($code)) {
-            throw new \InvalidArgumentException('$code parameter is not an integer.');
-        }
-
-        if (!isset(self::$myDescriptions[$code])) {
+        if (!isset(self::$descriptions[$code])) {
             throw new InvalidStatusCodeException('Status code ' . $code . ' is invalid.');
         }
 
-        $this->myCode = $code;
-        $this->myDescription = self::$myDescriptions[$code];
+        $this->code = $code;
+        $this->description = self::$descriptions[$code];
     }
 
     /**
@@ -454,9 +450,9 @@ class StatusCode implements StatusCodeInterface
      *
      * @return int The code.
      */
-    public function getCode()
+    public function getCode(): int
     {
-        return $this->myCode;
+        return $this->code;
     }
 
     /**
@@ -466,9 +462,9 @@ class StatusCode implements StatusCodeInterface
      *
      * @return string The description.
      */
-    public function getDescription()
+    public function getDescription(): string
     {
-        return $this->myDescription;
+        return $this->description;
     }
 
     /**
@@ -478,9 +474,9 @@ class StatusCode implements StatusCodeInterface
      *
      * @return bool True if this is an error code, false otherwise.
      */
-    public function isError()
+    public function isError(): bool
     {
-        return $this->myCode >= 400;
+        return $this->code >= 400;
     }
 
     /**
@@ -490,25 +486,25 @@ class StatusCode implements StatusCodeInterface
      *
      * @return string The status code as a string.
      */
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->myCode . ' ' . $this->myDescription;
+        return $this->code . ' ' . $this->description;
     }
 
     /**
      * @var int My code.
      */
-    private $myCode;
+    private $code;
 
     /**
      * @var string My description.
      */
-    private $myDescription;
+    private $description;
 
     /**
      * @var array My descriptions.
      */
-    private static $myDescriptions = [
+    private static $descriptions = [
 
         self::CONTINUE_                       => 'Continue',
         self::SWITCHING_PROTOCOLS             => 'Switching Protocols',

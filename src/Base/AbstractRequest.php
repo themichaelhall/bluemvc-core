@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Base;
 
@@ -35,9 +36,9 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @return IPAddressInterface The client IP address.
      */
-    public function getClientIp()
+    public function getClientIp(): IPAddressInterface
     {
-        return $this->myClientIp;
+        return $this->clientIp;
     }
 
     /**
@@ -47,13 +48,11 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @param string $name The cookie name.
      *
-     * @throws \InvalidArgumentException If the $name parameter is not a string.
-     *
      * @return RequestCookieInterface|null The cookie by cookie name if it exists, null otherwise.
      */
-    public function getCookie($name)
+    public function getCookie(string $name): ?RequestCookieInterface
     {
-        return $this->myCookies->get($name);
+        return $this->cookies->get($name);
     }
 
     /**
@@ -63,9 +62,9 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @return RequestCookieCollection The cookies.
      */
-    public function getCookies()
+    public function getCookies(): RequestCookieCollection
     {
-        return $this->myCookies;
+        return $this->cookies;
     }
 
     /**
@@ -75,13 +74,11 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @param string $name The cookie name.
      *
-     * @throws \InvalidArgumentException If the $name parameter is not a string.
-     *
      * @return string|null The cookie value by cookie name if it exists, false otherwise.
      */
-    public function getCookieValue($name)
+    public function getCookieValue(string $name): ?string
     {
-        $cookie = $this->myCookies->get($name);
+        $cookie = $this->cookies->get($name);
 
         return $cookie !== null ? $cookie->getValue() : null;
     }
@@ -93,13 +90,11 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @param string $name The form parameter name.
      *
-     * @throws \InvalidArgumentException If the $name parameter is not a string.
-     *
      * @return string|null The form parameter value by form parameter name if it exists, null otherwise.
      */
-    public function getFormParameter($name)
+    public function getFormParameter(string $name): ?string
     {
-        return $this->myFormParameters->get($name);
+        return $this->formParameters->get($name);
     }
 
     /**
@@ -109,9 +104,9 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @return ParameterCollectionInterface The form parameters.
      */
-    public function getFormParameters()
+    public function getFormParameters(): ParameterCollectionInterface
     {
-        return $this->myFormParameters;
+        return $this->formParameters;
     }
 
     /**
@@ -121,13 +116,11 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @param string $name The header name.
      *
-     * @throws \InvalidArgumentException If the $name parameter is not a string.
-     *
      * @return string|null The header value by header name if it exists, null otherwise.
      */
-    public function getHeader($name)
+    public function getHeader(string $name): ?string
     {
-        return $this->myHeaders->get($name);
+        return $this->headers->get($name);
     }
 
     /**
@@ -137,9 +130,9 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @return HeaderCollectionInterface The headers.
      */
-    public function getHeaders()
+    public function getHeaders(): HeaderCollectionInterface
     {
-        return $this->myHeaders;
+        return $this->headers;
     }
 
     /**
@@ -149,9 +142,9 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @return MethodInterface The http method.
      */
-    public function getMethod()
+    public function getMethod(): MethodInterface
     {
-        return $this->myMethod;
+        return $this->method;
     }
 
     /**
@@ -161,13 +154,11 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @param string $name The query parameter name.
      *
-     * @throws \InvalidArgumentException If the $name parameter is not a string.
-     *
      * @return string|null The query parameter value by query parameter name if it exists, null otherwise.
      */
-    public function getQueryParameter($name)
+    public function getQueryParameter(string $name): ?string
     {
-        return $this->myQueryParameters->get($name);
+        return $this->queryParameters->get($name);
     }
 
     /**
@@ -177,9 +168,9 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @return ParameterCollectionInterface The query parameters.
      */
-    public function getQueryParameters()
+    public function getQueryParameters(): ParameterCollectionInterface
     {
-        return $this->myQueryParameters;
+        return $this->queryParameters;
     }
 
     /**
@@ -189,9 +180,9 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @return string The raw content from request.
      */
-    public function getRawContent()
+    public function getRawContent(): string
     {
-        return $this->myRawContent;
+        return $this->rawContent;
     }
 
     /**
@@ -201,7 +192,7 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @return UrlInterface|null The referrer or null if request has no or invalid referrer.
      */
-    public function getReferrer()
+    public function getReferrer(): ?UrlInterface
     {
         $referrerHeader = $this->getHeader('Referer');
         if ($referrerHeader === null) {
@@ -218,13 +209,11 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @param string $name The uploaded file name.
      *
-     * @throws \InvalidArgumentException If the $name parameter is not a string.
-     *
      * @return UploadedFileInterface|null The uploaded file by name if it exists, null otherwise.
      */
-    public function getUploadedFile($name)
+    public function getUploadedFile(string $name): ?UploadedFileInterface
     {
-        return $this->myUploadedFiles->get($name);
+        return $this->uploadedFiles->get($name);
     }
 
     /**
@@ -234,9 +223,9 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @return UploadedFileCollectionInterface The uploaded files.
      */
-    public function getUploadedFiles()
+    public function getUploadedFiles(): UploadedFileCollectionInterface
     {
-        return $this->myUploadedFiles;
+        return $this->uploadedFiles;
     }
 
     /**
@@ -246,7 +235,7 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @return string The user agent or empty string if no user agent exists.
      */
-    public function getUserAgent()
+    public function getUserAgent(): string
     {
         return $this->getHeader('User-Agent') ?: '';
     }
@@ -258,9 +247,9 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @return UrlInterface The url.
      */
-    public function getUrl()
+    public function getUrl(): UrlInterface
     {
-        return $this->myUrl;
+        return $this->url;
     }
 
     /**
@@ -296,12 +285,10 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @param string $name  The header name.
      * @param string $value The header value.
-     *
-     * @throws \InvalidArgumentException If any of the parameters are of invalid type.
      */
-    protected function addHeader($name, $value)
+    protected function addHeader(string $name, string $value): void
     {
-        $this->myHeaders->add($name, $value);
+        $this->headers->add($name, $value);
     }
 
     /**
@@ -311,9 +298,9 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @param IPAddressInterface $clientIp The client IP address.
      */
-    protected function setClientIp(IPAddressInterface $clientIp)
+    protected function setClientIp(IPAddressInterface $clientIp): void
     {
-        $this->myClientIp = $clientIp;
+        $this->clientIp = $clientIp;
     }
 
     /**
@@ -323,12 +310,10 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @param string                 $name   The cookie name.
      * @param RequestCookieInterface $cookie The cookie.
-     *
-     * @throws \InvalidArgumentException If the $name parameter is not a string.
      */
-    protected function setCookie($name, RequestCookieInterface $cookie)
+    protected function setCookie(string $name, RequestCookieInterface $cookie): void
     {
-        $this->myCookies->set($name, $cookie);
+        $this->cookies->set($name, $cookie);
     }
 
     /**
@@ -338,9 +323,9 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @param RequestCookieCollectionInterface $cookies The cookies.
      */
-    protected function setCookies(RequestCookieCollectionInterface $cookies)
+    protected function setCookies(RequestCookieCollectionInterface $cookies): void
     {
-        $this->myCookies = $cookies;
+        $this->cookies = $cookies;
     }
 
     /**
@@ -350,12 +335,10 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @param string $name  The form parameter name.
      * @param string $value The form parameter value.
-     *
-     * @throws \InvalidArgumentException If any of the parameters are of invalid type.
      */
-    protected function setFormParameter($name, $value)
+    protected function setFormParameter(string $name, string $value): void
     {
-        $this->myFormParameters->set($name, $value);
+        $this->formParameters->set($name, $value);
     }
 
     /**
@@ -365,9 +348,9 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @param ParameterCollectionInterface $parameters The form parameters.
      */
-    protected function setFormParameters(ParameterCollectionInterface $parameters)
+    protected function setFormParameters(ParameterCollectionInterface $parameters): void
     {
-        $this->myFormParameters = $parameters;
+        $this->formParameters = $parameters;
     }
 
     /**
@@ -377,12 +360,10 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @param string $name  The header name.
      * @param string $value The header value.
-     *
-     * @throws \InvalidArgumentException If any of the parameters are of invalid type.
      */
-    protected function setHeader($name, $value)
+    protected function setHeader(string $name, string $value): void
     {
-        $this->myHeaders->set($name, $value);
+        $this->headers->set($name, $value);
     }
 
     /**
@@ -392,9 +373,9 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @param HeaderCollectionInterface $headers The headers.
      */
-    protected function setHeaders(HeaderCollectionInterface $headers)
+    protected function setHeaders(HeaderCollectionInterface $headers): void
     {
-        $this->myHeaders = $headers;
+        $this->headers = $headers;
     }
 
     /**
@@ -404,9 +385,9 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @param MethodInterface $method The http method.
      */
-    protected function setMethod(MethodInterface $method)
+    protected function setMethod(MethodInterface $method): void
     {
-        $this->myMethod = $method;
+        $this->method = $method;
     }
 
     /**
@@ -416,12 +397,10 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @param string $name  The query parameter name.
      * @param string $value The query parameter value.
-     *
-     * @throws \InvalidArgumentException If any of the parameters are of invalid type.
      */
-    protected function setQueryParameter($name, $value)
+    protected function setQueryParameter(string $name, string $value): void
     {
-        $this->myQueryParameters->set($name, $value);
+        $this->queryParameters->set($name, $value);
     }
 
     /**
@@ -431,9 +410,9 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @param ParameterCollectionInterface $parameters The query parameters.
      */
-    protected function setQueryParameters(ParameterCollectionInterface $parameters)
+    protected function setQueryParameters(ParameterCollectionInterface $parameters): void
     {
-        $this->myQueryParameters = $parameters;
+        $this->queryParameters = $parameters;
     }
 
     /**
@@ -442,16 +421,10 @@ abstract class AbstractRequest implements RequestInterface
      * @since 1.0.0
      *
      * @param string $content The raw content.
-     *
-     * @throws \InvalidArgumentException If the $content parameter is not a string.
      */
-    protected function setRawContent($content)
+    protected function setRawContent(string $content): void
     {
-        if (!is_string($content)) {
-            throw new \InvalidArgumentException('$content parameter is not a string.');
-        }
-
-        $this->myRawContent = $content;
+        $this->rawContent = $content;
     }
 
     /**
@@ -461,12 +434,10 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @param string                $name         The uploaded file name.
      * @param UploadedFileInterface $uploadedFile The uploaded file.
-     *
-     * @throws \InvalidArgumentException If the $name parameter is not a string.
      */
-    protected function setUploadedFile($name, UploadedFileInterface $uploadedFile)
+    protected function setUploadedFile(string $name, UploadedFileInterface $uploadedFile): void
     {
-        $this->myUploadedFiles->set($name, $uploadedFile);
+        $this->uploadedFiles->set($name, $uploadedFile);
     }
 
     /**
@@ -476,9 +447,9 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @param UploadedFileCollectionInterface $uploadedFiles The uploaded files.
      */
-    protected function setUploadedFiles(UploadedFileCollectionInterface $uploadedFiles)
+    protected function setUploadedFiles(UploadedFileCollectionInterface $uploadedFiles): void
     {
-        $this->myUploadedFiles = $uploadedFiles;
+        $this->uploadedFiles = $uploadedFiles;
     }
 
     /**
@@ -488,53 +459,53 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @param UrlInterface $url The url.
      */
-    protected function setUrl(UrlInterface $url)
+    protected function setUrl(UrlInterface $url): void
     {
-        $this->myUrl = $url;
+        $this->url = $url;
     }
 
     /**
      * @var RequestCookieCollection My cookies.
      */
-    private $myCookies;
+    private $cookies;
 
     /**
      * @var ParameterCollectionInterface My form parameters.
      */
-    private $myFormParameters;
+    private $formParameters;
 
     /**
      * @var HeaderCollectionInterface My headers.
      */
-    private $myHeaders;
+    private $headers;
 
     /**
      * @var MethodInterface My method.
      */
-    private $myMethod;
+    private $method;
 
     /**
      * @var ParameterCollectionInterface My query parameters.
      */
-    private $myQueryParameters;
+    private $queryParameters;
 
     /**
      * @var string My raw content.
      */
-    private $myRawContent;
+    private $rawContent;
 
     /**
      * @var UploadedFileCollectionInterface My uploaded files.
      */
-    private $myUploadedFiles;
+    private $uploadedFiles;
 
     /**
      * @var UrlInterface My url.
      */
-    private $myUrl;
+    private $url;
 
     /**
      * @var IPAddressInterface My client ip address.
      */
-    private $myClientIp;
+    private $clientIp;
 }

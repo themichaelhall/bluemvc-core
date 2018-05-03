@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests\Http;
 
 use BlueMvc\Core\Http\StatusCode;
@@ -21,12 +23,12 @@ class StatusCodeTest extends TestCase
      * @dataProvider statusCodeProvider
      */
     public function testGetCode(
-        $constant,
-        $code,
+        int $constant,
+        int $code,
         /** @noinspection PhpUnusedParameterInspection */
-        $description,
+        string $description,
         /** @noinspection PhpUnusedParameterInspection */
-        $asString
+        string $asString
     ) {
         $statusCode = new StatusCode($constant);
 
@@ -44,12 +46,12 @@ class StatusCodeTest extends TestCase
      * @dataProvider statusCodeProvider
      */
     public function testGetDescription(
-        $constant,
+        int $constant,
         /** @noinspection PhpUnusedParameterInspection */
-        $code,
-        $description,
+        int $code,
+        string $description,
         /** @noinspection PhpUnusedParameterInspection */
-        $asString
+        string $asString
     ) {
         $statusCode = new StatusCode($constant);
 
@@ -68,14 +70,14 @@ class StatusCodeTest extends TestCase
      * @dataProvider statusCodeProvider
      */
     public function testIsError(
-        $constant,
+        int $constant,
         /** @noinspection PhpUnusedParameterInspection */
-        $code,
+        int $code,
         /** @noinspection PhpUnusedParameterInspection */
-        $description,
+        string $description,
         /** @noinspection PhpUnusedParameterInspection */
-        $asString,
-        $isError
+        string $asString,
+        bool $isError
     ) {
         $statusCode = new StatusCode($constant);
 
@@ -93,12 +95,12 @@ class StatusCodeTest extends TestCase
      * @dataProvider statusCodeProvider
      */
     public function testToString(
-        $constant,
+        int $constant,
         /** @noinspection PhpUnusedParameterInspection */
-        $code,
+        int $code,
         /** @noinspection PhpUnusedParameterInspection */
-        $description,
-        $asString
+        string $description,
+        string $asString
     ) {
         $statusCode = new StatusCode($constant);
 
@@ -114,17 +116,6 @@ class StatusCodeTest extends TestCase
     public function testInvalidStatusCodeIsInvalid()
     {
         new StatusCode(99);
-    }
-
-    /**
-     * Test create status code with invalid code parameter type.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $code parameter is not an integer.
-     */
-    public function testCreateWithInvalidCodeParameterType()
-    {
-        new StatusCode(false);
     }
 
     /**

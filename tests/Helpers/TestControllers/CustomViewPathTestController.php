@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests\Helpers\TestControllers;
 
 use BlueMvc\Core\Controller;
@@ -27,7 +29,7 @@ class CustomViewPathTestController extends Controller
      *
      * @return string The view path.
      */
-    protected function getViewPath()
+    protected function getViewPath(): string
     {
         return 'ViewTest/CustomViewPath';
     }

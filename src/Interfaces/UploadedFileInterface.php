@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces;
 
@@ -23,7 +24,7 @@ interface UploadedFileInterface
      *
      * @return string The original name of the file.
      */
-    public function getOriginalName();
+    public function getOriginalName(): string;
 
     /**
      * Returns the path to the uploaded file.
@@ -32,7 +33,7 @@ interface UploadedFileInterface
      *
      * @return FilePathInterface The path to the uploaded file.
      */
-    public function getPath();
+    public function getPath(): FilePathInterface;
 
     /**
      * Returns the size of the file.
@@ -41,5 +42,5 @@ interface UploadedFileInterface
      *
      * @return int The size of the file.
      */
-    public function getSize();
+    public function getSize(): int;
 }

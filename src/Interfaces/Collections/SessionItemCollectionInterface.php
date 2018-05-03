@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces\Collections;
 
@@ -23,7 +24,7 @@ interface SessionItemCollectionInterface extends \Countable, \Iterator
      *
      * @return mixed|null The session item value by session item name if it exists, null otherwise.
      */
-    public function get($name);
+    public function get(string $name);
 
     /**
      * Sets a session item value by session item name.
@@ -33,7 +34,7 @@ interface SessionItemCollectionInterface extends \Countable, \Iterator
      * @param string $name  The session item name.
      * @param mixed  $value The session item value.
      */
-    public function set($name, $value);
+    public function set(string $name, $value): void;
 
     /**
      * Removes a session item by session item name.
@@ -42,5 +43,5 @@ interface SessionItemCollectionInterface extends \Countable, \Iterator
      *
      * @param string $name The session item name.
      */
-    public function remove($name);
+    public function remove(string $name): void;
 }

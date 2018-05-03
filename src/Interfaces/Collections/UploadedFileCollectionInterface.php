@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces\Collections;
 
@@ -25,7 +26,7 @@ interface UploadedFileCollectionInterface extends \Countable, \Iterator
      *
      * @return UploadedFileInterface|null The the uploaded file by name if it exists, null otherwise.
      */
-    public function get($name);
+    public function get(string $name): ?UploadedFileInterface;
 
     /**
      * Sets an uploaded file by name.
@@ -35,5 +36,5 @@ interface UploadedFileCollectionInterface extends \Countable, \Iterator
      * @param string                $name         The name.
      * @param UploadedFileInterface $uploadedFile The uploaded file.
      */
-    public function set($name, UploadedFileInterface $uploadedFile);
+    public function set(string $name, UploadedFileInterface $uploadedFile): void;
 }

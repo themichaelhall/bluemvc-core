@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces;
 
@@ -24,7 +25,7 @@ interface ResponseCookieInterface
      *
      * @return HostInterface|null The domain or null if no domain.
      */
-    public function getDomain();
+    public function getDomain(): ?HostInterface;
 
     /**
      * Returns the expiry time or null if no expiry time.
@@ -33,7 +34,7 @@ interface ResponseCookieInterface
      *
      * @return \DateTimeInterface|null The expiry time or null if no expiry time.
      */
-    public function getExpiry();
+    public function getExpiry(): ?\DateTimeInterface;
 
     /**
      * Returns the path or null if no path.
@@ -42,7 +43,7 @@ interface ResponseCookieInterface
      *
      * @return UrlPathInterface|null The path or null if no path.
      */
-    public function getPath();
+    public function getPath(): ?UrlPathInterface;
 
     /**
      * Returns the value.
@@ -51,7 +52,7 @@ interface ResponseCookieInterface
      *
      * @return string The value.
      */
-    public function getValue();
+    public function getValue(): string;
 
     /**
      * Returns true if cookie is http only, false otherwise.
@@ -60,7 +61,7 @@ interface ResponseCookieInterface
      *
      * @return bool True if cookie is http only, false otherwise.
      */
-    public function isHttpOnly();
+    public function isHttpOnly(): bool;
 
     /**
      * Returns true if cookie is secure, false otherwise.
@@ -69,7 +70,7 @@ interface ResponseCookieInterface
      *
      * @return bool True if cookie is secure, false otherwise.
      */
-    public function isSecure();
+    public function isSecure(): bool;
 
     /**
      * Returns the value.
@@ -78,5 +79,5 @@ interface ResponseCookieInterface
      *
      * @return string The value.
      */
-    public function __toString();
+    public function __toString(): string;
 }

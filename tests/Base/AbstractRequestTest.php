@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests\Base;
 
 use BlueMvc\Core\Collections\HeaderCollection;
@@ -25,7 +27,7 @@ class AbstractRequestTest extends TestCase
      */
     public function testGetUrl()
     {
-        self::assertSame('https://domain.com/foo/bar', $this->myRequest->getUrl()->__toString());
+        self::assertSame('https://domain.com/foo/bar', $this->request->getUrl()->__toString());
     }
 
     /**
@@ -33,7 +35,7 @@ class AbstractRequestTest extends TestCase
      */
     public function testGetMethod()
     {
-        self::assertSame('POST', $this->myRequest->getMethod()->__toString());
+        self::assertSame('POST', $this->request->getMethod()->__toString());
     }
 
     /**
@@ -41,9 +43,9 @@ class AbstractRequestTest extends TestCase
      */
     public function testSetUrl()
     {
-        $this->myRequest->setUrl(Url::parse('http://foo.com:8080/bar?baz'));
+        $this->request->setUrl(Url::parse('http://foo.com:8080/bar?baz'));
 
-        self::assertSame('http://foo.com:8080/bar?baz', $this->myRequest->getUrl()->__toString());
+        self::assertSame('http://foo.com:8080/bar?baz', $this->request->getUrl()->__toString());
     }
 
     /**
@@ -51,9 +53,9 @@ class AbstractRequestTest extends TestCase
      */
     public function testSetMethod()
     {
-        $this->myRequest->setMethod(new Method('GET'));
+        $this->request->setMethod(new Method('GET'));
 
-        self::assertSame('GET', $this->myRequest->getMethod()->__toString());
+        self::assertSame('GET', $this->request->getMethod()->__toString());
     }
 
     /**
@@ -61,7 +63,7 @@ class AbstractRequestTest extends TestCase
      */
     public function testGetHeaders()
     {
-        self::assertSame([], iterator_to_array($this->myRequest->getHeaders()));
+        self::assertSame([], iterator_to_array($this->request->getHeaders()));
     }
 
     /**
@@ -73,9 +75,9 @@ class AbstractRequestTest extends TestCase
         $headers->add('Accept-Encoding', 'gzip, deflate');
         $headers->add('Host', 'localhost');
 
-        $this->myRequest->setHeaders($headers);
+        $this->request->setHeaders($headers);
 
-        self::assertSame(['Accept-Encoding' => 'gzip, deflate', 'Host' => 'localhost'], iterator_to_array($this->myRequest->getHeaders()));
+        self::assertSame(['Accept-Encoding' => 'gzip, deflate', 'Host' => 'localhost'], iterator_to_array($this->request->getHeaders()));
     }
 
     /**
@@ -83,9 +85,9 @@ class AbstractRequestTest extends TestCase
      */
     public function testSetHeader()
     {
-        $this->myRequest->setHeader('Accept-Language', 'en-US,en;q=0.5');
+        $this->request->setHeader('Accept-Language', 'en-US,en;q=0.5');
 
-        self::assertSame(['Accept-Language' => 'en-US,en;q=0.5'], iterator_to_array($this->myRequest->getHeaders()));
+        self::assertSame(['Accept-Language' => 'en-US,en;q=0.5'], iterator_to_array($this->request->getHeaders()));
     }
 
     /**
@@ -93,10 +95,10 @@ class AbstractRequestTest extends TestCase
      */
     public function testAddHeader()
     {
-        $this->myRequest->setHeader('Accept-Language', 'en-US');
-        $this->myRequest->addHeader('Accept-Language', 'en');
+        $this->request->setHeader('Accept-Language', 'en-US');
+        $this->request->addHeader('Accept-Language', 'en');
 
-        self::assertSame(['Accept-Language' => 'en-US, en'], iterator_to_array($this->myRequest->getHeaders()));
+        self::assertSame(['Accept-Language' => 'en-US, en'], iterator_to_array($this->request->getHeaders()));
     }
 
     /**
@@ -104,10 +106,10 @@ class AbstractRequestTest extends TestCase
      */
     public function testGetHeader()
     {
-        $this->myRequest->setHeader('Accept-Language', 'en-US,en;q=0.5');
+        $this->request->setHeader('Accept-Language', 'en-US,en;q=0.5');
 
-        self::assertSame('en-US,en;q=0.5', $this->myRequest->getHeader('accept-language'));
-        self::assertNull($this->myRequest->getHeader('Foo-Bar'));
+        self::assertSame('en-US,en;q=0.5', $this->request->getHeader('accept-language'));
+        self::assertNull($this->request->getHeader('Foo-Bar'));
     }
 
     /**
@@ -115,7 +117,7 @@ class AbstractRequestTest extends TestCase
      */
     public function testGetUserAgentWithoutUserAgentSet()
     {
-        self::assertSame('', $this->myRequest->getUserAgent());
+        self::assertSame('', $this->request->getUserAgent());
     }
 
     /**
@@ -123,9 +125,9 @@ class AbstractRequestTest extends TestCase
      */
     public function testGetUserAgentWithUserAgentSet()
     {
-        $this->myRequest->setHeader('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36');
+        $this->request->setHeader('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36');
 
-        self::assertSame('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36', $this->myRequest->getUserAgent());
+        self::assertSame('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36', $this->request->getUserAgent());
     }
 
     /**
@@ -133,7 +135,7 @@ class AbstractRequestTest extends TestCase
      */
     public function testGetFormParameters()
     {
-        self::assertSame([], iterator_to_array($this->myRequest->getFormParameters()));
+        self::assertSame([], iterator_to_array($this->request->getFormParameters()));
     }
 
     /**
@@ -143,9 +145,9 @@ class AbstractRequestTest extends TestCase
     {
         $formParameters = new ParameterCollection();
         $formParameters->set('Foo', 'Bar');
-        $this->myRequest->setFormParameters($formParameters);
+        $this->request->setFormParameters($formParameters);
 
-        self::assertSame(['Foo' => 'Bar'], iterator_to_array($this->myRequest->getFormParameters()));
+        self::assertSame(['Foo' => 'Bar'], iterator_to_array($this->request->getFormParameters()));
     }
 
     /**
@@ -153,9 +155,9 @@ class AbstractRequestTest extends TestCase
      */
     public function testSetFormParameter()
     {
-        $this->myRequest->setFormParameter('Foo', 'Bar');
+        $this->request->setFormParameter('Foo', 'Bar');
 
-        self::assertSame(['Foo' => 'Bar'], iterator_to_array($this->myRequest->getFormParameters()));
+        self::assertSame(['Foo' => 'Bar'], iterator_to_array($this->request->getFormParameters()));
     }
 
     /**
@@ -163,10 +165,10 @@ class AbstractRequestTest extends TestCase
      */
     public function testGetFormParameter()
     {
-        $this->myRequest->setFormParameter('Foo', 'Bar');
+        $this->request->setFormParameter('Foo', 'Bar');
 
-        self::assertSame('Bar', $this->myRequest->getFormParameter('Foo'));
-        self::assertNull($this->myRequest->getFormParameter('Bar'));
+        self::assertSame('Bar', $this->request->getFormParameter('Foo'));
+        self::assertNull($this->request->getFormParameter('Bar'));
     }
 
     /**
@@ -174,7 +176,7 @@ class AbstractRequestTest extends TestCase
      */
     public function testGetQueryParameters()
     {
-        self::assertSame([], iterator_to_array($this->myRequest->getQueryParameters()));
+        self::assertSame([], iterator_to_array($this->request->getQueryParameters()));
     }
 
     /**
@@ -184,9 +186,9 @@ class AbstractRequestTest extends TestCase
     {
         $queryParameters = new ParameterCollection();
         $queryParameters->set('foo', 'bar');
-        $this->myRequest->setQueryParameters($queryParameters);
+        $this->request->setQueryParameters($queryParameters);
 
-        self::assertSame(['foo' => 'bar'], iterator_to_array($this->myRequest->getQueryParameters()));
+        self::assertSame(['foo' => 'bar'], iterator_to_array($this->request->getQueryParameters()));
     }
 
     /**
@@ -194,9 +196,9 @@ class AbstractRequestTest extends TestCase
      */
     public function testSetQueryParameter()
     {
-        $this->myRequest->setQueryParameter('Foo', 'Bar');
+        $this->request->setQueryParameter('Foo', 'Bar');
 
-        self::assertSame(['Foo' => 'Bar'], iterator_to_array($this->myRequest->getQueryParameters()));
+        self::assertSame(['Foo' => 'Bar'], iterator_to_array($this->request->getQueryParameters()));
     }
 
     /**
@@ -204,10 +206,10 @@ class AbstractRequestTest extends TestCase
      */
     public function testGetQueryParameter()
     {
-        $this->myRequest->setQueryParameter('Foo', 'Bar');
+        $this->request->setQueryParameter('Foo', 'Bar');
 
-        self::assertSame('Bar', $this->myRequest->getQueryParameter('Foo'));
-        self::assertNull($this->myRequest->getQueryParameter('Bar'));
+        self::assertSame('Bar', $this->request->getQueryParameter('Foo'));
+        self::assertNull($this->request->getQueryParameter('Bar'));
     }
 
     /**
@@ -215,7 +217,7 @@ class AbstractRequestTest extends TestCase
      */
     public function testGetUploadedFiles()
     {
-        self::assertSame([], iterator_to_array($this->myRequest->getUploadedFiles()));
+        self::assertSame([], iterator_to_array($this->request->getUploadedFiles()));
     }
 
     /**
@@ -230,9 +232,9 @@ class AbstractRequestTest extends TestCase
         $uploadedFiles->set('foo', $fileFoo);
         $uploadedFiles->set('bar', $fileBar);
 
-        $this->myRequest->setUploadedFiles($uploadedFiles);
+        $this->request->setUploadedFiles($uploadedFiles);
 
-        self::assertSame(['foo' => $fileFoo, 'bar' => $fileBar], iterator_to_array($this->myRequest->getUploadedFiles()));
+        self::assertSame(['foo' => $fileFoo, 'bar' => $fileBar], iterator_to_array($this->request->getUploadedFiles()));
     }
 
     /**
@@ -247,10 +249,10 @@ class AbstractRequestTest extends TestCase
         $uploadedFiles->set('FOO', $fileFoo);
         $uploadedFiles->set('bar', $fileBar);
 
-        $this->myRequest->setUploadedFiles($uploadedFiles);
+        $this->request->setUploadedFiles($uploadedFiles);
 
-        self::assertSame($fileFoo, $this->myRequest->getUploadedFile('FOO'));
-        self::assertSame($fileBar, $this->myRequest->getUploadedFile('bar'));
+        self::assertSame($fileFoo, $this->request->getUploadedFile('FOO'));
+        self::assertSame($fileBar, $this->request->getUploadedFile('bar'));
     }
 
     /**
@@ -260,9 +262,9 @@ class AbstractRequestTest extends TestCase
     {
         $fileFoo = new UploadedFile(FilePath::parse('/tmp/foo'), 'Foo.txt', 1000);
 
-        $this->myRequest->setUploadedFile('foo', $fileFoo);
+        $this->request->setUploadedFile('foo', $fileFoo);
 
-        self::assertSame(['foo' => $fileFoo], iterator_to_array($this->myRequest->getUploadedFiles()));
+        self::assertSame(['foo' => $fileFoo], iterator_to_array($this->request->getUploadedFiles()));
     }
 
     /**
@@ -270,7 +272,7 @@ class AbstractRequestTest extends TestCase
      */
     public function testGetCookies()
     {
-        self::assertSame([], iterator_to_array($this->myRequest->getCookies()));
+        self::assertSame([], iterator_to_array($this->request->getCookies()));
     }
 
     /**
@@ -285,9 +287,9 @@ class AbstractRequestTest extends TestCase
         $cookies->set('foo', $fooCookie);
         $cookies->set('bar', $barCookie);
 
-        $this->myRequest->setCookies($cookies);
+        $this->request->setCookies($cookies);
 
-        self::assertSame(['foo' => $fooCookie, 'bar' => $barCookie], iterator_to_array($this->myRequest->getCookies()));
+        self::assertSame(['foo' => $fooCookie, 'bar' => $barCookie], iterator_to_array($this->request->getCookies()));
     }
 
     /**
@@ -298,11 +300,11 @@ class AbstractRequestTest extends TestCase
         $fooCookie = new RequestCookie('foo-value');
         $barCookie = new RequestCookie('bar-value');
 
-        $this->myRequest->setCookie('foo', $barCookie);
-        $this->myRequest->setCookie('bar', $barCookie);
-        $this->myRequest->setCookie('foo', $fooCookie);
+        $this->request->setCookie('foo', $barCookie);
+        $this->request->setCookie('bar', $barCookie);
+        $this->request->setCookie('foo', $fooCookie);
 
-        self::assertSame(['foo' => $fooCookie, 'bar' => $barCookie], iterator_to_array($this->myRequest->getCookies()));
+        self::assertSame(['foo' => $fooCookie, 'bar' => $barCookie], iterator_to_array($this->request->getCookies()));
     }
 
     /**
@@ -317,12 +319,12 @@ class AbstractRequestTest extends TestCase
         $cookies->set('foo', $fooCookie);
         $cookies->set('bar', $barCookie);
 
-        $this->myRequest->setCookies($cookies);
+        $this->request->setCookies($cookies);
 
-        self::assertSame($fooCookie, $this->myRequest->getCookie('foo'));
-        self::assertSame($barCookie, $this->myRequest->getCookie('bar'));
-        self::assertNull($this->myRequest->getCookie('Foo'));
-        self::assertNull($this->myRequest->getCookie('baz'));
+        self::assertSame($fooCookie, $this->request->getCookie('foo'));
+        self::assertSame($barCookie, $this->request->getCookie('bar'));
+        self::assertNull($this->request->getCookie('Foo'));
+        self::assertNull($this->request->getCookie('baz'));
     }
 
     /**
@@ -337,12 +339,12 @@ class AbstractRequestTest extends TestCase
         $cookies->set('foo', $fooCookie);
         $cookies->set('bar', $barCookie);
 
-        $this->myRequest->setCookies($cookies);
+        $this->request->setCookies($cookies);
 
-        self::assertSame('foo-value', $this->myRequest->getCookieValue('foo'));
-        self::assertSame('bar-value', $this->myRequest->getCookieValue('bar'));
-        self::assertNull($this->myRequest->getCookieValue('Foo'));
-        self::assertNull($this->myRequest->getCookieValue('baz'));
+        self::assertSame('foo-value', $this->request->getCookieValue('foo'));
+        self::assertSame('bar-value', $this->request->getCookieValue('bar'));
+        self::assertNull($this->request->getCookieValue('Foo'));
+        self::assertNull($this->request->getCookieValue('baz'));
     }
 
     /**
@@ -350,7 +352,7 @@ class AbstractRequestTest extends TestCase
      */
     public function testGetRawContent()
     {
-        self::assertSame('', $this->myRequest->getRawContent());
+        self::assertSame('', $this->request->getRawContent());
     }
 
     /**
@@ -358,20 +360,9 @@ class AbstractRequestTest extends TestCase
      */
     public function testSetRawContent()
     {
-        $this->myRequest->setRawContent('{"Foo": "Bar"}');
+        $this->request->setRawContent('{"Foo": "Bar"}');
 
-        self::assertSame('{"Foo": "Bar"}', $this->myRequest->getRawContent());
-    }
-
-    /**
-     * Test setRawContent method with invalid $content parameter type.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $content parameter is not a string.
-     */
-    public function testSetRawContentWithInvalidContentParameterType()
-    {
-        $this->myRequest->setRawContent(false);
+        self::assertSame('{"Foo": "Bar"}', $this->request->getRawContent());
     }
 
     /**
@@ -379,7 +370,7 @@ class AbstractRequestTest extends TestCase
      */
     public function testGetReferrerWithEmptyReferrer()
     {
-        self::assertNull($this->myRequest->getReferrer());
+        self::assertNull($this->request->getReferrer());
     }
 
     /**
@@ -387,9 +378,9 @@ class AbstractRequestTest extends TestCase
      */
     public function testGetReferrerWithInvalidReferrer()
     {
-        $this->myRequest->setHeader('Referer', 'foo');
+        $this->request->setHeader('Referer', 'foo');
 
-        self::assertNull($this->myRequest->getReferrer());
+        self::assertNull($this->request->getReferrer());
     }
 
     /**
@@ -397,9 +388,9 @@ class AbstractRequestTest extends TestCase
      */
     public function testGetReferrerWithValidReferrer()
     {
-        $this->myRequest->setHeader('Referer', 'https://example.com/foo');
+        $this->request->setHeader('Referer', 'https://example.com/foo');
 
-        self::assertSame('https://example.com/foo', $this->myRequest->getReferrer()->__toString());
+        self::assertSame('https://example.com/foo', $this->request->getReferrer()->__toString());
     }
 
     /**
@@ -407,7 +398,7 @@ class AbstractRequestTest extends TestCase
      */
     public function testGetClientIp()
     {
-        self::assertSame('0.0.0.0', $this->myRequest->getClientIp()->__toString());
+        self::assertSame('0.0.0.0', $this->request->getClientIp()->__toString());
     }
 
     /**
@@ -416,9 +407,9 @@ class AbstractRequestTest extends TestCase
     public function testSetClientIp()
     {
         $clientIp = IPAddress::parse('1.2.3.4');
-        $this->myRequest->setClientIp($clientIp);
+        $this->request->setClientIp($clientIp);
 
-        self::assertSame($clientIp, $this->myRequest->getClientIp());
+        self::assertSame($clientIp, $this->request->getClientIp());
     }
 
     /**
@@ -426,7 +417,7 @@ class AbstractRequestTest extends TestCase
      */
     public function setUp()
     {
-        $this->myRequest = new BasicTestRequest(Url::parse('https://domain.com/foo/bar'), new Method('POST'));
+        $this->request = new BasicTestRequest(Url::parse('https://domain.com/foo/bar'), new Method('POST'));
     }
 
     /**
@@ -434,11 +425,11 @@ class AbstractRequestTest extends TestCase
      */
     public function tearDown()
     {
-        $this->myRequest = null;
+        $this->request = null;
     }
 
     /**
      * @var BasicTestRequest My test request.
      */
-    private $myRequest;
+    private $request;
 }

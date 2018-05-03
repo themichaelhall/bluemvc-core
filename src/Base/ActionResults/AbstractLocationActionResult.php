@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Base\ActionResults;
 
@@ -27,18 +28,12 @@ class AbstractLocationActionResult extends AbstractActionResult
      *
      * @param StatusCodeInterface $statusCode The status code.
      * @param string              $location   The location as an absolute or relative url.
-     *
-     * @throws \InvalidArgumentException If the location parameter is not a string.
      */
-    public function __construct(StatusCodeInterface $statusCode, $location = '')
+    public function __construct(StatusCodeInterface $statusCode, string $location = '')
     {
-        if (!is_string($location)) {
-            throw new \InvalidArgumentException('$location parameter is not a string.');
-        }
-
         parent::__construct('', $statusCode);
 
-        $this->myLocation = $location;
+        $this->location = $location;
     }
 
     /**
@@ -50,16 +45,16 @@ class AbstractLocationActionResult extends AbstractActionResult
      * @param RequestInterface     $request     The request.
      * @param ResponseInterface    $response    The response.
      */
-    public function updateResponse(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response)
+    public function updateResponse(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response): void
     {
         parent::updateResponse($application, $request, $response);
 
-        $locationUrl = Url::parseRelative($this->myLocation, $request->getUrl());
+        $locationUrl = Url::parseRelative($this->location, $request->getUrl());
         $response->setHeader('Location', $locationUrl->__toString());
     }
 
     /**
      * @var string My url.
      */
-    private $myLocation;
+    private $location;
 }

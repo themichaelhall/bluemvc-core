@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces\Collections;
 
@@ -25,7 +26,7 @@ interface ResponseCookieCollectionInterface extends \Countable, \Iterator
      *
      * @return ResponseCookieInterface|null The response cookie by name if it exists, null otherwise.
      */
-    public function get($name);
+    public function get(string $name): ?ResponseCookieInterface;
 
     /**
      * Sets a response cookie by name.
@@ -35,5 +36,5 @@ interface ResponseCookieCollectionInterface extends \Countable, \Iterator
      * @param string                  $name           The name.
      * @param ResponseCookieInterface $responseCookie The response cookie.
      */
-    public function set($name, ResponseCookieInterface $responseCookie);
+    public function set(string $name, ResponseCookieInterface $responseCookie): void;
 }

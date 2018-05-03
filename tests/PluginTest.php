@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\Http\Method;
@@ -36,15 +38,15 @@ class PluginTest extends TestCase
      * @param string[]          $expectedHeaders    The expected headers.
      * @param int               $expectedStatusCode The expected status code.
      */
-    public function testPluginHandling($url, array $plugins, $expectedContent, array $expectedHeaders, $expectedStatusCode)
+    public function testPluginHandling(string $url, array $plugins, string $expectedContent, array $expectedHeaders, int $expectedStatusCode)
     {
         foreach ($plugins as $plugin) {
-            $this->myApplication->addPlugin($plugin);
+            $this->application->addPlugin($plugin);
         }
 
         $request = new BasicTestRequest(Url::parse('http://localhost/' . $url), new Method('GET'));
         $response = new BasicTestResponse();
-        $this->myApplication->run($request, $response);
+        $this->application->run($request, $response);
 
         self::assertSame($expectedContent, $response->getContent());
         self::assertSame($expectedHeaders, iterator_to_array($response->getHeaders()));
@@ -190,7 +192,7 @@ class PluginTest extends TestCase
      */
     public function testGetPluginsForApplicationWithNoPlugins()
     {
-        self::assertSame([], $this->myApplication->getPlugins());
+        self::assertSame([], $this->application->getPlugins());
     }
 
     /**
@@ -201,10 +203,10 @@ class PluginTest extends TestCase
         $setHeaderTestPlugin = new SetHeaderTestPlugin(false, false);
         $setContentTestPlugin = new SetContentTestPlugin(false, false);
 
-        $this->myApplication->addPlugin($setHeaderTestPlugin);
-        $this->myApplication->addPlugin($setContentTestPlugin);
+        $this->application->addPlugin($setHeaderTestPlugin);
+        $this->application->addPlugin($setContentTestPlugin);
 
-        self::assertSame([$setHeaderTestPlugin, $setContentTestPlugin], $this->myApplication->getPlugins());
+        self::assertSame([$setHeaderTestPlugin, $setContentTestPlugin], $this->application->getPlugins());
     }
 
     /**
@@ -214,11 +216,11 @@ class PluginTest extends TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
-        $this->myApplication = new BasicTestApplication(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
-        $this->myApplication->addViewRenderer(new BasicTestViewRenderer());
-        $this->myApplication->addRoute(new Route('', BasicTestController::class));
-        $this->myApplication->addRoute(new Route('actionResult', ActionResultTestController::class));
-        $this->myApplication->setErrorControllerClass(ErrorTestController::class);
+        $this->application = new BasicTestApplication(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
+        $this->application->addViewRenderer(new BasicTestViewRenderer());
+        $this->application->addRoute(new Route('', BasicTestController::class));
+        $this->application->addRoute(new Route('actionResult', ActionResultTestController::class));
+        $this->application->setErrorControllerClass(ErrorTestController::class);
     }
 
     /**
@@ -226,11 +228,11 @@ class PluginTest extends TestCase
      */
     public function tearDown()
     {
-        $this->myApplication = null;
+        $this->application = null;
     }
 
     /**
      * @var ApplicationInterface My application.
      */
-    private $myApplication;
+    private $application;
 }

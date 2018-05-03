@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces\ActionResults;
 
@@ -27,5 +28,5 @@ interface ActionResultInterface
      * @param RequestInterface     $request     The request.
      * @param ResponseInterface    $response    The response.
      */
-    public function updateResponse(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response);
+    public function updateResponse(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response): void;
 }

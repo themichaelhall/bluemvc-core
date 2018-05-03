@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests\Base;
 
 use BlueMvc\Core\Tests\Helpers\TestViewRenderers\BasicTestViewRenderer;
@@ -29,16 +31,5 @@ class AbstractViewRendererTest extends TestCase
     public function testCreateWithInvalidFileExtension()
     {
         new BasicTestViewRenderer('foo$bar');
-    }
-
-    /**
-     * Test create view renderer with invalid argument type.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $viewFileExtension parameter is not a string.
-     */
-    public function testCreateWithInvalidArgumentType()
-    {
-        new BasicTestViewRenderer([]);
     }
 }

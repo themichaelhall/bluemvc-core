@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Traits;
 
@@ -21,9 +22,9 @@ trait ErrorControllerTrait
      *
      * @return \Exception|null The exception or null if no exception.
      */
-    public function getException()
+    public function getException(): ?\Exception
     {
-        return $this->myException;
+        return $this->exception;
     }
 
     /**
@@ -33,9 +34,9 @@ trait ErrorControllerTrait
      *
      * @param \Exception $exception The exception.
      */
-    public function setException(\Exception $exception)
+    public function setException(\Exception $exception): void
     {
-        $this->myException = $exception;
+        $this->exception = $exception;
     }
 
     /**
@@ -45,9 +46,9 @@ trait ErrorControllerTrait
      *
      * @return bool True if post-action event is enabled, false otherwise.
      */
-    protected function isPostActionEventEnabled()
+    protected function isPostActionEventEnabled(): bool
     {
-        return $this->myException === null;
+        return $this->exception === null;
     }
 
     /**
@@ -57,13 +58,13 @@ trait ErrorControllerTrait
      *
      * @return bool True if pre-action event is enabled, false otherwise.
      */
-    protected function isPreActionEventEnabled()
+    protected function isPreActionEventEnabled(): bool
     {
-        return $this->myException === null;
+        return $this->exception === null;
     }
 
     /**
      * @var \Exception|null My exception or null if no exception.
      */
-    private $myException = null;
+    private $exception = null;
 }

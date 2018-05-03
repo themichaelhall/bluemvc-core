@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core;
 
@@ -11,6 +12,7 @@ use BlueMvc\Core\Base\AbstractRoute;
 use BlueMvc\Core\Exceptions\InvalidControllerClassException;
 use BlueMvc\Core\Exceptions\InvalidRoutePathException;
 use BlueMvc\Core\Interfaces\RequestInterface;
+use BlueMvc\Core\Interfaces\RouteMatchInterface;
 
 /**
  * Class representing a route.
@@ -27,19 +29,14 @@ class Route extends AbstractRoute
      * @param string $path                The path.
      * @param string $controllerClassName The controller class name.
      *
-     * @throws \InvalidArgumentException       If any of the parameters are of invalid type.
      * @throws InvalidControllerClassException If the controller class name is invalid.
      * @throws InvalidRoutePathException       If the path is invalid.
      */
-    public function __construct($path, $controllerClassName)
+    public function __construct(string $path, string $controllerClassName)
     {
-        if (!is_string($path)) {
-            throw new \InvalidArgumentException('$path parameter is not a string.');
-        }
-
         parent::__construct($controllerClassName);
 
-        $this->myPath = self::mySplitPath($path);
+        $this->path = self::splitPath($path);
     }
 
     /**
@@ -49,15 +46,15 @@ class Route extends AbstractRoute
      *
      * @param RequestInterface $request The request.
      *
-     * @return \BlueMvc\Core\Interfaces\RouteMatchInterface|null The route match if rout matches request, false otherwise.
+     * @return RouteMatchInterface|null The route match if rout matches request, false otherwise.
      */
-    public function matches(RequestInterface $request)
+    public function matches(RequestInterface $request): ?RouteMatchInterface
     {
         $path = $request->getUrl()->getPath();
         $directoryParts = $path->getDirectoryParts();
         $filename = $path->getFilename() ?: '';
 
-        if (count($this->myPath) === 0) {
+        if (count($this->path) === 0) {
             // My path is empty, i.e. should only match root path.
             if (count($directoryParts) !== 0) {
                 return null;
@@ -66,14 +63,14 @@ class Route extends AbstractRoute
             return new RouteMatch($this->getControllerClassName(), $filename);
         }
 
-        if (count($this->myPath) > count($directoryParts)) {
+        if (count($this->path) > count($directoryParts)) {
             // My path contains more than the path in request, e.g. path /foo/ should not match /bar
             return null;
         }
 
         // Check each parts.
         $index = 0;
-        foreach ($this->myPath as $pathPart) {
+        foreach ($this->path as $pathPart) {
             // Part of path does not match.
             if ($pathPart !== $directoryParts[$index]) {
                 return null;
@@ -103,7 +100,7 @@ class Route extends AbstractRoute
      *
      * @return string[] The path as parts.
      */
-    private static function mySplitPath($path)
+    private static function splitPath(string $path): array
     {
         if ($path === '') {
             return [];
@@ -126,5 +123,5 @@ class Route extends AbstractRoute
     /**
      * @var string[] My path.
      */
-    private $myPath;
+    private $path;
 }

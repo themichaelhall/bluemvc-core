@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces;
 
@@ -28,7 +29,7 @@ interface ResponseInterface
      * @param string $name  The header name.
      * @param string $value The header value.
      */
-    public function addHeader($name, $value);
+    public function addHeader(string $name, string $value): void;
 
     /**
      * Returns the content.
@@ -37,7 +38,7 @@ interface ResponseInterface
      *
      * @return string The content.
      */
-    public function getContent();
+    public function getContent(): string;
 
     /**
      * Returns a cookie by cookie name if it exists, null otherwise.
@@ -48,7 +49,7 @@ interface ResponseInterface
      *
      * @return ResponseCookieInterface|null The cookie if it exists, null otherwise.
      */
-    public function getCookie($name);
+    public function getCookie(string $name): ?ResponseCookieInterface;
 
     /**
      * Returns the cookies.
@@ -57,7 +58,7 @@ interface ResponseInterface
      *
      * @return ResponseCookieCollectionInterface The cookies.
      */
-    public function getCookies();
+    public function getCookies(): ResponseCookieCollectionInterface;
 
     /**
      * Returns a header value by header name if it exists, null otherwise.
@@ -68,7 +69,7 @@ interface ResponseInterface
      *
      * @return string|null The header value by header name if it exists, null otherwise.
      */
-    public function getHeader($name);
+    public function getHeader(string $name): ?string;
 
     /**
      * Returns the headers.
@@ -77,7 +78,7 @@ interface ResponseInterface
      *
      * @return HeaderCollectionInterface The headers.
      */
-    public function getHeaders();
+    public function getHeaders(): HeaderCollectionInterface;
 
     /**
      * Returns the status code.
@@ -86,7 +87,7 @@ interface ResponseInterface
      *
      * @return StatusCodeInterface The status code.
      */
-    public function getStatusCode();
+    public function getStatusCode(): StatusCodeInterface;
 
     /**
      * Sets the content.
@@ -95,7 +96,7 @@ interface ResponseInterface
      *
      * @param string $content The content.
      */
-    public function setContent($content);
+    public function setContent(string $content): void;
 
     /**
      * Sets a cookie.
@@ -105,7 +106,7 @@ interface ResponseInterface
      * @param string                  $name   The cookie name.
      * @param ResponseCookieInterface $cookie The cookie.
      */
-    public function setCookie($name, ResponseCookieInterface $cookie);
+    public function setCookie(string $name, ResponseCookieInterface $cookie): void;
 
     /**
      * Sets the cookies.
@@ -114,7 +115,7 @@ interface ResponseInterface
      *
      * @param ResponseCookieCollectionInterface $cookies The cookies.
      */
-    public function setCookies(ResponseCookieCollectionInterface $cookies);
+    public function setCookies(ResponseCookieCollectionInterface $cookies): void;
 
     /**
      * Sets a cookie value.
@@ -129,7 +130,7 @@ interface ResponseInterface
      * @param bool                    $isSecure   True if cookie is secure, false otherwise.
      * @param bool                    $isHttpOnly True if cookie is http only, false otherwise.
      */
-    public function setCookieValue($name, $value, \DateTimeInterface $expiry = null, UrlPathInterface $path = null, HostInterface $domain = null, $isSecure = false, $isHttpOnly = false);
+    public function setCookieValue(string $name, string $value, ?\DateTimeInterface $expiry = null, ?UrlPathInterface $path = null, ?HostInterface $domain = null, bool $isSecure = false, bool $isHttpOnly = false): void;
 
     /**
      * Sets the expiry time.
@@ -138,7 +139,7 @@ interface ResponseInterface
      *
      * @param \DateTimeImmutable|null $expiry The expiry time or null for immediate expiry.
      */
-    public function setExpiry(\DateTimeImmutable $expiry = null);
+    public function setExpiry(?\DateTimeImmutable $expiry = null): void;
 
     /**
      * Sets a header.
@@ -148,7 +149,7 @@ interface ResponseInterface
      * @param string $name  The header name.
      * @param string $value The header value.
      */
-    public function setHeader($name, $value);
+    public function setHeader(string $name, string $value): void;
 
     /**
      * Sets the headers.
@@ -157,7 +158,7 @@ interface ResponseInterface
      *
      * @param HeaderCollectionInterface $headers The headers.
      */
-    public function setHeaders(HeaderCollectionInterface $headers);
+    public function setHeaders(HeaderCollectionInterface $headers): void;
 
     /**
      * Sets the status code.
@@ -166,12 +167,12 @@ interface ResponseInterface
      *
      * @param StatusCodeInterface $statusCode The status code.
      */
-    public function setStatusCode(StatusCodeInterface $statusCode);
+    public function setStatusCode(StatusCodeInterface $statusCode): void;
 
     /**
      * Outputs the content.
      *
      * @since 1.0.0
      */
-    public function output();
+    public function output(): void;
 }

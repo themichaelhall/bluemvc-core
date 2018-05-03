@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core;
 
@@ -26,10 +27,9 @@ class DefaultRoute extends AbstractRoute
      *
      * @param string $controllerClassName The controller class name.
      *
-     * @throws \InvalidArgumentException       If the $controllerClassName is not a string.
      * @throws InvalidControllerClassException If the controller class name is invalid.
      */
-    public function __construct($controllerClassName)
+    public function __construct(string $controllerClassName)
     {
         parent::__construct($controllerClassName);
     }
@@ -41,9 +41,9 @@ class DefaultRoute extends AbstractRoute
      *
      * @param RequestInterface $request The request.
      *
-     * @return RouteMatchInterface The route match.
+     * @return RouteMatchInterface|null The route match.
      */
-    public function matches(RequestInterface $request)
+    public function matches(RequestInterface $request): ?RouteMatchInterface
     {
         $path = $request->getUrl()->getPath();
         $directoryParts = $path->getDirectoryParts();

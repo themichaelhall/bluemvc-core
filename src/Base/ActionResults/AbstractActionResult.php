@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Base\ActionResults;
 
@@ -27,17 +28,11 @@ abstract class AbstractActionResult implements ActionResultInterface
      *
      * @param string              $content    The content.
      * @param StatusCodeInterface $statusCode The status code.
-     *
-     * @throws \InvalidArgumentException If the content parameter is not a string.
      */
-    protected function __construct($content, StatusCodeInterface $statusCode)
+    protected function __construct(string $content, StatusCodeInterface $statusCode)
     {
-        if (!is_string($content)) {
-            throw new \InvalidArgumentException('$content parameter is not a string.');
-        }
-
-        $this->myStatusCode = $statusCode;
-        $this->myContent = $content;
+        $this->statusCode = $statusCode;
+        $this->content = $content;
     }
 
     /**
@@ -49,19 +44,19 @@ abstract class AbstractActionResult implements ActionResultInterface
      * @param RequestInterface     $request     The request.
      * @param ResponseInterface    $response    The response.
      */
-    public function updateResponse(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response)
+    public function updateResponse(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response): void
     {
-        $response->setStatusCode($this->myStatusCode);
-        $response->setContent($this->myContent);
+        $response->setStatusCode($this->statusCode);
+        $response->setContent($this->content);
     }
 
     /**
      * @var StatusCodeInterface My status code.
      */
-    private $myStatusCode;
+    private $statusCode;
 
     /**
      * @var string My content.
      */
-    private $myContent;
+    private $content;
 }

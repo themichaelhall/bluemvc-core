@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces;
 
@@ -26,7 +27,7 @@ interface ApplicationInterface
      *
      * @param PluginInterface $plugin The plugin.
      */
-    public function addPlugin(PluginInterface $plugin);
+    public function addPlugin(PluginInterface $plugin): void;
 
     /**
      * Adds a route.
@@ -35,7 +36,7 @@ interface ApplicationInterface
      *
      * @param RouteInterface $route The route.
      */
-    public function addRoute(RouteInterface $route);
+    public function addRoute(RouteInterface $route): void;
 
     /**
      * Adds a view renderer.
@@ -44,7 +45,7 @@ interface ApplicationInterface
      *
      * @param ViewRendererInterface $viewRenderer The view renderer.
      */
-    public function addViewRenderer(ViewRendererInterface $viewRenderer);
+    public function addViewRenderer(ViewRendererInterface $viewRenderer): void;
 
     /**
      * Returns a custom item by name if it exists, null otherwise.
@@ -55,7 +56,7 @@ interface ApplicationInterface
      *
      * @return mixed|null The custom item if it exists, null otherwise.
      */
-    public function getCustomItem($name);
+    public function getCustomItem(string $name);
 
     /**
      * Returns the custom items.
@@ -64,7 +65,7 @@ interface ApplicationInterface
      *
      * @return CustomItemCollectionInterface The custom items.
      */
-    public function getCustomItems();
+    public function getCustomItems(): CustomItemCollectionInterface;
 
     /**
      * Returns the document root.
@@ -73,7 +74,7 @@ interface ApplicationInterface
      *
      * @return FilePathInterface The document root.
      */
-    public function getDocumentRoot();
+    public function getDocumentRoot(): FilePathInterface;
 
     /**
      * Returns the error controller class name or null if not specified.
@@ -82,7 +83,7 @@ interface ApplicationInterface
      *
      * @return string|null The error controller class name or null if not specified.
      */
-    public function getErrorControllerClass();
+    public function getErrorControllerClass(): ?string;
 
     /**
      * Returns the plugins.
@@ -91,7 +92,7 @@ interface ApplicationInterface
      *
      * @return PluginInterface[] The plugins.
      */
-    public function getPlugins();
+    public function getPlugins(): array;
 
     /**
      * Returns the routes.
@@ -100,7 +101,7 @@ interface ApplicationInterface
      *
      * @return RouteInterface[] The routes.
      */
-    public function getRoutes();
+    public function getRoutes(): array;
 
     /**
      * Returns a session item by name if it exists, null otherwise.
@@ -111,7 +112,7 @@ interface ApplicationInterface
      *
      * @return mixed|null The session item if it exists, null otherwise.
      */
-    public function getSessionItem($name);
+    public function getSessionItem(string $name);
 
     /**
      * Returns the session items.
@@ -120,7 +121,7 @@ interface ApplicationInterface
      *
      * @return SessionItemCollectionInterface The session items.
      */
-    public function getSessionItems();
+    public function getSessionItems(): SessionItemCollectionInterface;
 
     /**
      * Returns the path to the application-specific temporary directory.
@@ -129,7 +130,7 @@ interface ApplicationInterface
      *
      * @return FilePathInterface The path to the application-specific temporary directory.
      */
-    public function getTempPath();
+    public function getTempPath(): FilePathInterface;
 
     /**
      * Returns The view files path.
@@ -138,7 +139,7 @@ interface ApplicationInterface
      *
      * @return FilePathInterface The view files path.
      */
-    public function getViewPath();
+    public function getViewPath(): FilePathInterface;
 
     /**
      * Returns the view renderers.
@@ -147,7 +148,7 @@ interface ApplicationInterface
      *
      * @return ViewRendererInterface[] The view renderers.
      */
-    public function getViewRenderers();
+    public function getViewRenderers(): array;
 
     /**
      * Returns true if in debug mode, false otherwise.
@@ -156,7 +157,7 @@ interface ApplicationInterface
      *
      * @return bool True if in debug mode, false otherwise.
      */
-    public function isDebug();
+    public function isDebug(): bool;
 
     /**
      * Removes a session item by name.
@@ -165,7 +166,7 @@ interface ApplicationInterface
      *
      * @param string $name The session item name.
      */
-    public function removeSessionItem($name);
+    public function removeSessionItem(string $name): void;
 
     /**
      * Runs a request.
@@ -175,7 +176,7 @@ interface ApplicationInterface
      * @param RequestInterface  $request  The request.
      * @param ResponseInterface $response The response.
      */
-    public function run(RequestInterface $request, ResponseInterface $response);
+    public function run(RequestInterface $request, ResponseInterface $response): void;
 
     /**
      * Sets a custom item.
@@ -185,7 +186,7 @@ interface ApplicationInterface
      * @param string $name  The custom item name.
      * @param mixed  $value The custom item value.
      */
-    public function setCustomItem($name, $value);
+    public function setCustomItem(string $name, $value): void;
 
     /**
      * Sets the custom items.
@@ -194,7 +195,7 @@ interface ApplicationInterface
      *
      * @param CustomItemCollectionInterface $customItems The custom items.
      */
-    public function setCustomItems(CustomItemCollectionInterface $customItems);
+    public function setCustomItems(CustomItemCollectionInterface $customItems): void;
 
     /**
      * Sets the error controller class name.
@@ -203,7 +204,7 @@ interface ApplicationInterface
      *
      * @param string $errorControllerClass The error controller class name.
      */
-    public function setErrorControllerClass($errorControllerClass);
+    public function setErrorControllerClass(string $errorControllerClass): void;
 
     /**
      * Sets a session item.
@@ -213,7 +214,7 @@ interface ApplicationInterface
      * @param string $name  The session item name.
      * @param mixed  $value The session item value.
      */
-    public function setSessionItem($name, $value);
+    public function setSessionItem(string $name, $value): void;
 
     /**
      * Sets the path to the application-specific temporary directory.
@@ -224,7 +225,7 @@ interface ApplicationInterface
      *
      * @throws InvalidFilePathException If the $tempPath parameter is invalid.
      */
-    public function setTempPath(FilePathInterface $tempPath);
+    public function setTempPath(FilePathInterface $tempPath): void;
 
     /**
      * Sets the view files path.
@@ -235,5 +236,5 @@ interface ApplicationInterface
      *
      * @throws InvalidFilePathException If the $viewPath parameter is invalid.
      */
-    public function setViewPath(FilePathInterface $viewPath);
+    public function setViewPath(FilePathInterface $viewPath): void;
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests\Helpers\TestRequests;
 
 use BlueMvc\Core\Base\AbstractRequest;
@@ -47,7 +49,7 @@ class BasicTestRequest extends AbstractRequest
      * @param string $name  The name.
      * @param string $value The value.
      */
-    public function addHeader($name, $value)
+    public function addHeader(string $name, string $value): void
     {
         parent::addHeader($name, $value);
     }
@@ -57,7 +59,7 @@ class BasicTestRequest extends AbstractRequest
      *
      * @param IPAddressInterface $clientIp The client IP address.
      */
-    public function setClientIp(IPAddressInterface $clientIp)
+    public function setClientIp(IPAddressInterface $clientIp): void
     {
         parent::setClientIp($clientIp);
     }
@@ -68,7 +70,7 @@ class BasicTestRequest extends AbstractRequest
      * @param string                 $name   The cookie name.
      * @param RequestCookieInterface $cookie The cookie.
      */
-    public function setCookie($name, RequestCookieInterface $cookie)
+    public function setCookie(string $name, RequestCookieInterface $cookie): void
     {
         parent::setCookie($name, $cookie);
     }
@@ -78,7 +80,7 @@ class BasicTestRequest extends AbstractRequest
      *
      * @param RequestCookieCollectionInterface $cookies The cookies.
      */
-    public function setCookies(RequestCookieCollectionInterface $cookies)
+    public function setCookies(RequestCookieCollectionInterface $cookies): void
     {
         parent::setCookies($cookies);
     }
@@ -89,7 +91,7 @@ class BasicTestRequest extends AbstractRequest
      * @param string $name  The form parameter name.
      * @param string $value The form parameter value.
      */
-    public function setFormParameter($name, $value)
+    public function setFormParameter(string $name, string $value): void
     {
         parent::setFormParameter($name, $value);
     }
@@ -99,7 +101,7 @@ class BasicTestRequest extends AbstractRequest
      *
      * @param ParameterCollectionInterface $parameters The form parameters.
      */
-    public function setFormParameters(ParameterCollectionInterface $parameters)
+    public function setFormParameters(ParameterCollectionInterface $parameters): void
     {
         parent::setFormParameters($parameters);
     }
@@ -110,7 +112,7 @@ class BasicTestRequest extends AbstractRequest
      * @param string $name  The name.
      * @param string $value The value.
      */
-    public function setHeader($name, $value)
+    public function setHeader(string $name, string $value): void
     {
         parent::setHeader($name, $value);
     }
@@ -120,7 +122,7 @@ class BasicTestRequest extends AbstractRequest
      *
      * @param HeaderCollectionInterface $headers The headers.
      */
-    public function setHeaders(HeaderCollectionInterface $headers)
+    public function setHeaders(HeaderCollectionInterface $headers): void
     {
         parent::setHeaders($headers);
     }
@@ -130,7 +132,7 @@ class BasicTestRequest extends AbstractRequest
      *
      * @param MethodInterface $method The http method.
      */
-    public function setMethod(MethodInterface $method)
+    public function setMethod(MethodInterface $method): void
     {
         parent::setMethod($method);
     }
@@ -141,7 +143,7 @@ class BasicTestRequest extends AbstractRequest
      * @param string $name  The query parameter name.
      * @param string $value The query parameter value.
      */
-    public function setQueryParameter($name, $value)
+    public function setQueryParameter(string $name, string $value): void
     {
         parent::setQueryParameter($name, $value);
     }
@@ -151,7 +153,7 @@ class BasicTestRequest extends AbstractRequest
      *
      * @param ParameterCollectionInterface $parameters The query parameters.
      */
-    public function setQueryParameters(ParameterCollectionInterface $parameters)
+    public function setQueryParameters(ParameterCollectionInterface $parameters): void
     {
         parent::setQueryParameters($parameters);
     }
@@ -160,10 +162,8 @@ class BasicTestRequest extends AbstractRequest
      * Sets the raw content.
      *
      * @param string $content The raw content.
-     *
-     * @throws \InvalidArgumentException If the $content parameter is not a string.
      */
-    public function setRawContent($content)
+    public function setRawContent(string $content): void
     {
         parent::setRawContent($content);
     }
@@ -174,7 +174,7 @@ class BasicTestRequest extends AbstractRequest
      * @param string                $name         The uploaded file name.
      * @param UploadedFileInterface $uploadedFile The uploaded file.
      */
-    public function setUploadedFile($name, UploadedFileInterface $uploadedFile)
+    public function setUploadedFile(string $name, UploadedFileInterface $uploadedFile): void
     {
         parent::setUploadedFile($name, $uploadedFile);
     }
@@ -184,7 +184,7 @@ class BasicTestRequest extends AbstractRequest
      *
      * @param UploadedFileCollectionInterface $uploadedFiles The uploaded files.
      */
-    public function setUploadedFiles(UploadedFileCollectionInterface $uploadedFiles)
+    public function setUploadedFiles(UploadedFileCollectionInterface $uploadedFiles): void
     {
         parent::setUploadedFiles($uploadedFiles);
     }
@@ -194,7 +194,7 @@ class BasicTestRequest extends AbstractRequest
      *
      * @param UrlInterface $url The url.
      */
-    public function setUrl(UrlInterface $url)
+    public function setUrl(UrlInterface $url): void
     {
         parent::setUrl($url);
     }

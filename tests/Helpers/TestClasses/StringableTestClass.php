@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests\Helpers\TestClasses;
 
 /**
@@ -10,9 +12,9 @@ class StringableTestClass
     /**
      * StringableTestClass constructor.
      *
-     * @param string $text The text
+     * @param string $text The text.
      */
-    public function __construct($text)
+    public function __construct(string $text)
     {
         $this->text = $text;
     }
@@ -22,7 +24,7 @@ class StringableTestClass
      *
      * @return string The content as a string.
      */
-    public function __toString()
+    public function __toString(): string
     {
         return 'Text is "' . $this->text . '"';
     }

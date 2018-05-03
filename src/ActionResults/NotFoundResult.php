@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\ActionResults;
 
@@ -23,10 +24,8 @@ class NotFoundResult extends AbstractActionResult
      * @since 1.0.0
      *
      * @param string $content The content.
-     *
-     * @throws \InvalidArgumentException If the content parameter is not a string.
      */
-    public function __construct($content = '')
+    public function __construct(string $content = '')
     {
         parent::__construct($content, new StatusCode(StatusCode::NOT_FOUND));
     }

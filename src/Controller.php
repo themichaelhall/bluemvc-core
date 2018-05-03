@@ -4,12 +4,12 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core;
 
 use BlueMvc\Core\Base\AbstractController;
 use BlueMvc\Core\Collections\ViewItemCollection;
-use BlueMvc\Core\Exceptions\ViewFileNotFoundException;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Interfaces\ActionResults\ActionResultInterface;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
@@ -34,7 +34,7 @@ abstract class Controller extends AbstractController
     {
         parent::__construct();
 
-        $this->myViewItems = new ViewItemCollection();
+        $this->viewItems = new ViewItemCollection();
     }
 
     /**
@@ -44,13 +44,11 @@ abstract class Controller extends AbstractController
      *
      * @param string $name The view item name.
      *
-     * @throws \InvalidArgumentException If the $name parameter is not a string.
-     *
      * @return mixed|null The view item value by view item name if it exists, null otherwise.
      */
-    public function getViewItem($name)
+    public function getViewItem(string $name)
     {
-        return $this->myViewItems->get($name);
+        return $this->viewItems->get($name);
     }
 
     /**
@@ -60,9 +58,9 @@ abstract class Controller extends AbstractController
      *
      * @return ViewItemCollectionInterface The view items.
      */
-    public function getViewItems()
+    public function getViewItems(): ViewItemCollectionInterface
     {
-        return $this->myViewItems;
+        return $this->viewItems;
     }
 
     /**
@@ -75,20 +73,13 @@ abstract class Controller extends AbstractController
      * @param ResponseInterface    $response    The response.
      * @param string               $action      The action.
      * @param array                $parameters  The parameters.
-     *
-     * @throws \InvalidArgumentException If the $action parameter is not a string.
-     * @throws ViewFileNotFoundException If no suitable view file was found.
      */
-    public function processRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, $action, array $parameters = [])
+    public function processRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, string $action, array $parameters = []): void
     {
-        if (!is_string($action)) {
-            throw new \InvalidArgumentException('$action parameter is not a string.');
-        }
-
         parent::processRequest($application, $request, $response, $action, $parameters);
 
         $isIndex = $action === '';
-        $actionName = self::myGetActionName($action);
+        $actionName = self::getActionName($action);
 
         // Try to invoke the action, and if that failed, try to invoke the default action.
         if (!$this->tryInvokeActionMethod($actionName, $parameters, !$isIndex, $result, $hasFoundActionMethod)) {
@@ -109,7 +100,7 @@ abstract class Controller extends AbstractController
             }
         }
 
-        $this->myHandleResult($result, $application, $request, $response, $actionName);
+        $this->handleResult($result, $application, $request, $response, $actionName);
     }
 
     /**
@@ -119,12 +110,10 @@ abstract class Controller extends AbstractController
      *
      * @param string $name  The view item name.
      * @param mixed  $value The view item value.
-     *
-     * @throws \InvalidArgumentException If the $name parameter is not a string.
      */
-    public function setViewItem($name, $value)
+    public function setViewItem(string $name, $value): void
     {
-        $this->myViewItems->set($name, $value);
+        $this->viewItems->set($name, $value);
     }
 
     /**
@@ -134,9 +123,9 @@ abstract class Controller extends AbstractController
      *
      * @param ViewItemCollectionInterface $viewItems The view items.
      */
-    public function setViewItems(ViewItemCollectionInterface $viewItems)
+    public function setViewItems(ViewItemCollectionInterface $viewItems): void
     {
-        $this->myViewItems = $viewItems;
+        $this->viewItems = $viewItems;
     }
 
     /**
@@ -146,7 +135,7 @@ abstract class Controller extends AbstractController
      *
      * @return string The path to the view files.
      */
-    protected function getViewPath()
+    protected function getViewPath(): string
     {
         $result = (new \ReflectionClass($this))->getShortName();
         if (strlen($result) > 10 && substr(strtolower($result), -10) === 'controller') {
@@ -165,10 +154,10 @@ abstract class Controller extends AbstractController
      * @param ResponseInterface    $response    The response.
      * @param string               $actionName  The action name.
      */
-    private function myHandleResult($result, ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, $actionName)
+    private function handleResult($result, ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, string $actionName): void
     {
         if ($result instanceof ViewInterface) {
-            $result->updateResponse($application, $request, $response, $this->getViewPath(), $actionName, $this->myViewItems);
+            $result->updateResponse($application, $request, $response, $this->getViewPath(), $actionName, $this->viewItems);
 
             return;
         }
@@ -203,13 +192,13 @@ abstract class Controller extends AbstractController
      *
      * @return string The action name.
      */
-    private static function myGetActionName($action)
+    private static function getActionName(string $action): string
     {
         if ($action === '') {
             return 'index';
         }
 
-        if (in_array(strtolower($action), self::$myMagicActionMethods)) {
+        if (in_array(strtolower($action), self::$magicActionMethods)) {
             return '_' . $action;
         }
 
@@ -219,10 +208,10 @@ abstract class Controller extends AbstractController
     /**
      * @var ViewItemCollectionInterface My view items.
      */
-    private $myViewItems;
+    private $viewItems;
 
     /**
      * @var array My magic action methods.
      */
-    private static $myMagicActionMethods = ['index', 'default'];
+    private static $magicActionMethods = ['index', 'default'];
 }

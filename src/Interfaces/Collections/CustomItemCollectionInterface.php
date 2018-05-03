@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces\Collections;
 
@@ -23,7 +24,7 @@ interface CustomItemCollectionInterface extends \Countable, \Iterator
      *
      * @return mixed|null The custom item value by custom item name if it exists, null otherwise.
      */
-    public function get($name);
+    public function get(string $name);
 
     /**
      * Sets a custom item value by custom item name.
@@ -33,5 +34,5 @@ interface CustomItemCollectionInterface extends \Countable, \Iterator
      * @param string $name  The custom item name.
      * @param mixed  $value The custom item value.
      */
-    public function set($name, $value);
+    public function set(string $name, $value): void;
 }

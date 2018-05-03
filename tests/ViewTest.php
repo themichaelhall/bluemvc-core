@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\Collections\ViewItemCollection;
@@ -51,61 +53,6 @@ class ViewTest extends TestCase
 
         self::assertSame('The Model', $view->getModel());
         self::assertSame('10a_view-File', $view->getFile());
-    }
-
-    /**
-     * Test create view with invalid file parameter.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $file parameter is not a string or null.
-     */
-    public function testCreateViewWithInvalidViewFileParameter()
-    {
-        new View('The Model', false);
-    }
-
-    /**
-     * Test update response method with invalid action parameter.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $action parameter is not a string.
-     */
-    public function testUpdateResponseWithInvalidActionParameter()
-    {
-        $DS = DIRECTORY_SEPARATOR;
-
-        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
-        $application->addViewRenderer(new BasicTestViewRenderer());
-
-        $request = new BasicTestRequest(Url::parse('https://example.com/'), new Method('GET'));
-        $response = new BasicTestResponse();
-        $view = new View('The Model');
-        $viewItems = new ViewItemCollection();
-
-        $view->updateResponse($application, $request, $response, 'ViewTest', 0, $viewItems);
-    }
-
-    /**
-     * Test update response method with invalid view path parameter.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $viewPath parameter is not a string.
-     */
-    public function testUpdateResponseWithInvalidViewPathParameter()
-    {
-        $DS = DIRECTORY_SEPARATOR;
-
-        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
-        $application->addViewRenderer(new BasicTestViewRenderer());
-
-        $request = new BasicTestRequest(Url::parse('https://example.com/'), new Method('GET'));
-        $response = new BasicTestResponse();
-        $view = new View('The Model');
-        $viewItems = new ViewItemCollection();
-
-        $view->updateResponse($application, $request, $response, true, '', $viewItems);
     }
 
     /**

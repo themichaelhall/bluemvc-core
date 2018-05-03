@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Collections;
 
@@ -23,7 +24,7 @@ class ParameterCollection implements ParameterCollectionInterface
      */
     public function __construct()
     {
-        $this->myParameters = [];
+        $this->parameters = [];
     }
 
     /**
@@ -33,9 +34,9 @@ class ParameterCollection implements ParameterCollectionInterface
      *
      * @return int The number of parameters.
      */
-    public function count()
+    public function count(): int
     {
-        return count($this->myParameters);
+        return count($this->parameters);
     }
 
     /**
@@ -45,9 +46,9 @@ class ParameterCollection implements ParameterCollectionInterface
      *
      * @return string The current parameter value.
      */
-    public function current()
+    public function current(): string
     {
-        return current($this->myParameters);
+        return current($this->parameters);
     }
 
     /**
@@ -57,21 +58,15 @@ class ParameterCollection implements ParameterCollectionInterface
      *
      * @param string $name The parameter name.
      *
-     * @throws \InvalidArgumentException If the $name parameter is not a string.
-     *
      * @return string|null The parameter value by parameter name if it exists, null otherwise.
      */
-    public function get($name)
+    public function get(string $name): ?string
     {
-        if (!is_string($name)) {
-            throw new \InvalidArgumentException('$name parameter is not a string.');
-        }
-
-        if (!isset($this->myParameters[$name])) {
+        if (!isset($this->parameters[$name])) {
             return null;
         }
 
-        return $this->myParameters[$name];
+        return $this->parameters[$name];
     }
 
     /**
@@ -81,9 +76,9 @@ class ParameterCollection implements ParameterCollectionInterface
      *
      * @return string The current parameter name.
      */
-    public function key()
+    public function key(): string
     {
-        return key($this->myParameters);
+        return strval(key($this->parameters));
     }
 
     /**
@@ -91,9 +86,9 @@ class ParameterCollection implements ParameterCollectionInterface
      *
      * @since 1.0.0
      */
-    public function next()
+    public function next(): void
     {
-        next($this->myParameters);
+        next($this->parameters);
     }
 
     /**
@@ -103,20 +98,10 @@ class ParameterCollection implements ParameterCollectionInterface
      *
      * @param string $name  The parameter name.
      * @param string $value The parameter value.
-     *
-     * @throws \InvalidArgumentException If any of the parameters are of invalid type.
      */
-    public function set($name, $value)
+    public function set(string $name, string $value): void
     {
-        if (!is_string($name)) {
-            throw new \InvalidArgumentException('$name parameter is not a string.');
-        }
-
-        if (!is_string($value)) {
-            throw new \InvalidArgumentException('$value parameter is not a string.');
-        }
-
-        $this->myParameters[$name] = $value;
+        $this->parameters[$name] = $value;
     }
 
     /**
@@ -124,9 +109,9 @@ class ParameterCollection implements ParameterCollectionInterface
      *
      * @since 1.0.0
      */
-    public function rewind()
+    public function rewind(): void
     {
-        reset($this->myParameters);
+        reset($this->parameters);
     }
 
     /**
@@ -136,13 +121,13 @@ class ParameterCollection implements ParameterCollectionInterface
      *
      * @return bool True if the current parameter is valid.
      */
-    public function valid()
+    public function valid(): bool
     {
-        return current($this->myParameters) !== false;
+        return current($this->parameters) !== false;
     }
 
     /**
      * @var array My parameters.
      */
-    private $myParameters;
+    private $parameters;
 }

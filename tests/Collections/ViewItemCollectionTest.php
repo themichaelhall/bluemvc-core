@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests\Collections;
 
 use BlueMvc\Core\Collections\ViewItemCollection;
@@ -31,19 +33,6 @@ class ViewItemCollectionTest extends TestCase
     }
 
     /**
-     * Test get method with invalid name parameter type.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $name parameter is not a string.
-     */
-    public function testGetMethodWithInvalidNameParameterType()
-    {
-        $viewItemCollection = new ViewItemCollection();
-
-        $viewItemCollection->get(true);
-    }
-
-    /**
      * Test set method.
      */
     public function testSet()
@@ -52,24 +41,13 @@ class ViewItemCollectionTest extends TestCase
         $viewItemCollection->set('Foo', 'xxx');
         $viewItemCollection->set('bar', false);
         $viewItemCollection->set('foo', ['One' => 1, 'Two' => 2]);
+        $viewItemCollection->set('1', '2');
 
-        self::assertSame(3, count($viewItemCollection));
+        self::assertSame(4, count($viewItemCollection));
         self::assertSame('xxx', $viewItemCollection->get('Foo'));
         self::assertSame(false, $viewItemCollection->get('bar'));
         self::assertSame(['One' => 1, 'Two' => 2], $viewItemCollection->get('foo'));
-    }
-
-    /**
-     * Test set method with invalid name parameter type.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $name parameter is not a string.
-     */
-    public function testSetMethodWithInvalidNameParameterType()
-    {
-        $viewItemCollection = new ViewItemCollection();
-
-        $viewItemCollection->set(10, 'Foo');
+        self::assertSame('2', $viewItemCollection->get('1'));
     }
 
     /**
@@ -92,9 +70,10 @@ class ViewItemCollectionTest extends TestCase
         $viewItemCollection = new ViewItemCollection();
         $viewItemCollection->set('Foo', false);
         $viewItemCollection->set('Bar', 'Baz');
+        $viewItemCollection->set('1', '2');
 
         $viewItemArray = iterator_to_array($viewItemCollection, true);
 
-        self::assertSame(['Foo' => false, 'Bar' => 'Baz'], $viewItemArray);
+        self::assertSame(['Foo' => false, 'Bar' => 'Baz', 1 => '2'], $viewItemArray);
     }
 }
