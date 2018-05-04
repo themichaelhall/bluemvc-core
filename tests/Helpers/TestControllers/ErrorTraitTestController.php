@@ -35,14 +35,14 @@ class ErrorTraitTestController extends Controller implements ErrorControllerInte
     public function defaultAction($statusCode)
     {
         $errorText = 'Error: ' . $statusCode;
-        $exception = $this->getException();
-        if ($exception !== null) {
+        $throwable = $this->getThrowable();
+        if ($throwable !== null) {
             // Use standard error page for DomainException.
-            if ($exception instanceof \DomainException) {
+            if ($throwable instanceof \DomainException) {
                 return null;
             }
 
-            $errorText .= ', Exception: ' . get_class($exception) . ', ExceptionMessage: ' . $exception->getMessage();
+            $errorText .= ', Throwable: ' . get_class($throwable) . ', ThrowableMessage: ' . $throwable->getMessage();
         }
 
         return new View($errorText);

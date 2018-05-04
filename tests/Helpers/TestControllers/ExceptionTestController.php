@@ -33,4 +33,14 @@ class ExceptionTestController extends Controller
     {
         throw new \DomainException('DomainException was thrown.');
     }
+
+    /**
+     * Error action.
+     *
+     * @throws \Error
+     */
+    public function errorAction()
+    {
+        throw new \Error('Error was thrown.');
+    }
 }
