@@ -26,6 +26,15 @@ class ErrorTraitTestController extends Controller implements ErrorControllerInte
     }
 
     /**
+     * 405 Method not allowed action.
+     */
+    public function _405Action()
+    {
+        // This emulates the case when there is a bug in the error controller that throws an error.
+        throw new \ParseError('Error thrown from 405 action.');
+    }
+
+    /**
      * Default action.
      *
      * @param string $statusCode The status code as a string.

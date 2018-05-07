@@ -17,8 +17,17 @@ class ErrorTestController extends ErrorController
      */
     public function _403Action()
     {
-        // This emulates the case when there is a bug in the error controller.
+        // This emulates the case when there is a bug in the error controller that throws an exception.
         throw new \RuntimeException('Exception thrown from 403 action.');
+    }
+
+    /**
+     * 405 Method not allowed action.
+     */
+    public function _405Action()
+    {
+        // This emulates the case when there is a bug in the error controller that throws an error.
+        throw new \ParseError('Error thrown from 405 action.');
     }
 
     /**
