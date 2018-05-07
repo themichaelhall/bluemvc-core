@@ -27,6 +27,6 @@ class PermanentRedirectResult extends AbstractLocationActionResult
      */
     public function __construct(string $location = '')
     {
-        parent::__construct(new StatusCode(StatusCode::MOVED_PERMANENTLY), $location);
+        parent::__construct($location, new StatusCode(StatusCode::MOVED_PERMANENTLY));
     }
 }

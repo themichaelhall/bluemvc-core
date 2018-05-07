@@ -27,6 +27,6 @@ class RedirectResult extends AbstractLocationActionResult
      */
     public function __construct(string $location = '')
     {
-        parent::__construct(new StatusCode(StatusCode::FOUND), $location);
+        parent::__construct($location, new StatusCode(StatusCode::FOUND));
     }
 }

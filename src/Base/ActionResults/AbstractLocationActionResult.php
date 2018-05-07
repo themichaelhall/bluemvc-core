@@ -26,10 +26,10 @@ class AbstractLocationActionResult extends AbstractActionResult
      *
      * @since 1.0.0
      *
-     * @param StatusCodeInterface $statusCode The status code.
      * @param string              $location   The location as an absolute or relative url.
+     * @param StatusCodeInterface $statusCode The status code.
      */
-    public function __construct(StatusCodeInterface $statusCode, string $location = '')
+    public function __construct(string $location, StatusCodeInterface $statusCode)
     {
         parent::__construct('', $statusCode);
 

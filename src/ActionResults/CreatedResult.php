@@ -27,6 +27,6 @@ class CreatedResult extends AbstractLocationActionResult
      */
     public function __construct(string $location = '')
     {
-        parent::__construct(new StatusCode(StatusCode::CREATED), $location);
+        parent::__construct($location, new StatusCode(StatusCode::CREATED));
     }
 }
