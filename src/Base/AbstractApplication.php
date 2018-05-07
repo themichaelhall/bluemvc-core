@@ -432,7 +432,7 @@ abstract class AbstractApplication implements ApplicationInterface
      */
     private function doRun(RequestInterface $request, ResponseInterface $response): void
     {
-        $exception = null;
+        $throwable = null;
 
         foreach ($this->plugins as $plugin) {
             if ($plugin->onPreRequest($this, $request, $response)) {
@@ -442,13 +442,12 @@ abstract class AbstractApplication implements ApplicationInterface
 
         try {
             $this->handleRequest($request, $response);
-        } catch (\Exception $e) {
-            $this->exceptionToResponse($e, $response);
-            $exception = $e;
+        } catch (\Throwable $throwable) {
+            $this->throwableToResponse($throwable, $response);
         }
 
         if ($response->getStatusCode()->isError()) {
-            $this->handleError($request, $response, $exception);
+            $this->handleError($request, $response, $throwable);
         }
 
         foreach ($this->plugins as $plugin) {
@@ -490,48 +489,48 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @param RequestInterface  $request   The request.
      * @param ResponseInterface $response  The response.
-     * @param \Exception|null   $exception The exception or null if no exception.
+     * @param \Throwable|null   $throwable The throwable or null if no throwable.
      */
-    private function handleError(RequestInterface $request, ResponseInterface $response, \Exception $exception = null): void
+    private function handleError(RequestInterface $request, ResponseInterface $response, \Throwable $throwable = null): void
     {
         $errorControllerClass = $this->getErrorControllerClass();
 
         if ($errorControllerClass !== null) {
             /** @var ErrorControllerInterface $errorController */
             $errorController = new $errorControllerClass();
-            if ($exception !== null) {
-                $errorController->setException($exception);
+            if ($throwable !== null) {
+                $errorController->setThrowable($throwable);
             }
 
             try {
                 $errorController->processRequest($this, $request, $response, strval($response->getStatusCode()->getCode()), []);
-            } catch (\Exception $e) {
-                $this->exceptionToResponse($e, $response);
+            } catch (\Throwable $throwable) {
+                $this->throwableToResponse($throwable, $response);
             }
         }
     }
 
     /**
-     * Outputs an exception to a response.
+     * Outputs a throwable to a response.
      *
-     * @param \Exception        $exception The exception.
+     * @param \Throwable        $throwable The throwable.
      * @param ResponseInterface $response  The response.
      */
-    private function exceptionToResponse(\Exception $exception, ResponseInterface $response): void
+    private function throwableToResponse(\Throwable $throwable, ResponseInterface $response): void
     {
         $response->setStatusCode(new StatusCode(StatusCode::INTERNAL_SERVER_ERROR));
         $response->setHeaders(new HeaderCollection());
-        $response->setContent($this->exceptionToHtml($exception));
+        $response->setContent($this->throwableToHtml($throwable));
     }
 
     /**
-     * Converts an exception to html.
+     * Converts a throwable to html.
      *
-     * @param \Exception $exception The exception.
+     * @param \Throwable $throwable The throwable.
      *
      * @return string The html.
      */
-    private function exceptionToHtml(\Exception $exception): string
+    private function throwableToHtml(\Throwable $throwable): string
     {
         if (!$this->isDebug) {
             return '';
@@ -539,10 +538,10 @@ abstract class AbstractApplication implements ApplicationInterface
 
         return
             "<!DOCTYPE html>\n" .
-            "<html>\n" .
+            "<html lang=\"en\">\n" .
             "   <head>\n" .
             "      <meta charset=\"utf-8\">\n" .
-            '      <title>' . htmlentities($exception->getMessage()) . "</title>\n" .
+            '      <title>' . htmlentities($throwable->getMessage()) . "</title>\n" .
             "      <style>\n" .
             "         html, body, h1, p, code, pre {margin:0; padding:0; font-size:16px; font-family:Arial, Helvetica, sans-serif; color:#555;}\n" .
             "         h1 {font-size:2em; margin:.5em; color:#338;}\n" .
@@ -551,11 +550,11 @@ abstract class AbstractApplication implements ApplicationInterface
             "      </style>\n" .
             "   </head>\n" .
             "   <body>\n" .
-            '      <h1>' . htmlentities($exception->getMessage()) . "</h1>\n" .
+            '      <h1>' . htmlentities($throwable->getMessage()) . "</h1>\n" .
             "      <p>\n" .
-            '         <code>' . htmlentities(get_class($exception)) . '</code> was thrown from <code>' . htmlentities($exception->getFile()) . ':' . htmlentities(strval($exception->getLine())) . '</code> with message <code>' . htmlentities($exception->getMessage()) . ' (' . htmlentities(strval($exception->getCode())) . ")</code>\n" .
+            '         <code>' . htmlentities(get_class($throwable)) . '</code> was thrown from <code>' . htmlentities($throwable->getFile()) . ':' . htmlentities(strval($throwable->getLine())) . '</code> with message <code>' . htmlentities($throwable->getMessage()) . ' (' . htmlentities(strval($throwable->getCode())) . ")</code>\n" .
             "      </p>\n" .
-            '      <pre>' . htmlentities($exception->getTraceAsString()) . "</pre>\n" .
+            '      <pre>' . htmlentities($throwable->getTraceAsString()) . "</pre>\n" .
             "   </body>\n" .
             "</html>\n";
     }

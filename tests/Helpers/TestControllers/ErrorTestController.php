@@ -17,8 +17,17 @@ class ErrorTestController extends ErrorController
      */
     public function _403Action()
     {
-        // This emulates the case when there is a bug in the error controller.
+        // This emulates the case when there is a bug in the error controller that throws an exception.
         throw new \RuntimeException('Exception thrown from 403 action.');
+    }
+
+    /**
+     * 405 Method not allowed action.
+     */
+    public function _405Action()
+    {
+        // This emulates the case when there is a bug in the error controller that throws an error.
+        throw new \ParseError('Error thrown from 405 action.');
     }
 
     /**
@@ -31,14 +40,14 @@ class ErrorTestController extends ErrorController
     public function defaultAction($statusCode)
     {
         $errorText = 'Error: ' . $statusCode;
-        $exception = $this->getException();
-        if ($exception !== null) {
+        $throwable = $this->getThrowable();
+        if ($throwable !== null) {
             // Use standard error page for DomainException.
-            if ($exception instanceof \DomainException) {
+            if ($throwable instanceof \DomainException) {
                 return null;
             }
 
-            $errorText .= ', Exception: ' . get_class($exception) . ', ExceptionMessage: ' . $exception->getMessage();
+            $errorText .= ', Throwable: ' . get_class($throwable) . ', ThrowableMessage: ' . $throwable->getMessage();
         }
 
         return new View($errorText);

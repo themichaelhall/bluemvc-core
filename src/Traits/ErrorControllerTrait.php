@@ -16,27 +16,27 @@ namespace BlueMvc\Core\Traits;
 trait ErrorControllerTrait
 {
     /**
-     * Returns the exception or null if no exception.
+     * Returns the throwable or null if no throwable.
      *
-     * @since 1.0.0
+     * @since 2.0.0
      *
-     * @return \Exception|null The exception or null if no exception.
+     * @return \Throwable|null The throwable or null if no throwable.
      */
-    public function getException(): ?\Exception
+    public function getThrowable(): ?\Throwable
     {
-        return $this->exception;
+        return $this->throwable;
     }
 
     /**
-     * Sets the exception.
+     * Sets the throwable.
      *
-     * @since 1.0.0
+     * @since 2.0.0
      *
-     * @param \Exception $exception The exception.
+     * @param \Throwable $throwable The throwable.
      */
-    public function setException(\Exception $exception): void
+    public function setThrowable(\Throwable $throwable): void
     {
-        $this->exception = $exception;
+        $this->throwable = $throwable;
     }
 
     /**
@@ -48,7 +48,7 @@ trait ErrorControllerTrait
      */
     protected function isPostActionEventEnabled(): bool
     {
-        return $this->exception === null;
+        return $this->throwable === null;
     }
 
     /**
@@ -60,11 +60,11 @@ trait ErrorControllerTrait
      */
     protected function isPreActionEventEnabled(): bool
     {
-        return $this->exception === null;
+        return $this->throwable === null;
     }
 
     /**
-     * @var \Exception|null My exception or null if no exception.
+     * @var \Throwable|null My throwable or null if no throwable.
      */
-    private $exception = null;
+    private $throwable = null;
 }
