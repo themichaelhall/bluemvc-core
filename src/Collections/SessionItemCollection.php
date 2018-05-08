@@ -18,15 +18,6 @@ use BlueMvc\Core\Interfaces\Collections\SessionItemCollectionInterface;
 class SessionItemCollection implements SessionItemCollectionInterface
 {
     /**
-     * Constructs the collection of session items.
-     *
-     * @since 1.0.0
-     */
-    public function __construct()
-    {
-    }
-
-    /**
      * Returns the number of session items.
      *
      * @since 1.0.0

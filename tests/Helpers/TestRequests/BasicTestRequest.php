@@ -16,6 +16,7 @@ use BlueMvc\Core\Interfaces\Collections\UploadedFileCollectionInterface;
 use BlueMvc\Core\Interfaces\Http\MethodInterface;
 use BlueMvc\Core\Interfaces\RequestCookieInterface;
 use BlueMvc\Core\Interfaces\UploadedFileInterface;
+use BlueMvc\Core\Tests\Helpers\TestCollections\BasicTestSessionItemCollection;
 use DataTypes\Interfaces\IPAddressInterface;
 use DataTypes\Interfaces\UrlInterface;
 
@@ -39,7 +40,8 @@ class BasicTestRequest extends AbstractRequest
             new ParameterCollection(),
             new ParameterCollection(),
             new UploadedFileCollection(),
-            new RequestCookieCollection()
+            new RequestCookieCollection(),
+            new BasicTestSessionItemCollection()
         );
     }
 

@@ -12,6 +12,7 @@ use BlueMvc\Core\Collections\RequestCookieCollection;
 use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\ParameterCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\RequestCookieCollectionInterface;
+use BlueMvc\Core\Interfaces\Collections\SessionItemCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\UploadedFileCollectionInterface;
 use BlueMvc\Core\Interfaces\Http\MethodInterface;
 use BlueMvc\Core\Interfaces\RequestCookieInterface;
@@ -264,9 +265,18 @@ abstract class AbstractRequest implements RequestInterface
      * @param ParameterCollectionInterface     $formParameters  The form parameters.
      * @param UploadedFileCollectionInterface  $uploadedFiles   The uploaded files.
      * @param RequestCookieCollectionInterface $cookies         The cookies.
+     * @param SessionItemCollectionInterface   $sessionItems    The session items.
      */
-    protected function __construct(UrlInterface $url, MethodInterface $method, HeaderCollectionInterface $headers, ParameterCollectionInterface $queryParameters, ParameterCollectionInterface $formParameters, UploadedFileCollectionInterface $uploadedFiles, RequestCookieCollectionInterface $cookies)
-    {
+    protected function __construct(
+        UrlInterface $url,
+        MethodInterface $method,
+        HeaderCollectionInterface $headers,
+        ParameterCollectionInterface $queryParameters,
+        ParameterCollectionInterface $formParameters,
+        UploadedFileCollectionInterface $uploadedFiles,
+        RequestCookieCollectionInterface $cookies,
+        SessionItemCollectionInterface $sessionItems
+    ) {
         $this->setUrl($url);
         $this->setMethod($method);
         $this->setHeaders($headers);
@@ -274,6 +284,7 @@ abstract class AbstractRequest implements RequestInterface
         $this->setFormParameters($formParameters);
         $this->setUploadedFiles($uploadedFiles);
         $this->setCookies($cookies);
+        $this->sessionItems = $sessionItems;
         $this->setRawContent('');
         $this->setClientIp(IPAddress::fromParts([0, 0, 0, 0]));
     }
@@ -508,4 +519,9 @@ abstract class AbstractRequest implements RequestInterface
      * @var IPAddressInterface My client ip address.
      */
     private $clientIp;
+
+    /**
+     * @var SessionItemCollectionInterface My session items.
+     */
+    private $sessionItems;
 }
