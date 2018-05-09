@@ -838,6 +838,27 @@ class RequestTest extends TestCase
     }
 
     /**
+     * Test setSessionItem method.
+     */
+    public function testSetSessionItem()
+    {
+        $_SERVER = [
+            'HTTP_HOST'      => 'localhost',
+            'REQUEST_URI'    => '/',
+            'REQUEST_METHOD' => 'GET',
+        ];
+
+        $request = new Request();
+        $request->setSessionItem('Foo', 1);
+        $request->setSessionItem('Bar', false);
+
+        $sessionItems = $request->getSessionItems();
+
+        self::assertSame(['Foo' => 1, 'Bar' => false], iterator_to_array($sessionItems));
+        self::assertSame(['Foo' => 1, 'Bar' => false], $_SESSION);
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
@@ -863,7 +884,6 @@ class RequestTest extends TestCase
         $_FILES = [];
         $_COOKIE = [];
         $_SERVER = $this->originalServerArray;
-        $_SERVER['SCRIPT_NAME'] = __FILE__;
     }
 
     /**

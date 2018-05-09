@@ -266,6 +266,19 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
+     * Sets a session item.
+     *
+     * @since 2.0.0
+     *
+     * @param string $name  The session item name.
+     * @param mixed  $value The session item value.
+     */
+    public function setSessionItem(string $name, $value): void
+    {
+        $this->sessionItems->set($name, $value);
+    }
+
+    /**
      * Constructs the request.
      *
      * @since 1.0.0
