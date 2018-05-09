@@ -8,6 +8,7 @@ use BlueMvc\Core\Exceptions\ServerEnvironmentException;
 use BlueMvc\Core\Request;
 use BlueMvc\Core\Tests\Helpers\Fakes\FakeFileGetContentsPhpInput;
 use BlueMvc\Core\Tests\Helpers\Fakes\FakeIsUploadedFile;
+use BlueMvc\Core\Tests\Helpers\Fakes\FakeSession;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -797,14 +798,55 @@ class RequestTest extends TestCase
     }
 
     /**
+     * Test getSessionItems method with no session items set.
+     */
+    public function testGetSessionItemsWithNoSessionItemsSet()
+    {
+        $_SERVER = [
+            'HTTP_HOST'      => 'localhost',
+            'REQUEST_URI'    => '/',
+            'REQUEST_METHOD' => 'GET',
+        ];
+
+        $request = new Request();
+        $sessionItems = $request->getSessionItems();
+
+        self::assertSame([], iterator_to_array($sessionItems));
+        self::assertSame([], $_SESSION);
+    }
+
+    /**
+     * Test getSessionItems method with session items set.
+     */
+    public function testGetSessionItemsWithSessionItemsSet()
+    {
+        $_SERVER = [
+            'HTTP_HOST'      => 'localhost',
+            'REQUEST_URI'    => '/',
+            'REQUEST_METHOD' => 'GET',
+        ];
+
+        $_SESSION = [
+            'Foo' => 'Bar',
+        ];
+
+        $request = new Request();
+        $sessionItems = $request->getSessionItems();
+
+        self::assertSame(['Foo' => 'Bar'], iterator_to_array($sessionItems));
+        self::assertSame(['Foo' => 'Bar'], $_SESSION);
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
     {
-        $this->requestTimeFloat = $_SERVER['REQUEST_TIME_FLOAT'];
+        $this->originalServerArray = $_SERVER;
 
         FakeIsUploadedFile::enable();
         FakeFileGetContentsPhpInput::enable();
+        FakeSession::enable();
     }
 
     /**
@@ -812,20 +854,20 @@ class RequestTest extends TestCase
      */
     public function tearDown()
     {
-        $_SERVER = [];
+        FakeIsUploadedFile::disable();
+        FakeFileGetContentsPhpInput::disable();
+        FakeSession::disable();
+
         $_GET = [];
         $_POST = [];
         $_FILES = [];
         $_COOKIE = [];
-
-        FakeIsUploadedFile::disable();
-        FakeFileGetContentsPhpInput::disable();
-
-        $_SERVER['REQUEST_TIME_FLOAT'] = $this->requestTimeFloat;
+        $_SERVER = $this->originalServerArray;
+        $_SERVER['SCRIPT_NAME'] = __FILE__;
     }
 
     /**
-     * @var float My request time.
+     * @var array The original $_SERVER array.
      */
-    private $requestTimeFloat;
+    private $originalServerArray;
 }

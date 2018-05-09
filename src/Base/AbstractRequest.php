@@ -204,6 +204,18 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
+     * Returns the session items.
+     *
+     * @since 2.0.0
+     *
+     * @return SessionItemCollectionInterface The session items.
+     */
+    public function getSessionItems(): SessionItemCollectionInterface
+    {
+        return $this->sessionItems;
+    }
+
+    /**
      * Returns a uploaded file by name if it exists, null otherwise.
      *
      * @since 1.0.0

@@ -11,6 +11,7 @@ namespace BlueMvc\Core\Interfaces;
 use BlueMvc\Core\Collections\RequestCookieCollection;
 use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\ParameterCollectionInterface;
+use BlueMvc\Core\Interfaces\Collections\SessionItemCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\UploadedFileCollectionInterface;
 use BlueMvc\Core\Interfaces\Http\MethodInterface;
 use DataTypes\Interfaces\IPAddressInterface;
@@ -149,6 +150,15 @@ interface RequestInterface
      * @return UrlInterface|null The referrer or null if request has no or invalid referrer.
      */
     public function getReferrer(): ?UrlInterface;
+
+    /**
+     * Returns the session items.
+     *
+     * @since 2.0.0
+     *
+     * @return SessionItemCollectionInterface The session items.
+     */
+    public function getSessionItems(): SessionItemCollectionInterface;
 
     /**
      * Returns a uploaded file by name if it exists, null otherwise.
