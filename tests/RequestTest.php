@@ -867,7 +867,7 @@ class RequestTest extends TestCase
     }
 
     /**
-     * @var array The original $_SERVER array.
+     * @var array The original server array.
      */
     private $originalServerArray;
 }
