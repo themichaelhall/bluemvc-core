@@ -10,6 +10,7 @@ use BlueMvc\Core\Collections\RequestCookieCollection;
 use BlueMvc\Core\Collections\UploadedFileCollection;
 use BlueMvc\Core\Http\Method;
 use BlueMvc\Core\RequestCookie;
+use BlueMvc\Core\Tests\Helpers\TestCollections\BasicTestSessionItemCollection;
 use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
 use BlueMvc\Core\UploadedFile;
 use DataTypes\FilePath;
@@ -433,6 +434,20 @@ class AbstractRequestTest extends TestCase
         $sessionItems = $this->request->getSessionItems();
 
         self::assertSame(['Foo' => [1, 2], 'Bar' => true], iterator_to_array($sessionItems));
+    }
+
+    /**
+     * Test setSessionItems method.
+     */
+    public function testSetSessionItems()
+    {
+        $sessionItems = new BasicTestSessionItemCollection();
+        $sessionItems->set('Foo', 1);
+        $sessionItems->set('Bar', 2);
+
+        $this->request->setSessionItems($sessionItems);
+
+        self::assertSame(['Foo' => 1, 'Bar' => 2], iterator_to_array($this->request->getSessionItems()));
     }
 
     /**

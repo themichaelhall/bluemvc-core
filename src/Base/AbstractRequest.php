@@ -464,6 +464,18 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
+     * Sets the session items.
+     *
+     * @since 2.0.0
+     *
+     * @param SessionItemCollectionInterface $sessionItems The session items.
+     */
+    protected function setSessionItems(SessionItemCollectionInterface $sessionItems): void
+    {
+        $this->sessionItems = $sessionItems;
+    }
+
+    /**
      * Sets an uploaded file.
      *
      * @since 1.0.0
