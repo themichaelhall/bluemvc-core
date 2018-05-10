@@ -884,6 +884,34 @@ class RequestTest extends TestCase
     }
 
     /**
+     * Test removeSessionItem method.
+     */
+    public function testRemoveSessionItem()
+    {
+        $_SERVER = [
+            'HTTP_HOST'      => 'localhost',
+            'REQUEST_URI'    => '/',
+            'REQUEST_METHOD' => 'GET',
+        ];
+
+        $_SESSION = [
+            'Foo' => 'Bar',
+            'Baz' => [true, false],
+        ];
+
+        $request = new Request();
+
+        $request->removeSessionItem('Bar');
+        $request->removeSessionItem('Baz');
+
+        self::assertSame('Bar', $request->getSessionItem('Foo'));
+        self::assertNull($request->getSessionItem('Baz'));
+        self::assertNull($request->getSessionItem('Bar'));
+        self::assertNull($request->getSessionItem('foo'));
+        self::assertSame(['Foo' => 'Bar'], $_SESSION);
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

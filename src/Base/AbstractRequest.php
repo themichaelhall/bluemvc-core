@@ -280,6 +280,18 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
+     * Removes a session item by name.
+     *
+     * @since 2.0.0
+     *
+     * @param string $name The session item name.
+     */
+    public function removeSessionItem(string $name): void
+    {
+        $this->sessionItems->remove($name);
+    }
+
+    /**
      * Sets a session item.
      *
      * @since 2.0.0
