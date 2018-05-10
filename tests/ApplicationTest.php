@@ -336,7 +336,6 @@ class ApplicationTest extends TestCase
      */
     public function tearDown()
     {
-
         $this->application = null;
 
         $_SERVER = $this->originalServerArray;
