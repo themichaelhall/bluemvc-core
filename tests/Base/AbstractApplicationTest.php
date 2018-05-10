@@ -8,7 +8,6 @@ use BlueMvc\Core\Collections\CustomItemCollection;
 use BlueMvc\Core\Exceptions\InvalidFilePathException;
 use BlueMvc\Core\Route;
 use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
-use BlueMvc\Core\Tests\Helpers\TestCollections\BasicTestSessionItemCollection;
 use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ErrorTestController;
 use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
@@ -323,74 +322,6 @@ class AbstractApplicationTest extends TestCase
     public function testSetErrorControllerClassWithOrdinaryControllerClassName()
     {
         $this->application->setErrorControllerClass(BasicTestController::class);
-    }
-
-    /**
-     * Test getSessionItems method.
-     */
-    public function testGetSessionItems()
-    {
-        $sessionItems = $this->application->getSessionItems();
-
-        self::assertSame([], iterator_to_array($sessionItems));
-    }
-
-    /**
-     * Test setSessionItem method.
-     */
-    public function testSetSessionItem()
-    {
-        $this->application->setSessionItem('Foo', [1, 2]);
-        $this->application->setSessionItem('Bar', true);
-
-        $sessionItems = $this->application->getSessionItems();
-
-        self::assertSame(['Foo' => [1, 2], 'Bar' => true], iterator_to_array($sessionItems));
-    }
-
-    /**
-     * Test getSessionItem method.
-     */
-    public function testGetSessionItem()
-    {
-        $this->application->setSessionItem('Foo', [1, 2]);
-        $this->application->setSessionItem('Bar', true);
-
-        self::assertSame([1, 2], $this->application->getSessionItem('Foo'));
-        self::assertSame(true, $this->application->getSessionItem('Bar'));
-        self::assertNull($this->application->getSessionItem('Baz'));
-        self::assertNull($this->application->getSessionItem('bar'));
-    }
-
-    /**
-     * Test removeSessionItem method.
-     */
-    public function testRemoveSessionItem()
-    {
-        $this->application->setSessionItem('Foo', [1, 2]);
-        $this->application->setSessionItem('Bar', true);
-
-        $this->application->removeSessionItem('Bar');
-        $this->application->removeSessionItem('Baz');
-
-        self::assertSame([1, 2], $this->application->getSessionItem('Foo'));
-        self::assertNull($this->application->getSessionItem('Bar'));
-        self::assertNull($this->application->getSessionItem('Baz'));
-        self::assertNull($this->application->getSessionItem('bar'));
-    }
-
-    /**
-     * Test setSessionItems method.
-     */
-    public function testSetSessionItems()
-    {
-        $sessionItems = new BasicTestSessionItemCollection();
-        $sessionItems->set('Foo', 1);
-        $sessionItems->set('Bar', 2);
-
-        $this->application->setSessionItems($sessionItems);
-
-        self::assertSame(['Foo' => 1, 'Bar' => 2], iterator_to_array($this->application->getSessionItems()));
     }
 
     /**

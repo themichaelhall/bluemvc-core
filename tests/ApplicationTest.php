@@ -8,7 +8,6 @@ use BlueMvc\Core\Application;
 use BlueMvc\Core\Collections\CustomItemCollection;
 use BlueMvc\Core\Exceptions\InvalidFilePathException;
 use BlueMvc\Core\Route;
-use BlueMvc\Core\Tests\Helpers\Fakes\FakeSession;
 use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ErrorTestController;
 use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
@@ -262,83 +261,6 @@ class ApplicationTest extends TestCase
     }
 
     /**
-     * Test getSessionItems method with no session items set.
-     */
-    public function testGetSessionItemsWithNoSessionItemsSet()
-    {
-        $sessionItems = $this->application->getSessionItems();
-
-        self::assertSame([], iterator_to_array($sessionItems));
-        self::assertSame([], $_SESSION);
-    }
-
-    /**
-     * Test getSessionItems method with session items set.
-     */
-    public function testGetSessionItemsWithSessionItemsSet()
-    {
-        $_SESSION = [
-            'Foo' => 'Bar',
-        ];
-
-        $sessionItems = $this->application->getSessionItems();
-
-        self::assertSame(['Foo' => 'Bar'], iterator_to_array($sessionItems));
-        self::assertSame(['Foo' => 'Bar'], $_SESSION);
-    }
-
-    /**
-     * Test setSessionItem method.
-     */
-    public function testSetSessionItem()
-    {
-        $this->application->setSessionItem('Foo', 1);
-        $this->application->setSessionItem('Bar', false);
-
-        $sessionItems = $this->application->getSessionItems();
-
-        self::assertSame(['Foo' => 1, 'Bar' => false], iterator_to_array($sessionItems));
-        self::assertSame(['Foo' => 1, 'Bar' => false], $_SESSION);
-    }
-
-    /**
-     * Test getSessionItem method.
-     */
-    public function testGetSessionItem()
-    {
-        $_SESSION = [
-            'Foo' => 'Bar',
-            'Baz' => [true, false],
-        ];
-
-        self::assertSame('Bar', $this->application->getSessionItem('Foo'));
-        self::assertSame([true, false], $this->application->getSessionItem('Baz'));
-        self::assertNull($this->application->getSessionItem('Bar'));
-        self::assertNull($this->application->getSessionItem('foo'));
-        self::assertSame(['Foo' => 'Bar', 'Baz' => [true, false]], $_SESSION);
-    }
-
-    /**
-     * Test removeSessionItem method.
-     */
-    public function testRemoveSessionItem()
-    {
-        $_SESSION = [
-            'Foo' => 'Bar',
-            'Baz' => [true, false],
-        ];
-
-        $this->application->removeSessionItem('Bar');
-        $this->application->removeSessionItem('Baz');
-
-        self::assertSame('Bar', $this->application->getSessionItem('Foo'));
-        self::assertNull($this->application->getSessionItem('Baz'));
-        self::assertNull($this->application->getSessionItem('Bar'));
-        self::assertNull($this->application->getSessionItem('foo'));
-        self::assertSame(['Foo' => 'Bar'], $_SESSION);
-    }
-
-    /**
      * Test getCustomItems method.
      */
     public function testGetCustomItems()
@@ -393,7 +315,7 @@ class ApplicationTest extends TestCase
      */
     public function setUp()
     {
-        $this->requestTimeFloat = $_SERVER['REQUEST_TIME_FLOAT'];
+        $this->originalServerArray = $_SERVER;
 
         $DS = DIRECTORY_SEPARATOR;
 
@@ -407,7 +329,6 @@ class ApplicationTest extends TestCase
         $this->application->addViewRenderer(new BasicTestViewRenderer());
         $this->application->addRoute(new Route('', BasicTestController::class));
         rmdir($this->application->getTempPath()->__toString());
-        FakeSession::enable();
     }
 
     /**
@@ -415,11 +336,10 @@ class ApplicationTest extends TestCase
      */
     public function tearDown()
     {
-        $_SERVER = [];
-        $this->application = null;
-        FakeSession::disable();
 
-        $_SERVER['REQUEST_TIME_FLOAT'] = $this->requestTimeFloat;
+        $this->application = null;
+
+        $_SERVER = $this->originalServerArray;
     }
 
     /**
@@ -428,7 +348,7 @@ class ApplicationTest extends TestCase
     private $application;
 
     /**
-     * @var float My request time.
+     * @var array The original server array.
      */
-    private $requestTimeFloat;
+    private $originalServerArray;
 }

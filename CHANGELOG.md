@@ -1,5 +1,6 @@
 ## Unreleased
 - **Backward compatibility break**: Replaced getException/setException methods with getThrowable/setThrowable in ErrorController.
+- **Backward compatibility break**: Moved session handling from Application to Request.
 - Updated PHP requirement to 7.1.
 
 ## [1.1.0] 2018-04-29
