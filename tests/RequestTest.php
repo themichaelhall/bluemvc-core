@@ -859,6 +859,31 @@ class RequestTest extends TestCase
     }
 
     /**
+     * Test getSessionItem method.
+     */
+    public function testGetSessionItem()
+    {
+        $_SERVER = [
+            'HTTP_HOST'      => 'localhost',
+            'REQUEST_URI'    => '/',
+            'REQUEST_METHOD' => 'GET',
+        ];
+
+        $_SESSION = [
+            'Foo' => 'Bar',
+            'Baz' => [true, false],
+        ];
+
+        $request = new Request();
+
+        self::assertSame('Bar', $request->getSessionItem('Foo'));
+        self::assertSame([true, false], $request->getSessionItem('Baz'));
+        self::assertNull($request->getSessionItem('Bar'));
+        self::assertNull($request->getSessionItem('foo'));
+        self::assertSame(['Foo' => 'Bar', 'Baz' => [true, false]], $_SESSION);
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

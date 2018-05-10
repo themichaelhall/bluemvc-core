@@ -451,6 +451,20 @@ class AbstractRequestTest extends TestCase
     }
 
     /**
+     * Test getSessionItem method.
+     */
+    public function testGetSessionItem()
+    {
+        $this->request->setSessionItem('Foo', [1, 2]);
+        $this->request->setSessionItem('Bar', true);
+
+        self::assertSame([1, 2], $this->request->getSessionItem('Foo'));
+        self::assertSame(true, $this->request->getSessionItem('Bar'));
+        self::assertNull($this->request->getSessionItem('Baz'));
+        self::assertNull($this->request->getSessionItem('bar'));
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

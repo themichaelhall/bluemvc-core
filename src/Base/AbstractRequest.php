@@ -204,6 +204,20 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
+     * Returns a session item by name if it exists, null otherwise.
+     *
+     * @since 2.0.0
+     *
+     * @param string $name The name.
+     *
+     * @return mixed|null The session item if it exists, null otherwise.
+     */
+    public function getSessionItem(string $name)
+    {
+        return $this->sessionItems->get($name);
+    }
+
+    /**
      * Returns the session items.
      *
      * @since 2.0.0
@@ -309,7 +323,7 @@ abstract class AbstractRequest implements RequestInterface
         $this->setFormParameters($formParameters);
         $this->setUploadedFiles($uploadedFiles);
         $this->setCookies($cookies);
-        $this->sessionItems = $sessionItems;
+        $this->setSessionItems($sessionItems);
         $this->setRawContent('');
         $this->setClientIp(IPAddress::fromParts([0, 0, 0, 0]));
     }

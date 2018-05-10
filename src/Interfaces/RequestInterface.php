@@ -152,6 +152,17 @@ interface RequestInterface
     public function getReferrer(): ?UrlInterface;
 
     /**
+     * Returns a session item by name if it exists, null otherwise.
+     *
+     * @since 2.0.0
+     *
+     * @param string $name The session item name.
+     *
+     * @return mixed|null The session item if it exists, null otherwise.
+     */
+    public function getSessionItem(string $name);
+
+    /**
      * Returns the session items.
      *
      * @since 2.0.0
