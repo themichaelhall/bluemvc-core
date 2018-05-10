@@ -12,10 +12,12 @@ use BlueMvc\Core\Collections\UploadedFileCollection;
 use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\ParameterCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\RequestCookieCollectionInterface;
+use BlueMvc\Core\Interfaces\Collections\SessionItemCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\UploadedFileCollectionInterface;
 use BlueMvc\Core\Interfaces\Http\MethodInterface;
 use BlueMvc\Core\Interfaces\RequestCookieInterface;
 use BlueMvc\Core\Interfaces\UploadedFileInterface;
+use BlueMvc\Core\Tests\Helpers\TestCollections\BasicTestSessionItemCollection;
 use DataTypes\Interfaces\IPAddressInterface;
 use DataTypes\Interfaces\UrlInterface;
 
@@ -39,7 +41,8 @@ class BasicTestRequest extends AbstractRequest
             new ParameterCollection(),
             new ParameterCollection(),
             new UploadedFileCollection(),
-            new RequestCookieCollection()
+            new RequestCookieCollection(),
+            new BasicTestSessionItemCollection()
         );
     }
 
@@ -166,6 +169,16 @@ class BasicTestRequest extends AbstractRequest
     public function setRawContent(string $content): void
     {
         parent::setRawContent($content);
+    }
+
+    /**
+     * Sets the session items.
+     *
+     * @param SessionItemCollectionInterface $sessionItems The session items.
+     */
+    public function setSessionItems(SessionItemCollectionInterface $sessionItems): void
+    {
+        parent::setSessionItems($sessionItems);
     }
 
     /**

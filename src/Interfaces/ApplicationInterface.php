@@ -10,7 +10,6 @@ namespace BlueMvc\Core\Interfaces;
 
 use BlueMvc\Core\Exceptions\InvalidFilePathException;
 use BlueMvc\Core\Interfaces\Collections\CustomItemCollectionInterface;
-use BlueMvc\Core\Interfaces\Collections\SessionItemCollectionInterface;
 use DataTypes\Interfaces\FilePathInterface;
 
 /**
@@ -104,26 +103,6 @@ interface ApplicationInterface
     public function getRoutes(): array;
 
     /**
-     * Returns a session item by name if it exists, null otherwise.
-     *
-     * @since 1.0.0
-     *
-     * @param string $name The session item name.
-     *
-     * @return mixed|null The session item if it exists, null otherwise.
-     */
-    public function getSessionItem(string $name);
-
-    /**
-     * Returns the session items.
-     *
-     * @since 1.0.0
-     *
-     * @return SessionItemCollectionInterface The session items.
-     */
-    public function getSessionItems(): SessionItemCollectionInterface;
-
-    /**
      * Returns the path to the application-specific temporary directory.
      *
      * @since 1.0.0
@@ -158,15 +137,6 @@ interface ApplicationInterface
      * @return bool True if in debug mode, false otherwise.
      */
     public function isDebug(): bool;
-
-    /**
-     * Removes a session item by name.
-     *
-     * @since 1.0.0
-     *
-     * @param string $name The session item name.
-     */
-    public function removeSessionItem(string $name): void;
 
     /**
      * Runs a request.
@@ -205,16 +175,6 @@ interface ApplicationInterface
      * @param string $errorControllerClass The error controller class name.
      */
     public function setErrorControllerClass(string $errorControllerClass): void;
-
-    /**
-     * Sets a session item.
-     *
-     * @since 1.0.0
-     *
-     * @param string $name  The session item name.
-     * @param mixed  $value The session item value.
-     */
-    public function setSessionItem(string $name, $value): void;
 
     /**
      * Sets the path to the application-specific temporary directory.

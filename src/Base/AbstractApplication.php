@@ -15,7 +15,6 @@ use BlueMvc\Core\Exceptions\InvalidFilePathException;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\Collections\CustomItemCollectionInterface;
-use BlueMvc\Core\Interfaces\Collections\SessionItemCollectionInterface;
 use BlueMvc\Core\Interfaces\ControllerInterface;
 use BlueMvc\Core\Interfaces\ErrorControllerInterface;
 use BlueMvc\Core\Interfaces\PluginInterface;
@@ -145,32 +144,6 @@ abstract class AbstractApplication implements ApplicationInterface
     }
 
     /**
-     * Returns a session item by name if it exists, null otherwise.
-     *
-     * @since 1.0.0
-     *
-     * @param string $name The name.
-     *
-     * @return mixed|null The session item if it exists, null otherwise.
-     */
-    public function getSessionItem(string $name)
-    {
-        return $this->sessionItems->get($name);
-    }
-
-    /**
-     * Returns the session items.
-     *
-     * @since 1.0.0
-     *
-     * @return SessionItemCollectionInterface The session items.
-     */
-    public function getSessionItems(): SessionItemCollectionInterface
-    {
-        return $this->sessionItems;
-    }
-
-    /**
      * Returns the path to the application-specific temporary directory.
      *
      * @since 1.0.0
@@ -226,18 +199,6 @@ abstract class AbstractApplication implements ApplicationInterface
     public function isDebug(): bool
     {
         return $this->isDebug;
-    }
-
-    /**
-     * Removes a session item by name.
-     *
-     * @since 1.0.0
-     *
-     * @param string $name The session item name.
-     */
-    public function removeSessionItem(string $name): void
-    {
-        $this->sessionItems->remove($name);
     }
 
     /**
@@ -298,19 +259,6 @@ abstract class AbstractApplication implements ApplicationInterface
     }
 
     /**
-     * Sets a session item.
-     *
-     * @since 1.0.0
-     *
-     * @param string $name  The session item name.
-     * @param mixed  $value The session item value.
-     */
-    public function setSessionItem(string $name, $value): void
-    {
-        $this->sessionItems->set($name, $value);
-    }
-
-    /**
      * Sets the path to the application-specific temporary directory.
      *
      * @since 1.0.0
@@ -359,15 +307,13 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @since 1.0.0
      *
-     * @param FilePathInterface              $documentRoot The document root.
-     * @param SessionItemCollectionInterface $sessionItems The session items.
+     * @param FilePathInterface $documentRoot The document root.
      *
-     * @throws InvalidFilePathException
+     * @throws InvalidFilePathException If the $documentRoot parameter is invalid.
      */
-    protected function __construct(FilePathInterface $documentRoot, SessionItemCollectionInterface $sessionItems)
+    protected function __construct(FilePathInterface $documentRoot)
     {
         $this->setDocumentRoot($documentRoot);
-        $this->setSessionItems($sessionItems);
         $this->routes = [];
         $this->tempPath = null;
         $this->viewRenderers = [];
@@ -410,18 +356,6 @@ abstract class AbstractApplication implements ApplicationInterface
         }
 
         $this->documentRoot = $documentRoot;
-    }
-
-    /**
-     * Sets the session items.
-     *
-     * @since 1.0.0
-     *
-     * @param SessionItemCollectionInterface $sessionItems The session items.
-     */
-    protected function setSessionItems(SessionItemCollectionInterface $sessionItems): void
-    {
-        $this->sessionItems = $sessionItems;
     }
 
     /**
@@ -575,11 +509,6 @@ abstract class AbstractApplication implements ApplicationInterface
      * @var FilePathInterface My document root.
      */
     private $documentRoot;
-
-    /**
-     * @var SessionItemCollectionInterface My session items.
-     */
-    private $sessionItems;
 
     /**
      * @var bool True if in debug mode, false otherwise.

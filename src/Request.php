@@ -12,6 +12,7 @@ use BlueMvc\Core\Base\AbstractRequest;
 use BlueMvc\Core\Collections\HeaderCollection;
 use BlueMvc\Core\Collections\ParameterCollection;
 use BlueMvc\Core\Collections\RequestCookieCollection;
+use BlueMvc\Core\Collections\SessionItemCollection;
 use BlueMvc\Core\Collections\UploadedFileCollection;
 use BlueMvc\Core\Exceptions\ServerEnvironmentException;
 use BlueMvc\Core\Http\Method;
@@ -49,7 +50,8 @@ class Request extends AbstractRequest
             self::parseParameters($_GET),
             self::parseParameters($_POST),
             self::parseUploadedFiles($_FILES),
-            self::parseCookies($_COOKIE)
+            self::parseCookies($_COOKIE),
+            new SessionItemCollection()
         );
 
         $clientIp = IPAddress::tryParse(isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '');

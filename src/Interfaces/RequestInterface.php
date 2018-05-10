@@ -11,6 +11,7 @@ namespace BlueMvc\Core\Interfaces;
 use BlueMvc\Core\Collections\RequestCookieCollection;
 use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\ParameterCollectionInterface;
+use BlueMvc\Core\Interfaces\Collections\SessionItemCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\UploadedFileCollectionInterface;
 use BlueMvc\Core\Interfaces\Http\MethodInterface;
 use DataTypes\Interfaces\IPAddressInterface;
@@ -151,6 +152,26 @@ interface RequestInterface
     public function getReferrer(): ?UrlInterface;
 
     /**
+     * Returns a session item by name if it exists, null otherwise.
+     *
+     * @since 2.0.0
+     *
+     * @param string $name The session item name.
+     *
+     * @return mixed|null The session item if it exists, null otherwise.
+     */
+    public function getSessionItem(string $name);
+
+    /**
+     * Returns the session items.
+     *
+     * @since 2.0.0
+     *
+     * @return SessionItemCollectionInterface The session items.
+     */
+    public function getSessionItems(): SessionItemCollectionInterface;
+
+    /**
      * Returns a uploaded file by name if it exists, null otherwise.
      *
      * @since 1.0.0
@@ -187,4 +208,23 @@ interface RequestInterface
      * @return UrlInterface The url.
      */
     public function getUrl(): UrlInterface;
+
+    /**
+     * Removes a session item by name.
+     *
+     * @since 2.0.0
+     *
+     * @param string $name The session item name.
+     */
+    public function removeSessionItem(string $name): void;
+
+    /**
+     * Sets a session item.
+     *
+     * @since 2.0.0
+     *
+     * @param string $name  The session item name.
+     * @param mixed  $value The session item value.
+     */
+    public function setSessionItem(string $name, $value): void;
 }

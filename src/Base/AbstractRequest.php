@@ -12,6 +12,7 @@ use BlueMvc\Core\Collections\RequestCookieCollection;
 use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\ParameterCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\RequestCookieCollectionInterface;
+use BlueMvc\Core\Interfaces\Collections\SessionItemCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\UploadedFileCollectionInterface;
 use BlueMvc\Core\Interfaces\Http\MethodInterface;
 use BlueMvc\Core\Interfaces\RequestCookieInterface;
@@ -203,6 +204,32 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
+     * Returns a session item by name if it exists, null otherwise.
+     *
+     * @since 2.0.0
+     *
+     * @param string $name The name.
+     *
+     * @return mixed|null The session item if it exists, null otherwise.
+     */
+    public function getSessionItem(string $name)
+    {
+        return $this->sessionItems->get($name);
+    }
+
+    /**
+     * Returns the session items.
+     *
+     * @since 2.0.0
+     *
+     * @return SessionItemCollectionInterface The session items.
+     */
+    public function getSessionItems(): SessionItemCollectionInterface
+    {
+        return $this->sessionItems;
+    }
+
+    /**
      * Returns a uploaded file by name if it exists, null otherwise.
      *
      * @since 1.0.0
@@ -253,6 +280,31 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
+     * Removes a session item by name.
+     *
+     * @since 2.0.0
+     *
+     * @param string $name The session item name.
+     */
+    public function removeSessionItem(string $name): void
+    {
+        $this->sessionItems->remove($name);
+    }
+
+    /**
+     * Sets a session item.
+     *
+     * @since 2.0.0
+     *
+     * @param string $name  The session item name.
+     * @param mixed  $value The session item value.
+     */
+    public function setSessionItem(string $name, $value): void
+    {
+        $this->sessionItems->set($name, $value);
+    }
+
+    /**
      * Constructs the request.
      *
      * @since 1.0.0
@@ -264,9 +316,18 @@ abstract class AbstractRequest implements RequestInterface
      * @param ParameterCollectionInterface     $formParameters  The form parameters.
      * @param UploadedFileCollectionInterface  $uploadedFiles   The uploaded files.
      * @param RequestCookieCollectionInterface $cookies         The cookies.
+     * @param SessionItemCollectionInterface   $sessionItems    The session items.
      */
-    protected function __construct(UrlInterface $url, MethodInterface $method, HeaderCollectionInterface $headers, ParameterCollectionInterface $queryParameters, ParameterCollectionInterface $formParameters, UploadedFileCollectionInterface $uploadedFiles, RequestCookieCollectionInterface $cookies)
-    {
+    protected function __construct(
+        UrlInterface $url,
+        MethodInterface $method,
+        HeaderCollectionInterface $headers,
+        ParameterCollectionInterface $queryParameters,
+        ParameterCollectionInterface $formParameters,
+        UploadedFileCollectionInterface $uploadedFiles,
+        RequestCookieCollectionInterface $cookies,
+        SessionItemCollectionInterface $sessionItems
+    ) {
         $this->setUrl($url);
         $this->setMethod($method);
         $this->setHeaders($headers);
@@ -274,6 +335,7 @@ abstract class AbstractRequest implements RequestInterface
         $this->setFormParameters($formParameters);
         $this->setUploadedFiles($uploadedFiles);
         $this->setCookies($cookies);
+        $this->setSessionItems($sessionItems);
         $this->setRawContent('');
         $this->setClientIp(IPAddress::fromParts([0, 0, 0, 0]));
     }
@@ -428,6 +490,18 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
+     * Sets the session items.
+     *
+     * @since 2.0.0
+     *
+     * @param SessionItemCollectionInterface $sessionItems The session items.
+     */
+    protected function setSessionItems(SessionItemCollectionInterface $sessionItems): void
+    {
+        $this->sessionItems = $sessionItems;
+    }
+
+    /**
      * Sets an uploaded file.
      *
      * @since 1.0.0
@@ -508,4 +582,9 @@ abstract class AbstractRequest implements RequestInterface
      * @var IPAddressInterface My client ip address.
      */
     private $clientIp;
+
+    /**
+     * @var SessionItemCollectionInterface My session items.
+     */
+    private $sessionItems;
 }
