@@ -1,3 +1,5 @@
+## Unreleased
+
 ## [2.0.0] 2018-05-14
 - **Backward compatibility break**: Replaced getException/setException methods with getThrowable/setThrowable in ErrorController.
 - **Backward compatibility break**: Moved session handling from Application to Request.
