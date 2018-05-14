@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\Http\StatusCode;
@@ -552,7 +554,7 @@ class BasicRoutingTest extends TestCase
      * @param array  $expectedHeaders    The expected headers.
      * @param string $expectedContent    The expected content.
      */
-    public function testGetPagesWithPreAndPostActionEvent($action, $port, $expectedStatusCode, $expectedHeaders, $expectedContent)
+    public function testGetPagesWithPreAndPostActionEvent(string $action, int $port, int $expectedStatusCode, array $expectedHeaders, string $expectedContent)
     {
         $_SERVER = ['HTTP_HOST' => 'www.domain.com:' . $port, 'REQUEST_URI' => '/preandpostactionevent/' . $action, 'REQUEST_METHOD' => 'GET'];
 
@@ -630,8 +632,8 @@ class BasicRoutingTest extends TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        self::assertSame('<html><body><h1>Request Failed: Error: 500, Exception: LogicException, ExceptionMessage: Exception was thrown.</h1></body></html>', $responseOutput);
-        self::assertSame('<html><body><h1>Request Failed: Error: 500, Exception: LogicException, ExceptionMessage: Exception was thrown.</h1></body></html>', $response->getContent());
+        self::assertSame('<html><body><h1>Request Failed: Error: 500, Throwable: LogicException, ThrowableMessage: Exception was thrown.</h1></body></html>', $responseOutput);
+        self::assertSame('<html><body><h1>Request Failed: Error: 500, Throwable: LogicException, ThrowableMessage: Exception was thrown.</h1></body></html>', $response->getContent());
         self::assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
         self::assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
     }
@@ -873,7 +875,7 @@ class BasicRoutingTest extends TestCase
      * @param array  $expectedHeaders    The expected headers.
      * @param int    $expectedStatusCode The expected status code.
      */
-    public function testMultiLevelPages($url, $expectedContent, array $expectedHeaders, $expectedStatusCode)
+    public function testMultiLevelPages(string $url, string $expectedContent, array $expectedHeaders, int $expectedStatusCode)
     {
         $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/multilevel/' . $url, 'REQUEST_METHOD' => 'GET'];
 
@@ -997,7 +999,7 @@ class BasicRoutingTest extends TestCase
      * @param array  $expectedHeaders    The expected headers.
      * @param int    $expectedStatusCode The expected status code.
      */
-    public function testActionMethodVisibilityPages($url, $expectedContent, array $expectedHeaders, $expectedStatusCode)
+    public function testActionMethodVisibilityPages(string $url, string $expectedContent, array $expectedHeaders, int $expectedStatusCode)
     {
         $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionMethodVisibility/' . $url, 'REQUEST_METHOD' => 'GET'];
 
@@ -1039,7 +1041,7 @@ class BasicRoutingTest extends TestCase
      * @param array  $expectedHeaders    The expected headers.
      * @param int    $expectedStatusCode The expected status code.
      */
-    public function testSpecialActionNamePages($url, $expectedContent, array $expectedHeaders, $expectedStatusCode)
+    public function testSpecialActionNamePages(string $url, string $expectedContent, array $expectedHeaders, int $expectedStatusCode)
     {
         $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/specialActionName/' . $url, 'REQUEST_METHOD' => 'GET'];
 
@@ -1079,7 +1081,7 @@ class BasicRoutingTest extends TestCase
      * @param RequestCookie[] $requestCookies  The request cookies.
      * @param string          $expectedContent The expected content.
      */
-    public function testRequestCookiePage(array $requestCookies, $expectedContent)
+    public function testRequestCookiePage(array $requestCookies, string $expectedContent)
     {
         $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/cookies/', 'REQUEST_METHOD' => 'GET'];
         $_COOKIE = $requestCookies;
@@ -1119,7 +1121,7 @@ class BasicRoutingTest extends TestCase
      * @param array  $expectedHeaders    The expected headers.
      * @param int    $expectedStatusCode The expected status code.
      */
-    public function testMultipleLevelRoutePathPage($url, $expectedContent, array $expectedHeaders, $expectedStatusCode)
+    public function testMultipleLevelRoutePathPage(string $url, string $expectedContent, array $expectedHeaders, int $expectedStatusCode)
     {
         $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/multiple/level/' . $url, 'REQUEST_METHOD' => 'GET'];
 
@@ -1171,7 +1173,7 @@ class BasicRoutingTest extends TestCase
      * @param array           $expectedHeaders    The expected headers.
      * @param int             $expectedStatusCode The expected status code.
      */
-    public function testPageWithPlugin(PluginInterface $plugin, $expectedContent, array $expectedHeaders, $expectedStatusCode)
+    public function testPageWithPlugin(PluginInterface $plugin, string $expectedContent, array $expectedHeaders, int $expectedStatusCode)
     {
         $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET'];
 

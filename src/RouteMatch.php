@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core;
 
@@ -24,22 +25,12 @@ class RouteMatch implements RouteMatchInterface
      * @param string   $controllerClassName The controller class name.
      * @param string   $action              The action.
      * @param string[] $parameters          The parameters.
-     *
-     * @throws \InvalidArgumentException If any of the parameters are of invalid type.
      */
-    public function __construct($controllerClassName, $action = '', array $parameters = [])
+    public function __construct(string $controllerClassName, string $action = '', array $parameters = [])
     {
-        if (!is_string($controllerClassName)) {
-            throw new \InvalidArgumentException('$controllerClassName parameter is not a string.');
-        }
-
-        if (!is_string($action)) {
-            throw new \InvalidArgumentException('$action parameter is not a string.');
-        }
-
-        $this->myControllerClassName = $controllerClassName;
-        $this->myAction = $action;
-        $this->myParameters = $parameters;
+        $this->controllerClassName = $controllerClassName;
+        $this->action = $action;
+        $this->parameters = $parameters;
     }
 
     /**
@@ -49,9 +40,9 @@ class RouteMatch implements RouteMatchInterface
      *
      * @return string The action.
      */
-    public function getAction()
+    public function getAction(): string
     {
-        return $this->myAction;
+        return $this->action;
     }
 
     /**
@@ -61,9 +52,9 @@ class RouteMatch implements RouteMatchInterface
      *
      * @return string The controller class name.
      */
-    public function getControllerClassName()
+    public function getControllerClassName(): string
     {
-        return $this->myControllerClassName;
+        return $this->controllerClassName;
     }
 
     /**
@@ -73,23 +64,23 @@ class RouteMatch implements RouteMatchInterface
      *
      * @return string[] The parameters.
      */
-    public function getParameters()
+    public function getParameters(): array
     {
-        return $this->myParameters;
+        return $this->parameters;
     }
 
     /**
      * @var string My action.
      */
-    private $myAction;
+    private $action;
 
     /**
      * @var string My controller class name.
      */
-    private $myControllerClassName;
+    private $controllerClassName;
 
     /**
      * @var string[] My parameters.
      */
-    private $myParameters;
+    private $parameters;
 }

@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core;
 
@@ -33,18 +34,9 @@ class ResponseCookie extends AbstractCookie implements ResponseCookieInterface
      * @param bool                    $isHttpOnly True if cookie is http only, false otherwise.
      *
      * @throws InvalidResponseCookiePathException If the path is not a directory or an absolute path.
-     * @throws \InvalidArgumentException          If the $isSecure or $isHttpOnly parameter is not a boolean.
      */
-    public function __construct($value, \DateTimeInterface $expiry = null, UrlPathInterface $path = null, HostInterface $domain = null, $isSecure = false, $isHttpOnly = false)
+    public function __construct(string $value, ?\DateTimeInterface $expiry = null, ?UrlPathInterface $path = null, ?HostInterface $domain = null, bool $isSecure = false, bool $isHttpOnly = false)
     {
-        if (!is_bool($isSecure)) {
-            throw new \InvalidArgumentException('$isSecure parameter is not a boolean.');
-        }
-
-        if (!is_bool($isHttpOnly)) {
-            throw new \InvalidArgumentException('$isHttpOnly parameter is not a boolean.');
-        }
-
         parent::__construct($value);
 
         if ($path !== null) {
@@ -57,11 +49,11 @@ class ResponseCookie extends AbstractCookie implements ResponseCookieInterface
             }
         }
 
-        $this->myExpiry = $expiry;
-        $this->myPath = $path;
-        $this->myDomain = $domain;
-        $this->myIsSecure = $isSecure;
-        $this->myIsHttpOnly = $isHttpOnly;
+        $this->expiry = $expiry;
+        $this->path = $path;
+        $this->domain = $domain;
+        $this->isSecure = $isSecure;
+        $this->isHttpOnly = $isHttpOnly;
     }
 
     /**
@@ -71,9 +63,9 @@ class ResponseCookie extends AbstractCookie implements ResponseCookieInterface
      *
      * @return HostInterface|null The domain or null if no domain.
      */
-    public function getDomain()
+    public function getDomain(): ?HostInterface
     {
-        return $this->myDomain;
+        return $this->domain;
     }
 
     /**
@@ -83,9 +75,9 @@ class ResponseCookie extends AbstractCookie implements ResponseCookieInterface
      *
      * @return \DateTimeInterface|null The expiry time or null if no expiry time.
      */
-    public function getExpiry()
+    public function getExpiry(): ?\DateTimeInterface
     {
-        return $this->myExpiry;
+        return $this->expiry;
     }
 
     /**
@@ -95,9 +87,9 @@ class ResponseCookie extends AbstractCookie implements ResponseCookieInterface
      *
      * @return UrlPathInterface|null The path or null if no path.
      */
-    public function getPath()
+    public function getPath(): ?UrlPathInterface
     {
-        return $this->myPath;
+        return $this->path;
     }
 
     /**
@@ -107,9 +99,9 @@ class ResponseCookie extends AbstractCookie implements ResponseCookieInterface
      *
      * @return bool True if cookie is http only, false otherwise.
      */
-    public function isHttpOnly()
+    public function isHttpOnly(): bool
     {
-        return $this->myIsHttpOnly;
+        return $this->isHttpOnly;
     }
 
     /**
@@ -119,33 +111,33 @@ class ResponseCookie extends AbstractCookie implements ResponseCookieInterface
      *
      * @return bool True if cookie is secure, false otherwise.
      */
-    public function isSecure()
+    public function isSecure(): bool
     {
-        return $this->myIsSecure;
+        return $this->isSecure;
     }
 
     /**
      * @var \DateTimeInterface|null My expiry time or null if no expiry time.
      */
-    private $myExpiry;
+    private $expiry;
 
     /**
      * @var UrlPathInterface|null My path or null if no path.
      */
-    private $myPath;
+    private $path;
 
     /**
      * @var HostInterface|null My domain or null if no domain.
      */
-    private $myDomain;
+    private $domain;
 
     /**
      * @var bool True if cookie is secure, false otherwise.
      */
-    private $myIsSecure;
+    private $isSecure;
 
     /**
      * @var bool True if cookie is http only, false otherwise.
      */
-    private $myIsHttpOnly;
+    private $isHttpOnly;
 }

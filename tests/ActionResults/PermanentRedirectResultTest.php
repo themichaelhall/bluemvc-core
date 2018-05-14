@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests\ActionResults;
 
 use BlueMvc\Core\ActionResults\PermanentRedirectResult;
@@ -95,16 +97,5 @@ class PermanentRedirectResultTest extends TestCase
         $response = new BasicTestResponse();
         $actionResult = new PermanentRedirectResult('../../baz');
         $actionResult->updateResponse($application, $request, $response);
-    }
-
-    /**
-     * Test with invalid url parameter type.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $location parameter is not a string.
-     */
-    public function testWithInvalidUrlParameterType()
-    {
-        new PermanentRedirectResult(-1);
     }
 }

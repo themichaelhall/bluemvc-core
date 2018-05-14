@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests\Helpers\Fakes {
 
     /**
@@ -12,15 +14,15 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
          *
          * @param string $header The header.
          */
-        public static function add($header)
+        public static function add(string $header): void
         {
-            self::$myHeaders[] = $header;
+            self::$headers[] = $header;
         }
 
         /**
          * Disable fake headers.
          */
-        public static function disable()
+        public static function disable(): void
         {
             self::$isEnabled = false;
         }
@@ -28,24 +30,24 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
         /**
          * Enable fake headers.
          */
-        public static function enable()
+        public static function enable(): void
         {
-            self::$myHeaders = [];
+            self::$headers = [];
             self::$isEnabled = true;
         }
 
         /**
          * @return string[] The headers.
          */
-        public static function get()
+        public static function get(): array
         {
-            return self::$myHeaders;
+            return self::$headers;
         }
 
         /**
          * @return bool True if fake headers is enabled, false otherwise.
          */
-        public static function isEnabled()
+        public static function isEnabled(): bool
         {
             return self::$isEnabled;
         }
@@ -53,7 +55,7 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
         /**
          * @var string[] My headers.
          */
-        private static $myHeaders = [];
+        private static $headers = [];
 
         /**
          * @var bool True if fake headers is enabled, false otherwise.
@@ -71,7 +73,7 @@ namespace BlueMvc\Core {
      *
      * @param string $header The header.
      */
-    function header($header)
+    function header(string $header): void
     {
         if (FakeHeaders::isEnabled()) {
             FakeHeaders::add($header);

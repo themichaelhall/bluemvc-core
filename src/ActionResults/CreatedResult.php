@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\ActionResults;
 
@@ -23,11 +24,9 @@ class CreatedResult extends AbstractLocationActionResult
      * @since 1.0.0
      *
      * @param string $location The url as an absolute or relative url.
-     *
-     * @throws \InvalidArgumentException If the location parameter is not a string.
      */
-    public function __construct($location = '')
+    public function __construct(string $location = '')
     {
-        parent::__construct(new StatusCode(StatusCode::CREATED), $location);
+        parent::__construct($location, new StatusCode(StatusCode::CREATED));
     }
 }

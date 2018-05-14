@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Traits;
 
@@ -15,27 +16,27 @@ namespace BlueMvc\Core\Traits;
 trait ErrorControllerTrait
 {
     /**
-     * Returns the exception or null if no exception.
+     * Returns the throwable or null if no throwable.
      *
-     * @since 1.0.0
+     * @since 2.0.0
      *
-     * @return \Exception|null The exception or null if no exception.
+     * @return \Throwable|null The throwable or null if no throwable.
      */
-    public function getException()
+    public function getThrowable(): ?\Throwable
     {
-        return $this->myException;
+        return $this->throwable;
     }
 
     /**
-     * Sets the exception.
+     * Sets the throwable.
      *
-     * @since 1.0.0
+     * @since 2.0.0
      *
-     * @param \Exception $exception The exception.
+     * @param \Throwable $throwable The throwable.
      */
-    public function setException(\Exception $exception)
+    public function setThrowable(\Throwable $throwable): void
     {
-        $this->myException = $exception;
+        $this->throwable = $throwable;
     }
 
     /**
@@ -45,9 +46,9 @@ trait ErrorControllerTrait
      *
      * @return bool True if post-action event is enabled, false otherwise.
      */
-    protected function isPostActionEventEnabled()
+    protected function isPostActionEventEnabled(): bool
     {
-        return $this->myException === null;
+        return $this->throwable === null;
     }
 
     /**
@@ -57,13 +58,13 @@ trait ErrorControllerTrait
      *
      * @return bool True if pre-action event is enabled, false otherwise.
      */
-    protected function isPreActionEventEnabled()
+    protected function isPreActionEventEnabled(): bool
     {
-        return $this->myException === null;
+        return $this->throwable === null;
     }
 
     /**
-     * @var \Exception|null My exception or null if no exception.
+     * @var \Throwable|null My throwable or null if no throwable.
      */
-    private $myException = null;
+    private $throwable = null;
 }

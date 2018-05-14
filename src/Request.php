@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core;
 
@@ -11,11 +12,14 @@ use BlueMvc\Core\Base\AbstractRequest;
 use BlueMvc\Core\Collections\HeaderCollection;
 use BlueMvc\Core\Collections\ParameterCollection;
 use BlueMvc\Core\Collections\RequestCookieCollection;
+use BlueMvc\Core\Collections\SessionItemCollection;
 use BlueMvc\Core\Collections\UploadedFileCollection;
 use BlueMvc\Core\Exceptions\ServerEnvironmentException;
 use BlueMvc\Core\Http\Method;
 use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
+use BlueMvc\Core\Interfaces\Collections\ParameterCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\RequestCookieCollectionInterface;
+use BlueMvc\Core\Interfaces\Collections\UploadedFileCollectionInterface;
 use BlueMvc\Core\Interfaces\UploadedFileInterface;
 use DataTypes\FilePath;
 use DataTypes\Host;
@@ -40,13 +44,14 @@ class Request extends AbstractRequest
     public function __construct()
     {
         parent::__construct(
-            self::myParseUrl($_SERVER),
+            self::parseUrl($_SERVER),
             new Method($_SERVER['REQUEST_METHOD']),
-            self::myParseHeaders($_SERVER),
-            self::myParseParameters($_GET),
-            self::myParseParameters($_POST),
-            self::myParseUploadedFiles($_FILES),
-            self::myParseCookies($_COOKIE)
+            self::parseHeaders($_SERVER),
+            self::parseParameters($_GET),
+            self::parseParameters($_POST),
+            self::parseUploadedFiles($_FILES),
+            self::parseCookies($_COOKIE),
+            new SessionItemCollection()
         );
 
         $clientIp = IPAddress::tryParse(isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '');
@@ -54,7 +59,7 @@ class Request extends AbstractRequest
             $this->setClientIp($clientIp);
         }
 
-        $this->myRawContentIsFetched = false;
+        $this->rawContentIsFetched = false;
     }
 
     /**
@@ -64,11 +69,11 @@ class Request extends AbstractRequest
      *
      * @return string The raw content from request.
      */
-    public function getRawContent()
+    public function getRawContent(): string
     {
-        if (!$this->myRawContentIsFetched) {
+        if (!$this->rawContentIsFetched) {
             $this->setRawContent(file_get_contents('php://input'));
-            $this->myRawContentIsFetched = true;
+            $this->rawContentIsFetched = true;
         }
 
         return parent::getRawContent();
@@ -81,7 +86,7 @@ class Request extends AbstractRequest
      *
      * @return UrlInterface The url
      */
-    private static function myParseUrl(array $serverVars)
+    private static function parseUrl(array $serverVars): UrlInterface
     {
         $uriAndQueryString = explode('?', $serverVars['REQUEST_URI'], 2);
         $hostAndPort = explode(':', $serverVars['HTTP_HOST'], 2);
@@ -102,7 +107,7 @@ class Request extends AbstractRequest
      *
      * @return HeaderCollectionInterface The header collection.
      */
-    private static function myParseHeaders(array $serverVars)
+    private static function parseHeaders(array $serverVars): HeaderCollectionInterface
     {
         $headers = new HeaderCollection();
 
@@ -120,9 +125,9 @@ class Request extends AbstractRequest
      *
      * @param array $parametersArray The parameters array.
      *
-     * @return ParameterCollection The parameter collection.
+     * @return ParameterCollectionInterface The parameter collection.
      */
-    private static function myParseParameters(array $parametersArray)
+    private static function parseParameters(array $parametersArray): ParameterCollectionInterface
     {
         $parameters = new ParameterCollection();
 
@@ -143,7 +148,7 @@ class Request extends AbstractRequest
      *
      * @return RequestCookieCollectionInterface The cookie collection.
      */
-    private static function myParseCookies(array $cookiesArray)
+    private static function parseCookies(array $cookiesArray): RequestCookieCollectionInterface
     {
         $cookies = new RequestCookieCollection();
 
@@ -164,14 +169,14 @@ class Request extends AbstractRequest
      *
      * @throws ServerEnvironmentException If file upload failed due to server error or misconfiguration.
      *
-     * @return UploadedFileCollection The uploaded files collection.
+     * @return UploadedFileCollectionInterface The uploaded files collection.
      */
-    private static function myParseUploadedFiles(array $filesArray)
+    private static function parseUploadedFiles(array $filesArray): UploadedFileCollectionInterface
     {
         $uploadedFiles = new UploadedFileCollection();
 
         foreach ($filesArray as $uploadedFileName => $uploadedFileInfo) {
-            $uploadedFile = self::myParseUploadedFile($uploadedFileInfo);
+            $uploadedFile = self::parseUploadedFile($uploadedFileInfo);
             if ($uploadedFile === null) {
                 continue;
             }
@@ -191,14 +196,14 @@ class Request extends AbstractRequest
      *
      * @return UploadedFileInterface|null The uploaded file or null if parsing was not successful.
      */
-    private static function myParseUploadedFile(array $uploadedFileInfo)
+    private static function parseUploadedFile(array $uploadedFileInfo): ?UploadedFileInterface
     {
         $error = is_array($uploadedFileInfo['error']) ? $uploadedFileInfo['error'][0] : $uploadedFileInfo['error'];
         $error = intval($error);
 
         if ($error !== 0) {
-            if (isset(self::$myFileUploadErrors[$error])) {
-                throw new ServerEnvironmentException('File upload failed: ' . self::$myFileUploadErrors[$error]);
+            if (isset(self::$fileUploadErrors[$error])) {
+                throw new ServerEnvironmentException('File upload failed: ' . self::$fileUploadErrors[$error]);
             }
 
             return null;
@@ -224,7 +229,7 @@ class Request extends AbstractRequest
     /**
      * @var array My file upload errors that should result in an exception.
      */
-    private static $myFileUploadErrors = [
+    private static $fileUploadErrors = [
         UPLOAD_ERR_NO_TMP_DIR => 'Missing a temporary folder (UPLOAD_ERR_NO_TMP_DIR).',
         UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk (UPLOAD_ERR_CANT_WRITE).',
         UPLOAD_ERR_EXTENSION  => 'File upload stopped by extension (UPLOAD_ERR_EXTENSION).',
@@ -233,5 +238,5 @@ class Request extends AbstractRequest
     /**
      * @var bool True if raw content is fetched, false otherwise.
      */
-    private $myRawContentIsFetched;
+    private $rawContentIsFetched;
 }

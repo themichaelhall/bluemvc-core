@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces;
 
@@ -15,20 +16,20 @@ namespace BlueMvc\Core\Interfaces;
 interface ErrorControllerInterface extends ControllerInterface
 {
     /**
-     * Returns the exception or null if no exception.
+     * Returns the throwable or null if no throwable.
      *
-     * @since 1.0.0
+     * @since 2.0.0
      *
-     * @return \Exception|null The exception or null if no exception.
+     * @return \Throwable|null The throwable or null if no throwable.
      */
-    public function getException();
+    public function getThrowable(): ?\Throwable;
 
     /**
-     * Sets the exception.
+     * Sets the throwable.
      *
-     * @since 1.0.0
+     * @since 2.0.0
      *
-     * @param \Exception $exception The exception.
+     * @param \Throwable $throwable The throwable.
      */
-    public function setException(\Exception $exception);
+    public function setThrowable(\Throwable $throwable): void;
 }

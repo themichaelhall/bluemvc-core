@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core;
 
@@ -32,7 +33,7 @@ class Response extends AbstractResponse
      *
      * @since 1.0.0
      */
-    public function output()
+    public function output(): void
     {
         header('HTTP/1.1 ' . $this->getStatusCode());
 

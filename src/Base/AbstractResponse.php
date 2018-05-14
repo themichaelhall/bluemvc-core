@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Base;
 
@@ -34,12 +35,10 @@ abstract class AbstractResponse implements ResponseInterface
      *
      * @param string $name  The header name.
      * @param string $value The header value.
-     *
-     * @throws \InvalidArgumentException If any of the parameters are of invalid type.
      */
-    public function addHeader($name, $value)
+    public function addHeader(string $name, string $value): void
     {
-        $this->myHeaders->add($name, $value);
+        $this->headers->add($name, $value);
     }
 
     /**
@@ -49,9 +48,9 @@ abstract class AbstractResponse implements ResponseInterface
      *
      * @return string The content.
      */
-    public function getContent()
+    public function getContent(): string
     {
-        return $this->myContent;
+        return $this->content;
     }
 
     /**
@@ -61,13 +60,11 @@ abstract class AbstractResponse implements ResponseInterface
      *
      * @param string $name The cookie name.
      *
-     * @throws \InvalidArgumentException If the $name parameter is not a string.
-     *
      * @return ResponseCookieInterface|null The cookie if it exists, null otherwise.
      */
-    public function getCookie($name)
+    public function getCookie(string $name): ?ResponseCookieInterface
     {
-        return $this->myCookies->get($name);
+        return $this->cookies->get($name);
     }
 
     /**
@@ -77,9 +74,9 @@ abstract class AbstractResponse implements ResponseInterface
      *
      * @return ResponseCookieCollectionInterface The cookies.
      */
-    public function getCookies()
+    public function getCookies(): ResponseCookieCollectionInterface
     {
-        return $this->myCookies;
+        return $this->cookies;
     }
 
     /**
@@ -89,13 +86,11 @@ abstract class AbstractResponse implements ResponseInterface
      *
      * @param string $name The header name.
      *
-     * @throws \InvalidArgumentException If the $name parameter is not a string.
-     *
      * @return string|null The header value by header name if it exists, null otherwise.
      */
-    public function getHeader($name)
+    public function getHeader(string $name): ?string
     {
-        return $this->myHeaders->get($name);
+        return $this->headers->get($name);
     }
 
     /**
@@ -105,9 +100,9 @@ abstract class AbstractResponse implements ResponseInterface
      *
      * @return HeaderCollectionInterface The headers.
      */
-    public function getHeaders()
+    public function getHeaders(): HeaderCollectionInterface
     {
-        return $this->myHeaders;
+        return $this->headers;
     }
 
     /**
@@ -117,9 +112,9 @@ abstract class AbstractResponse implements ResponseInterface
      *
      * @return StatusCodeInterface The status code.
      */
-    public function getStatusCode()
+    public function getStatusCode(): StatusCodeInterface
     {
-        return $this->myStatusCode;
+        return $this->statusCode;
     }
 
     /**
@@ -128,16 +123,10 @@ abstract class AbstractResponse implements ResponseInterface
      * @since 1.0.0
      *
      * @param string $content The content.
-     *
-     * @throws \InvalidArgumentException If the $content parameter is not a string.
      */
-    public function setContent($content)
+    public function setContent(string $content): void
     {
-        if (!is_string($content)) {
-            throw new \InvalidArgumentException('$content parameter is not a string.');
-        }
-
-        $this->myContent = $content;
+        $this->content = $content;
     }
 
     /**
@@ -147,12 +136,10 @@ abstract class AbstractResponse implements ResponseInterface
      *
      * @param string                  $name   The cookie name.
      * @param ResponseCookieInterface $cookie The cookie.
-     *
-     * @throws \InvalidArgumentException If the $name parameter is not a string.
      */
-    public function setCookie($name, ResponseCookieInterface $cookie)
+    public function setCookie(string $name, ResponseCookieInterface $cookie): void
     {
-        $this->myCookies->set($name, $cookie);
+        $this->cookies->set($name, $cookie);
     }
 
     /**
@@ -162,9 +149,9 @@ abstract class AbstractResponse implements ResponseInterface
      *
      * @param ResponseCookieCollectionInterface $cookies The cookies.
      */
-    public function setCookies(ResponseCookieCollectionInterface $cookies)
+    public function setCookies(ResponseCookieCollectionInterface $cookies): void
     {
-        $this->myCookies = $cookies;
+        $this->cookies = $cookies;
     }
 
     /**
@@ -181,11 +168,10 @@ abstract class AbstractResponse implements ResponseInterface
      * @param bool                    $isHttpOnly True if cookie is http only, false otherwise.
      *
      * @throws InvalidResponseCookiePathException If the path is not a directory or an absolute path.
-     * @throws \InvalidArgumentException          If any of the parameters are of wrong type.
      */
-    public function setCookieValue($name, $value, \DateTimeInterface $expiry = null, UrlPathInterface $path = null, HostInterface $domain = null, $isSecure = false, $isHttpOnly = false)
+    public function setCookieValue(string $name, string $value, ?\DateTimeInterface $expiry = null, ?UrlPathInterface $path = null, ?HostInterface $domain = null, bool $isSecure = false, bool $isHttpOnly = false): void
     {
-        $this->myCookies->set($name, new ResponseCookie($value, $expiry, $path, $domain, $isSecure, $isHttpOnly));
+        $this->cookies->set($name, new ResponseCookie($value, $expiry, $path, $domain, $isSecure, $isHttpOnly));
     }
 
     /**
@@ -195,13 +181,13 @@ abstract class AbstractResponse implements ResponseInterface
      *
      * @param \DateTimeImmutable|null $expiry The expiry time or null for immediate expiry.
      */
-    public function setExpiry(\DateTimeImmutable $expiry = null)
+    public function setExpiry(?\DateTimeImmutable $expiry = null): void
     {
         $date = new \DateTimeImmutable();
         $expiry = $expiry ?: $date;
 
-        $this->setHeader('Date', $date->setTimeZone(new \DateTimeZone('UTC'))->format('D, d M Y H:i:s \G\M\T'));
-        $this->setHeader('Expires', $expiry->setTimeZone(new \DateTimeZone('UTC'))->format('D, d M Y H:i:s \G\M\T'));
+        $this->setHeader('Date', $date->setTimezone(new \DateTimeZone('UTC'))->format('D, d M Y H:i:s \G\M\T'));
+        $this->setHeader('Expires', $expiry->setTimezone(new \DateTimeZone('UTC'))->format('D, d M Y H:i:s \G\M\T'));
 
         if ($expiry <= $date) {
             $this->setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
@@ -220,12 +206,10 @@ abstract class AbstractResponse implements ResponseInterface
      *
      * @param string $name  The header name.
      * @param string $value The header value.
-     *
-     * @throws \InvalidArgumentException If any of the parameters are of invalid type.
      */
-    public function setHeader($name, $value)
+    public function setHeader(string $name, string $value): void
     {
-        $this->myHeaders->set($name, $value);
+        $this->headers->set($name, $value);
     }
 
     /**
@@ -235,9 +219,9 @@ abstract class AbstractResponse implements ResponseInterface
      *
      * @param HeaderCollectionInterface $headers The headers.
      */
-    public function setHeaders(HeaderCollectionInterface $headers)
+    public function setHeaders(HeaderCollectionInterface $headers): void
     {
-        $this->myHeaders = $headers;
+        $this->headers = $headers;
     }
 
     /**
@@ -247,9 +231,9 @@ abstract class AbstractResponse implements ResponseInterface
      *
      * @param StatusCodeInterface $statusCode The status code.
      */
-    public function setStatusCode(StatusCodeInterface $statusCode)
+    public function setStatusCode(StatusCodeInterface $statusCode): void
     {
-        $this->myStatusCode = $statusCode;
+        $this->statusCode = $statusCode;
     }
 
     /**
@@ -257,7 +241,7 @@ abstract class AbstractResponse implements ResponseInterface
      *
      * @since 1.0.0
      */
-    abstract public function output();
+    abstract public function output(): void;
 
     /**
      * Constructs a response.
@@ -275,20 +259,20 @@ abstract class AbstractResponse implements ResponseInterface
     /**
      * @var string My content.
      */
-    private $myContent;
+    private $content;
 
     /**
      * @var ResponseCookieCollectionInterface My cookies.
      */
-    private $myCookies;
+    private $cookies;
 
     /**
      * @var HeaderCollectionInterface My headers.
      */
-    private $myHeaders;
+    private $headers;
 
     /**
      * @var StatusCodeInterface My status code.
      */
-    private $myStatusCode;
+    private $statusCode;
 }

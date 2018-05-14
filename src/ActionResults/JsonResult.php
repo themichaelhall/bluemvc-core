@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\ActionResults;
 
@@ -32,7 +33,7 @@ class JsonResult extends AbstractActionResult
      *
      * @throws InvalidActionResultContentException If the content could not be json-encoded.
      */
-    public function __construct($content, StatusCodeInterface $statusCode = null)
+    public function __construct($content, ?StatusCodeInterface $statusCode = null)
     {
         $json = json_encode($content);
         if ($json === false) {
@@ -51,7 +52,7 @@ class JsonResult extends AbstractActionResult
      * @param RequestInterface     $request     The request.
      * @param ResponseInterface    $response    The response.
      */
-    public function updateResponse(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response)
+    public function updateResponse(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response): void
     {
         parent::updateResponse($application, $request, $response);
 

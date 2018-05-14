@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests\ActionResults;
 
 use BlueMvc\Core\ActionResults\ForbiddenResult;
@@ -46,16 +48,5 @@ class ForbiddenResultTest extends TestCase
         self::assertSame(403, $response->getStatusCode()->getCode());
         self::assertSame('Forbidden', $response->getStatusCode()->getDescription());
         self::assertSame('You are forbidden to view this content.', $response->getContent());
-    }
-
-    /**
-     * Test with invalid content parameter type.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $content parameter is not a string.
-     */
-    public function testWithInvalidContentParameterType()
-    {
-        new ForbiddenResult(null);
     }
 }

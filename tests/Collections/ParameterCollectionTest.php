@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests\Collections;
 
 use BlueMvc\Core\Collections\ParameterCollection;
@@ -31,19 +33,6 @@ class ParameterCollectionTest extends TestCase
     }
 
     /**
-     * Test get method with invalid name parameter type.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $name parameter is not a string.
-     */
-    public function testGetMethodWithInvalidNameParameterType()
-    {
-        $parameterCollection = new ParameterCollection();
-
-        $parameterCollection->get(10);
-    }
-
-    /**
      * Test set method.
      */
     public function testSet()
@@ -52,37 +41,13 @@ class ParameterCollectionTest extends TestCase
         $parameterCollection->set('Foo', 'xxx');
         $parameterCollection->set('bar', 'YYY');
         $parameterCollection->set('foo', 'zzz');
+        $parameterCollection->set('1', '2');
 
-        self::assertSame(3, count($parameterCollection));
+        self::assertSame(4, count($parameterCollection));
         self::assertSame('xxx', $parameterCollection->get('Foo'));
         self::assertSame('YYY', $parameterCollection->get('bar'));
         self::assertSame('zzz', $parameterCollection->get('foo'));
-    }
-
-    /**
-     * Test set method with invalid name parameter type.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $name parameter is not a string.
-     */
-    public function testSetMethodWithInvalidNameParameterType()
-    {
-        $parameterCollection = new ParameterCollection();
-
-        $parameterCollection->set(10, 'Foo');
-    }
-
-    /**
-     * Test set method with invalid valid parameter type.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $value parameter is not a string.
-     */
-    public function testSetMethodWithInvalidValueParameterType()
-    {
-        $parameterCollection = new ParameterCollection();
-
-        $parameterCollection->set('Bar', false);
+        self::assertSame('2', $parameterCollection->get('1'));
     }
 
     /**
@@ -105,9 +70,10 @@ class ParameterCollectionTest extends TestCase
         $parameterCollection = new ParameterCollection();
         $parameterCollection->set('Foo', '1');
         $parameterCollection->set('Bar', '2');
+        $parameterCollection->set('1', '2');
 
         $parameterArray = iterator_to_array($parameterCollection, true);
 
-        self::assertSame(['Foo' => '1', 'Bar' => '2'], $parameterArray);
+        self::assertSame(['Foo' => '1', 'Bar' => '2', 1 => '2'], $parameterArray);
     }
 }

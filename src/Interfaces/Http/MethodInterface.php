@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces\Http;
 
@@ -21,7 +22,7 @@ interface MethodInterface
      *
      * @return string The method name.
      */
-    public function getName();
+    public function getName(): string;
 
     /**
      * Returns true if this is a DELETE method, false otherwise.
@@ -30,7 +31,7 @@ interface MethodInterface
      *
      * @return bool True if this is a DELETE method, false otherwise.
      */
-    public function isDelete();
+    public function isDelete(): bool;
 
     /**
      * Returns true if this is a GET method, false otherwise.
@@ -39,7 +40,7 @@ interface MethodInterface
      *
      * @return bool True if this is a GET method, false otherwise.
      */
-    public function isGet();
+    public function isGet(): bool;
 
     /**
      * Returns true if this is a POST method, false otherwise.
@@ -48,7 +49,7 @@ interface MethodInterface
      *
      * @return bool True if this is a POST method, false otherwise.
      */
-    public function isPost();
+    public function isPost(): bool;
 
     /**
      * Returns true if this is a PUT method, false otherwise.
@@ -57,7 +58,7 @@ interface MethodInterface
      *
      * @return bool True if this is a PUT method, false otherwise.
      */
-    public function isPut();
+    public function isPut(): bool;
 
     /**
      * Returns the method as a string.
@@ -66,5 +67,5 @@ interface MethodInterface
      *
      * @return string The method as a string.
      */
-    public function __toString();
+    public function __toString(): string;
 }

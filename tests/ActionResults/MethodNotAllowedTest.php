@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests\ActionResults;
 
 use BlueMvc\Core\ActionResults\MethodNotAllowedResult;
@@ -46,16 +48,5 @@ class MethodNotAllowedTest extends TestCase
         self::assertSame(405, $response->getStatusCode()->getCode());
         self::assertSame('Method Not Allowed', $response->getStatusCode()->getDescription());
         self::assertSame('Method is not allowed.', $response->getContent());
-    }
-
-    /**
-     * Test with invalid content parameter type.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $content parameter is not a string.
-     */
-    public function testWithInvalidContentParameterType()
-    {
-        new MethodNotAllowedResult(null);
     }
 }

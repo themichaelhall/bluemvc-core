@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\Tests\Helpers\TestControllers\ErrorTestController;
@@ -17,7 +19,7 @@ class ErrorControllerTest extends TestCase
     {
         $errorController = new ErrorTestController();
 
-        self::assertNull($errorController->getException());
+        self::assertNull($errorController->getThrowable());
     }
 
     /**
@@ -27,8 +29,8 @@ class ErrorControllerTest extends TestCase
     {
         $errorController = new ErrorTestController();
         $exception = new \OutOfBoundsException('Test Exception');
-        $errorController->setException($exception);
+        $errorController->setThrowable($exception);
 
-        self::assertSame($exception, $errorController->getException());
+        self::assertSame($exception, $errorController->getThrowable());
     }
 }

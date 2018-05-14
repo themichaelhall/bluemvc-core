@@ -1,12 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests\Helpers\TestApplications;
 
 use BlueMvc\Core\Base\AbstractApplication;
-use BlueMvc\Core\Interfaces\Collections\SessionItemCollectionInterface;
 use BlueMvc\Core\Interfaces\RouteInterface;
 use BlueMvc\Core\Interfaces\ViewRendererInterface;
-use BlueMvc\Core\Tests\Helpers\TestCollections\BasicTestSessionItemCollection;
 use DataTypes\Interfaces\FilePathInterface;
 
 /**
@@ -21,7 +21,7 @@ class BasicTestApplication extends AbstractApplication
      */
     public function __construct(FilePathInterface $documentRoot)
     {
-        parent::__construct($documentRoot, new BasicTestSessionItemCollection());
+        parent::__construct($documentRoot);
     }
 
     /**
@@ -29,7 +29,7 @@ class BasicTestApplication extends AbstractApplication
      *
      * @param RouteInterface $route The route.
      */
-    public function addRoute(RouteInterface $route)
+    public function addRoute(RouteInterface $route): void
     {
         parent::addRoute($route);
     }
@@ -39,7 +39,7 @@ class BasicTestApplication extends AbstractApplication
      *
      * @param ViewRendererInterface $viewRenderer The view renderer.
      */
-    public function addViewRenderer(ViewRendererInterface $viewRenderer)
+    public function addViewRenderer(ViewRendererInterface $viewRenderer): void
     {
         parent::addViewRenderer($viewRenderer);
     }
@@ -49,7 +49,7 @@ class BasicTestApplication extends AbstractApplication
      *
      * @return RouteInterface[] The routes.
      */
-    public function getRoutes()
+    public function getRoutes(): array
     {
         return parent::getRoutes();
     }
@@ -59,7 +59,7 @@ class BasicTestApplication extends AbstractApplication
      *
      * @param bool $isDebug The debug mode.
      */
-    public function setDebug($isDebug)
+    public function setDebug(bool $isDebug): void
     {
         parent::setDebug($isDebug);
     }
@@ -69,19 +69,9 @@ class BasicTestApplication extends AbstractApplication
      *
      * @param FilePathInterface $documentRoot The document root.
      */
-    public function setDocumentRoot(FilePathInterface $documentRoot)
+    public function setDocumentRoot(FilePathInterface $documentRoot): void
     {
         parent::setDocumentRoot($documentRoot);
-    }
-
-    /**
-     * Sets the session items.
-     *
-     * @param SessionItemCollectionInterface $sessionItems The session items.
-     */
-    public function setSessionItems(SessionItemCollectionInterface $sessionItems)
-    {
-        parent::setSessionItems($sessionItems);
     }
 
     /**
@@ -89,7 +79,7 @@ class BasicTestApplication extends AbstractApplication
      *
      * @param FilePathInterface $tempPath The path.
      */
-    public function setTempPath(FilePathInterface $tempPath)
+    public function setTempPath(FilePathInterface $tempPath): void
     {
         parent::setTempPath($tempPath);
     }
@@ -99,7 +89,7 @@ class BasicTestApplication extends AbstractApplication
      *
      * @param FilePathInterface $viewPath The view files path.
      */
-    public function setViewPath(FilePathInterface $viewPath)
+    public function setViewPath(FilePathInterface $viewPath): void
     {
         parent::setViewPath($viewPath);
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests\Helpers\TestControllers;
 
 use BlueMvc\Core\Controller;
@@ -30,5 +32,15 @@ class ExceptionTestController extends Controller
     public function domainExceptionAction()
     {
         throw new \DomainException('DomainException was thrown.');
+    }
+
+    /**
+     * Error action.
+     *
+     * @throws \Error
+     */
+    public function errorAction()
+    {
+        throw new \Error('Error was thrown.');
     }
 }

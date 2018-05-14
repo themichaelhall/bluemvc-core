@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Base;
 
@@ -30,7 +31,7 @@ abstract class AbstractPlugin implements PluginInterface
      *
      * @return bool True if request should stop processing, false otherwise.
      */
-    public function onPreRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response)
+    public function onPreRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response): bool
     {
         return false;
     }
@@ -46,7 +47,7 @@ abstract class AbstractPlugin implements PluginInterface
      *
      * @return bool True if request should stop processing, false otherwise.
      */
-    public function onPostRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response)
+    public function onPostRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response): bool
     {
         return false;
     }

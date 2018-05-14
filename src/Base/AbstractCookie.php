@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Base;
 
@@ -21,9 +22,9 @@ abstract class AbstractCookie
      *
      * @return string The value.
      */
-    public function getValue()
+    public function getValue(): string
     {
-        return $this->myValue;
+        return $this->value;
     }
 
     /**
@@ -33,9 +34,9 @@ abstract class AbstractCookie
      *
      * @return string The cookie value.
      */
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->myValue;
+        return $this->value;
     }
 
     /**
@@ -44,20 +45,14 @@ abstract class AbstractCookie
      * @since 1.0.0
      *
      * @param string $value The value.
-     *
-     * @throws \InvalidArgumentException If the $value parameter is not a string.
      */
-    protected function __construct($value)
+    protected function __construct(string $value)
     {
-        if (!is_string($value)) {
-            throw new \InvalidArgumentException('$value parameter is not a string.');
-        }
-
-        $this->myValue = $value;
+        $this->value = $value;
     }
 
     /**
      * @var string My value.
      */
-    private $myValue;
+    private $value;
 }

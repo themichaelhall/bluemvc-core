@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests\Http;
 
 use BlueMvc\Core\Http\Method;
@@ -87,16 +89,5 @@ class MethodTest extends TestCase
     public function testInvalidCharacterInMethodNameIsInvalid()
     {
         new Method('FOO{BAR');
-    }
-
-    /**
-     * Test create method with invalid name parameter type.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage $name parameter is not a string.
-     */
-    public function testCreateWithInvalidNameParameterType()
-    {
-        new Method(123);
     }
 }

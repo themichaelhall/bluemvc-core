@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core;
 
@@ -29,25 +30,19 @@ class View implements ViewInterface
      *
      * @since 1.0.0
      *
-     * @param mixed       $model The model.
+     * @param mixed|null  $model The model.
      * @param string|null $file  The file.
      *
-     * @throws \InvalidArgumentException If the $file parameter is not a string or null.
-     * @throws InvalidViewFileException  If the file is invalid.
+     * @throws InvalidViewFileException If the file is invalid.
      */
-    public function __construct($model = null, $file = null)
+    public function __construct($model = null, ?string $file = null)
     {
-        $this->myModel = $model;
-
-        if (!is_string($file) && !is_null($file)) {
-            throw new \InvalidArgumentException('$file parameter is not a string or null.');
-        }
-
-        if (preg_match('/[^a-zA-Z0-9._-]/', $file, $matches)) {
+        if ($file !== null && preg_match('/[^a-zA-Z0-9._-]/', $file, $matches)) {
             throw new InvalidViewFileException('View file "' . $file . '" contains invalid character "' . $matches[0] . '".');
         }
 
-        $this->myFile = $file;
+        $this->model = $model;
+        $this->file = $file;
     }
 
     /**
@@ -57,9 +52,9 @@ class View implements ViewInterface
      *
      * @return string|null The file.
      */
-    public function getFile()
+    public function getFile(): ?string
     {
-        return $this->myFile;
+        return $this->file;
     }
 
     /**
@@ -67,11 +62,11 @@ class View implements ViewInterface
      *
      * @since 1.0.0
      *
-     * @return mixed The model.
+     * @return mixed|null The model.
      */
     public function getModel()
     {
-        return $this->myModel;
+        return $this->model;
     }
 
     /**
@@ -86,20 +81,11 @@ class View implements ViewInterface
      * @param string                      $action      The action.
      * @param ViewItemCollectionInterface $viewItems   The view items.
      *
-     * @throws \InvalidArgumentException    If any of the parameters are of invalid type.
      * @throws MissingViewRendererException If no view renderer was added to the application.
      * @throws ViewFileNotFoundException    If a suitable view file could not be found.
      */
-    public function updateResponse(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, $viewPath, $action, ViewItemCollectionInterface $viewItems)
+    public function updateResponse(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, string $viewPath, string $action, ViewItemCollectionInterface $viewItems): void
     {
-        if (!is_string($viewPath)) {
-            throw new \InvalidArgumentException('$viewPath parameter is not a string.');
-        }
-
-        if (!is_string($action)) {
-            throw new \InvalidArgumentException('$action parameter is not a string.');
-        }
-
         $viewRenderers = $application->getViewRenderers();
         if (count($viewRenderers) === 0) {
             throw new MissingViewRendererException('No view renderer was added to application.');
@@ -126,10 +112,10 @@ class View implements ViewInterface
     /**
      * @var mixed My model.
      */
-    private $myModel;
+    private $model;
 
     /**
      * @var string|null My file.
      */
-    private $myFile;
+    private $file;
 }

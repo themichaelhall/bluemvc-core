@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Collections;
 
@@ -24,7 +25,7 @@ class ResponseCookieCollection implements ResponseCookieCollectionInterface
      */
     public function __construct()
     {
-        $this->myResponseCookies = [];
+        $this->responseCookies = [];
     }
 
     /**
@@ -34,9 +35,9 @@ class ResponseCookieCollection implements ResponseCookieCollectionInterface
      *
      * @return int The number of response cookies.
      */
-    public function count()
+    public function count(): int
     {
-        return count($this->myResponseCookies);
+        return count($this->responseCookies);
     }
 
     /**
@@ -46,9 +47,9 @@ class ResponseCookieCollection implements ResponseCookieCollectionInterface
      *
      * @return ResponseCookieInterface The current response cookie value.
      */
-    public function current()
+    public function current(): ResponseCookieInterface
     {
-        return current($this->myResponseCookies);
+        return current($this->responseCookies);
     }
 
     /**
@@ -58,21 +59,15 @@ class ResponseCookieCollection implements ResponseCookieCollectionInterface
      *
      * @param string $name The name.
      *
-     * @throws \InvalidArgumentException If the $name parameter is not a string.
-     *
      * @return ResponseCookieInterface|null The response cookie by name if it exists, null otherwise.
      */
-    public function get($name)
+    public function get(string $name): ?ResponseCookieInterface
     {
-        if (!is_string($name)) {
-            throw new \InvalidArgumentException('$name parameter is not a string.');
-        }
-
-        if (!isset($this->myResponseCookies[$name])) {
+        if (!isset($this->responseCookies[$name])) {
             return null;
         }
 
-        return $this->myResponseCookies[$name];
+        return $this->responseCookies[$name];
     }
 
     /**
@@ -82,9 +77,9 @@ class ResponseCookieCollection implements ResponseCookieCollectionInterface
      *
      * @return string The current response cookie name.
      */
-    public function key()
+    public function key(): string
     {
-        return key($this->myResponseCookies);
+        return strval(key($this->responseCookies));
     }
 
     /**
@@ -92,9 +87,9 @@ class ResponseCookieCollection implements ResponseCookieCollectionInterface
      *
      * @since 1.0.0
      */
-    public function next()
+    public function next(): void
     {
-        next($this->myResponseCookies);
+        next($this->responseCookies);
     }
 
     /**
@@ -102,9 +97,9 @@ class ResponseCookieCollection implements ResponseCookieCollectionInterface
      *
      * @since 1.0.0
      */
-    public function rewind()
+    public function rewind(): void
     {
-        reset($this->myResponseCookies);
+        reset($this->responseCookies);
     }
 
     /**
@@ -114,16 +109,10 @@ class ResponseCookieCollection implements ResponseCookieCollectionInterface
      *
      * @param string                  $name           The name.
      * @param ResponseCookieInterface $responseCookie The response cookie.
-     *
-     * @throws \InvalidArgumentException If the $name parameter is not a string.
      */
-    public function set($name, ResponseCookieInterface $responseCookie)
+    public function set(string $name, ResponseCookieInterface $responseCookie): void
     {
-        if (!is_string($name)) {
-            throw new \InvalidArgumentException('$name parameter is not a string.');
-        }
-
-        $this->myResponseCookies[$name] = $responseCookie;
+        $this->responseCookies[$name] = $responseCookie;
     }
 
     /**
@@ -133,13 +122,13 @@ class ResponseCookieCollection implements ResponseCookieCollectionInterface
      *
      * @return bool True if the current response cookie is valid.
      */
-    public function valid()
+    public function valid(): bool
     {
-        return key($this->myResponseCookies) !== null;
+        return key($this->responseCookies) !== null;
     }
 
     /**
      * @var ResponseCookieInterface[] My response cookies.
      */
-    private $myResponseCookies;
+    private $responseCookies;
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests\Helpers\Fakes {
 
     /**
@@ -10,7 +12,7 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
         /**
          * Disable fake is_uploaded_file method.
          */
-        public static function disable()
+        public static function disable(): void
         {
             self::$isEnabled = false;
         }
@@ -18,7 +20,7 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
         /**
          * Enable fake is_uploaded_file method.
          */
-        public static function enable()
+        public static function enable(): void
         {
             self::$isEnabled = true;
         }
@@ -26,7 +28,7 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
         /**
          * @return bool True if fake is_uploaded_file method is enabled, false otherwise.
          */
-        public static function isEnabled()
+        public static function isEnabled(): bool
         {
             return self::$isEnabled;
         }
@@ -49,7 +51,7 @@ namespace BlueMvc\Core {
      *
      * @return bool True if file is an uploaded file, false otherwise.
      */
-    function is_uploaded_file($filename)
+    function is_uploaded_file(string $filename): bool
     {
         if (FakeIsUploadedFile::isEnabled()) {
             return substr($filename, -13) !== '.not-uploaded';

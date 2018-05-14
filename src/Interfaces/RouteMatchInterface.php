@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces;
 
@@ -21,7 +22,7 @@ interface RouteMatchInterface
      *
      * @return string The action.
      */
-    public function getAction();
+    public function getAction(): string;
 
     /**
      * Returns the controller class name.
@@ -30,7 +31,7 @@ interface RouteMatchInterface
      *
      * @return string The controller class name.
      */
-    public function getControllerClassName();
+    public function getControllerClassName(): string;
 
     /**
      * Returns the parameters.
@@ -39,5 +40,5 @@ interface RouteMatchInterface
      *
      * @return string[] The parameters.
      */
-    public function getParameters();
+    public function getParameters(): array;
 }

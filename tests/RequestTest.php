@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\Exceptions\ServerEnvironmentException;
 use BlueMvc\Core\Request;
 use BlueMvc\Core\Tests\Helpers\Fakes\FakeFileGetContentsPhpInput;
 use BlueMvc\Core\Tests\Helpers\Fakes\FakeIsUploadedFile;
+use BlueMvc\Core\Tests\Helpers\Fakes\FakeSession;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -795,14 +798,129 @@ class RequestTest extends TestCase
     }
 
     /**
+     * Test getSessionItems method with no session items set.
+     */
+    public function testGetSessionItemsWithNoSessionItemsSet()
+    {
+        $_SERVER = [
+            'HTTP_HOST'      => 'localhost',
+            'REQUEST_URI'    => '/',
+            'REQUEST_METHOD' => 'GET',
+        ];
+
+        $request = new Request();
+        $sessionItems = $request->getSessionItems();
+
+        self::assertSame([], iterator_to_array($sessionItems));
+        self::assertSame([], $_SESSION);
+    }
+
+    /**
+     * Test getSessionItems method with session items set.
+     */
+    public function testGetSessionItemsWithSessionItemsSet()
+    {
+        $_SERVER = [
+            'HTTP_HOST'      => 'localhost',
+            'REQUEST_URI'    => '/',
+            'REQUEST_METHOD' => 'GET',
+        ];
+
+        $_SESSION = [
+            'Foo' => 'Bar',
+        ];
+
+        $request = new Request();
+        $sessionItems = $request->getSessionItems();
+
+        self::assertSame(['Foo' => 'Bar'], iterator_to_array($sessionItems));
+        self::assertSame(['Foo' => 'Bar'], $_SESSION);
+    }
+
+    /**
+     * Test setSessionItem method.
+     */
+    public function testSetSessionItem()
+    {
+        $_SERVER = [
+            'HTTP_HOST'      => 'localhost',
+            'REQUEST_URI'    => '/',
+            'REQUEST_METHOD' => 'GET',
+        ];
+
+        $request = new Request();
+        $request->setSessionItem('Foo', 1);
+        $request->setSessionItem('Bar', false);
+
+        $sessionItems = $request->getSessionItems();
+
+        self::assertSame(['Foo' => 1, 'Bar' => false], iterator_to_array($sessionItems));
+        self::assertSame(['Foo' => 1, 'Bar' => false], $_SESSION);
+    }
+
+    /**
+     * Test getSessionItem method.
+     */
+    public function testGetSessionItem()
+    {
+        $_SERVER = [
+            'HTTP_HOST'      => 'localhost',
+            'REQUEST_URI'    => '/',
+            'REQUEST_METHOD' => 'GET',
+        ];
+
+        $_SESSION = [
+            'Foo' => 'Bar',
+            'Baz' => [true, false],
+        ];
+
+        $request = new Request();
+
+        self::assertSame('Bar', $request->getSessionItem('Foo'));
+        self::assertSame([true, false], $request->getSessionItem('Baz'));
+        self::assertNull($request->getSessionItem('Bar'));
+        self::assertNull($request->getSessionItem('foo'));
+        self::assertSame(['Foo' => 'Bar', 'Baz' => [true, false]], $_SESSION);
+    }
+
+    /**
+     * Test removeSessionItem method.
+     */
+    public function testRemoveSessionItem()
+    {
+        $_SERVER = [
+            'HTTP_HOST'      => 'localhost',
+            'REQUEST_URI'    => '/',
+            'REQUEST_METHOD' => 'GET',
+        ];
+
+        $_SESSION = [
+            'Foo' => 'Bar',
+            'Baz' => [true, false],
+        ];
+
+        $request = new Request();
+
+        $request->removeSessionItem('Bar');
+        $request->removeSessionItem('Baz');
+
+        self::assertSame('Bar', $request->getSessionItem('Foo'));
+        self::assertNull($request->getSessionItem('Baz'));
+        self::assertNull($request->getSessionItem('Bar'));
+        self::assertNull($request->getSessionItem('foo'));
+        self::assertSame(['Foo' => 'Bar'], $_SESSION);
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
     {
-        $this->myRequestTimeFloat = $_SERVER['REQUEST_TIME_FLOAT'];
+        $this->originalServerArray = $_SERVER;
 
         FakeIsUploadedFile::enable();
         FakeFileGetContentsPhpInput::enable();
+        FakeSession::enable();
     }
 
     /**
@@ -810,20 +928,19 @@ class RequestTest extends TestCase
      */
     public function tearDown()
     {
-        $_SERVER = [];
+        FakeIsUploadedFile::disable();
+        FakeFileGetContentsPhpInput::disable();
+        FakeSession::disable();
+
         $_GET = [];
         $_POST = [];
         $_FILES = [];
         $_COOKIE = [];
-
-        FakeIsUploadedFile::disable();
-        FakeFileGetContentsPhpInput::disable();
-
-        $_SERVER['REQUEST_TIME_FLOAT'] = $this->myRequestTimeFloat;
+        $_SERVER = $this->originalServerArray;
     }
 
     /**
-     * @var float My request time.
+     * @var array The original server array.
      */
-    private $myRequestTimeFloat;
+    private $originalServerArray;
 }

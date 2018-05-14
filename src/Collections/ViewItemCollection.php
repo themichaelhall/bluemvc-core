@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Collections;
 
@@ -23,7 +24,7 @@ class ViewItemCollection implements ViewItemCollectionInterface
      */
     public function __construct()
     {
-        $this->myItems = [];
+        $this->items = [];
     }
 
     /**
@@ -33,9 +34,9 @@ class ViewItemCollection implements ViewItemCollectionInterface
      *
      * @return int The number of view items.
      */
-    public function count()
+    public function count(): int
     {
-        return count($this->myItems);
+        return count($this->items);
     }
 
     /**
@@ -47,7 +48,7 @@ class ViewItemCollection implements ViewItemCollectionInterface
      */
     public function current()
     {
-        return current($this->myItems);
+        return current($this->items);
     }
 
     /**
@@ -57,21 +58,15 @@ class ViewItemCollection implements ViewItemCollectionInterface
      *
      * @param string $name The view item name.
      *
-     * @throws \InvalidArgumentException If the $name parameter is not a string.
-     *
      * @return mixed|null The view item value by view item name if it exists, null otherwise.
      */
-    public function get($name)
+    public function get(string $name)
     {
-        if (!is_string($name)) {
-            throw new \InvalidArgumentException('$name parameter is not a string.');
-        }
-
-        if (!isset($this->myItems[$name])) {
+        if (!isset($this->items[$name])) {
             return null;
         }
 
-        return $this->myItems[$name];
+        return $this->items[$name];
     }
 
     /**
@@ -81,9 +76,9 @@ class ViewItemCollection implements ViewItemCollectionInterface
      *
      * @return string The current view item name.
      */
-    public function key()
+    public function key(): string
     {
-        return key($this->myItems);
+        return strval(key($this->items));
     }
 
     /**
@@ -91,9 +86,9 @@ class ViewItemCollection implements ViewItemCollectionInterface
      *
      * @since 1.0.0
      */
-    public function next()
+    public function next(): void
     {
-        next($this->myItems);
+        next($this->items);
     }
 
     /**
@@ -101,9 +96,9 @@ class ViewItemCollection implements ViewItemCollectionInterface
      *
      * @since 1.0.0
      */
-    public function rewind()
+    public function rewind(): void
     {
-        reset($this->myItems);
+        reset($this->items);
     }
 
     /**
@@ -113,16 +108,10 @@ class ViewItemCollection implements ViewItemCollectionInterface
      *
      * @param string $name  The view item name.
      * @param mixed  $value The view item value.
-     *
-     * @throws \InvalidArgumentException If the $name parameter is not a string.
      */
-    public function set($name, $value)
+    public function set(string $name, $value): void
     {
-        if (!is_string($name)) {
-            throw new \InvalidArgumentException('$name parameter is not a string.');
-        }
-
-        $this->myItems[$name] = $value;
+        $this->items[$name] = $value;
     }
 
     /**
@@ -132,13 +121,13 @@ class ViewItemCollection implements ViewItemCollectionInterface
      *
      * @return bool True if the current view item is valid.
      */
-    public function valid()
+    public function valid(): bool
     {
-        return key($this->myItems) !== null;
+        return key($this->items) !== null;
     }
 
     /**
      * @var array My view items.
      */
-    private $myItems;
+    private $items;
 }

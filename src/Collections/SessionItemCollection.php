@@ -4,6 +4,7 @@
  *
  * Read more at https://bluemvc.com/
  */
+declare(strict_types=1);
 
 namespace BlueMvc\Core\Collections;
 
@@ -17,24 +18,15 @@ use BlueMvc\Core\Interfaces\Collections\SessionItemCollectionInterface;
 class SessionItemCollection implements SessionItemCollectionInterface
 {
     /**
-     * Constructs the collection of session items.
-     *
-     * @since 1.0.0
-     */
-    public function __construct()
-    {
-    }
-
-    /**
      * Returns the number of session items.
      *
      * @since 1.0.0
      *
      * @return int The number of session items.
      */
-    public function count()
+    public function count(): int
     {
-        self::myInit();
+        self::doInit();
 
         return count($_SESSION);
     }
@@ -48,7 +40,7 @@ class SessionItemCollection implements SessionItemCollectionInterface
      */
     public function current()
     {
-        self::myInit();
+        self::doInit();
 
         return current($_SESSION);
     }
@@ -60,17 +52,11 @@ class SessionItemCollection implements SessionItemCollectionInterface
      *
      * @param string $name The session item name.
      *
-     * @throws \InvalidArgumentException If the $name parameter is not a string.
-     *
      * @return mixed|null The session item value by session item name if it exists, null otherwise.
      */
-    public function get($name)
+    public function get(string $name)
     {
-        if (!is_string($name)) {
-            throw new \InvalidArgumentException('$name parameter is not a string.');
-        }
-
-        self::myInit();
+        self::doInit();
 
         if (!isset($_SESSION[$name])) {
             return null;
@@ -86,11 +72,11 @@ class SessionItemCollection implements SessionItemCollectionInterface
      *
      * @return string The current session item name.
      */
-    public function key()
+    public function key(): string
     {
-        self::myInit();
+        self::doInit();
 
-        return key($_SESSION);
+        return strval(key($_SESSION));
     }
 
     /**
@@ -98,9 +84,9 @@ class SessionItemCollection implements SessionItemCollectionInterface
      *
      * @since 1.0.0
      */
-    public function next()
+    public function next(): void
     {
-        self::myInit();
+        self::doInit();
 
         next($_SESSION);
     }
@@ -111,16 +97,10 @@ class SessionItemCollection implements SessionItemCollectionInterface
      * @since 1.0.0
      *
      * @param string $name The session item name.
-     *
-     * @throws \InvalidArgumentException If the $name parameter is not a string.
      */
-    public function remove($name)
+    public function remove(string $name): void
     {
-        if (!is_string($name)) {
-            throw new \InvalidArgumentException('$name parameter is not a string.');
-        }
-
-        self::myInit();
+        self::doInit();
 
         unset($_SESSION[$name]);
     }
@@ -130,9 +110,9 @@ class SessionItemCollection implements SessionItemCollectionInterface
      *
      * @since 1.0.0
      */
-    public function rewind()
+    public function rewind(): void
     {
-        self::myInit();
+        self::doInit();
 
         reset($_SESSION);
     }
@@ -144,16 +124,10 @@ class SessionItemCollection implements SessionItemCollectionInterface
      *
      * @param string $name  The session item name.
      * @param mixed  $value The session item value.
-     *
-     * @throws \InvalidArgumentException If the $name parameter is not a string.
      */
-    public function set($name, $value)
+    public function set(string $name, $value): void
     {
-        if (!is_string($name)) {
-            throw new \InvalidArgumentException('$name parameter is not a string.');
-        }
-
-        self::myInit();
+        self::doInit();
 
         $_SESSION[$name] = $value;
     }
@@ -165,9 +139,9 @@ class SessionItemCollection implements SessionItemCollectionInterface
      *
      * @return bool True if the current session item is valid.
      */
-    public function valid()
+    public function valid(): bool
     {
-        self::myInit();
+        self::doInit();
 
         return key($_SESSION) !== null;
     }
@@ -175,7 +149,7 @@ class SessionItemCollection implements SessionItemCollectionInterface
     /**
      * Initializes session if it is not already initialized.
      */
-    private static function myInit()
+    private static function doInit(): void
     {
         if (session_status() !== PHP_SESSION_ACTIVE) {
             session_start([
