@@ -1,4 +1,4 @@
-## Unreleased
+## [2.0.0] 2018-05-14
 - **Backward compatibility break**: Replaced getException/setException methods with getThrowable/setThrowable in ErrorController.
 - **Backward compatibility break**: Moved session handling from Application to Request.
 - Updated PHP requirement to 7.1.
@@ -15,4 +15,5 @@
 ## 1.0.0 - 2018-02-03
 - First stable revision.
 
+[2.0.0]: https://github.com/themichaelhall/bluemvc-core/compare/v1.1.0...v2.0.0
 [1.1.0]: https://github.com/themichaelhall/bluemvc-core/compare/v1.0.0...v1.1.0
