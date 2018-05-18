@@ -364,11 +364,18 @@ class BasicRoutingTest extends TestCase
     }
 
     /**
-     * Test get a page returning a NotFoundResult.
+     * Test get page returning action result.
+     *
+     * @dataProvider getPageReturningActionResultDataProvider
+     *
+     * @param string $path               The path.
+     * @param int    $expectedStatusCode The expected status code.
+     * @param array  $expectedHeaders    The expected headers.
+     * @param string $expectedContent    The expected content.
      */
-    public function testGetPageWithNotFoundResult()
+    public function testGetPageReturningActionResult(string $path, int $expectedStatusCode, array $expectedHeaders, string $expectedContent)
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/notfound', 'REQUEST_METHOD' => 'GET'];
+        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/' . $path, 'REQUEST_METHOD' => 'GET'];
 
         $request = new Request();
         $response = new Response();
@@ -377,170 +384,31 @@ class BasicRoutingTest extends TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        self::assertSame('Page was not found', $responseOutput);
-        self::assertSame('Page was not found', $response->getContent());
-        self::assertSame(['HTTP/1.1 404 Not Found'], FakeHeaders::get());
-        self::assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
+        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
+        self::assertSame($expectedHeaders, FakeHeaders::get());
+        self::assertSame($expectedContent, $responseOutput);
+        self::assertSame($expectedContent, $response->getContent());
     }
 
     /**
-     * Test get a page returning a RedirectResult.
+     * Data provider for page returning action results test.
+     *
+     * @return array The data.
      */
-    public function testGetPageWithRedirectResult()
+    public function getPageReturningActionResultDataProvider()
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/redirect', 'REQUEST_METHOD' => 'GET'];
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('', $responseOutput);
-        self::assertSame('', $response->getContent());
-        self::assertSame(['HTTP/1.1 302 Found', 'Location: http://www.domain.com/foo/bar'], FakeHeaders::get());
-        self::assertSame(StatusCode::FOUND, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get a page returning a PermanentRedirectResult.
-     */
-    public function testGetPageWithPermanentRedirectResult()
-    {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/permanentRedirect', 'REQUEST_METHOD' => 'GET'];
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('', $responseOutput);
-        self::assertSame('', $response->getContent());
-        self::assertSame(['HTTP/1.1 301 Moved Permanently', 'Location: https://domain.com/'], FakeHeaders::get());
-        self::assertSame(StatusCode::MOVED_PERMANENTLY, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get a page returning a ForbiddenResult.
-     */
-    public function testGetPageWithForbiddenResult()
-    {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/forbidden', 'REQUEST_METHOD' => 'GET'];
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('Page is forbidden', $responseOutput);
-        self::assertSame('Page is forbidden', $response->getContent());
-        self::assertSame(['HTTP/1.1 403 Forbidden'], FakeHeaders::get());
-        self::assertSame(StatusCode::FORBIDDEN, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get a page returning a NoContentResult.
-     */
-    public function testGetPageWithNoContentResult()
-    {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/nocontent', 'REQUEST_METHOD' => 'GET'];
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('', $responseOutput);
-        self::assertSame('', $response->getContent());
-        self::assertSame(['HTTP/1.1 204 No Content'], FakeHeaders::get());
-        self::assertSame(StatusCode::NO_CONTENT, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get a page returning a NotModifiedResult.
-     */
-    public function testGetPageWithNotModifiedResult()
-    {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/notmodified', 'REQUEST_METHOD' => 'GET'];
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('', $responseOutput);
-        self::assertSame('', $response->getContent());
-        self::assertSame(['HTTP/1.1 304 Not Modified'], FakeHeaders::get());
-        self::assertSame(StatusCode::NOT_MODIFIED, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get a page returning a MethodNotAllowedResult.
-     */
-    public function testGetPageWithMethodNotAllowedResult()
-    {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/methodnotallowed', 'REQUEST_METHOD' => 'GET'];
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('', $responseOutput);
-        self::assertSame('', $response->getContent());
-        self::assertSame(['HTTP/1.1 405 Method Not Allowed'], FakeHeaders::get());
-        self::assertSame(StatusCode::METHOD_NOT_ALLOWED, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get a page returning a JsonResult.
-     */
-    public function testGetPageWithJsonResult()
-    {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/json', 'REQUEST_METHOD' => 'GET'];
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('{"Foo":1,"Bar":{"Baz":2}}', $responseOutput);
-        self::assertSame('{"Foo":1,"Bar":{"Baz":2}}', $response->getContent());
-        self::assertSame(['HTTP/1.1 200 OK', 'Content-Type: application/json'], FakeHeaders::get());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get a page returning a CreatedResult.
-     */
-    public function testGetPageWithCreatedResult()
-    {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/created', 'REQUEST_METHOD' => 'GET'];
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('', $responseOutput);
-        self::assertSame('', $response->getContent());
-        self::assertSame(['HTTP/1.1 201 Created', 'Location: http://www.domain.com/actionresult/created'], FakeHeaders::get());
-        self::assertSame(StatusCode::CREATED, $response->getStatusCode()->getCode());
+        return [
+            ['notfound', StatusCode::NOT_FOUND, ['HTTP/1.1 404 Not Found'], 'Page was not found'],
+            ['redirect', StatusCode::FOUND, ['HTTP/1.1 302 Found', 'Location: http://www.domain.com/foo/bar'], ''],
+            ['permanentRedirect', StatusCode::MOVED_PERMANENTLY, ['HTTP/1.1 301 Moved Permanently', 'Location: https://domain.com/'], ''],
+            ['forbidden', StatusCode::FORBIDDEN, ['HTTP/1.1 403 Forbidden'], 'Page is forbidden'],
+            ['nocontent', StatusCode::NO_CONTENT, ['HTTP/1.1 204 No Content'], ''],
+            ['notmodified', StatusCode::NOT_MODIFIED, ['HTTP/1.1 304 Not Modified'], ''],
+            ['methodnotallowed', StatusCode::METHOD_NOT_ALLOWED, ['HTTP/1.1 405 Method Not Allowed'], ''],
+            ['json', StatusCode::OK, ['HTTP/1.1 200 OK', 'Content-Type: application/json'], '{"Foo":1,"Bar":{"Baz":2}}'],
+            ['created', StatusCode::CREATED, ['HTTP/1.1 201 Created', 'Location: http://www.domain.com/actionresult/created'], ''],
+            ['custom', StatusCode::MULTI_STATUS, ['HTTP/1.1 207 Multi-Status'], 'Custom action result'],
+        ];
     }
 
     /**
@@ -1215,7 +1083,7 @@ class BasicRoutingTest extends TestCase
      */
     public function setUp()
     {
-        $this->myRequestTimeFloat = $_SERVER['REQUEST_TIME_FLOAT'];
+        $this->originalServerArray = $_SERVER;
 
         FakeHeaders::enable();
         $this->application = new BasicTestApplication(FilePath::parse(__DIR__ . DIRECTORY_SEPARATOR));
@@ -1244,13 +1112,12 @@ class BasicRoutingTest extends TestCase
      */
     public function tearDown()
     {
-        $_SERVER = [];
         $_COOKIE = [];
 
         FakeHeaders::disable();
         $this->application = null;
 
-        $_SERVER['REQUEST_TIME_FLOAT'] = $this->myRequestTimeFloat;
+        $_SERVER = $this->originalServerArray;
     }
 
     /**
@@ -1259,7 +1126,7 @@ class BasicRoutingTest extends TestCase
     private $application;
 
     /**
-     * @var float My request time.
+     * @var array The original server array.
      */
-    private $myRequestTimeFloat;
+    private $originalServerArray;
 }

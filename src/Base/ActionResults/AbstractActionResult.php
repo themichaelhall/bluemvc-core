@@ -17,7 +17,9 @@ use BlueMvc\Core\Interfaces\ResponseInterface;
 /**
  * Abstract class representing an action result.
  *
- * @since 1.0.0
+ * @since      1.0.0
+ * @deprecated Use ActionResult class.
+ * @see        \BlueMvc\Core\ActionResults\ActionResult
  */
 abstract class AbstractActionResult implements ActionResultInterface
 {

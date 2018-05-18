@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Tests\Helpers\TestControllers;
 
+use BlueMvc\Core\ActionResults\ActionResult;
 use BlueMvc\Core\ActionResults\CreatedResult;
 use BlueMvc\Core\ActionResults\ForbiddenResult;
 use BlueMvc\Core\ActionResults\JsonResult;
@@ -14,6 +15,7 @@ use BlueMvc\Core\ActionResults\NotModifiedResult;
 use BlueMvc\Core\ActionResults\PermanentRedirectResult;
 use BlueMvc\Core\ActionResults\RedirectResult;
 use BlueMvc\Core\Controller;
+use BlueMvc\Core\Http\StatusCode;
 
 /**
  * Action result test controller class.
@@ -108,5 +110,15 @@ class ActionResultTestController extends Controller
     public function createdAction()
     {
         return new CreatedResult();
+    }
+
+    /**
+     * Action returning a custom action result.
+     *
+     * @return ActionResult The action result.
+     */
+    public function customAction()
+    {
+        return new ActionResult('Custom action result', new StatusCode(StatusCode::MULTI_STATUS));
     }
 }

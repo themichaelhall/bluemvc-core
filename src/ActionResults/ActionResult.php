@@ -6,41 +6,39 @@
  */
 declare(strict_types=1);
 
-namespace BlueMvc\Core\Base\ActionResults;
+namespace BlueMvc\Core\ActionResults;
 
-use BlueMvc\Core\ActionResults\ActionResult;
+use BlueMvc\Core\Interfaces\ActionResults\ActionResultInterface;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\Http\StatusCodeInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
-use DataTypes\Url;
 
 /**
- * Abstract class representing an action result with a location.
+ * Class representing a generic action result.
  *
- * @since 1.0.0
+ * @since 2.1.0
  */
-class AbstractLocationActionResult extends ActionResult
+class ActionResult implements ActionResultInterface
 {
     /**
      * Constructs the action result.
      *
-     * @since 1.0.0
+     * @since 2.1.0
      *
-     * @param string              $location   The location as an absolute or relative url.
+     * @param string              $content    The content.
      * @param StatusCodeInterface $statusCode The status code.
      */
-    public function __construct(string $location, StatusCodeInterface $statusCode)
+    public function __construct(string $content, StatusCodeInterface $statusCode)
     {
-        parent::__construct('', $statusCode);
-
-        $this->location = $location;
+        $this->statusCode = $statusCode;
+        $this->content = $content;
     }
 
     /**
      * Updates the response.
      *
-     * @since 1.0.0
+     * @since 2.1.0
      *
      * @param ApplicationInterface $application The application.
      * @param RequestInterface     $request     The request.
@@ -48,14 +46,17 @@ class AbstractLocationActionResult extends ActionResult
      */
     public function updateResponse(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response): void
     {
-        parent::updateResponse($application, $request, $response);
-
-        $locationUrl = Url::parseRelative($this->location, $request->getUrl());
-        $response->setHeader('Location', $locationUrl->__toString());
+        $response->setStatusCode($this->statusCode);
+        $response->setContent($this->content);
     }
 
     /**
-     * @var string My url.
+     * @var StatusCodeInterface My status code.
      */
-    private $location;
+    private $statusCode;
+
+    /**
+     * @var string My content.
+     */
+    private $content;
 }

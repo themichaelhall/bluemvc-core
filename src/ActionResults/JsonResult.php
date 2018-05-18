@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\ActionResults;
 
-use BlueMvc\Core\Base\ActionResults\AbstractActionResult;
 use BlueMvc\Core\Exceptions\InvalidActionResultContentException;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
@@ -21,7 +20,7 @@ use BlueMvc\Core\Interfaces\ResponseInterface;
  *
  * @since 1.0.0
  */
-class JsonResult extends AbstractActionResult
+class JsonResult extends ActionResult
 {
     /**
      * Constructs the action result.

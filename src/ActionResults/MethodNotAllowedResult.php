@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\ActionResults;
 
-use BlueMvc\Core\Base\ActionResults\AbstractActionResult;
 use BlueMvc\Core\Http\StatusCode;
 
 /**
@@ -16,7 +15,7 @@ use BlueMvc\Core\Http\StatusCode;
  *
  * @since 1.0.0
  */
-class MethodNotAllowedResult extends AbstractActionResult
+class MethodNotAllowedResult extends ActionResult
 {
     /**
      * Constructs the action result.
