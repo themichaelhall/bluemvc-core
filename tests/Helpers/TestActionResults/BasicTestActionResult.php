@@ -1,4 +1,6 @@
-<?php /** @noinspection PhpDeprecationInspection */
+<?php
+
+/** @noinspection PhpDeprecationInspection */
 
 declare(strict_types=1);
 
