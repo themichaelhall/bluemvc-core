@@ -24,6 +24,7 @@ use BlueMvc\Core\Tests\Helpers\TestControllers\ExceptionTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\MultiLevelTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\PreAndPostActionEventController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\SpecialActionNameTestController;
+use BlueMvc\Core\Tests\Helpers\TestControllers\TypeHintActionParametersTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\UppercaseActionTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ViewTestController;
 use BlueMvc\Core\Tests\Helpers\TestPlugins\SetContentTestPlugin;
@@ -1079,6 +1080,61 @@ class BasicRoutingTest extends TestCase
     }
 
     /**
+     * Test get pages with typed hint action parameters.
+     *
+     * @dataProvider typeHintActionParameterPagesDataProvider
+     *
+     * @param string $url                The (relative) url.
+     * @param string $expectedContent    The expected content.
+     * @param array  $expectedHeaders    The expected headers.
+     * @param int    $expectedStatusCode The expected status code.
+     */
+    public function testTypeHintActionParameterPages(string $url, string $expectedContent, array $expectedHeaders, int $expectedStatusCode)
+    {
+        $_SERVER = ['HTTP_HOST' => 'www.example.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/typeHintActionParameters/' . $url, 'REQUEST_METHOD' => 'GET'];
+
+        $request = new Request();
+        $response = new Response();
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        self::assertSame($expectedContent, $responseOutput);
+        self::assertSame($expectedContent, $response->getContent());
+        self::assertSame($expectedHeaders, FakeHeaders::get());
+        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Data provider for type hint action parameter pages tests.
+     *
+     * @return array The data.
+     */
+    public function typeHintActionParameterPagesDataProvider()
+    {
+        return [
+            ['stringTypes', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['stringTypes/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['stringTypes/param1', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['stringTypes/param1/', 'StringTypesAction: Foo=[string:param1], Bar=[string:], Baz=[NULL:], FooBar=[string:Foo Bar]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['stringTypes/param1/param2', 'StringTypesAction: Foo=[string:param1], Bar=[string:param2], Baz=[NULL:], FooBar=[string:Foo Bar]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['stringTypes/param1/param2/', 'StringTypesAction: Foo=[string:param1], Bar=[string:param2], Baz=[string:], FooBar=[string:Foo Bar]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['stringTypes/param1/param2/param3', 'StringTypesAction: Foo=[string:param1], Bar=[string:param2], Baz=[string:param3], FooBar=[string:Foo Bar]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['stringTypes/param1/param2/param3/', 'StringTypesAction: Foo=[string:param1], Bar=[string:param2], Baz=[string:param3], FooBar=[string:]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['stringTypes/param1/param2/param3/param4', 'StringTypesAction: Foo=[string:param1], Bar=[string:param2], Baz=[string:param3], FooBar=[string:param4]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['stringTypes/param1/param2/param3/param4/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['stringTypes/param1/param2/param3/param4/param5', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['stringTypes/10/20.30/false/true', 'StringTypesAction: Foo=[string:10], Bar=[string:20.30], Baz=[string:false], FooBar=[string:true]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['nonExistingAction', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['nonExistingAction/', 'DefaultAction: Action=[string:nonExistingAction], Foo=[string:]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['nonExistingAction/param1', 'DefaultAction: Action=[string:nonExistingAction], Foo=[string:param1]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['nonExistingAction/param1/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['nonExistingAction/param1/param2', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+        ];
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
@@ -1105,6 +1161,7 @@ class BasicRoutingTest extends TestCase
         $this->application->addRoute(new Route('specialActionName', SpecialActionNameTestController::class));
         $this->application->addRoute(new Route('cookies', CookieTestController::class));
         $this->application->addRoute(new Route('multiple/level', MultiLevelTestController::class));
+        $this->application->addRoute(new Route('typeHintActionParameters', TypeHintActionParametersTestController::class));
     }
 
     /**

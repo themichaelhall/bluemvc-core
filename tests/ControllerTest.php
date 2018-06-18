@@ -16,6 +16,7 @@ use BlueMvc\Core\Tests\Helpers\TestControllers\DefaultActionTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\MultiLevelTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\PreAndPostActionEventController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\SpecialActionNameTestController;
+use BlueMvc\Core\Tests\Helpers\TestControllers\TypeHintActionParametersTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\UppercaseActionTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ViewTestController;
 use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
@@ -699,5 +700,48 @@ class ControllerTest extends TestCase
         $controller->processRequest($application, $request, $response, 'foo', []);
 
         self::assertNull($controller->getActionMethod());
+    }
+
+    /**
+     * Test type hinted action parameters.
+     *
+     * @dataProvider typeHintActionParametersDataProvider
+     *
+     * @param string $action             The action.
+     * @param array  $parameters         The parameters.
+     * @param int    $expectedStatusCode The expected status code.
+     * @param string $expectedContent    The expected content.
+     */
+    public function testTypeHintActionParameters(string $action, array $parameters, int $expectedStatusCode, string $expectedContent)
+    {
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
+        $response = new BasicTestResponse();
+        $controller = new TypeHintActionParametersTestController();
+        $controller->processRequest($application, $request, $response, $action, $parameters);
+
+        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
+        self::assertSame($expectedContent, $response->getContent());
+    }
+
+    /**
+     * Data provider for type hinted action parameter tests.
+     *
+     * @return array The data.
+     */
+    public function typeHintActionParametersDataProvider()
+    {
+        return [
+            ['stringTypes', [], StatusCode::NOT_FOUND, ''],
+            ['stringTypes', ['param1'], StatusCode::NOT_FOUND, ''],
+            ['stringTypes', ['param1', 'param2'], StatusCode::OK, 'StringTypesAction: Foo=[string:param1], Bar=[string:param2], Baz=[NULL:], FooBar=[string:Foo Bar]'],
+            ['stringTypes', ['param1', 'param2', 'param3'], StatusCode::OK, 'StringTypesAction: Foo=[string:param1], Bar=[string:param2], Baz=[string:param3], FooBar=[string:Foo Bar]'],
+            ['stringTypes', ['param1', 'param2', 'param3', 'param4'], StatusCode::OK, 'StringTypesAction: Foo=[string:param1], Bar=[string:param2], Baz=[string:param3], FooBar=[string:param4]'],
+            ['stringTypes', ['param1', 'param2', 'param3', 'param4', 'param5'], StatusCode::NOT_FOUND, ''],
+            ['stringTypes', ['10', '20.30', 'false', 'true'], StatusCode::OK, 'StringTypesAction: Foo=[string:10], Bar=[string:20.30], Baz=[string:false], FooBar=[string:true]'],
+            ['nonExistingAction', [], StatusCode::NOT_FOUND, ''],
+            ['nonExistingAction', ['param1'], StatusCode::OK, 'DefaultAction: Action=[string:nonExistingAction], Foo=[string:param1]'],
+            ['nonExistingAction', ['param1', 'param2'], StatusCode::NOT_FOUND, ''],
+        ];
     }
 }
