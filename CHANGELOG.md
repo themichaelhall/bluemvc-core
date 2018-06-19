@@ -1,3 +1,6 @@
+## [2.0.1] 2018-06-19
+- Fixed [#1](https://github.com/themichaelhall/bluemvc/issues/1) - Empty action method parameter when "0" is last in url. 
+
 ## [2.0.0] 2018-05-14
 - **Backward compatibility break**: Replaced getException/setException methods with getThrowable/setThrowable in ErrorController.
 - **Backward compatibility break**: Moved session handling from Application to Request.
@@ -15,5 +18,6 @@
 ## 1.0.0 - 2018-02-03
 - First stable revision.
 
+[2.0.1]: https://github.com/themichaelhall/bluemvc-core/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/themichaelhall/bluemvc-core/compare/v1.1.0...v2.0.0
 [1.1.0]: https://github.com/themichaelhall/bluemvc-core/compare/v1.0.0...v1.1.0
