@@ -52,7 +52,7 @@ class Route extends AbstractRoute
     {
         $path = $request->getUrl()->getPath();
         $directoryParts = $path->getDirectoryParts();
-        $filename = $path->getFilename() ?: '';
+        $filename = $path->getFilename() ?? '';
 
         if (count($this->path) === 0) {
             // My path is empty, i.e. should only match root path.
