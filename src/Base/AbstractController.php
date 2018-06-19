@@ -168,12 +168,12 @@ abstract class AbstractController implements ControllerInterface
 
         $hasFoundActionMethod = true;
 
-        if (!self::actionMethodMatchesParameters($actionMethod, $parameters)) {
+        if (!self::actionMethodMatchesParameters($actionMethod, $parameters, $actualParameters)) {
             // Action method found, but parameters did not match.
             return false;
         }
 
-        $result = $this->invokeActionMethod($actionMethod, $parameters);
+        $result = $this->invokeActionMethod($actionMethod, $actualParameters);
 
         return true;
     }
@@ -213,10 +213,11 @@ abstract class AbstractController implements ControllerInterface
      *
      * @param \ReflectionMethod $reflectionMethod The action method.
      * @param array             $parameters       The parameters.
+     * @param array|null        $actualParameters The actual parameters, matching action methods actual signature or undefined if check failed.
      *
      * @return bool True if action method matches the parameters, false otherwise.
      */
-    private static function actionMethodMatchesParameters(\ReflectionMethod $reflectionMethod, array $parameters): bool
+    private static function actionMethodMatchesParameters(\ReflectionMethod $reflectionMethod, array $parameters, array &$actualParameters = null): bool
     {
         $parametersCount = count($parameters);
 
@@ -224,13 +225,39 @@ abstract class AbstractController implements ControllerInterface
             return false;
         }
 
-        $index = 0;
+        $actualParameters = [];
+        reset($parameters);
+
         foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
-            if ($index >= $parametersCount && !$reflectionParameter->isOptional()) {
+            if (key($parameters) === null) {
+                // No more parameters.
+                if ($reflectionParameter->isOptional()) {
+                    // It's still ok if the action method parameter is optional.
+                    continue;
+                }
+
                 return false;
             }
 
-            $index++;
+            $parameter = current($parameters);
+
+            if ($reflectionParameter->getType() !== null) {
+                switch ($reflectionParameter->getType()->getName()) {
+                    case 'int':
+                        if (!preg_match('/^-?[0-9]+$/', $parameter)) {
+                            return false;
+                        }
+
+                        $parameter = intval($parameter);
+                        break;
+                    case 'string':
+                        $parameter = strval($parameter);
+                        break;
+                }
+            }
+
+            $actualParameters[] = $parameter;
+            next($parameters);
         }
 
         return true;
