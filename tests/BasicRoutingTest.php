@@ -1137,7 +1137,7 @@ class BasicRoutingTest extends TestCase
             ['intTypes/10/20/30/40', 'IntTypesAction: Foo=[integer:10], Bar=[integer:20], Baz=[integer:30], FooBar=[integer:40]', ['HTTP/1.1 200 OK'], StatusCode::OK],
             ['intTypes/10/20/30/40/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
             ['intTypes/10/20/30/40/50', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
-            ['intTypes/0/0', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND], // fixme: This should work.
+            ['intTypes/0/0', 'IntTypesAction: Foo=[integer:0], Bar=[integer:0], Baz=[NULL:], FooBar=[integer:42]', ['HTTP/1.1 200 OK'], StatusCode::OK],
             ['intTypes/0/-20', 'IntTypesAction: Foo=[integer:0], Bar=[integer:-20], Baz=[NULL:], FooBar=[integer:42]', ['HTTP/1.1 200 OK'], StatusCode::OK],
             ['intTypes/12345678901234567890/-12345678901234567890', 'IntTypesAction: Foo=[integer:' . PHP_INT_MAX . '], Bar=[integer:' . PHP_INT_MIN . '], Baz=[NULL:], FooBar=[integer:42]', ['HTTP/1.1 200 OK'], StatusCode::OK],
             ['mixedTypes', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
