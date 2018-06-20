@@ -244,11 +244,12 @@ abstract class AbstractController implements ControllerInterface
             if ($reflectionParameter->getType() !== null) {
                 switch ($reflectionParameter->getType()->getName()) {
                     case 'int':
-                        if (!preg_match('/^-?[0-9]+$/', $parameter)) {
+                        $intVal = intval($parameter);
+                        if (strval($intVal) !== $parameter) {
                             return false;
                         }
 
-                        $parameter = intval($parameter);
+                        $parameter = $intVal;
                         break;
                     case 'string':
                         $parameter = strval($parameter);
