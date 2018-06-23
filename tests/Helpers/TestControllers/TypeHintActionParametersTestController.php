@@ -42,16 +42,32 @@ class TypeHintActionParametersTestController extends Controller
     }
 
     /**
-     * Mixed types action.
+     * Float types action.
      *
-     * @param int    $foo The first parameter.
-     * @param string $bar The second parameter.
+     * @param float      $foo    The first parameter.
+     * @param float|null $bar    The second parameter.
+     * @param float|null $baz    The third parameter.
+     * @param float      $fooBar The fourth parameter.
      *
      * @return string The result.
      */
-    public function mixedTypesAction(int $foo, string $bar): string
+    public function floatTypesAction(float $foo, ?float $bar, ?float $baz = null, float $fooBar = 0.5): string
     {
-        return 'MixedTypesAction: Foo=[' . gettype($foo) . ':' . $foo . '], Bar=[' . gettype($bar) . ':' . $bar . ']';
+        return 'FloatTypesAction: Foo=[' . gettype($foo) . ':' . $foo . '], Bar=[' . gettype($bar) . ':' . $bar . '], Baz=[' . gettype($baz) . ':' . $baz . '], FooBar=[' . gettype($fooBar) . ':' . $fooBar . ']';
+    }
+
+    /**
+     * Mixed types action.
+     *
+     * @param float  $typeFloat  The float parameter.
+     * @param int    $typeInt    The integer parameter.
+     * @param string $typeString The string parameter.
+     *
+     * @return string The result.
+     */
+    public function mixedTypesAction(float $typeFloat, int $typeInt, string $typeString): string
+    {
+        return 'MixedTypesAction: TypeFloat=[' . gettype($typeFloat) . ':' . $typeFloat . '], TypeInt=[' . gettype($typeInt) . ':' . $typeInt . '], TypeString=[' . gettype($typeString) . ':' . $typeString . ']';
     }
 
     /**

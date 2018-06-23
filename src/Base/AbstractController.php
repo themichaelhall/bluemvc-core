@@ -251,6 +251,18 @@ abstract class AbstractController implements ControllerInterface
 
                         $parameter = $intVal;
                         break;
+                    case 'float':
+                        if (!is_numeric($parameter)) {
+                            return false;
+                        }
+
+                        $floatVal = floatval($parameter);
+                        if (is_infinite($floatVal) || is_nan($floatVal)) {
+                            return false;
+                        }
+
+                        $parameter = $floatVal;
+                        break;
                     case 'string':
                         $parameter = strval($parameter);
                         break;
