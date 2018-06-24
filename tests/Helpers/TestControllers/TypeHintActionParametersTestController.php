@@ -80,7 +80,7 @@ class TypeHintActionParametersTestController extends Controller
      */
     public function arrayTypesAction(array $foo): string
     {
-        return 'ArrayTypesAction: Foo=[' . gettype($foo) . ':' . join(',', $foo) . ']';
+        return 'ArrayTypesAction: Foo=[' . gettype($foo) . ':' . implode(',', $foo) . ']';
     }
 
     /**
