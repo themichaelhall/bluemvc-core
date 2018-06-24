@@ -276,6 +276,8 @@ abstract class AbstractController implements ControllerInterface
                     case 'string':
                         $parameter = strval($parameter);
                         break;
+                    default:
+                        return false;
                 }
             }
 

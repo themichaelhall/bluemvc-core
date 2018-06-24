@@ -72,6 +72,30 @@ class TypeHintActionParametersTestController extends Controller
     }
 
     /**
+     * Array types action.
+     *
+     * @param array $foo The array parameter.
+     *
+     * @return string The result.
+     */
+    public function arrayTypesAction(array $foo): string
+    {
+        return 'ArrayTypesAction: Foo=[' . gettype($foo) . ':' . join(',', $foo) . ']';
+    }
+
+    /**
+     * Object types action.
+     *
+     * @param \stdClass $foo The object parameter.
+     *
+     * @return string The result.
+     */
+    public function objectTypesAction(\stdClass $foo): string
+    {
+        return 'ObjectTypesAction: Foo=[' . gettype($foo) . ':' . print_r($foo, true) . ']';
+    }
+
+    /**
      * Mixed types action.
      *
      * @param float  $typeFloat  The float parameter.
