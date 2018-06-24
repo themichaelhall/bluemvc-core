@@ -263,6 +263,16 @@ abstract class AbstractController implements ControllerInterface
 
                         $parameter = $floatVal;
                         break;
+                    case 'bool':
+                        if ($parameter === 'true') {
+                            $parameter = true;
+                        } elseif ($parameter === 'false') {
+                            $parameter = false;
+                        } else {
+                            return false;
+                        }
+
+                        break;
                     case 'string':
                         $parameter = strval($parameter);
                         break;

@@ -57,28 +57,44 @@ class TypeHintActionParametersTestController extends Controller
     }
 
     /**
+     * Boolean types action.
+     *
+     * @param bool      $foo    The first parameter.
+     * @param bool|null $bar    The second parameter.
+     * @param bool|null $baz    The third parameter.
+     * @param bool      $fooBar The fourth parameter.
+     *
+     * @return string The result.
+     */
+    public function boolTypesAction(bool $foo, ?bool $bar, ?bool $baz = null, bool $fooBar = true): string
+    {
+        return 'BoolTypesAction: Foo=[' . gettype($foo) . ':' . $foo . '], Bar=[' . gettype($bar) . ':' . $bar . '], Baz=[' . gettype($baz) . ':' . $baz . '], FooBar=[' . gettype($fooBar) . ':' . $fooBar . ']';
+    }
+
+    /**
      * Mixed types action.
      *
      * @param float  $typeFloat  The float parameter.
      * @param int    $typeInt    The integer parameter.
      * @param string $typeString The string parameter.
+     * @param bool   $typeBool   The boolean parameter.
      *
      * @return string The result.
      */
-    public function mixedTypesAction(float $typeFloat, int $typeInt, string $typeString): string
+    public function mixedTypesAction(float $typeFloat, int $typeInt, string $typeString, bool $typeBool = false): string
     {
-        return 'MixedTypesAction: TypeFloat=[' . gettype($typeFloat) . ':' . $typeFloat . '], TypeInt=[' . gettype($typeInt) . ':' . $typeInt . '], TypeString=[' . gettype($typeString) . ':' . $typeString . ']';
+        return 'MixedTypesAction: TypeFloat=[' . gettype($typeFloat) . ':' . $typeFloat . '], TypeInt=[' . gettype($typeInt) . ':' . $typeInt . '], TypeString=[' . gettype($typeString) . ':' . $typeString . '], TypeBool=[' . gettype($typeBool) . ':' . $typeBool . ']';
     }
 
     /**
      * The default action.
      *
      * @param string $action The action.
-     * @param string $foo    The first parameter.
+     * @param int    $foo    The first parameter.
      *
      * @return string The result.
      */
-    public function defaultAction(string $action, string $foo): string
+    public function defaultAction(string $action, int $foo = -1): string
     {
         return 'DefaultAction: Action=[' . gettype($action) . ':' . $action . '], Foo=[' . gettype($foo) . ':' . $foo . ']';
     }
