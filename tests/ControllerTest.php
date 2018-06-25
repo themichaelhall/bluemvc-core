@@ -16,6 +16,7 @@ use BlueMvc\Core\Tests\Helpers\TestControllers\DefaultActionTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\MultiLevelTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\PreAndPostActionEventController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\SpecialActionNameTestController;
+use BlueMvc\Core\Tests\Helpers\TestControllers\TypeHintActionParametersTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\UppercaseActionTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ViewTestController;
 use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
@@ -699,5 +700,98 @@ class ControllerTest extends TestCase
         $controller->processRequest($application, $request, $response, 'foo', []);
 
         self::assertNull($controller->getActionMethod());
+    }
+
+    /**
+     * Test type hinted action parameters.
+     *
+     * @dataProvider typeHintActionParametersDataProvider
+     *
+     * @param string $action             The action.
+     * @param array  $parameters         The parameters.
+     * @param int    $expectedStatusCode The expected status code.
+     * @param string $expectedContent    The expected content.
+     */
+    public function testTypeHintActionParameters(string $action, array $parameters, int $expectedStatusCode, string $expectedContent)
+    {
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
+        $response = new BasicTestResponse();
+        $controller = new TypeHintActionParametersTestController();
+        $controller->processRequest($application, $request, $response, $action, $parameters);
+
+        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
+        self::assertSame($expectedContent, $response->getContent());
+    }
+
+    /**
+     * Data provider for type hinted action parameter tests.
+     *
+     * @return array The data.
+     */
+    public function typeHintActionParametersDataProvider()
+    {
+        return [
+            ['stringTypes', [], StatusCode::NOT_FOUND, ''],
+            ['stringTypes', ['param1'], StatusCode::NOT_FOUND, ''],
+            ['stringTypes', ['param1', 'param2'], StatusCode::OK, 'StringTypesAction: Foo=[string:param1], Bar=[string:param2], Baz=[NULL:], FooBar=[string:Foo Bar]'],
+            ['stringTypes', ['param1', 'param2', 'param3'], StatusCode::OK, 'StringTypesAction: Foo=[string:param1], Bar=[string:param2], Baz=[string:param3], FooBar=[string:Foo Bar]'],
+            ['stringTypes', ['param1', 'param2', 'param3', 'param4'], StatusCode::OK, 'StringTypesAction: Foo=[string:param1], Bar=[string:param2], Baz=[string:param3], FooBar=[string:param4]'],
+            ['stringTypes', ['param1', 'param2', 'param3', 'param4', 'param5'], StatusCode::NOT_FOUND, ''],
+            ['stringTypes', ['10', '20.30', 'false', 'true'], StatusCode::OK, 'StringTypesAction: Foo=[string:10], Bar=[string:20.30], Baz=[string:false], FooBar=[string:true]'],
+            ['intTypes', [], StatusCode::NOT_FOUND, ''],
+            ['intTypes', ['10'], StatusCode::NOT_FOUND, ''],
+            ['intTypes', ['10', '20'], StatusCode::OK, 'IntTypesAction: Foo=[integer:10], Bar=[integer:20], Baz=[NULL:], FooBar=[integer:42]'],
+            ['intTypes', ['10', '20', '30'], StatusCode::OK, 'IntTypesAction: Foo=[integer:10], Bar=[integer:20], Baz=[integer:30], FooBar=[integer:42]'],
+            ['intTypes', ['10', '20', '30', '40'], StatusCode::OK, 'IntTypesAction: Foo=[integer:10], Bar=[integer:20], Baz=[integer:30], FooBar=[integer:40]'],
+            ['intTypes', ['10', '20', '30', '40', '50'], StatusCode::NOT_FOUND, ''],
+            ['intTypes', ['0', '0'], StatusCode::OK, 'IntTypesAction: Foo=[integer:0], Bar=[integer:0], Baz=[NULL:], FooBar=[integer:42]'],
+            ['intTypes', ['0', '-20'], StatusCode::OK, 'IntTypesAction: Foo=[integer:0], Bar=[integer:-20], Baz=[NULL:], FooBar=[integer:42]'],
+            ['intTypes', ['10', 'foo'], StatusCode::NOT_FOUND, ''],
+            ['intTypes', ['10', '050'], StatusCode::NOT_FOUND, ''],
+            ['intTypes', ['10', '+4'], StatusCode::NOT_FOUND, ''],
+            ['intTypes', ['12345678901234567890', '-12345678901234567890'], StatusCode::NOT_FOUND, ''],
+            ['floatTypes', [], StatusCode::NOT_FOUND, ''],
+            ['floatTypes', ['10'], StatusCode::NOT_FOUND, ''],
+            ['floatTypes', ['10', '1.5'], StatusCode::OK, 'FloatTypesAction: Foo=[double:10], Bar=[double:1.5], Baz=[NULL:], FooBar=[double:0.5]'],
+            ['floatTypes', ['-1', '0.0', '-200E6'], StatusCode::OK, 'FloatTypesAction: Foo=[double:-1], Bar=[double:0], Baz=[double:-200000000], FooBar=[double:0.5]'],
+            ['floatTypes', ['9e-4', '0', '2.50', '-1e-10'], StatusCode::OK, 'FloatTypesAction: Foo=[double:0.0009], Bar=[double:0], Baz=[double:2.5], FooBar=[double:-1.0E-10]'],
+            ['floatTypes', ['0.1', '2.3', '4.5', '6.7', '8.9'], StatusCode::NOT_FOUND, ''],
+            ['floatTypes', ['0', '0'], StatusCode::OK, 'FloatTypesAction: Foo=[double:0], Bar=[double:0], Baz=[NULL:], FooBar=[double:0.5]'],
+            ['floatTypes', ['0.0', '0.0'], StatusCode::OK, 'FloatTypesAction: Foo=[double:0], Bar=[double:0], Baz=[NULL:], FooBar=[double:0.5]'],
+            ['floatTypes', ['10', 'foo'], StatusCode::NOT_FOUND, ''],
+            ['floatTypes', ['0x10', '50'], StatusCode::NOT_FOUND, ''],
+            ['floatTypes', ['1E1000', '50'], StatusCode::NOT_FOUND, ''],
+            ['floatTypes', ['50', '-1E-1000'], StatusCode::OK, 'FloatTypesAction: Foo=[double:50], Bar=[double:-0], Baz=[NULL:], FooBar=[double:0.5]'],
+            ['boolTypes', [], StatusCode::NOT_FOUND, ''],
+            ['boolTypes', ['true'], StatusCode::NOT_FOUND, ''],
+            ['boolTypes', ['true', 'false'], StatusCode::OK, 'BoolTypesAction: Foo=[boolean:1], Bar=[boolean:], Baz=[NULL:], FooBar=[boolean:1]'],
+            ['boolTypes', ['false', 'true', 'false'], StatusCode::OK, 'BoolTypesAction: Foo=[boolean:], Bar=[boolean:1], Baz=[boolean:], FooBar=[boolean:1]'],
+            ['boolTypes', ['true', 'false', 'true', 'false'], StatusCode::OK, 'BoolTypesAction: Foo=[boolean:1], Bar=[boolean:], Baz=[boolean:1], FooBar=[boolean:]'],
+            ['boolTypes', ['true', 'false', 'true', 'false', 'true'], StatusCode::NOT_FOUND, ''],
+            ['boolTypes', ['TRUE', 'false'], StatusCode::NOT_FOUND, ''],
+            ['boolTypes', ['true', 'FALSE'], StatusCode::NOT_FOUND, ''],
+            ['boolTypes', ['', 'false'], StatusCode::NOT_FOUND, ''],
+            ['boolTypes', ['1', 'false'], StatusCode::NOT_FOUND, ''],
+            ['boolTypes', ['0', 'false'], StatusCode::NOT_FOUND, ''],
+            ['arrayTypes', [], StatusCode::NOT_FOUND, ''],
+            ['arrayTypes', ['foo'], StatusCode::NOT_FOUND, ''],
+            ['arrayTypes', ['foo', 'bar'], StatusCode::NOT_FOUND, ''],
+            ['objectTypes', [], StatusCode::NOT_FOUND, ''],
+            ['objectTypes', ['foo'], StatusCode::NOT_FOUND, ''],
+            ['objectTypes', ['foo', 'bar'], StatusCode::NOT_FOUND, ''],
+            ['mixedTypes', [], StatusCode::NOT_FOUND, ''],
+            ['mixedTypes', ['1.0', 'foo', 'bar'], StatusCode::NOT_FOUND, ''],
+            ['mixedTypes', ['1.0', '123', 'bar'], StatusCode::OK, 'MixedTypesAction: TypeFloat=[double:1], TypeInt=[integer:123], TypeString=[string:bar], TypeBool=[boolean:]'],
+            ['mixedTypes', ['1.0', 'foo', '456'], StatusCode::NOT_FOUND, ''],
+            ['mixedTypes', ['baz', '123', 'bar'], StatusCode::NOT_FOUND, ''],
+            ['mixedTypes', ['1.0', '123', 'bar', 'true'], StatusCode::OK, 'MixedTypesAction: TypeFloat=[double:1], TypeInt=[integer:123], TypeString=[string:bar], TypeBool=[boolean:1]'],
+            ['mixedTypes', ['1.0', '123', 'bar', 'baz'], StatusCode::NOT_FOUND, ''],
+            ['nonExistingAction', [], StatusCode::OK, 'DefaultAction: Action=[string:nonExistingAction], Foo=[integer:-1]'],
+            ['nonExistingAction', ['1234'], StatusCode::OK, 'DefaultAction: Action=[string:nonExistingAction], Foo=[integer:1234]'],
+            ['nonExistingAction', ['param1'], StatusCode::NOT_FOUND, ''],
+            ['nonExistingAction', ['1234', 'param2'], StatusCode::NOT_FOUND, ''],
+            ['nonExistingAction', ['param1', 'param2'], StatusCode::NOT_FOUND, ''],
+        ];
     }
 }

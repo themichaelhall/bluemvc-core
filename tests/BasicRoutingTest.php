@@ -24,6 +24,7 @@ use BlueMvc\Core\Tests\Helpers\TestControllers\ExceptionTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\MultiLevelTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\PreAndPostActionEventController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\SpecialActionNameTestController;
+use BlueMvc\Core\Tests\Helpers\TestControllers\TypeHintActionParametersTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\UppercaseActionTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ViewTestController;
 use BlueMvc\Core\Tests\Helpers\TestPlugins\SetContentTestPlugin;
@@ -1079,6 +1080,135 @@ class BasicRoutingTest extends TestCase
     }
 
     /**
+     * Test get pages with typed hint action parameters.
+     *
+     * @dataProvider typeHintActionParameterPagesDataProvider
+     *
+     * @param string $url                The (relative) url.
+     * @param string $expectedContent    The expected content.
+     * @param array  $expectedHeaders    The expected headers.
+     * @param int    $expectedStatusCode The expected status code.
+     */
+    public function testTypeHintActionParameterPages(string $url, string $expectedContent, array $expectedHeaders, int $expectedStatusCode)
+    {
+        $_SERVER = ['HTTP_HOST' => 'www.example.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/typeHintActionParameters/' . $url, 'REQUEST_METHOD' => 'GET'];
+
+        $request = new Request();
+        $response = new Response();
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        self::assertSame($expectedContent, $responseOutput);
+        self::assertSame($expectedContent, $response->getContent());
+        self::assertSame($expectedHeaders, FakeHeaders::get());
+        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Data provider for type hint action parameter pages tests.
+     *
+     * @return array The data.
+     */
+    public function typeHintActionParameterPagesDataProvider()
+    {
+        return [
+            ['stringTypes', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['stringTypes/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['stringTypes/param1', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['stringTypes/param1/', 'StringTypesAction: Foo=[string:param1], Bar=[string:], Baz=[NULL:], FooBar=[string:Foo Bar]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['stringTypes/param1/param2', 'StringTypesAction: Foo=[string:param1], Bar=[string:param2], Baz=[NULL:], FooBar=[string:Foo Bar]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['stringTypes/param1/param2/', 'StringTypesAction: Foo=[string:param1], Bar=[string:param2], Baz=[string:], FooBar=[string:Foo Bar]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['stringTypes/param1/param2/param3', 'StringTypesAction: Foo=[string:param1], Bar=[string:param2], Baz=[string:param3], FooBar=[string:Foo Bar]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['stringTypes/param1/param2/param3/', 'StringTypesAction: Foo=[string:param1], Bar=[string:param2], Baz=[string:param3], FooBar=[string:]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['stringTypes/param1/param2/param3/param4', 'StringTypesAction: Foo=[string:param1], Bar=[string:param2], Baz=[string:param3], FooBar=[string:param4]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['stringTypes/param1/param2/param3/param4/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['stringTypes/param1/param2/param3/param4/param5', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['stringTypes/10/20.30/false/true', 'StringTypesAction: Foo=[string:10], Bar=[string:20.30], Baz=[string:false], FooBar=[string:true]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['intTypes', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['intTypes/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['intTypes/10', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['intTypes/10/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['intTypes/10/20', 'IntTypesAction: Foo=[integer:10], Bar=[integer:20], Baz=[NULL:], FooBar=[integer:42]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['intTypes/10/20/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['intTypes/10/20/30', 'IntTypesAction: Foo=[integer:10], Bar=[integer:20], Baz=[integer:30], FooBar=[integer:42]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['intTypes/10/20/30/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['intTypes/10/20/30/40', 'IntTypesAction: Foo=[integer:10], Bar=[integer:20], Baz=[integer:30], FooBar=[integer:40]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['intTypes/10/20/30/40/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['intTypes/10/20/30/40/50', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['intTypes/0/0', 'IntTypesAction: Foo=[integer:0], Bar=[integer:0], Baz=[NULL:], FooBar=[integer:42]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['intTypes/0/-20', 'IntTypesAction: Foo=[integer:0], Bar=[integer:-20], Baz=[NULL:], FooBar=[integer:42]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['intTypes/0/020', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['intTypes/0/+20', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['intTypes/12345678901234567890/-12345678901234567890', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['floatTypes', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['floatTypes/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['floatTypes/10', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['floatTypes/10/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['floatTypes/10/1.5', 'FloatTypesAction: Foo=[double:10], Bar=[double:1.5], Baz=[NULL:], FooBar=[double:0.5]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['floatTypes/10/1.5/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['floatTypes/10/1.5/-2e-20', 'FloatTypesAction: Foo=[double:10], Bar=[double:1.5], Baz=[double:-2.0E-20], FooBar=[double:0.5]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['floatTypes/10/1.5/-2e-20/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['floatTypes/10/1.5/-2e-20/0.005', 'FloatTypesAction: Foo=[double:10], Bar=[double:1.5], Baz=[double:-2.0E-20], FooBar=[double:0.005]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['floatTypes/10/1.5/-2e-20/0.005/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['floatTypes/10/1.5/-2e-20/0.005/1.0', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['floatTypes/0/0', 'FloatTypesAction: Foo=[double:0], Bar=[double:0], Baz=[NULL:], FooBar=[double:0.5]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['floatTypes/0.0/0.0', 'FloatTypesAction: Foo=[double:0], Bar=[double:0], Baz=[NULL:], FooBar=[double:0.5]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['floatTypes/10/foo', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['floatTypes/0x10/50', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['floatTypes/1E1000/50', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['floatTypes/50/-1E-1000', 'FloatTypesAction: Foo=[double:50], Bar=[double:-0], Baz=[NULL:], FooBar=[double:0.5]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['boolTypes/true', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['boolTypes/true/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['boolTypes/true/false', 'BoolTypesAction: Foo=[boolean:1], Bar=[boolean:], Baz=[NULL:], FooBar=[boolean:1]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['boolTypes/true/false/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['boolTypes/true/false/false', 'BoolTypesAction: Foo=[boolean:1], Bar=[boolean:], Baz=[boolean:], FooBar=[boolean:1]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['boolTypes/true/false/false/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['boolTypes/true/false/false/true', 'BoolTypesAction: Foo=[boolean:1], Bar=[boolean:], Baz=[boolean:], FooBar=[boolean:1]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['boolTypes/true/false/false/true/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['boolTypes/true/false/false/true/true', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['boolTypes/TRUE/false', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['boolTypes/true/FALSE', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['boolTypes/Foo/false', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['boolTypes/1/false', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['boolTypes/0/false', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['arrayTypes', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['arrayTypes/foo', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['arrayTypes/foo/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['arrayTypes/foo/bar', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['objectTypes', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['objectTypes/foo', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['objectTypes/foo/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['objectTypes/foo/bar', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['mixedTypes', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['mixedTypes/42/foo/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['mixedTypes/42/foo/bar', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['mixedTypes/42/foo/bar/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['mixedTypes/42/foo/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['mixedTypes/42/foo/123', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['mixedTypes/42/foo/123/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['mixedTypes/42/123/', 'MixedTypesAction: TypeFloat=[double:42], TypeInt=[integer:123], TypeString=[string:], TypeBool=[boolean:]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['mixedTypes/42/123/bar', 'MixedTypesAction: TypeFloat=[double:42], TypeInt=[integer:123], TypeString=[string:bar], TypeBool=[boolean:]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['mixedTypes/42/123/bar/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['mixedTypes/baz/123/bar', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['mixedTypes/baz/123/bar/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['mixedTypes/42/123/bar/true', 'MixedTypesAction: TypeFloat=[double:42], TypeInt=[integer:123], TypeString=[string:bar], TypeBool=[boolean:1]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['mixedTypes/42/123/bar/false', 'MixedTypesAction: TypeFloat=[double:42], TypeInt=[integer:123], TypeString=[string:bar], TypeBool=[boolean:]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['mixedTypes/42/123/bar/baz', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['mixedTypes/42/123/bar/true/false', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['nonExistingAction', 'DefaultAction: Action=[string:nonExistingAction], Foo=[integer:-1]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['nonExistingAction/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['nonExistingAction/1234', 'DefaultAction: Action=[string:nonExistingAction], Foo=[integer:1234]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['nonExistingAction/param1', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['nonExistingAction/1234/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['nonExistingAction/param1/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['nonExistingAction/1234/param2', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['nonExistingAction/param1/param2', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+        ];
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
@@ -1105,6 +1235,7 @@ class BasicRoutingTest extends TestCase
         $this->application->addRoute(new Route('specialActionName', SpecialActionNameTestController::class));
         $this->application->addRoute(new Route('cookies', CookieTestController::class));
         $this->application->addRoute(new Route('multiple/level', MultiLevelTestController::class));
+        $this->application->addRoute(new Route('typeHintActionParameters', TypeHintActionParametersTestController::class));
     }
 
     /**

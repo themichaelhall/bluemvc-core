@@ -37,11 +37,11 @@ class ErrorTraitTestController extends Controller implements ErrorControllerInte
     /**
      * Default action.
      *
-     * @param string $statusCode The status code as a string.
+     * @param int $statusCode The status code as a string.
      *
      * @return View The result.
      */
-    public function defaultAction($statusCode)
+    public function defaultAction(int $statusCode)
     {
         $errorText = 'Error: ' . $statusCode;
         $throwable = $this->getThrowable();

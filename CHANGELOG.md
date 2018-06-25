@@ -1,5 +1,6 @@
 ## Unreleased
 - Added ActionResult.
+- Added type hints functionality in action method parameters.
 - Deprecated AbstractActionResult.
 
 ## [2.0.1] 2018-06-19
