@@ -168,122 +168,12 @@ abstract class AbstractController implements ControllerInterface
 
         $hasFoundActionMethod = true;
 
-        if (!self::actionMethodMatchesParameters($actionMethod, $parameters, $actualParameters)) {
+        if (!self::actionMethodMatchesParameters($actionMethod, $parameters, $adjustedParameters)) {
             // Action method found, but parameters did not match.
             return false;
         }
 
-        $result = $this->invokeActionMethod($actionMethod, $actualParameters);
-
-        return true;
-    }
-
-    /**
-     * Invoke action method.
-     *
-     * @param \ReflectionMethod $actionMethod The action method.
-     * @param array             $parameters   The parameters.
-     *
-     * @return mixed|null The result.
-     */
-    private function invokeActionMethod(\ReflectionMethod $actionMethod, array $parameters)
-    {
-        $this->actionMethod = $actionMethod;
-
-        // Handle pre-action event.
-        $preActionResult = $this->isPreActionEventEnabled() ? $this->onPreActionEvent() : null;
-        if ($preActionResult !== null) {
-            return $preActionResult;
-        }
-
-        // Handle action method.
-        $result = $actionMethod->invokeArgs($this, $parameters);
-
-        // Handle post-action event.
-        $postActionResult = $this->isPostActionEventEnabled() ? $this->onPostActionEvent() : null;
-        if ($postActionResult !== null) {
-            return $postActionResult;
-        }
-
-        return $result;
-    }
-
-    /**
-     * Check if an action method matches an array of parameters.
-     *
-     * @param \ReflectionMethod $reflectionMethod The action method.
-     * @param array             $parameters       The parameters.
-     * @param array|null        $actualParameters The actual parameters, matching action methods actual signature or undefined if check failed.
-     *
-     * @return bool True if action method matches the parameters, false otherwise.
-     */
-    private static function actionMethodMatchesParameters(\ReflectionMethod $reflectionMethod, array $parameters, array &$actualParameters = null): bool
-    {
-        $parametersCount = count($parameters);
-
-        if ($reflectionMethod->getNumberOfParameters() < $parametersCount) {
-            return false;
-        }
-
-        $actualParameters = [];
-        reset($parameters);
-
-        foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
-            if (key($parameters) === null) {
-                // No more parameters.
-                if ($reflectionParameter->isOptional()) {
-                    // It's still ok if the action method parameter is optional.
-                    continue;
-                }
-
-                return false;
-            }
-
-            $parameter = current($parameters);
-
-            if ($reflectionParameter->getType() !== null) {
-                switch ($reflectionParameter->getType()->getName()) {
-                    case 'int':
-                        $intVal = intval($parameter);
-                        if (strval($intVal) !== $parameter) {
-                            return false;
-                        }
-
-                        $parameter = $intVal;
-                        break;
-                    case 'float':
-                        if (!is_numeric($parameter)) {
-                            return false;
-                        }
-
-                        $floatVal = floatval($parameter);
-                        if (is_infinite($floatVal) || is_nan($floatVal)) {
-                            return false;
-                        }
-
-                        $parameter = $floatVal;
-                        break;
-                    case 'bool':
-                        if ($parameter === 'true') {
-                            $parameter = true;
-                        } elseif ($parameter === 'false') {
-                            $parameter = false;
-                        } else {
-                            return false;
-                        }
-
-                        break;
-                    case 'string':
-                        $parameter = strval($parameter);
-                        break;
-                    default:
-                        return false;
-                }
-            }
-
-            $actualParameters[] = $parameter;
-            next($parameters);
-        }
+        $result = $this->invokeActionMethod($actionMethod, $adjustedParameters);
 
         return true;
     }
@@ -321,6 +211,137 @@ abstract class AbstractController implements ControllerInterface
         }
 
         return $actionMethod;
+    }
+
+    /**
+     * Invoke action method.
+     *
+     * @param \ReflectionMethod $actionMethod The action method.
+     * @param array             $parameters   The parameters.
+     *
+     * @return mixed|null The result.
+     */
+    private function invokeActionMethod(\ReflectionMethod $actionMethod, array $parameters)
+    {
+        $this->actionMethod = $actionMethod;
+
+        // Handle pre-action event.
+        $preActionResult = $this->isPreActionEventEnabled() ? $this->onPreActionEvent() : null;
+        if ($preActionResult !== null) {
+            return $preActionResult;
+        }
+
+        // Handle action method.
+        $result = $actionMethod->invokeArgs($this, $parameters);
+
+        // Handle post-action event.
+        $postActionResult = $this->isPostActionEventEnabled() ? $this->onPostActionEvent() : null;
+        if ($postActionResult !== null) {
+            return $postActionResult;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Check if an action method matches an array of parameters.
+     *
+     * @param \ReflectionMethod $reflectionMethod   The action method.
+     * @param array             $parameters         The parameters.
+     * @param array|null        $adjustedParameters The actual parameters, matching action methods actual signature or undefined if check failed.
+     *
+     * @return bool True if action method matches the parameters, false otherwise.
+     */
+    private static function actionMethodMatchesParameters(\ReflectionMethod $reflectionMethod, array $parameters, array &$adjustedParameters = null): bool
+    {
+        $parametersCount = count($parameters);
+
+        if ($reflectionMethod->getNumberOfParameters() < $parametersCount) {
+            return false;
+        }
+
+        $adjustedParameters = [];
+        reset($parameters);
+
+        foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
+            if (key($parameters) === null) {
+                // No more parameters.
+                if ($reflectionParameter->isOptional()) {
+                    // It's still ok if the action method parameter is optional.
+                    continue;
+                }
+
+                return false;
+            }
+
+            $parameter = current($parameters);
+            if (!self::actionMethodParameterMatchesParameter($reflectionParameter, $parameter, $adjustedParameter)) {
+                return false;
+            }
+
+            $adjustedParameters[] = $adjustedParameter;
+            next($parameters);
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if an action method parameter matches a parameter.
+     *
+     * @param \ReflectionParameter $reflectionParameter The action method parameter.
+     * @param mixed                $parameter           The parameter.
+     * @param mixed|null           $adjustedParameter   The adjusted parameter.
+     *
+     * @return bool True if parameter matches, false otherwise.
+     */
+    private static function actionMethodParameterMatchesParameter(\ReflectionParameter $reflectionParameter, $parameter, &$adjustedParameter = null)
+    {
+        $adjustedParameter = $parameter;
+
+        if ($reflectionParameter->getType() === null) {
+            return true;
+        }
+
+        switch ($reflectionParameter->getType()->getName()) {
+            case 'int':
+                $intVal = intval($parameter);
+                if (strval($intVal) !== $parameter) {
+                    return false;
+                }
+
+                $adjustedParameter = $intVal;
+                break;
+            case 'float':
+                if (!is_numeric($parameter)) {
+                    return false;
+                }
+
+                $floatVal = floatval($parameter);
+                if (is_infinite($floatVal) || is_nan($floatVal)) {
+                    return false;
+                }
+
+                $adjustedParameter = $floatVal;
+                break;
+            case 'bool':
+                if ($parameter === 'true') {
+                    $adjustedParameter = true;
+                } elseif ($parameter === 'false') {
+                    $adjustedParameter = false;
+                } else {
+                    return false;
+                }
+
+                break;
+            case 'string':
+                $adjustedParameter = strval($parameter);
+                break;
+            default:
+                return false;
+        }
+
+        return true;
     }
 
     /**
