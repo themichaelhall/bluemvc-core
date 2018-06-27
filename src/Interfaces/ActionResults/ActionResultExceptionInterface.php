@@ -13,7 +13,7 @@ namespace BlueMvc\Core\Interfaces\ActionResults;
  *
  * @since 2.1.0
  */
-interface ActionResultExceptionInterface
+interface ActionResultExceptionInterface extends \Throwable
 {
     /**
      * Returns the action result.

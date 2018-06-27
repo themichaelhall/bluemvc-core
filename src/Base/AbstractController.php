@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Base;
 
+use BlueMvc\Core\Interfaces\ActionResults\ActionResultExceptionInterface;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\ControllerInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
@@ -232,7 +233,11 @@ abstract class AbstractController implements ControllerInterface
         }
 
         // Handle action method.
-        $result = $actionMethod->invokeArgs($this, $parameters);
+        try {
+            $result = $actionMethod->invokeArgs($this, $parameters);
+        } catch (ActionResultExceptionInterface $exception) {
+            $result = $exception->getActionResult();
+        }
 
         // Handle post-action event.
         $postActionResult = $this->isPostActionEventEnabled() ? $this->onPostActionEvent() : null;

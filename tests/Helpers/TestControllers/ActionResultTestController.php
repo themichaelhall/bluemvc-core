@@ -27,7 +27,7 @@ class ActionResultTestController extends Controller
      *
      * @return NotFoundResult The action result.
      */
-    public function notfoundAction()
+    public function notFoundAction()
     {
         return new NotFoundResult('Page was not found');
     }
@@ -67,7 +67,7 @@ class ActionResultTestController extends Controller
      *
      * @return NoContentResult The action result.
      */
-    public function nocontentAction()
+    public function noContentAction()
     {
         return new NoContentResult();
     }
@@ -77,7 +77,7 @@ class ActionResultTestController extends Controller
      *
      * @return NotModifiedResult The action result.
      */
-    public function notmodifiedAction()
+    public function notModifiedAction()
     {
         return new NotModifiedResult();
     }
@@ -87,7 +87,7 @@ class ActionResultTestController extends Controller
      *
      * @return MethodNotAllowedResult The action result.
      */
-    public function methodnotallowedAction()
+    public function methodNotAllowedAction()
     {
         return new MethodNotAllowedResult();
     }
@@ -109,7 +109,7 @@ class ActionResultTestController extends Controller
      */
     public function createdAction()
     {
-        return new CreatedResult();
+        return new CreatedResult('https://example.com/created');
     }
 
     /**

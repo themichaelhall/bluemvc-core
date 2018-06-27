@@ -9,6 +9,7 @@ use BlueMvc\Core\Http\Method;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ActionMethodVisibilityTestController;
+use BlueMvc\Core\Tests\Helpers\TestControllers\ActionResultExceptionTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ActionResultTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\CustomViewPathTestController;
@@ -149,7 +150,7 @@ class ControllerTest extends TestCase
     }
 
     /**
-     * Test an action returning a ActionResult.
+     * Test actions returning a ActionResult.
      *
      * @dataProvider actionReturningActionResultDataProvider
      *
@@ -172,6 +173,29 @@ class ControllerTest extends TestCase
     }
 
     /**
+     * Test actions returning a ActionResultException.
+     *
+     * @dataProvider actionReturningActionResultDataProvider
+     *
+     * @param string $path               The path.
+     * @param int    $expectedStatusCode The expected status code.
+     * @param array  $expectedHeaders    The expected headers.
+     * @param string $expectedContent    The expected content.
+     */
+    public function testActionReturningActionResultException(string $path, int $expectedStatusCode, array $expectedHeaders, string $expectedContent)
+    {
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/' . $path), new Method('GET'));
+        $response = new BasicTestResponse();
+        $controller = new ActionResultExceptionTestController();
+        $controller->processRequest($application, $request, $response, $path);
+
+        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
+        self::assertSame($expectedHeaders, iterator_to_array($response->getHeaders()));
+        self::assertSame($expectedContent, $response->getContent());
+    }
+
+    /**
      * Data provider for action result tests.
      *
      * @return array The data.
@@ -179,15 +203,15 @@ class ControllerTest extends TestCase
     public function actionReturningActionResultDataProvider()
     {
         return [
-            ['notfound', StatusCode::NOT_FOUND, [], 'Page was not found'],
+            ['notFound', StatusCode::NOT_FOUND, [], 'Page was not found'],
             ['redirect', StatusCode::FOUND, ['Location' => 'http://www.domain.com/foo/bar'], ''],
             ['permanentRedirect', StatusCode::MOVED_PERMANENTLY, ['Location' => 'https://domain.com/'], ''],
             ['forbidden', StatusCode::FORBIDDEN, [], 'Page is forbidden'],
-            ['nocontent', StatusCode::NO_CONTENT, [], ''],
-            ['notmodified', StatusCode::NOT_MODIFIED, [], ''],
-            ['methodnotallowed', StatusCode::METHOD_NOT_ALLOWED, [], ''],
+            ['noContent', StatusCode::NO_CONTENT, [], ''],
+            ['notModified', StatusCode::NOT_MODIFIED, [], ''],
+            ['methodNotAllowed', StatusCode::METHOD_NOT_ALLOWED, [], ''],
             ['json', StatusCode::OK, ['Content-Type' => 'application/json'], '{"Foo":1,"Bar":{"Baz":2}}'],
-            ['created', StatusCode::CREATED, ['Location' => 'http://www.domain.com/created'], ''],
+            ['created', StatusCode::CREATED, ['Location' => 'https://example.com/created'], ''],
             ['custom', StatusCode::MULTI_STATUS, [], 'Custom action result'],
         ];
     }

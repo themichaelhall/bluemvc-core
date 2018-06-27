@@ -13,6 +13,7 @@ use BlueMvc\Core\Route;
 use BlueMvc\Core\Tests\Helpers\Fakes\FakeHeaders;
 use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ActionMethodVisibilityTestController;
+use BlueMvc\Core\Tests\Helpers\TestControllers\ActionResultExceptionTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ActionResultTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\CookieTestController;
@@ -392,6 +393,33 @@ class BasicRoutingTest extends TestCase
     }
 
     /**
+     * Test get page returning action result exception.
+     *
+     * @dataProvider getPageReturningActionResultDataProvider
+     *
+     * @param string $path               The path.
+     * @param int    $expectedStatusCode The expected status code.
+     * @param array  $expectedHeaders    The expected headers.
+     * @param string $expectedContent    The expected content.
+     */
+    public function testGetPageReturningActionResultException(string $path, int $expectedStatusCode, array $expectedHeaders, string $expectedContent)
+    {
+        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionResultException/' . $path, 'REQUEST_METHOD' => 'GET'];
+
+        $request = new Request();
+        $response = new Response();
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
+        self::assertSame($expectedHeaders, FakeHeaders::get());
+        self::assertSame($expectedContent, $responseOutput);
+        self::assertSame($expectedContent, $response->getContent());
+    }
+
+    /**
      * Data provider for page returning action results test.
      *
      * @return array The data.
@@ -399,15 +427,15 @@ class BasicRoutingTest extends TestCase
     public function getPageReturningActionResultDataProvider()
     {
         return [
-            ['notfound', StatusCode::NOT_FOUND, ['HTTP/1.1 404 Not Found'], 'Page was not found'],
+            ['notFound', StatusCode::NOT_FOUND, ['HTTP/1.1 404 Not Found'], 'Page was not found'],
             ['redirect', StatusCode::FOUND, ['HTTP/1.1 302 Found', 'Location: http://www.domain.com/foo/bar'], ''],
             ['permanentRedirect', StatusCode::MOVED_PERMANENTLY, ['HTTP/1.1 301 Moved Permanently', 'Location: https://domain.com/'], ''],
             ['forbidden', StatusCode::FORBIDDEN, ['HTTP/1.1 403 Forbidden'], 'Page is forbidden'],
-            ['nocontent', StatusCode::NO_CONTENT, ['HTTP/1.1 204 No Content'], ''],
-            ['notmodified', StatusCode::NOT_MODIFIED, ['HTTP/1.1 304 Not Modified'], ''],
-            ['methodnotallowed', StatusCode::METHOD_NOT_ALLOWED, ['HTTP/1.1 405 Method Not Allowed'], ''],
+            ['noContent', StatusCode::NO_CONTENT, ['HTTP/1.1 204 No Content'], ''],
+            ['notModified', StatusCode::NOT_MODIFIED, ['HTTP/1.1 304 Not Modified'], ''],
+            ['methodNotAllowed', StatusCode::METHOD_NOT_ALLOWED, ['HTTP/1.1 405 Method Not Allowed'], ''],
             ['json', StatusCode::OK, ['HTTP/1.1 200 OK', 'Content-Type: application/json'], '{"Foo":1,"Bar":{"Baz":2}}'],
-            ['created', StatusCode::CREATED, ['HTTP/1.1 201 Created', 'Location: http://www.domain.com/actionresult/created'], ''],
+            ['created', StatusCode::CREATED, ['HTTP/1.1 201 Created', 'Location: https://example.com/created'], ''],
             ['custom', StatusCode::MULTI_STATUS, ['HTTP/1.1 207 Multi-Status'], 'Custom action result'],
         ];
     }
@@ -1227,6 +1255,7 @@ class BasicRoutingTest extends TestCase
         $this->application->addRoute(new Route('default', DefaultActionTestController::class));
         $this->application->addRoute(new Route('defaultview', DefaultActionWithViewTestController::class));
         $this->application->addRoute(new Route('actionresult', ActionResultTestController::class));
+        $this->application->addRoute(new Route('actionResultException', ActionResultExceptionTestController::class));
         $this->application->addRoute(new Route('preandpostactionevent', PreAndPostActionEventController::class));
         $this->application->addRoute(new Route('exception', ExceptionTestController::class));
         $this->application->addRoute(new Route('uppercase', UppercaseActionTestController::class));
