@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Base;
 
+use BlueMvc\Core\Interfaces\ActionResults\ActionResultExceptionInterface;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\ControllerInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
@@ -226,16 +227,29 @@ abstract class AbstractController implements ControllerInterface
         $this->actionMethod = $actionMethod;
 
         // Handle pre-action event.
-        $preActionResult = $this->isPreActionEventEnabled() ? $this->onPreActionEvent() : null;
+        try {
+            $preActionResult = $this->isPreActionEventEnabled() ? $this->onPreActionEvent() : null;
+        } catch (ActionResultExceptionInterface $exception) {
+            $preActionResult = $exception->getActionResult();
+        }
+
         if ($preActionResult !== null) {
             return $preActionResult;
         }
 
         // Handle action method.
-        $result = $actionMethod->invokeArgs($this, $parameters);
+        try {
+            $result = $actionMethod->invokeArgs($this, $parameters);
+        } catch (ActionResultExceptionInterface $exception) {
+            $result = $exception->getActionResult();
+        }
 
         // Handle post-action event.
-        $postActionResult = $this->isPostActionEventEnabled() ? $this->onPostActionEvent() : null;
+        try {
+            $postActionResult = $this->isPostActionEventEnabled() ? $this->onPostActionEvent() : null;
+        } catch (ActionResultExceptionInterface $exception) {
+            $postActionResult = $exception->getActionResult();
+        }
         if ($postActionResult !== null) {
             return $postActionResult;
         }
