@@ -16,6 +16,7 @@ use BlueMvc\Core\Tests\Helpers\TestControllers\CustomViewPathTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\DefaultActionTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\MultiLevelTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\PreAndPostActionEventController;
+use BlueMvc\Core\Tests\Helpers\TestControllers\PreAndPostActionEventExceptionController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\SpecialActionNameTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\TypeHintActionParametersTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\UppercaseActionTestController;
@@ -293,6 +294,30 @@ class ControllerTest extends TestCase
         $request = new BasicTestRequest(Url::parse('http://www.domain.com:' . $port . '/' . $action), new Method('GET'));
         $response = new BasicTestResponse();
         $controller = new PreAndPostActionEventController();
+        $controller->processRequest($application, $request, $response, $action);
+
+        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
+        self::assertSame($expectedHeaders, iterator_to_array($response->getHeaders()));
+        self::assertSame($expectedContent, $response->getContent());
+    }
+
+    /**
+     * Test pre- and post-action event returning action result exceptions.
+     *
+     * @dataProvider preAndPostActionEventDataProvider
+     *
+     * @param string $action             The action.
+     * @param int    $port               The port.
+     * @param int    $expectedStatusCode The expected status code.
+     * @param array  $expectedHeaders    The expected headers.
+     * @param string $expectedContent    The expected content.
+     */
+    public function testPreAndPostActionEventException(string $action, int $port, int $expectedStatusCode, array $expectedHeaders, string $expectedContent)
+    {
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com:' . $port . '/' . $action), new Method('GET'));
+        $response = new BasicTestResponse();
+        $controller = new PreAndPostActionEventExceptionController();
         $controller->processRequest($application, $request, $response, $action);
 
         self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());

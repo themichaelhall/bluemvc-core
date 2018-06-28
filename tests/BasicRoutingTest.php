@@ -24,6 +24,7 @@ use BlueMvc\Core\Tests\Helpers\TestControllers\ErrorTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ExceptionTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\MultiLevelTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\PreAndPostActionEventController;
+use BlueMvc\Core\Tests\Helpers\TestControllers\PreAndPostActionEventExceptionController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\SpecialActionNameTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\TypeHintActionParametersTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\UppercaseActionTestController;
@@ -453,7 +454,35 @@ class BasicRoutingTest extends TestCase
      */
     public function testGetPagesWithPreAndPostActionEvent(string $action, int $port, int $expectedStatusCode, array $expectedHeaders, string $expectedContent)
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com:' . $port, 'REQUEST_URI' => '/preandpostactionevent/' . $action, 'REQUEST_METHOD' => 'GET'];
+        $_SERVER = ['HTTP_HOST' => 'www.domain.com:' . $port, 'REQUEST_URI' => '/preAndPostActionEvent/' . $action, 'REQUEST_METHOD' => 'GET'];
+
+        $request = new Request();
+        $response = new Response();
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
+        self::assertSame($expectedHeaders, FakeHeaders::get());
+        self::assertSame($expectedContent, $responseOutput);
+        self::assertSame($expectedContent, $response->getContent());
+    }
+
+    /**
+     * Test get pages with pre- and post-action event returning action result exceptions.
+     *
+     * @dataProvider preAndPostActionEventDataProvider
+     *
+     * @param string $action             The action.
+     * @param int    $port               The port.
+     * @param int    $expectedStatusCode The expected status code.
+     * @param array  $expectedHeaders    The expected headers.
+     * @param string $expectedContent    The expected content.
+     */
+    public function testGetPagesWithPreAndPostActionEventException(string $action, int $port, int $expectedStatusCode, array $expectedHeaders, string $expectedContent)
+    {
+        $_SERVER = ['HTTP_HOST' => 'www.domain.com:' . $port, 'REQUEST_URI' => '/preAndPostActionEventException/' . $action, 'REQUEST_METHOD' => 'GET'];
 
         $request = new Request();
         $response = new Response();
@@ -1256,7 +1285,8 @@ class BasicRoutingTest extends TestCase
         $this->application->addRoute(new Route('defaultview', DefaultActionWithViewTestController::class));
         $this->application->addRoute(new Route('actionresult', ActionResultTestController::class));
         $this->application->addRoute(new Route('actionResultException', ActionResultExceptionTestController::class));
-        $this->application->addRoute(new Route('preandpostactionevent', PreAndPostActionEventController::class));
+        $this->application->addRoute(new Route('preAndPostActionEvent', PreAndPostActionEventController::class));
+        $this->application->addRoute(new Route('preAndPostActionEventException', PreAndPostActionEventExceptionController::class));
         $this->application->addRoute(new Route('exception', ExceptionTestController::class));
         $this->application->addRoute(new Route('uppercase', UppercaseActionTestController::class));
         $this->application->addRoute(new Route('multilevel', MultiLevelTestController::class));

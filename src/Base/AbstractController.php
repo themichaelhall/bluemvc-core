@@ -227,7 +227,12 @@ abstract class AbstractController implements ControllerInterface
         $this->actionMethod = $actionMethod;
 
         // Handle pre-action event.
-        $preActionResult = $this->isPreActionEventEnabled() ? $this->onPreActionEvent() : null;
+        try {
+            $preActionResult = $this->isPreActionEventEnabled() ? $this->onPreActionEvent() : null;
+        } catch (ActionResultExceptionInterface $exception) {
+            $preActionResult = $exception->getActionResult();
+        }
+
         if ($preActionResult !== null) {
             return $preActionResult;
         }
@@ -240,7 +245,11 @@ abstract class AbstractController implements ControllerInterface
         }
 
         // Handle post-action event.
-        $postActionResult = $this->isPostActionEventEnabled() ? $this->onPostActionEvent() : null;
+        try {
+            $postActionResult = $this->isPostActionEventEnabled() ? $this->onPostActionEvent() : null;
+        } catch (ActionResultExceptionInterface $exception) {
+            $postActionResult = $exception->getActionResult();
+        }
         if ($postActionResult !== null) {
             return $postActionResult;
         }

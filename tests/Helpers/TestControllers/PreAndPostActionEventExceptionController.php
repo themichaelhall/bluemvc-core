@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Tests\Helpers\TestControllers;
 
-use BlueMvc\Core\ActionResults\NotFoundResult;
+use BlueMvc\Core\ActionResults\ActionResult;
+use BlueMvc\Core\ActionResults\ActionResultException;
+use BlueMvc\Core\ActionResults\NotFoundResultException;
 use BlueMvc\Core\Controller;
+use BlueMvc\Core\Http\StatusCode;
 
 /**
- * Pre- and post-action event test controller class.
+ * Pre- and post-action event returning action result exception test controller class.
  */
-class PreAndPostActionEventController extends Controller
+class PreAndPostActionEventExceptionController extends Controller
 {
     /**
      * Index action.
@@ -37,33 +40,29 @@ class PreAndPostActionEventController extends Controller
     /**
      * Pre-action event.
      *
-     * @return NotFoundResult|null The result.
+     * @throws NotFoundResultException
      */
     protected function onPreActionEvent()
     {
         if ($this->getRequest()->getUrl()->getPort() === 81) {
-            return new NotFoundResult('This is a pre-action result');
+            throw new NotFoundResultException('This is a pre-action result');
         }
 
         $this->getResponse()->addHeader('X-Pre-Action', 'true');
-
-        return null;
     }
 
     /**
      * Post-action event.
      *
-     * @return string|null The result.
+     * @throws ActionResultException
      */
     protected function onPostActionEvent()
     {
         if ($this->getRequest()->getUrl()->getPort() === 82) {
-            return 'This is a post-action result';
+            throw new ActionResultException(new ActionResult('This is a post-action result', new StatusCode(StatusCode::OK)));
         }
 
         $this->getResponse()->addHeader('X-Post-Action', 'true');
-
-        return null;
     }
 
     /** @noinspection PhpMissingParentCallCommonInspection */
