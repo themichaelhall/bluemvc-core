@@ -112,6 +112,17 @@ class SessionItemCollectionTest extends TestCase
     }
 
     /**
+     * Test options is set.
+     */
+    public function testOptionsIsSet()
+    {
+        $sessionItemCollection = new SessionItemCollection(['Foo' => 'Bar']);
+        $sessionItemCollection->set('1', '2');
+
+        self::assertSame(['Foo' => 'Bar'], FakeSession::getOptions());
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

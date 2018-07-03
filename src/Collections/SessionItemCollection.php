@@ -18,6 +18,18 @@ use BlueMvc\Core\Interfaces\Collections\SessionItemCollectionInterface;
 class SessionItemCollection implements SessionItemCollectionInterface
 {
     /**
+     * SessionItemCollection constructor.
+     *
+     * @since 2.1.0
+     *
+     * @param array $options The options to pass to session_start() method.
+     */
+    public function __construct(array $options = [])
+    {
+        $this->options = $options;
+    }
+
+    /**
      * Returns the number of session items.
      *
      * @since 1.0.0
@@ -26,7 +38,7 @@ class SessionItemCollection implements SessionItemCollectionInterface
      */
     public function count(): int
     {
-        self::doInit();
+        $this->doInit();
 
         return count($_SESSION);
     }
@@ -40,7 +52,7 @@ class SessionItemCollection implements SessionItemCollectionInterface
      */
     public function current()
     {
-        self::doInit();
+        $this->doInit();
 
         return current($_SESSION);
     }
@@ -56,7 +68,7 @@ class SessionItemCollection implements SessionItemCollectionInterface
      */
     public function get(string $name)
     {
-        self::doInit();
+        $this->doInit();
 
         if (!isset($_SESSION[$name])) {
             return null;
@@ -74,7 +86,7 @@ class SessionItemCollection implements SessionItemCollectionInterface
      */
     public function key(): string
     {
-        self::doInit();
+        $this->doInit();
 
         return strval(key($_SESSION));
     }
@@ -86,7 +98,7 @@ class SessionItemCollection implements SessionItemCollectionInterface
      */
     public function next(): void
     {
-        self::doInit();
+        $this->doInit();
 
         next($_SESSION);
     }
@@ -100,7 +112,7 @@ class SessionItemCollection implements SessionItemCollectionInterface
      */
     public function remove(string $name): void
     {
-        self::doInit();
+        $this->doInit();
 
         unset($_SESSION[$name]);
     }
@@ -112,7 +124,7 @@ class SessionItemCollection implements SessionItemCollectionInterface
      */
     public function rewind(): void
     {
-        self::doInit();
+        $this->doInit();
 
         reset($_SESSION);
     }
@@ -127,7 +139,7 @@ class SessionItemCollection implements SessionItemCollectionInterface
      */
     public function set(string $name, $value): void
     {
-        self::doInit();
+        $this->doInit();
 
         $_SESSION[$name] = $value;
     }
@@ -141,7 +153,7 @@ class SessionItemCollection implements SessionItemCollectionInterface
      */
     public function valid(): bool
     {
-        self::doInit();
+        $this->doInit();
 
         return key($_SESSION) !== null;
     }
@@ -149,13 +161,15 @@ class SessionItemCollection implements SessionItemCollectionInterface
     /**
      * Initializes session if it is not already initialized.
      */
-    private static function doInit(): void
+    private function doInit(): void
     {
         if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start([
-                'cookie_httponly' => true,
-                'use_strict_mode' => true,
-            ]);
+            session_start($this->options);
         }
     }
+
+    /**
+     * @var array The options to pass to session_start() method.
+     */
+    private $options;
 }

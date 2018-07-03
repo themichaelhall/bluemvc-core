@@ -16,6 +16,7 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
         {
             self::$isEnabled = false;
             self::$status = PHP_SESSION_NONE;
+            self::$options = [];
             unset($_SESSION);
         }
 
@@ -26,6 +27,7 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
         {
             self::$isEnabled = true;
             self::$status = PHP_SESSION_NONE;
+            self::$options = [];
 
             if (!isset($_SESSION)) {
                 $_SESSION = [];
@@ -52,10 +54,23 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
 
         /**
          * Starts the session.
+         *
+         * @param array $options The options.
          */
-        public static function start(): void
+        public static function start(array $options): void
         {
             self::$status = PHP_SESSION_ACTIVE;
+            self::$options = $options;
+        }
+
+        /**
+         * Returns the options.
+         *
+         * @return array The options.
+         */
+        public static function getOptions(): array
+        {
+            return self::$options;
         }
 
         /**
@@ -67,6 +82,11 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
          * @var int My current session status.
          */
         private static $status = PHP_SESSION_NONE;
+
+        /**
+         * @var array My options.
+         */
+        private static $options = [];
     }
 }
 
@@ -84,7 +104,7 @@ namespace BlueMvc\Core\Collections {
     function session_start(array $options = []): bool
     {
         if (FakeSession::isEnabled()) {
-            FakeSession::start();
+            FakeSession::start($options);
 
             return true;
         }

@@ -912,6 +912,41 @@ class RequestTest extends TestCase
     }
 
     /**
+     * Test session options for non secure request (http).
+     */
+    public function testSessionOptionsForNonSecureRequest()
+    {
+        $_SERVER = [
+            'HTTP_HOST'      => 'localhost',
+            'REQUEST_URI'    => '/',
+            'REQUEST_METHOD' => 'GET',
+        ];
+
+        $request = new Request();
+        $request->setSessionItem('Foo', 'Bar');
+
+        self::assertSame(['cookie_httponly' => true, 'use_strict_mode' => true], FakeSession::getOptions());
+    }
+
+    /**
+     * Test session options for secure request (https).
+     */
+    public function testSessionOptionsForSecureRequest()
+    {
+        $_SERVER = [
+            'HTTP_HOST'      => 'localhost',
+            'REQUEST_URI'    => '/',
+            'REQUEST_METHOD' => 'GET',
+            'HTTPS'          => 'On',
+        ];
+
+        $request = new Request();
+        $request->setSessionItem('Foo', 'Bar');
+
+        self::assertSame(['cookie_httponly' => true, 'use_strict_mode' => true, 'cookie_secure' => true], FakeSession::getOptions());
+    }
+
+    /**
      * Set up.
      */
     public function setUp()

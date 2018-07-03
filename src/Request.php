@@ -19,6 +19,7 @@ use BlueMvc\Core\Http\Method;
 use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\ParameterCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\RequestCookieCollectionInterface;
+use BlueMvc\Core\Interfaces\Collections\SessionItemCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\UploadedFileCollectionInterface;
 use BlueMvc\Core\Interfaces\UploadedFileInterface;
 use DataTypes\FilePath;
@@ -43,15 +44,17 @@ class Request extends AbstractRequest
      */
     public function __construct()
     {
+        $url = self::parseUrl($_SERVER);
+
         parent::__construct(
-            self::parseUrl($_SERVER),
+            $url,
             new Method($_SERVER['REQUEST_METHOD']),
             self::parseHeaders($_SERVER),
             self::parseParameters($_GET),
             self::parseParameters($_POST),
             self::parseUploadedFiles($_FILES),
             self::parseCookies($_COOKIE),
-            new SessionItemCollection()
+            self::createSessionItems($url)
         );
 
         $clientIp = IPAddress::tryParse(isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '');
@@ -224,6 +227,27 @@ class Request extends AbstractRequest
         );
 
         return $result;
+    }
+
+    /**
+     * Creates the session items.
+     *
+     * @param UrlInterface $url The url of the request.
+     *
+     * @return SessionItemCollectionInterface The session items.
+     */
+    private static function createSessionItems(UrlInterface $url): SessionItemCollectionInterface
+    {
+        $options = [
+            'cookie_httponly' => true,
+            'use_strict_mode' => true,
+        ];
+
+        if ($url->getScheme()->isHttps()) {
+            $options['cookie_secure'] = true;
+        }
+
+        return new SessionItemCollection($options);
     }
 
     /**
