@@ -21,16 +21,9 @@ class RequestTest extends TestCase
      */
     public function testGetUrl()
     {
-        $_SERVER =
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'GET',
-            ];
-
         $request = new Request();
 
-        self::assertSame('http://www.domain.com/foo/bar', $request->getUrl()->__toString());
+        self::assertSame('http://example.com/foo/bar', $request->getUrl()->__toString());
     }
 
     /**
@@ -38,17 +31,11 @@ class RequestTest extends TestCase
      */
     public function testGetUrlForHttpsRequest()
     {
-        $_SERVER =
-            [
-                'HTTPS'          => 'On',
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'GET',
-            ];
+        $_SERVER['HTTPS'] = 'On';
 
         $request = new Request();
 
-        self::assertSame('https://www.domain.com/foo/bar', $request->getUrl()->__toString());
+        self::assertSame('https://example.com/foo/bar', $request->getUrl()->__toString());
     }
 
     /**
@@ -56,16 +43,11 @@ class RequestTest extends TestCase
      */
     public function testGetUrlWithPort()
     {
-        $_SERVER =
-            [
-                'HTTP_HOST'      => 'www.domain.com:8080',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'GET',
-            ];
+        $_SERVER['HTTP_HOST'] = 'example.com:8080';
 
         $request = new Request();
 
-        self::assertSame('http://www.domain.com:8080/foo/bar', $request->getUrl()->__toString());
+        self::assertSame('http://example.com:8080/foo/bar', $request->getUrl()->__toString());
     }
 
     /**
@@ -73,16 +55,11 @@ class RequestTest extends TestCase
      */
     public function testGetUrlWithEmptyQueryString()
     {
-        $_SERVER =
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar?',
-                'REQUEST_METHOD' => 'GET',
-            ];
+        $_SERVER['REQUEST_URI'] = '/foo/bar?';
 
         $request = new Request();
 
-        self::assertSame('http://www.domain.com/foo/bar?', $request->getUrl()->__toString());
+        self::assertSame('http://example.com/foo/bar?', $request->getUrl()->__toString());
     }
 
     /**
@@ -90,16 +67,11 @@ class RequestTest extends TestCase
      */
     public function testGetUrlWithQueryString()
     {
-        $_SERVER =
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar?baz=true',
-                'REQUEST_METHOD' => 'GET',
-            ];
+        $_SERVER['REQUEST_URI'] = '/foo/bar?baz=true';
 
         $request = new Request();
 
-        self::assertSame('http://www.domain.com/foo/bar?baz=true', $request->getUrl()->__toString());
+        self::assertSame('http://example.com/foo/bar?baz=true', $request->getUrl()->__toString());
     }
 
     /**
@@ -107,12 +79,7 @@ class RequestTest extends TestCase
      */
     public function testGetMethod()
     {
-        $_SERVER =
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'POST',
-            ];
+        $_SERVER['REQUEST_METHOD'] = 'POST';
 
         $request = new Request();
 
@@ -124,17 +91,12 @@ class RequestTest extends TestCase
      */
     public function testGetHeaders()
     {
-        $_SERVER =
-            [
-                'HTTP_HOST'            => 'www.domain.com',
-                'REQUEST_URI'          => '/foo/bar',
-                'REQUEST_METHOD'       => 'GET',
-                'HTTP_ACCEPT_ENCODING' => 'gzip, deflate',
-            ];
+        $_SERVER['HTTP_HOST'] = 'www.example.com';
+        $_SERVER['HTTP_ACCEPT_ENCODING'] = 'gzip, deflate';
 
         $request = new Request();
 
-        self::assertSame(['Host' => 'www.domain.com', 'Accept-Encoding' => 'gzip, deflate'], iterator_to_array($request->getHeaders()));
+        self::assertSame(['Host' => 'www.example.com', 'Accept-Encoding' => 'gzip, deflate'], iterator_to_array($request->getHeaders()));
     }
 
     /**
@@ -142,13 +104,7 @@ class RequestTest extends TestCase
      */
     public function testGetHeader()
     {
-        $_SERVER =
-            [
-                'HTTP_HOST'            => 'www.domain.com',
-                'REQUEST_URI'          => '/foo/bar',
-                'REQUEST_METHOD'       => 'GET',
-                'HTTP_ACCEPT_ENCODING' => 'gzip, deflate',
-            ];
+        $_SERVER['HTTP_ACCEPT_ENCODING'] = 'gzip, deflate';
 
         $request = new Request();
 
@@ -161,13 +117,6 @@ class RequestTest extends TestCase
      */
     public function testGetUserAgentWithoutUserAgentSet()
     {
-        $_SERVER =
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'GET',
-            ];
-
         $request = new Request();
 
         self::assertSame('', $request->getUserAgent());
@@ -178,13 +127,7 @@ class RequestTest extends TestCase
      */
     public function testGetUserAgentWithUserAgentSet()
     {
-        $_SERVER =
-            [
-                'HTTP_HOST'       => 'www.domain.com',
-                'REQUEST_URI'     => '/foo/bar',
-                'REQUEST_METHOD'  => 'GET',
-                'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
-            ];
+        $_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36';
 
         $request = new Request();
 
@@ -196,13 +139,6 @@ class RequestTest extends TestCase
      */
     public function testGetFormParametersWithoutFormParametersSet()
     {
-        $_SERVER =
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'GET',
-            ];
-
         $request = new Request();
 
         self::assertSame([], iterator_to_array($request->getFormParameters()));
@@ -213,13 +149,6 @@ class RequestTest extends TestCase
      */
     public function testGetFormParametersWithFormParametersSet()
     {
-        $_SERVER =
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'GET',
-            ];
-
         $_POST =
             [
                 'Foo' => '1',
@@ -236,13 +165,6 @@ class RequestTest extends TestCase
      */
     public function testGetFormParameter()
     {
-        $_SERVER =
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'GET',
-            ];
-
         $_POST =
             [
                 'Foo' => '1',
@@ -261,13 +183,6 @@ class RequestTest extends TestCase
      */
     public function testGetQueryParametersWithoutQueryParametersSet()
     {
-        $_SERVER =
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'GET',
-            ];
-
         $request = new Request();
 
         self::assertSame([], iterator_to_array($request->getQueryParameters()));
@@ -278,13 +193,6 @@ class RequestTest extends TestCase
      */
     public function testGetQueryParametersWithQueryParametersSet()
     {
-        $_SERVER =
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'GET',
-            ];
-
         $_GET =
             [
                 'Foo' => '1',
@@ -301,13 +209,6 @@ class RequestTest extends TestCase
      */
     public function testGetQueryParameter()
     {
-        $_SERVER =
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'GET',
-            ];
-
         $_GET =
             [
                 'Foo' => '1',
@@ -326,13 +227,6 @@ class RequestTest extends TestCase
      */
     public function testGetQueryParameterWithNumericParameters()
     {
-        $_SERVER =
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'GET',
-            ];
-
         $_GET =
             [
                 1 => 2,
@@ -348,13 +242,6 @@ class RequestTest extends TestCase
      */
     public function testGetFormParameterWithNumericParameters()
     {
-        $_SERVER =
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'GET',
-            ];
-
         $_POST =
             [
                 1 => 2,
@@ -370,13 +257,6 @@ class RequestTest extends TestCase
      */
     public function testGetUploadedFilesWithNoUploadedFiles()
     {
-        $_SERVER =
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'GET',
-            ];
-
         $request = new Request();
 
         self::assertSame([], iterator_to_array($request->getUploadedFiles()));
@@ -388,13 +268,6 @@ class RequestTest extends TestCase
     public function testGetUploadedFilesWithUploadedFiles()
     {
         $DS = DIRECTORY_SEPARATOR;
-
-        $_SERVER =
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'GET',
-            ];
 
         $_FILES =
             [
@@ -434,13 +307,6 @@ class RequestTest extends TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
-        $_SERVER =
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'GET',
-            ];
-
         $_FILES =
             [
                 'foo' => [
@@ -475,13 +341,6 @@ class RequestTest extends TestCase
         $exceptionMessage = null;
 
         try {
-            $_SERVER =
-                [
-                    'HTTP_HOST'      => 'www.domain.com',
-                    'REQUEST_URI'    => '/foo/bar',
-                    'REQUEST_METHOD' => 'GET',
-                ];
-
             $_FILES =
                 [
                     'foo' => [
@@ -527,13 +386,6 @@ class RequestTest extends TestCase
     {
         $DS = DIRECTORY_SEPARATOR;
 
-        $_SERVER =
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'GET',
-            ];
-
         $_FILES =
             [
                 'foo' => [
@@ -559,13 +411,6 @@ class RequestTest extends TestCase
      */
     public function testGetUploadedFileWithNotUploadedFile()
     {
-        $_SERVER =
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'GET',
-            ];
-
         $_FILES =
             [
                 'foo' => [
@@ -588,13 +433,6 @@ class RequestTest extends TestCase
      */
     public function testGetCookiesWithNoCookiesSet()
     {
-        $_SERVER =
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'GET',
-            ];
-
         $request = new Request();
 
         self::assertSame([], iterator_to_array($request->getCookies()));
@@ -605,13 +443,6 @@ class RequestTest extends TestCase
      */
     public function testGetCookiesWithCookiesSet()
     {
-        $_SERVER =
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'GET',
-            ];
-
         $_COOKIE =
             [
                 'Foo' => 'Bar',
@@ -630,13 +461,6 @@ class RequestTest extends TestCase
      */
     public function testGetCookie()
     {
-        $_SERVER =
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'GET',
-            ];
-
         $_COOKIE =
             [
                 'Foo' => 'Bar',
@@ -656,13 +480,6 @@ class RequestTest extends TestCase
      */
     public function testGetCookieValue()
     {
-        $_SERVER =
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'GET',
-            ];
-
         $_COOKIE =
             [
                 'Foo' => 'Bar',
@@ -682,13 +499,6 @@ class RequestTest extends TestCase
      */
     public function testGetRawContentWithNoContentSet()
     {
-        $_SERVER =
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'GET',
-            ];
-
         $request = new Request();
 
         self::assertSame('', $request->getRawContent());
@@ -699,13 +509,6 @@ class RequestTest extends TestCase
      */
     public function testGetRawContentWithContentSet()
     {
-        $_SERVER =
-            [
-                'HTTP_HOST'      => 'www.domain.com',
-                'REQUEST_URI'    => '/foo/bar',
-                'REQUEST_METHOD' => 'GET',
-            ];
-
         FakeFileGetContentsPhpInput::setContent('<foo><bar>Baz</bar></foo>');
 
         $request = new Request();
@@ -719,11 +522,17 @@ class RequestTest extends TestCase
      */
     public function testGetClientIpWithNoAddressSet()
     {
-        $_SERVER = [
-            'HTTP_HOST'      => 'www.domain.com',
-            'REQUEST_URI'    => '/foo/bar',
-            'REQUEST_METHOD' => 'GET',
-        ];
+        $request = new Request();
+
+        self::assertSame('0.0.0.0', $request->getClientIp()->__toString());
+    }
+
+    /**
+     * Test getClientIp with invalid address set.
+     */
+    public function testGetClientIpWithInvalidAddressSet()
+    {
+        $_SERVER['REMOTE_ADDR'] = 'FooBar';
 
         $request = new Request();
 
@@ -735,12 +544,7 @@ class RequestTest extends TestCase
      */
     public function testGetClientIpWithAddressSet()
     {
-        $_SERVER = [
-            'HTTP_HOST'      => 'www.domain.com',
-            'REQUEST_URI'    => '/foo/bar',
-            'REQUEST_METHOD' => 'GET',
-            'REMOTE_ADDR'    => '10.20.30.40',
-        ];
+        $_SERVER['REMOTE_ADDR'] = '10.20.30.40';
 
         $request = new Request();
 
@@ -752,12 +556,6 @@ class RequestTest extends TestCase
      */
     public function testGetReferrerWithNoReferrerSet()
     {
-        $_SERVER = [
-            'HTTP_HOST'      => 'www.domain.com',
-            'REQUEST_URI'    => '/foo/bar',
-            'REQUEST_METHOD' => 'GET',
-        ];
-
         $request = new Request();
 
         self::assertNull($request->getReferrer());
@@ -768,12 +566,7 @@ class RequestTest extends TestCase
      */
     public function testGetReferrerWithInvalidReferrer()
     {
-        $_SERVER = [
-            'HTTP_HOST'      => 'www.domain.com',
-            'REQUEST_URI'    => '/foo/bar',
-            'REQUEST_METHOD' => 'GET',
-            'HTTP_REFERER'   => 'FooBar',
-        ];
+        $_SERVER['HTTP_REFERER'] = 'FooBar';
 
         $request = new Request();
 
@@ -785,12 +578,7 @@ class RequestTest extends TestCase
      */
     public function testGetReferrerWithValidReferrer()
     {
-        $_SERVER = [
-            'HTTP_HOST'      => 'www.domain.com',
-            'REQUEST_URI'    => '/foo/bar',
-            'REQUEST_METHOD' => 'GET',
-            'HTTP_REFERER'   => 'https://example.com:8080/foo/bar?baz',
-        ];
+        $_SERVER['HTTP_REFERER'] = 'https://example.com:8080/foo/bar?baz';
 
         $request = new Request();
 
@@ -802,12 +590,6 @@ class RequestTest extends TestCase
      */
     public function testGetSessionItemsWithNoSessionItemsSet()
     {
-        $_SERVER = [
-            'HTTP_HOST'      => 'localhost',
-            'REQUEST_URI'    => '/',
-            'REQUEST_METHOD' => 'GET',
-        ];
-
         $request = new Request();
         $sessionItems = $request->getSessionItems();
 
@@ -820,12 +602,6 @@ class RequestTest extends TestCase
      */
     public function testGetSessionItemsWithSessionItemsSet()
     {
-        $_SERVER = [
-            'HTTP_HOST'      => 'localhost',
-            'REQUEST_URI'    => '/',
-            'REQUEST_METHOD' => 'GET',
-        ];
-
         $_SESSION = [
             'Foo' => 'Bar',
         ];
@@ -842,12 +618,6 @@ class RequestTest extends TestCase
      */
     public function testSetSessionItem()
     {
-        $_SERVER = [
-            'HTTP_HOST'      => 'localhost',
-            'REQUEST_URI'    => '/',
-            'REQUEST_METHOD' => 'GET',
-        ];
-
         $request = new Request();
         $request->setSessionItem('Foo', 1);
         $request->setSessionItem('Bar', false);
@@ -863,12 +633,6 @@ class RequestTest extends TestCase
      */
     public function testGetSessionItem()
     {
-        $_SERVER = [
-            'HTTP_HOST'      => 'localhost',
-            'REQUEST_URI'    => '/',
-            'REQUEST_METHOD' => 'GET',
-        ];
-
         $_SESSION = [
             'Foo' => 'Bar',
             'Baz' => [true, false],
@@ -888,12 +652,6 @@ class RequestTest extends TestCase
      */
     public function testRemoveSessionItem()
     {
-        $_SERVER = [
-            'HTTP_HOST'      => 'localhost',
-            'REQUEST_URI'    => '/',
-            'REQUEST_METHOD' => 'GET',
-        ];
-
         $_SESSION = [
             'Foo' => 'Bar',
             'Baz' => [true, false],
@@ -916,12 +674,6 @@ class RequestTest extends TestCase
      */
     public function testSessionOptionsForNonSecureRequest()
     {
-        $_SERVER = [
-            'HTTP_HOST'      => 'localhost',
-            'REQUEST_URI'    => '/',
-            'REQUEST_METHOD' => 'GET',
-        ];
-
         $request = new Request();
         $request->setSessionItem('Foo', 'Bar');
 
@@ -933,12 +685,7 @@ class RequestTest extends TestCase
      */
     public function testSessionOptionsForSecureRequest()
     {
-        $_SERVER = [
-            'HTTP_HOST'      => 'localhost',
-            'REQUEST_URI'    => '/',
-            'REQUEST_METHOD' => 'GET',
-            'HTTPS'          => 'On',
-        ];
+        $_SERVER['HTTPS'] = 'On';
 
         $request = new Request();
         $request->setSessionItem('Foo', 'Bar');
@@ -952,6 +699,11 @@ class RequestTest extends TestCase
     public function setUp()
     {
         $this->originalServerArray = $_SERVER;
+        $_SERVER = [
+            'HTTP_HOST'      => 'example.com',
+            'REQUEST_URI'    => '/foo/bar',
+            'REQUEST_METHOD' => 'GET',
+        ];
 
         FakeIsUploadedFile::enable();
         FakeFileGetContentsPhpInput::enable();

@@ -46,8 +46,6 @@ class BasicRoutingTest extends TestCase
      */
     public function testGetIndexPage()
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET'];
-
         $request = new Request();
         $response = new Response();
         ob_start();
@@ -66,7 +64,7 @@ class BasicRoutingTest extends TestCase
      */
     public function testGetNonExistingAction()
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/notfound', 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/notfound';
 
         $request = new Request();
         $response = new Response();
@@ -86,7 +84,7 @@ class BasicRoutingTest extends TestCase
      */
     public function testGetNonExistingController()
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/non-existing-controller/action', 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/non-existing-controller/action';
 
         $request = new Request();
         $response = new Response();
@@ -106,7 +104,7 @@ class BasicRoutingTest extends TestCase
      */
     public function testGetServerErrorPage()
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/serverError', 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/serverError';
 
         $request = new Request();
         $response = new Response();
@@ -126,7 +124,7 @@ class BasicRoutingTest extends TestCase
      */
     public function testGetPageStartingWithNumericCharacter()
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/123numeric', 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/123numeric';
 
         $request = new Request();
         $response = new Response();
@@ -146,7 +144,7 @@ class BasicRoutingTest extends TestCase
      */
     public function testGetViewIndexPage()
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/view/', 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/view/';
 
         $request = new Request();
         $response = new Response();
@@ -166,7 +164,7 @@ class BasicRoutingTest extends TestCase
      */
     public function testGetViewWithModelPage()
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/view/withmodel', 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/view/withmodel';
 
         $request = new Request();
         $response = new Response();
@@ -186,7 +184,7 @@ class BasicRoutingTest extends TestCase
      */
     public function testGetViewWithViewDataPage()
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/view/withviewdata', 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/view/withviewdata';
 
         $request = new Request();
         $response = new Response();
@@ -209,7 +207,7 @@ class BasicRoutingTest extends TestCase
         $DS = DIRECTORY_SEPARATOR;
         $this->application->setDebug(true);
 
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/view/withnoviewfile', 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/view/withnoviewfile';
 
         $request = new Request();
         $response = new Response();
@@ -231,7 +229,7 @@ class BasicRoutingTest extends TestCase
      */
     public function testGetViewWithCustomViewFilePage()
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/view/withcustomviewfile', 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/view/withcustomviewfile';
 
         $request = new Request();
         $response = new Response();
@@ -240,8 +238,8 @@ class BasicRoutingTest extends TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        self::assertSame('<html><body><h1>Custom view file</h1><span>' . $this->application->getDocumentRoot() . '</span><em>http://www.domain.com/view/withcustomviewfile</em><p>This is the model.</p></body></html>', $responseOutput);
-        self::assertSame('<html><body><h1>Custom view file</h1><span>' . $this->application->getDocumentRoot() . '</span><em>http://www.domain.com/view/withcustomviewfile</em><p>This is the model.</p></body></html>', $response->getContent());
+        self::assertSame('<html><body><h1>Custom view file</h1><span>' . $this->application->getDocumentRoot() . '</span><em>http://example.com/view/withcustomviewfile</em><p>This is the model.</p></body></html>', $responseOutput);
+        self::assertSame('<html><body><h1>Custom view file</h1><span>' . $this->application->getDocumentRoot() . '</span><em>http://example.com/view/withcustomviewfile</em><p>This is the model.</p></body></html>', $response->getContent());
         self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
@@ -251,7 +249,7 @@ class BasicRoutingTest extends TestCase
      */
     public function testGetViewWithCustomViewFilePath()
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/customViewPath/', 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/customViewPath/';
 
         $request = new Request();
         $response = new Response();
@@ -271,7 +269,7 @@ class BasicRoutingTest extends TestCase
      */
     public function testGetViewWithAlternateViewType()
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/view/alternate', 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/view/alternate';
 
         $request = new Request();
         $response = new Response();
@@ -291,7 +289,7 @@ class BasicRoutingTest extends TestCase
      */
     public function testGetViewWithSecondChoiceViewType()
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/view/onlyjson', 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/view/onlyjson';
 
         $request = new Request();
         $response = new Response();
@@ -311,7 +309,7 @@ class BasicRoutingTest extends TestCase
      */
     public function testGetExistingPageForControllerWithDefaultAction()
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/default/foo', 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/default/foo';
 
         $request = new Request();
         $response = new Response();
@@ -331,7 +329,7 @@ class BasicRoutingTest extends TestCase
      */
     public function testGetDefaultPageForControllerWithDefaultAction()
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/default/bar', 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/default/bar';
 
         $request = new Request();
         $response = new Response();
@@ -351,7 +349,7 @@ class BasicRoutingTest extends TestCase
      */
     public function testGetDefaultPageForControllerWithDefaultActionWithView()
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/defaultview/foo', 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/defaultview/foo';
 
         $request = new Request();
         $response = new Response();
@@ -378,7 +376,7 @@ class BasicRoutingTest extends TestCase
      */
     public function testGetPageReturningActionResult(string $path, int $expectedStatusCode, array $expectedHeaders, string $expectedContent)
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/' . $path, 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/actionresult/' . $path;
 
         $request = new Request();
         $response = new Response();
@@ -405,7 +403,7 @@ class BasicRoutingTest extends TestCase
      */
     public function testGetPageReturningActionResultException(string $path, int $expectedStatusCode, array $expectedHeaders, string $expectedContent)
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionResultException/' . $path, 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/actionResultException/' . $path;
 
         $request = new Request();
         $response = new Response();
@@ -429,7 +427,7 @@ class BasicRoutingTest extends TestCase
     {
         return [
             ['notFound', StatusCode::NOT_FOUND, ['HTTP/1.1 404 Not Found'], 'Page was not found'],
-            ['redirect', StatusCode::FOUND, ['HTTP/1.1 302 Found', 'Location: http://www.domain.com/foo/bar'], ''],
+            ['redirect', StatusCode::FOUND, ['HTTP/1.1 302 Found', 'Location: http://example.com/foo/bar'], ''],
             ['permanentRedirect', StatusCode::MOVED_PERMANENTLY, ['HTTP/1.1 301 Moved Permanently', 'Location: https://domain.com/'], ''],
             ['forbidden', StatusCode::FORBIDDEN, ['HTTP/1.1 403 Forbidden'], 'Page is forbidden'],
             ['noContent', StatusCode::NO_CONTENT, ['HTTP/1.1 204 No Content'], ''],
@@ -454,7 +452,8 @@ class BasicRoutingTest extends TestCase
      */
     public function testGetPagesWithPreAndPostActionEvent(string $action, int $port, int $expectedStatusCode, array $expectedHeaders, string $expectedContent)
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com:' . $port, 'REQUEST_URI' => '/preAndPostActionEvent/' . $action, 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['HTTP_HOST'] = 'example.com:' . $port;
+        $_SERVER['REQUEST_URI'] = '/preAndPostActionEvent/' . $action;
 
         $request = new Request();
         $response = new Response();
@@ -482,7 +481,8 @@ class BasicRoutingTest extends TestCase
      */
     public function testGetPagesWithPreAndPostActionEventException(string $action, int $port, int $expectedStatusCode, array $expectedHeaders, string $expectedContent)
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com:' . $port, 'REQUEST_URI' => '/preAndPostActionEventException/' . $action, 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['HTTP_HOST'] = 'example.com:' . $port;
+        $_SERVER['REQUEST_URI'] = '/preAndPostActionEventException/' . $action;
 
         $request = new Request();
         $response = new Response();
@@ -527,7 +527,7 @@ class BasicRoutingTest extends TestCase
     {
         $this->application->setErrorControllerClass(ErrorTestController::class);
 
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/notfound', 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/actionresult/notfound';
 
         $request = new Request();
         $response = new Response();
@@ -549,7 +549,7 @@ class BasicRoutingTest extends TestCase
     {
         $this->application->setErrorControllerClass(ErrorTestController::class);
 
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/exception/', 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/exception/';
 
         $request = new Request();
         $response = new Response();
@@ -571,7 +571,7 @@ class BasicRoutingTest extends TestCase
     {
         $this->application->setErrorControllerClass(ErrorTestController::class);
 
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/forbidden', 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/actionresult/forbidden';
 
         $request = new Request();
         $response = new Response();
@@ -594,7 +594,7 @@ class BasicRoutingTest extends TestCase
         $this->application->setDebug(true);
         $this->application->setErrorControllerClass(ErrorTestController::class);
 
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionresult/forbidden', 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/actionresult/forbidden';
 
         $request = new Request();
         $response = new Response();
@@ -616,7 +616,7 @@ class BasicRoutingTest extends TestCase
      */
     public function testGetIntegerResultPage()
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/int', 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/int';
 
         $request = new Request();
         $response = new Response();
@@ -636,7 +636,7 @@ class BasicRoutingTest extends TestCase
      */
     public function testGetFalseResultPage()
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/false', 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/false';
 
         $request = new Request();
         $response = new Response();
@@ -656,7 +656,7 @@ class BasicRoutingTest extends TestCase
      */
     public function testGetTrueResultPage()
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/true', 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/true';
 
         $request = new Request();
         $response = new Response();
@@ -676,7 +676,7 @@ class BasicRoutingTest extends TestCase
      */
     public function testGetNullResultPage()
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/null', 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/null';
 
         $request = new Request();
         $response = new Response();
@@ -696,7 +696,7 @@ class BasicRoutingTest extends TestCase
      */
     public function testGetObjectResultPage()
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/object', 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/object';
 
         $request = new Request();
         $response = new Response();
@@ -716,7 +716,7 @@ class BasicRoutingTest extends TestCase
      */
     public function testGetStringableResultPage()
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/stringable', 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/stringable';
 
         $request = new Request();
         $response = new Response();
@@ -736,7 +736,7 @@ class BasicRoutingTest extends TestCase
      */
     public function testUppercaseIndexPage()
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/uppercase/', 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/uppercase/';
 
         $request = new Request();
         $response = new Response();
@@ -756,7 +756,7 @@ class BasicRoutingTest extends TestCase
      */
     public function testUppercaseDefaultPage()
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/uppercase/bar', 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/uppercase/bar';
 
         $request = new Request();
         $response = new Response();
@@ -776,7 +776,7 @@ class BasicRoutingTest extends TestCase
      */
     public function testUppercaseActionMethodPageWithLowercasePath()
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/uppercase/foo', 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/uppercase/foo';
 
         $request = new Request();
         $response = new Response();
@@ -803,7 +803,7 @@ class BasicRoutingTest extends TestCase
      */
     public function testMultiLevelPages(string $url, string $expectedContent, array $expectedHeaders, int $expectedStatusCode)
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/multilevel/' . $url, 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/multilevel/' . $url;
 
         $request = new Request();
         $response = new Response();
@@ -927,7 +927,7 @@ class BasicRoutingTest extends TestCase
      */
     public function testActionMethodVisibilityPages(string $url, string $expectedContent, array $expectedHeaders, int $expectedStatusCode)
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/actionMethodVisibility/' . $url, 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/actionMethodVisibility/' . $url;
 
         $request = new Request();
         $response = new Response();
@@ -969,7 +969,7 @@ class BasicRoutingTest extends TestCase
      */
     public function testSpecialActionNamePages(string $url, string $expectedContent, array $expectedHeaders, int $expectedStatusCode)
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/specialActionName/' . $url, 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/specialActionName/' . $url;
 
         $request = new Request();
         $response = new Response();
@@ -1009,7 +1009,7 @@ class BasicRoutingTest extends TestCase
      */
     public function testRequestCookiePage(array $requestCookies, string $expectedContent)
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/cookies/', 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/cookies/';
         $_COOKIE = $requestCookies;
 
         $request = new Request();
@@ -1049,7 +1049,7 @@ class BasicRoutingTest extends TestCase
      */
     public function testMultipleLevelRoutePathPage(string $url, string $expectedContent, array $expectedHeaders, int $expectedStatusCode)
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/multiple/level/' . $url, 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/multiple/level/' . $url;
 
         $request = new Request();
         $response = new Response();
@@ -1101,7 +1101,7 @@ class BasicRoutingTest extends TestCase
      */
     public function testPageWithPlugin(PluginInterface $plugin, string $expectedContent, array $expectedHeaders, int $expectedStatusCode)
     {
-        $_SERVER = ['HTTP_HOST' => 'www.domain.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/', 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/';
 
         $this->application->addPlugin($plugin);
         $request = new Request();
@@ -1148,7 +1148,7 @@ class BasicRoutingTest extends TestCase
      */
     public function testTypeHintActionParameterPages(string $url, string $expectedContent, array $expectedHeaders, int $expectedStatusCode)
     {
-        $_SERVER = ['HTTP_HOST' => 'www.example.com', 'SERVER_PORT' => '80', 'REQUEST_URI' => '/typeHintActionParameters/' . $url, 'REQUEST_METHOD' => 'GET'];
+        $_SERVER['REQUEST_URI'] = '/typeHintActionParameters/' . $url;
 
         $request = new Request();
         $response = new Response();
@@ -1271,6 +1271,12 @@ class BasicRoutingTest extends TestCase
     public function setUp()
     {
         $this->originalServerArray = $_SERVER;
+        $_SERVER = [
+            'HTTP_HOST'      => 'example.com',
+            'REQUEST_URI'    => '/',
+            'REQUEST_METHOD' => 'GET',
+            'SERVER_PORT'    => '80',
+        ];
 
         FakeHeaders::enable();
         $this->application = new BasicTestApplication(FilePath::parse(__DIR__ . DIRECTORY_SEPARATOR));
