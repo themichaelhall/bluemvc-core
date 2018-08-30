@@ -435,6 +435,7 @@ class BasicRoutingTest extends TestCase
             ['methodNotAllowed', StatusCode::METHOD_NOT_ALLOWED, ['HTTP/1.1 405 Method Not Allowed'], ''],
             ['json', StatusCode::OK, ['HTTP/1.1 200 OK', 'Content-Type: application/json'], '{"Foo":1,"Bar":{"Baz":2}}'],
             ['created', StatusCode::CREATED, ['HTTP/1.1 201 Created', 'Location: https://example.com/created'], ''],
+            ['badRequest', StatusCode::BAD_REQUEST, ['HTTP/1.1 400 Bad Request'], 'The request was bad'],
             ['custom', StatusCode::MULTI_STATUS, ['HTTP/1.1 207 Multi-Status'], 'Custom action result'],
         ];
     }

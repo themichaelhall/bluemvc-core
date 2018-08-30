@@ -6,6 +6,7 @@ namespace BlueMvc\Core\Tests\Helpers\TestControllers;
 
 use BlueMvc\Core\ActionResults\ActionResult;
 use BlueMvc\Core\ActionResults\ActionResultException;
+use BlueMvc\Core\ActionResults\BadRequestResultException;
 use BlueMvc\Core\ActionResults\CreatedResultException;
 use BlueMvc\Core\ActionResults\ForbiddenResultException;
 use BlueMvc\Core\ActionResults\JsonResultException;
@@ -111,6 +112,16 @@ class ActionResultExceptionTestController extends Controller
     public function createdAction()
     {
         throw new CreatedResultException('https://example.com/created');
+    }
+
+    /**
+     * Action throwing a "400 Bad Request" action result exception.
+     *
+     * @throws BadRequestResultException
+     */
+    public function badRequestAction()
+    {
+        throw new BadRequestResultException('The request was bad');
     }
 
     /**

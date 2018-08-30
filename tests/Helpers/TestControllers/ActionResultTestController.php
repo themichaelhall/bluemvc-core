@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BlueMvc\Core\Tests\Helpers\TestControllers;
 
 use BlueMvc\Core\ActionResults\ActionResult;
+use BlueMvc\Core\ActionResults\BadRequestResult;
 use BlueMvc\Core\ActionResults\CreatedResult;
 use BlueMvc\Core\ActionResults\ForbiddenResult;
 use BlueMvc\Core\ActionResults\JsonResult;
@@ -110,6 +111,16 @@ class ActionResultTestController extends Controller
     public function createdAction()
     {
         return new CreatedResult('https://example.com/created');
+    }
+
+    /**
+     * Action returning a "400 Bad Request" action result.
+     *
+     * @return BadRequestResult The action result.
+     */
+    public function badRequestAction()
+    {
+        return new BadRequestResult('The request was bad');
     }
 
     /**

@@ -213,6 +213,7 @@ class ControllerTest extends TestCase
             ['methodNotAllowed', StatusCode::METHOD_NOT_ALLOWED, [], ''],
             ['json', StatusCode::OK, ['Content-Type' => 'application/json'], '{"Foo":1,"Bar":{"Baz":2}}'],
             ['created', StatusCode::CREATED, ['Location' => 'https://example.com/created'], ''],
+            ['badRequest', StatusCode::BAD_REQUEST, [], 'The request was bad'],
             ['custom', StatusCode::MULTI_STATUS, [], 'Custom action result'],
         ];
     }
