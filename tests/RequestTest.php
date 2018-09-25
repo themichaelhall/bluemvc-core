@@ -7,6 +7,8 @@ namespace BlueMvc\Core\Tests;
 use BlueMvc\Core\Exceptions\ServerEnvironmentException;
 use BlueMvc\Core\Request;
 use BlueMvc\Core\Tests\Helpers\Fakes\FakeFileGetContentsPhpInput;
+use BlueMvc\Core\Tests\Helpers\Fakes\FakeFunctionExists;
+use BlueMvc\Core\Tests\Helpers\Fakes\FakeGetAllHeaders;
 use BlueMvc\Core\Tests\Helpers\Fakes\FakeIsUploadedFile;
 use BlueMvc\Core\Tests\Helpers\Fakes\FakeSession;
 use PHPUnit\Framework\TestCase;
@@ -912,6 +914,31 @@ class RequestTest extends TestCase
     }
 
     /**
+     * Test that getallheaders method is used primarily for headers.
+     */
+    public function testGetAllHeadersIsUsedForPrimarilyHeaders()
+    {
+        $_SERVER = [
+            'HTTP_HOST'            => 'localhost',
+            'REQUEST_URI'          => '/',
+            'REQUEST_METHOD'       => 'GET',
+            'HTTP_CUSTOM_HEADER_1' => 'Foo',
+            'HTTP_CUSTOM_HEADER_2' => 'Bar',
+        ];
+
+        FakeFunctionExists::enable();
+        FakeGetAllHeaders::enable();
+        FakeGetAllHeaders::addHeader('Host', 'localhost');
+        FakeGetAllHeaders::addHeader('Custom-Header-2', 'Bar');
+        FakeGetAllHeaders::addHeader('Custom-Header-3', 'Baz');
+        FakeGetAllHeaders::addHeader('1', 'One');
+
+        $request = new Request();
+
+        self::assertSame(['Host' => 'localhost', 'Custom-Header-2' => 'Bar', 'Custom-Header-3' => 'Baz', 1 => 'One'], iterator_to_array($request->getHeaders()));
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
@@ -921,6 +948,8 @@ class RequestTest extends TestCase
         FakeIsUploadedFile::enable();
         FakeFileGetContentsPhpInput::enable();
         FakeSession::enable();
+        FakeFunctionExists::enable();
+        FakeFunctionExists::disableFunction('getallheaders');
     }
 
     /**
@@ -931,6 +960,7 @@ class RequestTest extends TestCase
         FakeIsUploadedFile::disable();
         FakeFileGetContentsPhpInput::disable();
         FakeSession::disable();
+        FakeFunctionExists::disable();
 
         $_GET = [];
         $_POST = [];

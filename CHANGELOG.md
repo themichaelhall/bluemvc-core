@@ -1,3 +1,6 @@
+## [2.0.2] 2018-09-25
+- Fixed [#2](https://github.com/themichaelhall/bluemvc/issues/2) - Header Authorization not present with Apache/2.4.7
+
 ## [2.0.1] 2018-06-19
 - Fixed [#1](https://github.com/themichaelhall/bluemvc/issues/1) - Empty action method parameter when "0" is last in url. 
 
@@ -18,6 +21,7 @@
 ## 1.0.0 - 2018-02-03
 - First stable revision.
 
+[2.0.2]: https://github.com/themichaelhall/bluemvc-core/compare/v2.0.1...v2.0.2
 [2.0.1]: https://github.com/themichaelhall/bluemvc-core/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/themichaelhall/bluemvc-core/compare/v1.1.0...v2.0.0
 [1.1.0]: https://github.com/themichaelhall/bluemvc-core/compare/v1.0.0...v1.1.0
