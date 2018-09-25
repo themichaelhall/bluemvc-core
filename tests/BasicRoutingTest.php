@@ -10,6 +10,7 @@ use BlueMvc\Core\Request;
 use BlueMvc\Core\RequestCookie;
 use BlueMvc\Core\Response;
 use BlueMvc\Core\Route;
+use BlueMvc\Core\Tests\Helpers\Fakes\FakeFunctionExists;
 use BlueMvc\Core\Tests\Helpers\Fakes\FakeHeaders;
 use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ActionMethodVisibilityTestController;
@@ -1280,6 +1281,8 @@ class BasicRoutingTest extends TestCase
         ];
 
         FakeHeaders::enable();
+        FakeFunctionExists::enable();
+        FakeFunctionExists::disableFunction('getallheaders');
         $this->application = new BasicTestApplication(FilePath::parse(__DIR__ . DIRECTORY_SEPARATOR));
         $this->application->setViewPath(FilePath::parse('Helpers' . DIRECTORY_SEPARATOR . 'TestViews' . DIRECTORY_SEPARATOR));
         $this->application->addViewRenderer(new JsonTestViewRenderer());
@@ -1312,6 +1315,7 @@ class BasicRoutingTest extends TestCase
         $_COOKIE = [];
 
         FakeHeaders::disable();
+        FakeFunctionExists::disable();
         $this->application = null;
 
         $_SERVER = $this->originalServerArray;

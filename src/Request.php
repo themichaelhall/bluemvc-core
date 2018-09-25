@@ -113,14 +113,38 @@ class Request extends AbstractRequest
     private static function parseHeaders(array $serverVars): HeaderCollectionInterface
     {
         $headers = new HeaderCollection();
+        $headersArray = self::getHeadersArray($serverVars);
 
-        foreach ($serverVars as $name => $value) {
-            if (substr($name, 0, 5) === 'HTTP_') {
-                $headers->add(str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5))))), $value);
-            }
+        foreach ($headersArray as $name => $value) {
+            $headers->add(strval($name), $value);
         }
 
         return $headers;
+    }
+
+    /**
+     * Returns all headers as an array.
+     *
+     * @param array $serverVars The server array.
+     *
+     * @return array The headers as an array.
+     */
+    private static function getHeadersArray(array $serverVars): array
+    {
+        $headersArray = [];
+
+        if (function_exists('getallheaders')) {
+            /** @noinspection PhpComposerExtensionStubsInspection */
+            return getallheaders();
+        }
+
+        foreach ($serverVars as $name => $value) {
+            if (substr($name, 0, 5) === 'HTTP_') {
+                $headersArray[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
+            }
+        }
+
+        return $headersArray;
     }
 
     /**
