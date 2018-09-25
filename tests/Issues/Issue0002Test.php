@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Tests\Issues;
 
+use BlueMvc\Core\Request;
 use BlueMvc\Core\Tests\Helpers\Fakes\FakeFunctionExists;
 use BlueMvc\Core\Tests\Helpers\Fakes\FakeGetAllHeaders;
-use BlueMvc\Core\Request;
 use PHPUnit\Framework\TestCase;
 
 /**
