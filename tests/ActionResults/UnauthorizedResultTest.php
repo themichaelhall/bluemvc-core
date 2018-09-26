@@ -1,0 +1,54 @@
+<?php
+
+declare(strict_types=1);
+
+namespace BlueMvc\Core\Tests\ActionResults;
+
+use BlueMvc\Core\ActionResults\UnauthorizedResult;
+use BlueMvc\Core\Http\Method;
+use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
+use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
+use BlueMvc\Core\Tests\Helpers\TestResponses\BasicTestResponse;
+use DataTypes\FilePath;
+use DataTypes\Url;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Test UnauthorizedResult class.
+ */
+class UnauthorizedResultTest extends TestCase
+{
+    /**
+     * Test default constructor.
+     */
+    public function testDefaultConstructor()
+    {
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
+        $request = new BasicTestRequest(Url::parse('https://www.example.com/foo/bar'), new Method('GET'));
+        $response = new BasicTestResponse();
+        $actionResult = new UnauthorizedResult();
+        $actionResult->updateResponse($application, $request, $response);
+
+        self::assertSame(401, $response->getStatusCode()->getCode());
+        self::assertSame('Unauthorized', $response->getStatusCode()->getDescription());
+        self::assertSame(['WWW-Authenticate' => 'Basic'], iterator_to_array($response->getHeaders()));
+        self::assertSame('', $response->getContent());
+    }
+
+    /**
+     * Test with WWW-Authenticate header.
+     */
+    public function testWithWWWAuthenticateHeader()
+    {
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
+        $request = new BasicTestRequest(Url::parse('https://www.example.com/foo/bar'), new Method('GET'));
+        $response = new BasicTestResponse();
+        $actionResult = new UnauthorizedResult('Foo Bar Baz');
+        $actionResult->updateResponse($application, $request, $response);
+
+        self::assertSame(401, $response->getStatusCode()->getCode());
+        self::assertSame('Unauthorized', $response->getStatusCode()->getDescription());
+        self::assertSame(['WWW-Authenticate' => 'Foo Bar Baz'], iterator_to_array($response->getHeaders()));
+        self::assertSame('', $response->getContent());
+    }
+}
