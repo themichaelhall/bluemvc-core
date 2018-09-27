@@ -15,6 +15,7 @@ use BlueMvc\Core\ActionResults\NotFoundResult;
 use BlueMvc\Core\ActionResults\NotModifiedResult;
 use BlueMvc\Core\ActionResults\PermanentRedirectResult;
 use BlueMvc\Core\ActionResults\RedirectResult;
+use BlueMvc\Core\ActionResults\UnauthorizedResult;
 use BlueMvc\Core\Controller;
 use BlueMvc\Core\Http\StatusCode;
 
@@ -121,6 +122,16 @@ class ActionResultTestController extends Controller
     public function badRequestAction()
     {
         return new BadRequestResult('The request was bad');
+    }
+
+    /**
+     * Action returning a "401 Unauthorized" action result.
+     *
+     * @return UnauthorizedResult
+     */
+    public function unauthorizedAction()
+    {
+        return new UnauthorizedResult('Basic realm="Foo"');
     }
 
     /**

@@ -214,6 +214,7 @@ class ControllerTest extends TestCase
             ['json', StatusCode::OK, ['Content-Type' => 'application/json'], '{"Foo":1,"Bar":{"Baz":2}}'],
             ['created', StatusCode::CREATED, ['Location' => 'https://example.com/created'], ''],
             ['badRequest', StatusCode::BAD_REQUEST, [], 'The request was bad'],
+            ['unauthorized', StatusCode::UNAUTHORIZED, ['WWW-Authenticate' => 'Basic realm="Foo"'], ''],
             ['custom', StatusCode::MULTI_STATUS, [], 'Custom action result'],
         ];
     }

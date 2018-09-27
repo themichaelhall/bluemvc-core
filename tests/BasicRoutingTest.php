@@ -437,6 +437,7 @@ class BasicRoutingTest extends TestCase
             ['json', StatusCode::OK, ['HTTP/1.1 200 OK', 'Content-Type: application/json'], '{"Foo":1,"Bar":{"Baz":2}}'],
             ['created', StatusCode::CREATED, ['HTTP/1.1 201 Created', 'Location: https://example.com/created'], ''],
             ['badRequest', StatusCode::BAD_REQUEST, ['HTTP/1.1 400 Bad Request'], 'The request was bad'],
+            ['unauthorized', StatusCode::UNAUTHORIZED, ['HTTP/1.1 401 Unauthorized', 'WWW-Authenticate: Basic realm="Foo"'], ''],
             ['custom', StatusCode::MULTI_STATUS, ['HTTP/1.1 207 Multi-Status'], 'Custom action result'],
         ];
     }

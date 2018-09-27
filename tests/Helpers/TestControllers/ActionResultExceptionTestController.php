@@ -16,6 +16,7 @@ use BlueMvc\Core\ActionResults\NotFoundResultException;
 use BlueMvc\Core\ActionResults\NotModifiedResultException;
 use BlueMvc\Core\ActionResults\PermanentRedirectResultException;
 use BlueMvc\Core\ActionResults\RedirectResultException;
+use BlueMvc\Core\ActionResults\UnauthorizedResultException;
 use BlueMvc\Core\Controller;
 use BlueMvc\Core\Http\StatusCode;
 
@@ -122,6 +123,16 @@ class ActionResultExceptionTestController extends Controller
     public function badRequestAction()
     {
         throw new BadRequestResultException('The request was bad');
+    }
+
+    /**
+     * Action returning a "401 Unauthorized" action result exception.
+     *
+     * @throws UnauthorizedResultException
+     */
+    public function unauthorizedAction()
+    {
+        throw new UnauthorizedResultException('Basic realm="Foo"');
     }
 
     /**
