@@ -735,6 +735,88 @@ class BasicRoutingTest extends TestCase
     }
 
     /**
+     * Test get action result page.
+     */
+    public function testActionResultPage()
+    {
+        $_SERVER['REQUEST_URI'] = '/actionResult';
+
+        $request = new Request();
+        $response = new Response();
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        self::assertSame('', $responseOutput);
+        self::assertSame('', $response->getContent());
+        self::assertSame(['HTTP/1.1 304 Not Modified'], FakeHeaders::get());
+        self::assertSame(StatusCode::NOT_MODIFIED, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Test get view result page.
+     */
+    public function testViewResultPage()
+    {
+        $_SERVER['REQUEST_URI'] = '/view';
+
+        $request = new Request();
+        $response = new Response();
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        self::assertSame('<html><body><h1>viewAction</h1></body></html>', $responseOutput);
+        self::assertSame('<html><body><h1>viewAction</h1></body></html>', $response->getContent());
+        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Test get view or action result page returning view.
+     */
+    public function testViewOrActionResultPageReturningView()
+    {
+        $_SERVER['REQUEST_URI'] = '/viewOrActionResult';
+        $_GET['showView'] = '1';
+
+        $request = new Request();
+        $response = new Response();
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        self::assertSame('<html><body><h1>viewOrActionResultAction</h1></body></html>', $responseOutput);
+        self::assertSame('<html><body><h1>viewOrActionResultAction</h1></body></html>', $response->getContent());
+        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Test get view or action result page returning action result.
+     */
+    public function testViewOrActionResultPageReturningActionResult()
+    {
+        $_SERVER['REQUEST_URI'] = '/viewOrActionResult';
+        $_GET['showView'] = '0';
+
+        $request = new Request();
+        $response = new Response();
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        self::assertSame('', $responseOutput);
+        self::assertSame('', $response->getContent());
+        self::assertSame(['HTTP/1.1 204 No Content'], FakeHeaders::get());
+        self::assertSame(StatusCode::NO_CONTENT, $response->getStatusCode()->getCode());
+    }
+
+    /**
      * Test get uppercase index action method page.
      */
     public function testUppercaseIndexPage()

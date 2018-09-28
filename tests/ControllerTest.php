@@ -491,6 +491,80 @@ class ControllerTest extends TestCase
     }
 
     /**
+     * Test an action returning an action result.
+     */
+    public function testBasicActionReturningActionResult()
+    {
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/actionResult'), new Method('GET'));
+        $response = new BasicTestResponse();
+        $controller = new BasicTestController();
+        $controller->processRequest($application, $request, $response, 'actionResult');
+
+        self::assertSame('', $response->getContent());
+        self::assertSame(StatusCode::NOT_MODIFIED, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Test an action returning a view.
+     */
+    public function testBasicActionReturningView()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
+        $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
+        $application->addViewRenderer(new BasicTestViewRenderer());
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/view'), new Method('GET'));
+        $response = new BasicTestResponse();
+        $controller = new BasicTestController();
+        $controller->processRequest($application, $request, $response, 'view');
+
+        self::assertSame('<html><body><h1>viewAction</h1></body></html>', $response->getContent());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Test an action returning a view or action result returning a view.
+     */
+    public function testBasicActionReturningViewOrActionResultReturningView()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
+        $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
+        $application->addViewRenderer(new BasicTestViewRenderer());
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/viewOrActionResult'), new Method('GET'));
+        $request->setQueryParameter('showView', '1');
+        $response = new BasicTestResponse();
+        $controller = new BasicTestController();
+        $controller->processRequest($application, $request, $response, 'viewOrActionResult');
+
+        self::assertSame('<html><body><h1>viewOrActionResultAction</h1></body></html>', $response->getContent());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Test an action returning a view or action result returning an action result.
+     */
+    public function testBasicActionReturningViewOrActionResultReturningActionResult()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
+        $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
+        $application->addViewRenderer(new BasicTestViewRenderer());
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/viewOrActionResult'), new Method('GET'));
+        $request->setQueryParameter('showView', '0');
+        $response = new BasicTestResponse();
+        $controller = new BasicTestController();
+        $controller->processRequest($application, $request, $response, 'viewOrActionResult');
+
+        self::assertSame('', $response->getContent());
+        self::assertSame(StatusCode::NO_CONTENT, $response->getStatusCode()->getCode());
+    }
+
+    /**
      * Test an index action in uppercase.
      */
     public function testUppercaseIndexAction()

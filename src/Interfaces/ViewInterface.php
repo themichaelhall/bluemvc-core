@@ -15,7 +15,7 @@ use BlueMvc\Core\Interfaces\Collections\ViewItemCollectionInterface;
  *
  * @since 1.0.0
  */
-interface ViewInterface
+interface ViewInterface extends ViewOrActionResultInterface
 {
     /**
      * Updates the response.

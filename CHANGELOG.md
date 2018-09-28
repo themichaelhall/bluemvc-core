@@ -3,7 +3,8 @@
 - Added type hints functionality in action method parameters.
 - Added ActionResultException handling in action methods.
 - Added BadRequestResult and BadRequestResultException.
-- Added UnauthorizedResult and UnauthorizedResultException. 
+- Added UnauthorizedResult and UnauthorizedResultException.
+- Added ViewOrActionResultInterface.
 - Session cookie is marked as "secure" if request is secure (https).
 - Deprecated AbstractActionResult.
 

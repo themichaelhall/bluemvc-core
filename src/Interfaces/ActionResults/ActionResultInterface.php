@@ -11,13 +11,14 @@ namespace BlueMvc\Core\Interfaces\ActionResults;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
+use BlueMvc\Core\Interfaces\ViewOrActionResultInterface;
 
 /**
  * Interface for ActionResult class.
  *
  * @since 1.0.0
  */
-interface ActionResultInterface
+interface ActionResultInterface extends ViewOrActionResultInterface
 {
     /**
      * Updates the response.
