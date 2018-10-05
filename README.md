@@ -5,6 +5,7 @@
 # BlueMvc Core
 
 [![Build Status](https://travis-ci.org/themichaelhall/bluemvc-core.svg?branch=master)](https://travis-ci.org/themichaelhall/bluemvc-core)
+[![AppVeyor](https://ci.appveyor.com/api/projects/status/github/themichaelhall/bluemvc-core?branch=master&svg=true)](https://ci.appveyor.com/project/themichaelhall/bluemvc-core/branch/master)
 [![codecov.io](https://codecov.io/gh/themichaelhall/bluemvc-core/coverage.svg?branch=master)](https://codecov.io/gh/themichaelhall/bluemvc-core?branch=master)
 [![StyleCI](https://styleci.io/repos/61732117/shield?style=flat)](https://styleci.io/repos/61732117)
 [![License](https://poser.pugx.org/bluemvc/bluemvc-core/license)](https://packagist.org/packages/bluemvc/bluemvc-core)
