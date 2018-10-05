@@ -24,6 +24,7 @@ use BlueMvc\Core\Tests\Helpers\TestControllers\ViewTestController;
 use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
 use BlueMvc\Core\Tests\Helpers\TestResponses\BasicTestResponse;
 use BlueMvc\Core\Tests\Helpers\TestViewRenderers\BasicTestViewRenderer;
+use BlueMvc\Core\Tests\Helpers\TestViewRenderers\JsonTestViewRenderer;
 use DataTypes\FilePath;
 use DataTypes\Url;
 use PHPUnit\Framework\TestCase;
@@ -73,281 +74,6 @@ class ControllerTest extends TestCase
         $controller->processRequest($application, $request, $response, '');
 
         self::assertSame($response, $controller->getResponse());
-    }
-
-    /**
-     * Test processRequest method for index path.
-     */
-    public function testProcessRequestForIndexPath()
-    {
-        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
-        $response = new BasicTestResponse();
-        $controller = new BasicTestController();
-        $controller->processRequest($application, $request, $response, '');
-
-        self::assertSame('Hello World!', $response->getContent());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test processRequest method for non existing path.
-     */
-    public function testProcessRequestForNonExistingPath()
-    {
-        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com/notfound'), new Method('GET'));
-        $response = new BasicTestResponse();
-        $controller = new BasicTestController();
-        $controller->processRequest($application, $request, $response, 'notfound');
-
-        self::assertSame('', $response->getContent());
-        self::assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test an action starting with a numeric character.
-     */
-    public function testActionStartingWithNumericCharacter()
-    {
-        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com/123numeric'), new Method('GET'));
-        $response = new BasicTestResponse();
-        $controller = new BasicTestController();
-        $controller->processRequest($application, $request, $response, '123numeric');
-
-        self::assertSame('Numeric action result', $response->getContent());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test existing action for controller with default action.
-     */
-    public function testExistingActionForControllerWithDefaultAction()
-    {
-        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com/foo'), new Method('GET'));
-        $response = new BasicTestResponse();
-        $controller = new DefaultActionTestController();
-        $controller->processRequest($application, $request, $response, 'foo');
-
-        self::assertSame('Foo Action', $response->getContent());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test non-existing action for controller with default action.
-     */
-    public function testNonExistingActionForControllerWithDefaultAction()
-    {
-        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com/bar'), new Method('GET'));
-        $response = new BasicTestResponse();
-        $controller = new DefaultActionTestController();
-        $controller->processRequest($application, $request, $response, 'bar');
-
-        self::assertSame('Default Action bar', $response->getContent());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test actions returning a ActionResult.
-     *
-     * @dataProvider actionReturningActionResultDataProvider
-     *
-     * @param string $path               The path.
-     * @param int    $expectedStatusCode The expected status code.
-     * @param array  $expectedHeaders    The expected headers.
-     * @param string $expectedContent    The expected content.
-     */
-    public function testActionReturningActionResult(string $path, int $expectedStatusCode, array $expectedHeaders, string $expectedContent)
-    {
-        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com/' . $path), new Method('GET'));
-        $response = new BasicTestResponse();
-        $controller = new ActionResultTestController();
-        $controller->processRequest($application, $request, $response, $path);
-
-        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
-        self::assertSame($expectedHeaders, iterator_to_array($response->getHeaders()));
-        self::assertSame($expectedContent, $response->getContent());
-    }
-
-    /**
-     * Test actions returning a ActionResultException.
-     *
-     * @dataProvider actionReturningActionResultDataProvider
-     *
-     * @param string $path               The path.
-     * @param int    $expectedStatusCode The expected status code.
-     * @param array  $expectedHeaders    The expected headers.
-     * @param string $expectedContent    The expected content.
-     */
-    public function testActionReturningActionResultException(string $path, int $expectedStatusCode, array $expectedHeaders, string $expectedContent)
-    {
-        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com/' . $path), new Method('GET'));
-        $response = new BasicTestResponse();
-        $controller = new ActionResultExceptionTestController();
-        $controller->processRequest($application, $request, $response, $path);
-
-        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
-        self::assertSame($expectedHeaders, iterator_to_array($response->getHeaders()));
-        self::assertSame($expectedContent, $response->getContent());
-    }
-
-    /**
-     * Data provider for action result tests.
-     *
-     * @return array The data.
-     */
-    public function actionReturningActionResultDataProvider()
-    {
-        return [
-            ['notFound', StatusCode::NOT_FOUND, [], 'Page was not found'],
-            ['redirect', StatusCode::FOUND, ['Location' => 'http://www.domain.com/foo/bar'], ''],
-            ['permanentRedirect', StatusCode::MOVED_PERMANENTLY, ['Location' => 'https://domain.com/'], ''],
-            ['forbidden', StatusCode::FORBIDDEN, [], 'Page is forbidden'],
-            ['noContent', StatusCode::NO_CONTENT, [], ''],
-            ['notModified', StatusCode::NOT_MODIFIED, [], ''],
-            ['methodNotAllowed', StatusCode::METHOD_NOT_ALLOWED, [], ''],
-            ['json', StatusCode::OK, ['Content-Type' => 'application/json'], '{"Foo":1,"Bar":{"Baz":2}}'],
-            ['created', StatusCode::CREATED, ['Location' => 'https://example.com/created'], ''],
-            ['badRequest', StatusCode::BAD_REQUEST, [], 'The request was bad'],
-            ['unauthorized', StatusCode::UNAUTHORIZED, ['WWW-Authenticate' => 'Basic realm="Foo"'], ''],
-            ['custom', StatusCode::MULTI_STATUS, [], 'Custom action result'],
-        ];
-    }
-
-    /**
-     * Test an action returning a view.
-     */
-    public function testActionReturningView()
-    {
-        $DS = DIRECTORY_SEPARATOR;
-
-        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
-        $application->addViewRenderer(new BasicTestViewRenderer());
-
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
-        $response = new BasicTestResponse();
-        $controller = new ViewTestController();
-        $controller->processRequest($application, $request, $response, '');
-
-        self::assertSame('<html><body><h1>Index</h1><span>' . $application->getDocumentRoot() . '</span><em>http://www.domain.com/</em></body></html>', $response->getContent());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test an action returning a custom view file.
-     */
-    public function testActionReturningCustomViewFile()
-    {
-        $DS = DIRECTORY_SEPARATOR;
-
-        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
-        $application->addViewRenderer(new BasicTestViewRenderer());
-
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com/withcustomviewfile'), new Method('GET'));
-        $response = new BasicTestResponse();
-        $controller = new ViewTestController();
-        $controller->processRequest($application, $request, $response, 'withcustomviewfile');
-
-        self::assertSame('<html><body><h1>Custom view file</h1><span>' . $application->getDocumentRoot() . '</span><em>http://www.domain.com/withcustomviewfile</em><p>This is the model.</p></body></html>', $response->getContent());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test an action returning a custom view file.
-     */
-    public function testControllerWithCustomViewPath()
-    {
-        $DS = DIRECTORY_SEPARATOR;
-
-        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
-        $application->addViewRenderer(new BasicTestViewRenderer());
-
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
-        $response = new BasicTestResponse();
-        $controller = new CustomViewPathTestController();
-        $controller->processRequest($application, $request, $response, '');
-
-        self::assertSame('<html><body><h1>View in custom view path</h1></body></html>', $response->getContent());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test pre- and post-action event.
-     *
-     * @dataProvider preAndPostActionEventDataProvider
-     *
-     * @param string $action             The action.
-     * @param int    $port               The port.
-     * @param int    $expectedStatusCode The expected status code.
-     * @param array  $expectedHeaders    The expected headers.
-     * @param string $expectedContent    The expected content.
-     */
-    public function testPreAndPostActionEvent(string $action, int $port, int $expectedStatusCode, array $expectedHeaders, string $expectedContent)
-    {
-        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com:' . $port . '/' . $action), new Method('GET'));
-        $response = new BasicTestResponse();
-        $controller = new PreAndPostActionEventController();
-        $controller->processRequest($application, $request, $response, $action);
-
-        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
-        self::assertSame($expectedHeaders, iterator_to_array($response->getHeaders()));
-        self::assertSame($expectedContent, $response->getContent());
-    }
-
-    /**
-     * Test pre- and post-action event returning action result exceptions.
-     *
-     * @dataProvider preAndPostActionEventDataProvider
-     *
-     * @param string $action             The action.
-     * @param int    $port               The port.
-     * @param int    $expectedStatusCode The expected status code.
-     * @param array  $expectedHeaders    The expected headers.
-     * @param string $expectedContent    The expected content.
-     */
-    public function testPreAndPostActionEventException(string $action, int $port, int $expectedStatusCode, array $expectedHeaders, string $expectedContent)
-    {
-        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com:' . $port . '/' . $action), new Method('GET'));
-        $response = new BasicTestResponse();
-        $controller = new PreAndPostActionEventExceptionController();
-        $controller->processRequest($application, $request, $response, $action);
-
-        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
-        self::assertSame($expectedHeaders, iterator_to_array($response->getHeaders()));
-        self::assertSame($expectedContent, $response->getContent());
-    }
-
-    /**
-     * Data provider for pre- and post-action event tests.
-     *
-     * @return array The data.
-     */
-    public function preAndPostActionEventDataProvider()
-    {
-        return [
-            ['', 80, StatusCode::OK, ['X-Pre-Action' => 'true', 'X-Post-Action' => 'true'], 'Index action with pre- and post-action event'],
-            ['foo', 80, StatusCode::OK, ['X-Pre-Action' => 'true', 'X-Post-Action' => 'true'], 'Default action "foo" with pre- and post-action event'],
-            ['', 81, StatusCode::NOT_FOUND, [], 'This is a pre-action result'],
-            ['foo', 81, StatusCode::NOT_FOUND, [], 'This is a pre-action result'],
-            ['', 82, StatusCode::OK, ['X-Pre-Action' => 'true'], 'This is a post-action result'],
-            ['foo', 82, StatusCode::OK, ['X-Pre-Action' => 'true'], 'This is a post-action result'],
-            ['', 83, StatusCode::OK, ['X-Post-Action' => 'true'], 'Index action with pre- and post-action event'],
-            ['foo', 83, StatusCode::OK, ['X-Post-Action' => 'true'], 'Default action "foo" with pre- and post-action event'],
-            ['', 84, StatusCode::OK, ['X-Pre-Action' => 'true'], 'Index action with pre- and post-action event'],
-            ['foo', 84, StatusCode::OK, ['X-Pre-Action' => 'true'], 'Default action "foo" with pre- and post-action event'],
-            ['', 85, StatusCode::OK, [], 'Index action with pre- and post-action event'],
-            ['foo', 85, StatusCode::OK, [], 'Default action "foo" with pre- and post-action event'],
-        ];
     }
 
     /**
@@ -401,240 +127,392 @@ class ControllerTest extends TestCase
     }
 
     /**
-     * Test an action returning an integer.
+     * Test getActionMethod method for index action.
      */
-    public function testActionReturningInteger()
+    public function testGetActionMethodForIndexAction()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com/int'), new Method('GET'));
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
         $response = new BasicTestResponse();
         $controller = new BasicTestController();
-        $controller->processRequest($application, $request, $response, 'int');
+        $controller->processRequest($application, $request, $response, '', []);
 
-        self::assertSame('42', $response->getContent());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertSame('indexAction', $controller->getActionMethod()->getName());
     }
 
     /**
-     * Test an action returning false.
+     * Test getActionMethod method for custom action.
      */
-    public function testActionReturningFalse()
+    public function testGetActionMethodForCustomAction()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com/false'), new Method('GET'));
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
         $response = new BasicTestResponse();
         $controller = new BasicTestController();
-        $controller->processRequest($application, $request, $response, 'false');
+        $controller->processRequest($application, $request, $response, 'int', []);
 
-        self::assertSame('false', $response->getContent());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertSame('intAction', $controller->getActionMethod()->getName());
     }
 
     /**
-     * Test an action returning true.
+     * Test getActionMethod method for default action.
      */
-    public function testActionReturningTrue()
+    public function testGetActionMethodForDefaultAction()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com/true'), new Method('GET'));
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
         $response = new BasicTestResponse();
-        $controller = new BasicTestController();
-        $controller->processRequest($application, $request, $response, 'true');
+        $controller = new DefaultActionTestController();
+        $controller->processRequest($application, $request, $response, 'bar', []);
 
-        self::assertSame('true', $response->getContent());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertSame('defaultAction', $controller->getActionMethod()->getName());
     }
 
     /**
-     * Test an action returning null.
+     * Test getActionMethod method for invalid action.
      */
-    public function testActionReturningNull()
+    public function testGetActionMethodForInvalidAction()
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com/null'), new Method('GET'));
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
         $response = new BasicTestResponse();
         $controller = new BasicTestController();
-        $controller->processRequest($application, $request, $response, 'null');
+        $controller->processRequest($application, $request, $response, 'foo', []);
 
-        self::assertSame('Content set manually.', $response->getContent());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertNull($controller->getActionMethod());
     }
 
     /**
-     * Test an action returning an object.
+     * Test process BasicTestController.
+     *
+     * @dataProvider processBasicTestControllerDataProvider
+     *
+     * @param string $path               The path.
+     * @param array  $queryParameters    The query parameters.
+     * @param int    $expectedStatusCode The expected status code.
+     * @param string $expectedContent    The expected content.
      */
-    public function testActionReturningObject()
+    public function testProcessBasicTestController(string $path, array $queryParameters, int $expectedStatusCode, string $expectedContent)
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com/object'), new Method('GET'));
-        $response = new BasicTestResponse();
-        $controller = new BasicTestController();
-        $controller->processRequest($application, $request, $response, 'object');
-
-        self::assertSame('object', $response->getContent());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test an action returning a stringable object.
-     */
-    public function testActionReturningStringable()
-    {
-        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com/stringable'), new Method('GET'));
-        $response = new BasicTestResponse();
-        $controller = new BasicTestController();
-        $controller->processRequest($application, $request, $response, 'stringable');
-
-        self::assertSame('Text is "Bar"', $response->getContent());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test an action returning an action result.
-     */
-    public function testBasicActionReturningActionResult()
-    {
-        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com/actionResult'), new Method('GET'));
-        $response = new BasicTestResponse();
-        $controller = new BasicTestController();
-        $controller->processRequest($application, $request, $response, 'actionResult');
-
-        self::assertSame('', $response->getContent());
-        self::assertSame(StatusCode::NOT_MODIFIED, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test an action returning a view.
-     */
-    public function testBasicActionReturningView()
-    {
-        $DS = DIRECTORY_SEPARATOR;
-
-        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
+        $application->setViewPath(FilePath::parse(__DIR__ . DIRECTORY_SEPARATOR . 'Helpers' . DIRECTORY_SEPARATOR . 'TestViews' . DIRECTORY_SEPARATOR));
         $application->addViewRenderer(new BasicTestViewRenderer());
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com/view'), new Method('GET'));
+        $request = new BasicTestRequest(Url::parse('https://www.example.com/'), new Method('GET'));
+        foreach ($queryParameters as $name => $value) {
+            $request->setQueryParameter($name, $value);
+        }
         $response = new BasicTestResponse();
         $controller = new BasicTestController();
-        $controller->processRequest($application, $request, $response, 'view');
+        $controller->processRequest($application, $request, $response, $path);
 
-        self::assertSame('<html><body><h1>viewAction</h1></body></html>', $response->getContent());
+        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
+        self::assertSame($expectedContent, $response->getContent());
+    }
+
+    /**
+     * Data provider for testProcessBasicController.
+     *
+     * @return array
+     */
+    public function processBasicTestControllerDataProvider()
+    {
+        return [
+            ['', [], StatusCode::OK, 'Hello World!'],
+            ['nonExistingAction', [], StatusCode::NOT_FOUND, ''],
+            ['serverError', [], StatusCode::INTERNAL_SERVER_ERROR, 'Server Error'],
+            ['123numeric', [], StatusCode::OK, 'Numeric action result'],
+            ['int', [], StatusCode::OK, '42'],
+            ['false', [], StatusCode::OK, 'false'],
+            ['true', [], StatusCode::OK, 'true'],
+            ['null', [], StatusCode::OK, 'Content set manually.'],
+            ['object', [], StatusCode::OK, 'object'],
+            ['stringable', [], StatusCode::OK, 'Text is "Bar"'],
+            ['actionResult', [], StatusCode::NOT_MODIFIED, ''],
+            ['view', [], StatusCode::OK, '<html><body><h1>viewAction</h1></body></html>'],
+            ['viewOrActionResult', ['showView' => '1'], StatusCode::OK, '<html><body><h1>viewOrActionResultAction</h1></body></html>'],
+            ['viewOrActionResult', ['showView' => '0'], StatusCode::NO_CONTENT, ''],
+        ];
+    }
+
+    /**
+     * Test process DefaultActionTestController.
+     *
+     * @dataProvider processDefaultActionControllerDataProvider
+     *
+     * @param string $path            The path.
+     * @param string $expectedContent The expected content.
+     */
+    public function testProcessDefaultActionController(string $path, string $expectedContent)
+    {
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
+        $request = new BasicTestRequest(Url::parse('https://www.example.com/'), new Method('GET'));
+        $response = new BasicTestResponse();
+        $controller = new DefaultActionTestController();
+        $controller->processRequest($application, $request, $response, $path);
+
+        self::assertSame($expectedContent, $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
     /**
-     * Test an action returning a view or action result returning a view.
+     * Data provider for testProcessDefaultActionController.
+     *
+     * @return array
      */
-    public function testBasicActionReturningViewOrActionResultReturningView()
+    public function processDefaultActionControllerDataProvider()
     {
-        $DS = DIRECTORY_SEPARATOR;
+        return [
+            ['foo', 'Foo Action'],
+            ['bar', 'Default Action bar'],
+            ['', 'Default Action '],
+        ];
+    }
 
+    /**
+     * Test process ActionResultTestController.
+     *
+     * @dataProvider processActionResultTestControllerDataProvider
+     *
+     * @param string $path               The path.
+     * @param int    $expectedStatusCode The expected status code.
+     * @param array  $expectedHeaders    The expected headers.
+     * @param string $expectedContent    The expected content.
+     */
+    public function testProcessActionResultTestController(string $path, int $expectedStatusCode, array $expectedHeaders, string $expectedContent)
+    {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
-        $application->addViewRenderer(new BasicTestViewRenderer());
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com/viewOrActionResult'), new Method('GET'));
-        $request->setQueryParameter('showView', '1');
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/' . $path), new Method('GET'));
         $response = new BasicTestResponse();
-        $controller = new BasicTestController();
-        $controller->processRequest($application, $request, $response, 'viewOrActionResult');
+        $controller = new ActionResultTestController();
+        $controller->processRequest($application, $request, $response, $path);
 
-        self::assertSame('<html><body><h1>viewOrActionResultAction</h1></body></html>', $response->getContent());
+        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
+        self::assertSame($expectedHeaders, iterator_to_array($response->getHeaders()));
+        self::assertSame($expectedContent, $response->getContent());
+    }
+
+    /**
+     * Test process ActionResultExceptionTestController.
+     *
+     * @dataProvider processActionResultTestControllerDataProvider
+     *
+     * @param string $path               The path.
+     * @param int    $expectedStatusCode The expected status code.
+     * @param array  $expectedHeaders    The expected headers.
+     * @param string $expectedContent    The expected content.
+     */
+    public function testProcessActionResultExceptionTestController(string $path, int $expectedStatusCode, array $expectedHeaders, string $expectedContent)
+    {
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/' . $path), new Method('GET'));
+        $response = new BasicTestResponse();
+        $controller = new ActionResultExceptionTestController();
+        $controller->processRequest($application, $request, $response, $path);
+
+        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
+        self::assertSame($expectedHeaders, iterator_to_array($response->getHeaders()));
+        self::assertSame($expectedContent, $response->getContent());
+    }
+
+    /**
+     * Data provider for testProcessActionResultTestController and testProcessActionResultExceptionTestController.
+     *
+     * @return array
+     */
+    public function processActionResultTestControllerDataProvider()
+    {
+        return [
+            ['notFound', StatusCode::NOT_FOUND, [], 'Page was not found'],
+            ['redirect', StatusCode::FOUND, ['Location' => 'http://www.domain.com/foo/bar'], ''],
+            ['permanentRedirect', StatusCode::MOVED_PERMANENTLY, ['Location' => 'https://domain.com/'], ''],
+            ['forbidden', StatusCode::FORBIDDEN, [], 'Page is forbidden'],
+            ['noContent', StatusCode::NO_CONTENT, [], ''],
+            ['notModified', StatusCode::NOT_MODIFIED, [], ''],
+            ['methodNotAllowed', StatusCode::METHOD_NOT_ALLOWED, [], ''],
+            ['json', StatusCode::OK, ['Content-Type' => 'application/json'], '{"Foo":1,"Bar":{"Baz":2}}'],
+            ['created', StatusCode::CREATED, ['Location' => 'https://example.com/created'], ''],
+            ['badRequest', StatusCode::BAD_REQUEST, [], 'The request was bad'],
+            ['unauthorized', StatusCode::UNAUTHORIZED, ['WWW-Authenticate' => 'Basic realm="Foo"'], ''],
+            ['custom', StatusCode::MULTI_STATUS, [], 'Custom action result'],
+        ];
+    }
+
+    /**
+     * Test process ViewTestController.
+     *
+     * @dataProvider processViewTestControllerDataProvider
+     *
+     * @param string $path            The path.
+     * @param string $expectedContent The expected content.
+     */
+    public function testProcessViewTestController(string $path, string $expectedContent)
+    {
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
+        $application->setViewPath(FilePath::parse(__DIR__ . '/Helpers/TestViews/'));
+        $application->addViewRenderer(new JsonTestViewRenderer());
+        $application->addViewRenderer(new BasicTestViewRenderer());
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
+        $response = new BasicTestResponse();
+        $controller = new ViewTestController();
+        $controller->processRequest($application, $request, $response, $path);
+
+        self::assertSame($expectedContent, $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
     /**
-     * Test an action returning a view or action result returning an action result.
+     * Data provider for testProcessViewTestController.
+     *
+     * @return array
      */
-    public function testBasicActionReturningViewOrActionResultReturningActionResult()
+    public function processViewTestControllerDataProvider()
     {
-        $DS = DIRECTORY_SEPARATOR;
-
-        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $application->setViewPath(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
-        $application->addViewRenderer(new BasicTestViewRenderer());
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com/viewOrActionResult'), new Method('GET'));
-        $request->setQueryParameter('showView', '0');
-        $response = new BasicTestResponse();
-        $controller = new BasicTestController();
-        $controller->processRequest($application, $request, $response, 'viewOrActionResult');
-
-        self::assertSame('', $response->getContent());
-        self::assertSame(StatusCode::NO_CONTENT, $response->getStatusCode()->getCode());
+        return [
+            ['', '<html><body><h1>Index</h1><span>' . DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR . 'www' . DIRECTORY_SEPARATOR . '</span><em>http://www.domain.com/</em></body></html>'],
+            ['alternate', '{"Model":"This is the model.","ViewItems":{"Foo":"Bar"}}'],
+            ['onlyjson', '{"Model":"This is the model."}'],
+            ['withmodel', '<html><body><h1>With model</h1><span>' . DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR . 'www' . DIRECTORY_SEPARATOR . '</span><em>http://www.domain.com/</em><p>This is the model.</p></body></html>'],
+            ['withviewdata', '<html><body><h1>With model and view data</h1><span>' . DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR . 'www' . DIRECTORY_SEPARATOR . '</span><em>http://www.domain.com/</em><p>This is the model.</p><i>This is the view data.</i></body></html>'],
+            // Skipped 'withnoviewfile' intentionally here.
+            ['withcustomviewfile', '<html><body><h1>Custom view file</h1><span>' . DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR . 'www' . DIRECTORY_SEPARATOR . '</span><em>http://www.domain.com/</em><p>This is the model.</p></body></html>'],
+        ];
     }
 
     /**
-     * Test an index action in uppercase.
+     * Test process CustomViewPathTestController.
      */
-    public function testUppercaseIndexAction()
+    public function testProcessCustomViewPathController()
+    {
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
+        $application->setViewPath(FilePath::parse(__DIR__ . '/Helpers/TestViews/'));
+        $application->addViewRenderer(new BasicTestViewRenderer());
+
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
+        $response = new BasicTestResponse();
+        $controller = new CustomViewPathTestController();
+        $controller->processRequest($application, $request, $response, '');
+
+        self::assertSame('<html><body><h1>View in custom view path</h1></body></html>', $response->getContent());
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Test process PreAndPostActionEventController.
+     *
+     * @dataProvider processPreAndPostActionEventControllerDataProvider
+     *
+     * @param string $action             The action.
+     * @param int    $port               The port.
+     * @param int    $expectedStatusCode The expected status code.
+     * @param array  $expectedHeaders    The expected headers.
+     * @param string $expectedContent    The expected content.
+     */
+    public function testProcessPreAndPostActionEventController(string $action, int $port, int $expectedStatusCode, array $expectedHeaders, string $expectedContent)
+    {
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com:' . $port . '/' . $action), new Method('GET'));
+        $response = new BasicTestResponse();
+        $controller = new PreAndPostActionEventController();
+        $controller->processRequest($application, $request, $response, $action);
+
+        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
+        self::assertSame($expectedHeaders, iterator_to_array($response->getHeaders()));
+        self::assertSame($expectedContent, $response->getContent());
+    }
+
+    /**
+     * Test process PreAndPostActionEventExceptionController.
+     *
+     * @dataProvider processPreAndPostActionEventControllerDataProvider
+     *
+     * @param string $action             The action.
+     * @param int    $port               The port.
+     * @param int    $expectedStatusCode The expected status code.
+     * @param array  $expectedHeaders    The expected headers.
+     * @param string $expectedContent    The expected content.
+     */
+    public function testProcessPreAndPostActionEventExceptionController(string $action, int $port, int $expectedStatusCode, array $expectedHeaders, string $expectedContent)
+    {
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com:' . $port . '/' . $action), new Method('GET'));
+        $response = new BasicTestResponse();
+        $controller = new PreAndPostActionEventExceptionController();
+        $controller->processRequest($application, $request, $response, $action);
+
+        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
+        self::assertSame($expectedHeaders, iterator_to_array($response->getHeaders()));
+        self::assertSame($expectedContent, $response->getContent());
+    }
+
+    /**
+     * Data provider testProcessPreAndPostActionEventController and testProcessPreAndPostActionEventExceptionController.
+     *
+     * @return array The data.
+     */
+    public function processPreAndPostActionEventControllerDataProvider()
+    {
+        return [
+            ['', 80, StatusCode::OK, ['X-Pre-Action' => 'true', 'X-Post-Action' => 'true'], 'Index action with pre- and post-action event'],
+            ['foo', 80, StatusCode::OK, ['X-Pre-Action' => 'true', 'X-Post-Action' => 'true'], 'Default action "foo" with pre- and post-action event'],
+            ['', 81, StatusCode::NOT_FOUND, [], 'This is a pre-action result'],
+            ['foo', 81, StatusCode::NOT_FOUND, [], 'This is a pre-action result'],
+            ['', 82, StatusCode::OK, ['X-Pre-Action' => 'true'], 'This is a post-action result'],
+            ['foo', 82, StatusCode::OK, ['X-Pre-Action' => 'true'], 'This is a post-action result'],
+            ['', 83, StatusCode::OK, ['X-Post-Action' => 'true'], 'Index action with pre- and post-action event'],
+            ['foo', 83, StatusCode::OK, ['X-Post-Action' => 'true'], 'Default action "foo" with pre- and post-action event'],
+            ['', 84, StatusCode::OK, ['X-Pre-Action' => 'true'], 'Index action with pre- and post-action event'],
+            ['foo', 84, StatusCode::OK, ['X-Pre-Action' => 'true'], 'Default action "foo" with pre- and post-action event'],
+            ['', 85, StatusCode::OK, [], 'Index action with pre- and post-action event'],
+            ['foo', 85, StatusCode::OK, [], 'Default action "foo" with pre- and post-action event'],
+        ];
+    }
+
+    /**
+     * Test process UppercaseActionTestController.
+     *
+     * @dataProvider processUppercaseActionTestControllerDataProvider
+     *
+     * @param string $path            The path.
+     * @param string $expectedContent The expected content.
+     */
+    public function testProcessUppercaseActionTestController(string $path, string $expectedContent)
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
         $response = new BasicTestResponse();
         $controller = new UppercaseActionTestController();
-        $controller->processRequest($application, $request, $response, '');
+        $controller->processRequest($application, $request, $response, $path);
 
-        self::assertSame('INDEX action', $response->getContent());
+        self::assertSame($expectedContent, $response->getContent());
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
     /**
-     * Test a default action in uppercase.
-     */
-    public function testUppercaseDefaultAction()
-    {
-        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com/bar'), new Method('GET'));
-        $response = new BasicTestResponse();
-        $controller = new UppercaseActionTestController();
-        $controller->processRequest($application, $request, $response, 'bar');
-
-        self::assertSame('DEFAULT action "bar"', $response->getContent());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test an uppercase action method with uppercase action.
-     */
-    public function testUppercaseActionMethodWithUppercaseAction()
-    {
-        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com/FOO'), new Method('GET'));
-        $response = new BasicTestResponse();
-        $controller = new UppercaseActionTestController();
-        $controller->processRequest($application, $request, $response, 'FOO');
-
-        self::assertSame('FOO action', $response->getContent());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test an uppercase action method with uppercase action.
-     */
-    public function testUppercaseActionMethodWithLowercaseAction()
-    {
-        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com/foo'), new Method('GET'));
-        $response = new BasicTestResponse();
-        $controller = new UppercaseActionTestController();
-        $controller->processRequest($application, $request, $response, 'foo');
-
-        self::assertSame('DEFAULT action "foo"', $response->getContent());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test multi level actions.
+     * Data provider for testProcessUppercaseActionTestController.
      *
-     * @dataProvider multiLevelActionsDataProvider
+     * @return array
+     */
+    public function processUppercaseActionTestControllerDataProvider()
+    {
+        return [
+            ['', 'INDEX action'],
+            ['bar', 'DEFAULT action "bar"'],
+            ['FOO', 'FOO action'],
+            ['foo', 'DEFAULT action "foo"'],
+        ];
+    }
+
+    /**
+     * Test process MultiLevelTestController.
+     *
+     * @dataProvider processMultiLevelTestControllerDataProvider
      *
      * @param string $action             The action.
      * @param array  $parameters         The parameters.
      * @param int    $expectedStatusCode The expected status code.
      * @param string $expectedContent    The expected content.
      */
-    public function testMultiLevelActions(string $action, array $parameters, int $expectedStatusCode, string $expectedContent)
+    public function testProcessMultiLevelTestController(string $action, array $parameters, int $expectedStatusCode, string $expectedContent)
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
@@ -647,9 +525,11 @@ class ControllerTest extends TestCase
     }
 
     /**
-     * Data provider for multi level action tests.
+     * Data provider for testProcessMultiLevelTestController.
+     *
+     * @return array
      */
-    public function multiLevelActionsDataProvider()
+    public function processMultiLevelTestControllerDataProvider()
     {
         return [
             ['noparams', [], StatusCode::OK, 'No Parameters'],
@@ -700,15 +580,15 @@ class ControllerTest extends TestCase
     }
 
     /**
-     * Test action method visibility.
+     * Test process ActionMethodVisibilityTestController.
      *
-     * @dataProvider actionMethodVisibilityDataProvider
+     * @dataProvider processActionMethodVisibilityTestControllerDataProvider
      *
      * @param string $action             The action.
      * @param int    $expectedStatusCode The expected status code.
      * @param string $expectedContent    The expected content.
      */
-    public function testActionMethodVisibility(string $action, int $expectedStatusCode, string $expectedContent)
+    public function testProcessActionMethodVisibilityTestController(string $action, int $expectedStatusCode, string $expectedContent)
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
@@ -721,9 +601,11 @@ class ControllerTest extends TestCase
     }
 
     /**
-     * Data provider for action method visibility tests.
+     * Data provider for testProcessActionMethodVisibilityTestController.
+     *
+     * @return array
      */
-    public function actionMethodVisibilityDataProvider()
+    public function processActionMethodVisibilityTestControllerDataProvider()
     {
         return [
             ['public', StatusCode::OK, 'Public action'],
@@ -736,15 +618,15 @@ class ControllerTest extends TestCase
     }
 
     /**
-     * Test actions with special names.
+     * Test process SpecialActionNameTestController.
      *
-     * @dataProvider specialNameActionDataProvider
+     * @dataProvider processSpecialActionNameTestControllerDataProvider
      *
      * @param string $action             The action.
      * @param int    $expectedStatusCode The expected status code.
      * @param string $expectedContent    The expected content.
      */
-    public function testSpecialNameAction(string $action, int $expectedStatusCode, string $expectedContent)
+    public function testProcessSpecialActionNameTestController(string $action, int $expectedStatusCode, string $expectedContent)
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
@@ -757,9 +639,11 @@ class ControllerTest extends TestCase
     }
 
     /**
-     * Data provider for special action names tests.
+     * Data provider for testProcessSpecialActionNameTestController.
+     *
+     * @return array
      */
-    public function specialNameActionDataProvider()
+    public function processSpecialActionNameTestControllerDataProvider()
     {
         return [
             ['index', StatusCode::OK, '_index action'],
@@ -772,72 +656,16 @@ class ControllerTest extends TestCase
     }
 
     /**
-     * Test getActionMethod method for index action.
-     */
-    public function testGetActionMethodForIndexAction()
-    {
-        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
-        $response = new BasicTestResponse();
-        $controller = new BasicTestController();
-        $controller->processRequest($application, $request, $response, '', []);
-
-        self::assertSame('indexAction', $controller->getActionMethod()->getName());
-    }
-
-    /**
-     * Test getActionMethod method for custom action.
-     */
-    public function testGetActionMethodForCustomAction()
-    {
-        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com/int'), new Method('GET'));
-        $response = new BasicTestResponse();
-        $controller = new BasicTestController();
-        $controller->processRequest($application, $request, $response, 'int', []);
-
-        self::assertSame('intAction', $controller->getActionMethod()->getName());
-    }
-
-    /**
-     * Test getActionMethod method for default action.
-     */
-    public function testGetActionMethodForDefaultAction()
-    {
-        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com/bar'), new Method('GET'));
-        $response = new BasicTestResponse();
-        $controller = new DefaultActionTestController();
-        $controller->processRequest($application, $request, $response, 'bar', []);
-
-        self::assertSame('defaultAction', $controller->getActionMethod()->getName());
-    }
-
-    /**
-     * Test getActionMethod method for invalid action.
-     */
-    public function testGetActionMethodForInvalidAction()
-    {
-        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
-        $request = new BasicTestRequest(Url::parse('http://www.domain.com/foo'), new Method('GET'));
-        $response = new BasicTestResponse();
-        $controller = new BasicTestController();
-        $controller->processRequest($application, $request, $response, 'foo', []);
-
-        self::assertNull($controller->getActionMethod());
-    }
-
-    /**
-     * Test type hinted action parameters.
+     * Test process TypeHintActionParametersTestController.
      *
-     * @dataProvider typeHintActionParametersDataProvider
+     * @dataProvider processTypeHintActionParametersTestControllerDataProvider
      *
      * @param string $action             The action.
      * @param array  $parameters         The parameters.
      * @param int    $expectedStatusCode The expected status code.
      * @param string $expectedContent    The expected content.
      */
-    public function testTypeHintActionParameters(string $action, array $parameters, int $expectedStatusCode, string $expectedContent)
+    public function testProcessTypeHintActionParametersTestController(string $action, array $parameters, int $expectedStatusCode, string $expectedContent)
     {
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
@@ -850,11 +678,11 @@ class ControllerTest extends TestCase
     }
 
     /**
-     * Data provider for type hinted action parameter tests.
+     * Data provider for testProcessTypeHintActionParametersTestController.
      *
-     * @return array The data.
+     * @return array
      */
-    public function typeHintActionParametersDataProvider()
+    public function processTypeHintActionParametersTestControllerDataProvider()
     {
         return [
             ['stringTypes', [], StatusCode::NOT_FOUND, ''],
