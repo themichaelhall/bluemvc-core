@@ -7,7 +7,6 @@ namespace BlueMvc\Core\Tests;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Interfaces\PluginInterface;
 use BlueMvc\Core\Request;
-use BlueMvc\Core\RequestCookie;
 use BlueMvc\Core\Response;
 use BlueMvc\Core\Route;
 use BlueMvc\Core\Tests\Helpers\Fakes\FakeFunctionExists;
@@ -38,15 +37,26 @@ use DataTypes\FilePath;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test basic routing for a application.
+ * Test routing for an application.
  */
-class BasicRoutingTest extends TestCase
+class ApplicationRoutingTest extends TestCase
 {
     /**
-     * Test get index page.
+     * Test index pages route.
+     *
+     * @dataProvider indexPagesRouteDataProvider
+     *
+     * @param string $requestUri         The request uri.
+     * @param array  $getVars            The $_GET variables.
+     * @param int    $expectedStatusCode The expected status code.
+     * @param array  $expectedHeaders    The expected headers.
+     * @param string $expectedContent    The expected content.
      */
-    public function testGetIndexPage()
+    public function testIndexPagesRoute(string $requestUri, array $getVars, int $expectedStatusCode, array $expectedHeaders, string $expectedContent)
     {
+        $_SERVER['REQUEST_URI'] = $requestUri;
+        $_GET = $getVars;
+
         $request = new Request();
         $response = new Response();
         ob_start();
@@ -54,160 +64,87 @@ class BasicRoutingTest extends TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        self::assertSame('Hello World!', $responseOutput);
-        self::assertSame('Hello World!', $response->getContent());
-        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
+        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
+        self::assertSame($expectedHeaders, FakeHeaders::get());
+        self::assertSame($expectedContent, $responseOutput);
+        self::assertSame($expectedContent, $response->getContent());
+    }
+
+    /**
+     * Data provider for testIndexPagesRoute.
+     *
+     * @return array
+     */
+    public function indexPagesRouteDataProvider()
+    {
+        return [
+            ['/', [], StatusCode::OK, ['HTTP/1.1 200 OK'], 'Hello World!'],
+            ['/notfound', [], StatusCode::NOT_FOUND, ['HTTP/1.1 404 Not Found'], ''],
+            ['/non-existing-controller/action', [], StatusCode::NOT_FOUND, ['HTTP/1.1 404 Not Found'], ''],
+            ['/serverError', [], StatusCode::INTERNAL_SERVER_ERROR, ['HTTP/1.1 500 Internal Server Error'], 'Server Error'],
+            ['/123numeric', [], StatusCode::OK, ['HTTP/1.1 200 OK'], 'Numeric action result'],
+            ['/int', [], StatusCode::OK, ['HTTP/1.1 200 OK'], '42'],
+            ['/false', [], StatusCode::OK, ['HTTP/1.1 200 OK'], 'false'],
+            ['/true', [], StatusCode::OK, ['HTTP/1.1 200 OK'], 'true'],
+            ['/null', [], StatusCode::OK, ['HTTP/1.1 200 OK'], 'Content set manually.'],
+            ['/object', [], StatusCode::OK, ['HTTP/1.1 200 OK'], 'object'],
+            ['/stringable', [], StatusCode::OK, ['HTTP/1.1 200 OK'], 'Text is "Bar"'],
+            ['/actionResult', [], StatusCode::NOT_MODIFIED, ['HTTP/1.1 304 Not Modified'], ''],
+            ['/view', [], StatusCode::OK, ['HTTP/1.1 200 OK'], '<html><body><h1>viewAction</h1></body></html>'],
+            ['/viewOrActionResult', ['showView' => '1'], StatusCode::OK, ['HTTP/1.1 200 OK'], '<html><body><h1>viewOrActionResultAction</h1></body></html>'],
+            ['/viewOrActionResult', ['showView' => '0'], StatusCode::NO_CONTENT, ['HTTP/1.1 204 No Content'], ''],
+        ];
+    }
+
+    /**
+     * Test view pages route.
+     *
+     * @dataProvider viewPagesRouteDataProvider
+     *
+     * @param string $requestUri
+     * @param string $expectedContent
+     */
+    public function testViewPagesRoute(string $requestUri, string $expectedContent)
+    {
+        $_SERVER['REQUEST_URI'] = $requestUri;
+
+        $request = new Request();
+        $response = new Response();
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get non-existing action.
-     */
-    public function testGetNonExistingAction()
-    {
-        $_SERVER['REQUEST_URI'] = '/notfound';
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('', $responseOutput);
-        self::assertSame('', $response->getContent());
-        self::assertSame(['HTTP/1.1 404 Not Found'], FakeHeaders::get());
-        self::assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get non-existing controller.
-     */
-    public function testGetNonExistingController()
-    {
-        $_SERVER['REQUEST_URI'] = '/non-existing-controller/action';
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('', $responseOutput);
-        self::assertSame('', $response->getContent());
-        self::assertSame(['HTTP/1.1 404 Not Found'], FakeHeaders::get());
-        self::assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get server error page.
-     */
-    public function testGetServerErrorPage()
-    {
-        $_SERVER['REQUEST_URI'] = '/serverError';
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('Server Error', $responseOutput);
-        self::assertSame('Server Error', $response->getContent());
-        self::assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
-        self::assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get page starting with a numeric character.
-     */
-    public function testGetPageStartingWithNumericCharacter()
-    {
-        $_SERVER['REQUEST_URI'] = '/123numeric';
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('Numeric action result', $responseOutput);
-        self::assertSame('Numeric action result', $response->getContent());
         self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertSame($expectedContent, $responseOutput);
+        self::assertSame($expectedContent, $response->getContent());
     }
 
     /**
-     * Test get view index page.
+     * Data provider for testViewRoute.
+     *
+     * @return array
      */
-    public function testGetViewIndexPage()
+    public function viewPagesRouteDataProvider()
     {
-        $_SERVER['REQUEST_URI'] = '/view/';
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('<html><body><h1>Index</h1><span>' . $this->application->getDocumentRoot() . '</span><em>' . $request->getUrl() . '</em></body></html>', $responseOutput);
-        self::assertSame('<html><body><h1>Index</h1><span>' . $this->application->getDocumentRoot() . '</span><em>' . $request->getUrl() . '</em></body></html>', $response->getContent());
-        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get view with model page.
-     */
-    public function testGetViewWithModelPage()
-    {
-        $_SERVER['REQUEST_URI'] = '/view/withmodel';
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('<html><body><h1>With model</h1><span>' . $this->application->getDocumentRoot() . '</span><em>' . $request->getUrl() . '</em><p>This is the model.</p></body></html>', $responseOutput);
-        self::assertSame('<html><body><h1>With model</h1><span>' . $this->application->getDocumentRoot() . '</span><em>' . $request->getUrl() . '</em><p>This is the model.</p></body></html>', $response->getContent());
-        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get view with view data page.
-     */
-    public function testGetViewWithViewDataPage()
-    {
-        $_SERVER['REQUEST_URI'] = '/view/withviewdata';
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('<html><body><h1>With model and view data</h1><span>' . $this->application->getDocumentRoot() . '</span><em>' . $request->getUrl() . '</em><p>This is the model.</p><i>This is the view data.</i></body></html>', $responseOutput);
-        self::assertSame('<html><body><h1>With model and view data</h1><span>' . $this->application->getDocumentRoot() . '</span><em>' . $request->getUrl() . '</em><p>This is the model.</p><i>This is the view data.</i></body></html>', $response->getContent());
-        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        return [
+            ['/view/', '<html><body><h1>Index</h1><span>' . FilePath::parse(__DIR__ . DIRECTORY_SEPARATOR) . '</span><em>http://example.com/view/</em></body></html>'],
+            ['/view/withmodel', '<html><body><h1>With model</h1><span>' . FilePath::parse(__DIR__ . DIRECTORY_SEPARATOR) . '</span><em>http://example.com/view/withmodel</em><p>This is the model.</p></body></html>'],
+            ['/view/withviewdata', '<html><body><h1>With model and view data</h1><span>' . FilePath::parse(__DIR__ . DIRECTORY_SEPARATOR) . '</span><em>http://example.com/view/withviewdata</em><p>This is the model.</p><i>This is the view data.</i></body></html>'],
+            ['/view/withcustomviewfile', '<html><body><h1>Custom view file</h1><span>' . FilePath::parse(__DIR__ . DIRECTORY_SEPARATOR) . '</span><em>http://example.com/view/withcustomviewfile</em><p>This is the model.</p></body></html>'],
+            ['/view/alternate', '{"Model":"This is the model.","ViewItems":{"Foo":"Bar"}}'],
+            ['/view/onlyjson', '{"Model":"This is the model."}'],
+            ['/customViewPath/', '<html><body><h1>View in custom view path</h1></body></html>'],
+        ];
     }
 
     /**
      * Test get view with non-existing view file page.
      */
-    public function testGetViewWithNonExistingViewFilePage()
+    public function testViewPagesRouteWithNonExistingViewFilePage()
     {
-        $DS = DIRECTORY_SEPARATOR;
         $this->application->setDebug(true);
-
         $_SERVER['REQUEST_URI'] = '/view/withnoviewfile';
 
         $request = new Request();
@@ -218,164 +155,63 @@ class BasicRoutingTest extends TestCase
         ob_end_clean();
 
         self::assertContains('BlueMvc\Core\Exceptions\ViewFileNotFoundException', $responseOutput);
-        self::assertContains('Could not find view file &quot;' . $this->application->getViewPath() . 'ViewTest' . $DS . 'withnoviewfile.json&quot; or &quot;' . $this->application->getViewPath() . 'ViewTest' . $DS . 'withnoviewfile.view&quot;', $responseOutput);
+        self::assertContains('Could not find view file &quot;' . $this->application->getViewPath() . 'ViewTest' . DIRECTORY_SEPARATOR . 'withnoviewfile.json&quot; or &quot;' . $this->application->getViewPath() . 'ViewTest' . DIRECTORY_SEPARATOR . 'withnoviewfile.view&quot;', $responseOutput);
         self::assertContains('BlueMvc\Core\Exceptions\ViewFileNotFoundException', $response->getContent());
-        self::assertContains('Could not find view file &quot;' . $this->application->getViewPath() . 'ViewTest' . $DS . 'withnoviewfile.json&quot; or &quot;' . $this->application->getViewPath() . 'ViewTest' . $DS . 'withnoviewfile.view&quot;', $response->getContent());
+        self::assertContains('Could not find view file &quot;' . $this->application->getViewPath() . 'ViewTest' . DIRECTORY_SEPARATOR . 'withnoviewfile.json&quot; or &quot;' . $this->application->getViewPath() . 'ViewTest' . DIRECTORY_SEPARATOR . 'withnoviewfile.view&quot;', $response->getContent());
         self::assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
         self::assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
     }
 
     /**
-     * Test get view with custom view file page.
-     */
-    public function testGetViewWithCustomViewFilePage()
-    {
-        $_SERVER['REQUEST_URI'] = '/view/withcustomviewfile';
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('<html><body><h1>Custom view file</h1><span>' . $this->application->getDocumentRoot() . '</span><em>http://example.com/view/withcustomviewfile</em><p>This is the model.</p></body></html>', $responseOutput);
-        self::assertSame('<html><body><h1>Custom view file</h1><span>' . $this->application->getDocumentRoot() . '</span><em>http://example.com/view/withcustomviewfile</em><p>This is the model.</p></body></html>', $response->getContent());
-        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get view with custom view path.
-     */
-    public function testGetViewWithCustomViewFilePath()
-    {
-        $_SERVER['REQUEST_URI'] = '/customViewPath/';
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('<html><body><h1>View in custom view path</h1></body></html>', $responseOutput);
-        self::assertSame('<html><body><h1>View in custom view path</h1></body></html>', $response->getContent());
-        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get view with alternate view type.
-     */
-    public function testGetViewWithAlternateViewType()
-    {
-        $_SERVER['REQUEST_URI'] = '/view/alternate';
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('{"Model":"This is the model.","ViewItems":{"Foo":"Bar"}}', $responseOutput);
-        self::assertSame('{"Model":"This is the model.","ViewItems":{"Foo":"Bar"}}', $response->getContent());
-        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get view with second choice view type.
-     */
-    public function testGetViewWithSecondChoiceViewType()
-    {
-        $_SERVER['REQUEST_URI'] = '/view/onlyjson';
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('{"Model":"This is the model."}', $responseOutput);
-        self::assertSame('{"Model":"This is the model."}', $response->getContent());
-        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get existing page for controller with default action.
-     */
-    public function testGetExistingPageForControllerWithDefaultAction()
-    {
-        $_SERVER['REQUEST_URI'] = '/default/foo';
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('Foo Action', $responseOutput);
-        self::assertSame('Foo Action', $response->getContent());
-        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get default page for controller with default action.
-     */
-    public function testGetDefaultPageForControllerWithDefaultAction()
-    {
-        $_SERVER['REQUEST_URI'] = '/default/bar';
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('Default Action bar', $responseOutput);
-        self::assertSame('Default Action bar', $response->getContent());
-        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get default page for controller with default action with view.
-     */
-    public function testGetDefaultPageForControllerWithDefaultActionWithView()
-    {
-        $_SERVER['REQUEST_URI'] = '/defaultview/foo';
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('<html><body><h1>Default view for action foo</h1></body></html>', $responseOutput);
-        self::assertSame('<html><body><h1>Default view for action foo</h1></body></html>', $response->getContent());
-        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get page returning action result.
+     * Test default pages route.
      *
-     * @dataProvider getPageReturningActionResultDataProvider
+     * @dataProvider defaultPagesRouteDataProvider
+     *
+     * @param string $requestUri
+     * @param string $expectedContent
+     */
+    public function testDefaultPagesRoute(string $requestUri, string $expectedContent)
+    {
+        $_SERVER['REQUEST_URI'] = $requestUri;
+
+        $request = new Request();
+        $response = new Response();
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
+        self::assertSame($expectedContent, $responseOutput);
+        self::assertSame($expectedContent, $response->getContent());
+    }
+
+    /**
+     * Data provider for testDefaultPagesRoute.
+     *
+     * @return array
+     */
+    public function defaultPagesRouteDataProvider()
+    {
+        return [
+            ['/default/foo', 'Foo Action'],
+            ['/default/bar', 'Default Action bar'],
+            ['/defaultview/foo', '<html><body><h1>Default view for action foo</h1></body></html>'],
+        ];
+    }
+
+    /**
+     * Test action result pages route.
+     *
+     * @dataProvider actionResultPagesRouteDataProvider
      *
      * @param string $path               The path.
      * @param int    $expectedStatusCode The expected status code.
      * @param array  $expectedHeaders    The expected headers.
      * @param string $expectedContent    The expected content.
      */
-    public function testGetPageReturningActionResult(string $path, int $expectedStatusCode, array $expectedHeaders, string $expectedContent)
+    public function testActionResultPagesRoute(string $path, int $expectedStatusCode, array $expectedHeaders, string $expectedContent)
     {
         $_SERVER['REQUEST_URI'] = '/actionresult/' . $path;
 
@@ -393,16 +229,16 @@ class BasicRoutingTest extends TestCase
     }
 
     /**
-     * Test get page returning action result exception.
+     * Test action result exception pages route.
      *
-     * @dataProvider getPageReturningActionResultDataProvider
+     * @dataProvider actionResultPagesRouteDataProvider
      *
      * @param string $path               The path.
      * @param int    $expectedStatusCode The expected status code.
      * @param array  $expectedHeaders    The expected headers.
      * @param string $expectedContent    The expected content.
      */
-    public function testGetPageReturningActionResultException(string $path, int $expectedStatusCode, array $expectedHeaders, string $expectedContent)
+    public function testActionResultExceptionPagesRoute(string $path, int $expectedStatusCode, array $expectedHeaders, string $expectedContent)
     {
         $_SERVER['REQUEST_URI'] = '/actionResultException/' . $path;
 
@@ -420,11 +256,11 @@ class BasicRoutingTest extends TestCase
     }
 
     /**
-     * Data provider for page returning action results test.
+     * Data provider for testActionResultPagesRoute and testActionResultExceptionPagesRoute.
      *
-     * @return array The data.
+     * @return array
      */
-    public function getPageReturningActionResultDataProvider()
+    public function actionResultPagesRouteDataProvider()
     {
         return [
             ['notFound', StatusCode::NOT_FOUND, ['HTTP/1.1 404 Not Found'], 'Page was not found'],
@@ -443,9 +279,9 @@ class BasicRoutingTest extends TestCase
     }
 
     /**
-     * Test get pages with pre- and post-action event.
+     * Test pre- and post-action event pages route.
      *
-     * @dataProvider preAndPostActionEventDataProvider
+     * @dataProvider preAndPostActionEventPagesRouteDataProvider
      *
      * @param string $action             The action.
      * @param int    $port               The port.
@@ -453,7 +289,7 @@ class BasicRoutingTest extends TestCase
      * @param array  $expectedHeaders    The expected headers.
      * @param string $expectedContent    The expected content.
      */
-    public function testGetPagesWithPreAndPostActionEvent(string $action, int $port, int $expectedStatusCode, array $expectedHeaders, string $expectedContent)
+    public function testPreAndPostActionEventPagesRoute(string $action, int $port, int $expectedStatusCode, array $expectedHeaders, string $expectedContent)
     {
         $_SERVER['HTTP_HOST'] = 'example.com:' . $port;
         $_SERVER['REQUEST_URI'] = '/preAndPostActionEvent/' . $action;
@@ -472,9 +308,9 @@ class BasicRoutingTest extends TestCase
     }
 
     /**
-     * Test get pages with pre- and post-action event returning action result exceptions.
+     * Test pre- and post-action event exception pages route.
      *
-     * @dataProvider preAndPostActionEventDataProvider
+     * @dataProvider preAndPostActionEventPagesRouteDataProvider
      *
      * @param string $action             The action.
      * @param int    $port               The port.
@@ -482,7 +318,7 @@ class BasicRoutingTest extends TestCase
      * @param array  $expectedHeaders    The expected headers.
      * @param string $expectedContent    The expected content.
      */
-    public function testGetPagesWithPreAndPostActionEventException(string $action, int $port, int $expectedStatusCode, array $expectedHeaders, string $expectedContent)
+    public function testPreAndPostActionEventPagesExceptionRoute(string $action, int $port, int $expectedStatusCode, array $expectedHeaders, string $expectedContent)
     {
         $_SERVER['HTTP_HOST'] = 'example.com:' . $port;
         $_SERVER['REQUEST_URI'] = '/preAndPostActionEventException/' . $action;
@@ -501,11 +337,11 @@ class BasicRoutingTest extends TestCase
     }
 
     /**
-     * Data provider for pre- and post-action event tests.
+     * Data provider for testPreAndPostActionEventPagesRoute and testPreAndPostActionEventPagesExceptionRoute.
      *
      * @return array The data.
      */
-    public function preAndPostActionEventDataProvider()
+    public function preAndPostActionEventPagesRouteDataProvider()
     {
         return [
             ['', 80, 200, ['HTTP/1.1 200 OK', 'X-Pre-Action: true', 'X-Post-Action: true'], 'Index action with pre- and post-action event'],
@@ -524,13 +360,19 @@ class BasicRoutingTest extends TestCase
     }
 
     /**
-     * Test get a page with not found error with error controller set.
+     * Test error handling with error controller.
+     *
+     * @dataProvider errorHandlingWithErrorControllerDataProvider
+     *
+     * @param string $requestUri
+     * @param int    $expectedStatusCode
+     * @param array  $expectedHeaders
+     * @param string $expectedContent
      */
-    public function testGetPageWithNotFoundErrorWithErrorControllerSet()
+    public function testErrorHandlingWithErrorController(string $requestUri, int $expectedStatusCode, array $expectedHeaders, string $expectedContent)
     {
         $this->application->setErrorControllerClass(ErrorTestController::class);
-
-        $_SERVER['REQUEST_URI'] = '/actionresult/notfound';
+        $_SERVER['REQUEST_URI'] = $requestUri;
 
         $request = new Request();
         $response = new Response();
@@ -539,54 +381,24 @@ class BasicRoutingTest extends TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        self::assertSame('<html><body><h1>Request Failed: Error: 404</h1></body></html>', $responseOutput);
-        self::assertSame('<html><body><h1>Request Failed: Error: 404</h1></body></html>', $response->getContent());
-        self::assertSame(['HTTP/1.1 404 Not Found', 'X-Error-PreActionEvent: 1', 'X-Error-PostActionEvent: 1'], FakeHeaders::get());
-        self::assertSame(StatusCode::NOT_FOUND, $response->getStatusCode()->getCode());
+        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
+        self::assertSame($expectedHeaders, FakeHeaders::get());
+        self::assertSame($expectedContent, $responseOutput);
+        self::assertSame($expectedContent, $response->getContent());
     }
 
     /**
-     * Test get a page with server error with error controller set.
+     * Data provider for testErrorHandlingWithErrorController.
+     *
+     * @return array
      */
-    public function testGetPageWithServerErrorWithErrorControllerSet()
+    public function errorHandlingWithErrorControllerDataProvider()
     {
-        $this->application->setErrorControllerClass(ErrorTestController::class);
-
-        $_SERVER['REQUEST_URI'] = '/exception/';
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('<html><body><h1>Request Failed: Error: 500, Throwable: LogicException, ThrowableMessage: Exception was thrown.</h1></body></html>', $responseOutput);
-        self::assertSame('<html><body><h1>Request Failed: Error: 500, Throwable: LogicException, ThrowableMessage: Exception was thrown.</h1></body></html>', $response->getContent());
-        self::assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
-        self::assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get a page with error controller throwing exception in non debug mode.
-     */
-    public function testGetPageWithErrorControllerThrowingExceptionInNonDebugMode()
-    {
-        $this->application->setErrorControllerClass(ErrorTestController::class);
-
-        $_SERVER['REQUEST_URI'] = '/actionresult/forbidden';
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('', $responseOutput);
-        self::assertSame('', $response->getContent());
-        self::assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
-        self::assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
+        return [
+            ['/actionresult/notfound', StatusCode::NOT_FOUND, ['HTTP/1.1 404 Not Found', 'X-Error-PreActionEvent: 1', 'X-Error-PostActionEvent: 1'], '<html><body><h1>Request Failed: Error: 404</h1></body></html>'],
+            ['/exception/', StatusCode::INTERNAL_SERVER_ERROR, ['HTTP/1.1 500 Internal Server Error'], '<html><body><h1>Request Failed: Error: 500, Throwable: LogicException, ThrowableMessage: Exception was thrown.</h1></body></html>'],
+            ['/actionresult/forbidden', StatusCode::INTERNAL_SERVER_ERROR, ['HTTP/1.1 500 Internal Server Error'], ''],
+        ];
     }
 
     /**
@@ -596,7 +408,6 @@ class BasicRoutingTest extends TestCase
     {
         $this->application->setDebug(true);
         $this->application->setErrorControllerClass(ErrorTestController::class);
-
         $_SERVER['REQUEST_URI'] = '/actionresult/forbidden';
 
         $request = new Request();
@@ -615,278 +426,56 @@ class BasicRoutingTest extends TestCase
     }
 
     /**
-     * Test get integer result page.
-     */
-    public function testGetIntegerResultPage()
-    {
-        $_SERVER['REQUEST_URI'] = '/int';
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('42', $responseOutput);
-        self::assertSame('42', $response->getContent());
-        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get false result page.
-     */
-    public function testGetFalseResultPage()
-    {
-        $_SERVER['REQUEST_URI'] = '/false';
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('false', $responseOutput);
-        self::assertSame('false', $response->getContent());
-        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get true result page.
-     */
-    public function testGetTrueResultPage()
-    {
-        $_SERVER['REQUEST_URI'] = '/true';
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('true', $responseOutput);
-        self::assertSame('true', $response->getContent());
-        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get null result page.
-     */
-    public function testGetNullResultPage()
-    {
-        $_SERVER['REQUEST_URI'] = '/null';
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('Content set manually.', $responseOutput);
-        self::assertSame('Content set manually.', $response->getContent());
-        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get object result page.
-     */
-    public function testGetObjectResultPage()
-    {
-        $_SERVER['REQUEST_URI'] = '/object';
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('object', $responseOutput);
-        self::assertSame('object', $response->getContent());
-        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get stringable object result page.
-     */
-    public function testGetStringableResultPage()
-    {
-        $_SERVER['REQUEST_URI'] = '/stringable';
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('Text is "Bar"', $responseOutput);
-        self::assertSame('Text is "Bar"', $response->getContent());
-        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get action result page.
-     */
-    public function testActionResultPage()
-    {
-        $_SERVER['REQUEST_URI'] = '/actionResult';
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('', $responseOutput);
-        self::assertSame('', $response->getContent());
-        self::assertSame(['HTTP/1.1 304 Not Modified'], FakeHeaders::get());
-        self::assertSame(StatusCode::NOT_MODIFIED, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get view result page.
-     */
-    public function testViewResultPage()
-    {
-        $_SERVER['REQUEST_URI'] = '/view';
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('<html><body><h1>viewAction</h1></body></html>', $responseOutput);
-        self::assertSame('<html><body><h1>viewAction</h1></body></html>', $response->getContent());
-        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get view or action result page returning view.
-     */
-    public function testViewOrActionResultPageReturningView()
-    {
-        $_SERVER['REQUEST_URI'] = '/viewOrActionResult';
-        $_GET['showView'] = '1';
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('<html><body><h1>viewOrActionResultAction</h1></body></html>', $responseOutput);
-        self::assertSame('<html><body><h1>viewOrActionResultAction</h1></body></html>', $response->getContent());
-        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get view or action result page returning action result.
-     */
-    public function testViewOrActionResultPageReturningActionResult()
-    {
-        $_SERVER['REQUEST_URI'] = '/viewOrActionResult';
-        $_GET['showView'] = '0';
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('', $responseOutput);
-        self::assertSame('', $response->getContent());
-        self::assertSame(['HTTP/1.1 204 No Content'], FakeHeaders::get());
-        self::assertSame(StatusCode::NO_CONTENT, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get uppercase index action method page.
-     */
-    public function testUppercaseIndexPage()
-    {
-        $_SERVER['REQUEST_URI'] = '/uppercase/';
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('INDEX action', $responseOutput);
-        self::assertSame('INDEX action', $response->getContent());
-        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get uppercase default action method page.
-     */
-    public function testUppercaseDefaultPage()
-    {
-        $_SERVER['REQUEST_URI'] = '/uppercase/bar';
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('DEFAULT action "bar"', $responseOutput);
-        self::assertSame('DEFAULT action "bar"', $response->getContent());
-        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get uppercase action method page with lowercase path.
-     */
-    public function testUppercaseActionMethodPageWithLowercasePath()
-    {
-        $_SERVER['REQUEST_URI'] = '/uppercase/foo';
-
-        $request = new Request();
-        $response = new Response();
-        ob_start();
-        $this->application->run($request, $response);
-        $responseOutput = ob_get_contents();
-        ob_end_clean();
-
-        self::assertSame('DEFAULT action "foo"', $responseOutput);
-        self::assertSame('DEFAULT action "foo"', $response->getContent());
-        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
-        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
-    }
-
-    /**
-     * Test get pages with multi level urls.
+     * Test uppercase pages route.
      *
-     * @dataProvider multiLevelPagesDataProvider
+     * @dataProvider uppercasePagesRouteDataProvider
+     *
+     * @param string $path            The path.
+     * @param string $expectedContent The expected content.
+     */
+    public function testUppercasePagesRoute(string $path, string $expectedContent)
+    {
+        $_SERVER['REQUEST_URI'] = '/uppercase/' . $path;
+
+        $request = new Request();
+        $response = new Response();
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+        self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
+        self::assertSame($expectedContent, $responseOutput);
+        self::assertSame($expectedContent, $response->getContent());
+    }
+
+    /**
+     * Data provider for testUppercasePagesRoute.
+     *
+     * @return array
+     */
+    public function uppercasePagesRouteDataProvider()
+    {
+        return [
+            ['', 'INDEX action'],
+            ['bar', 'DEFAULT action "bar"'],
+            ['FOO', 'FOO action'],
+            ['foo', 'DEFAULT action "foo"'],
+        ];
+    }
+
+    /**
+     * Test multi-level pages route.
+     *
+     * @dataProvider multiLevelPagesRouteDataProvider
      *
      * @param string $url                The (relative) url.
      * @param string $expectedContent    The expected content.
      * @param array  $expectedHeaders    The expected headers.
      * @param int    $expectedStatusCode The expected status code.
      */
-    public function testMultiLevelPages(string $url, string $expectedContent, array $expectedHeaders, int $expectedStatusCode)
+    public function testMultiLevelPagesRoute(string $url, string $expectedContent, array $expectedHeaders, int $expectedStatusCode)
     {
         $_SERVER['REQUEST_URI'] = '/multilevel/' . $url;
 
@@ -897,16 +486,18 @@ class BasicRoutingTest extends TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
+        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
+        self::assertSame($expectedHeaders, FakeHeaders::get());
         self::assertSame($expectedContent, $responseOutput);
         self::assertSame($expectedContent, $response->getContent());
-        self::assertSame($expectedHeaders, FakeHeaders::get());
-        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
     }
 
     /**
-     * Data provider for multi level urls tests.
+     * Data provider for testMultiLevelPagesRoute.
+     *
+     * @return array
      */
-    public function multiLevelPagesDataProvider()
+    public function multiLevelPagesRouteDataProvider()
     {
         return [
             ['noparams', 'No Parameters', ['HTTP/1.1 200 OK'], StatusCode::OK],
@@ -1001,16 +592,16 @@ class BasicRoutingTest extends TestCase
     }
 
     /**
-     * Test get pages with different action method visibilities.
+     * Test test action method visibility pages route.
      *
-     * @dataProvider actionMethodVisibilityPagesDataProvider
+     * @dataProvider actionMethodVisibilityPagesRouteDataProvider
      *
      * @param string $url                The (relative) url.
      * @param string $expectedContent    The expected content.
      * @param array  $expectedHeaders    The expected headers.
      * @param int    $expectedStatusCode The expected status code.
      */
-    public function testActionMethodVisibilityPages(string $url, string $expectedContent, array $expectedHeaders, int $expectedStatusCode)
+    public function testActionMethodVisibilityPagesRoute(string $url, string $expectedContent, array $expectedHeaders, int $expectedStatusCode)
     {
         $_SERVER['REQUEST_URI'] = '/actionMethodVisibility/' . $url;
 
@@ -1028,9 +619,11 @@ class BasicRoutingTest extends TestCase
     }
 
     /**
-     * Data provider for action method visibility tests.
+     * Data provider for testActionMethodVisibilityPagesRoute.
+     *
+     * @return array
      */
-    public function actionMethodVisibilityPagesDataProvider()
+    public function actionMethodVisibilityPagesRouteDataProvider()
     {
         return [
             ['public', 'Public action', ['HTTP/1.1 200 OK'], StatusCode::OK],
@@ -1043,16 +636,16 @@ class BasicRoutingTest extends TestCase
     }
 
     /**
-     * Test get pages with special action names.
+     * Test special action names pages route.
      *
-     * @dataProvider specialActionNamePagesDataProvider
+     * @dataProvider specialActionNamePagesRouteDataProvider
      *
      * @param string $url                The (relative) url.
      * @param string $expectedContent    The expected content.
      * @param array  $expectedHeaders    The expected headers.
      * @param int    $expectedStatusCode The expected status code.
      */
-    public function testSpecialActionNamePages(string $url, string $expectedContent, array $expectedHeaders, int $expectedStatusCode)
+    public function testSpecialActionNamePagesRoute(string $url, string $expectedContent, array $expectedHeaders, int $expectedStatusCode)
     {
         $_SERVER['REQUEST_URI'] = '/specialActionName/' . $url;
 
@@ -1070,9 +663,11 @@ class BasicRoutingTest extends TestCase
     }
 
     /**
-     * Data provider for special action name tests.
+     * Data provider for testSpecialActionNamePagesRoute.
+     *
+     * @return array
      */
-    public function specialActionNamePagesDataProvider()
+    public function specialActionNamePagesRouteDataProvider()
     {
         return [
             ['index', '_index action', ['HTTP/1.1 200 OK'], StatusCode::OK],
@@ -1085,14 +680,14 @@ class BasicRoutingTest extends TestCase
     }
 
     /**
-     * Test get page that displays request cookies.
+     * Test request cookie pages route.
      *
-     * @dataProvider requestCookiePageDataProvider
+     * @dataProvider requestCookiePagesRouteDataProvider
      *
-     * @param RequestCookie[] $requestCookies  The request cookies.
-     * @param string          $expectedContent The expected content.
+     * @param array  $requestCookies  The request cookies.
+     * @param string $expectedContent The expected content.
      */
-    public function testRequestCookiePage(array $requestCookies, string $expectedContent)
+    public function testRequestCookiePagesRoute(array $requestCookies, string $expectedContent)
     {
         $_SERVER['REQUEST_URI'] = '/cookies/';
         $_COOKIE = $requestCookies;
@@ -1111,9 +706,11 @@ class BasicRoutingTest extends TestCase
     }
 
     /**
-     * Data provider for request cookie tests.
+     * Data provider for testRequestCookiePagesRoute.
+     *
+     * @return array
      */
-    public function requestCookiePageDataProvider()
+    public function requestCookiePagesRouteDataProvider()
     {
         return [
             [[], ''],
@@ -1123,16 +720,16 @@ class BasicRoutingTest extends TestCase
     }
 
     /**
-     * Test get page with multiple level route path.
+     * Test multi-level path pages route.
      *
-     * @dataProvider multipleLevelRoutePathDataProvider
+     * @dataProvider multiLevelPathPagesRouteDataProvider
      *
      * @param string $url                The (relative) url.
      * @param string $expectedContent    The expected content.
      * @param array  $expectedHeaders    The expected headers.
      * @param int    $expectedStatusCode The expected status code.
      */
-    public function testMultipleLevelRoutePathPage(string $url, string $expectedContent, array $expectedHeaders, int $expectedStatusCode)
+    public function testMultiLevelPathPagesRoute(string $url, string $expectedContent, array $expectedHeaders, int $expectedStatusCode)
     {
         $_SERVER['REQUEST_URI'] = '/multiple/level/' . $url;
 
@@ -1143,18 +740,18 @@ class BasicRoutingTest extends TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
+        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
+        self::assertSame($expectedHeaders, FakeHeaders::get());
         self::assertSame($expectedContent, $responseOutput);
         self::assertSame($expectedContent, $response->getContent());
-        self::assertSame($expectedHeaders, FakeHeaders::get());
-        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
     }
 
     /**
-     * Data provider for multiple level route path tests.
+     * Data provider for testMultiLevelPathPagesRoute.
      *
-     * @return array The data.
+     * @return array
      */
-    public function multipleLevelRoutePathDataProvider()
+    public function multiLevelPathPagesRouteDataProvider()
     {
         return [
             ['noparams', 'No Parameters', ['HTTP/1.1 200 OK'], 200],
@@ -1222,16 +819,16 @@ class BasicRoutingTest extends TestCase
     }
 
     /**
-     * Test get pages with typed hint action parameters.
+     * Test type hint action parameters pages route.
      *
-     * @dataProvider typeHintActionParameterPagesDataProvider
+     * @dataProvider typeHintActionParametersPagesRouteDataProvider
      *
      * @param string $url                The (relative) url.
      * @param string $expectedContent    The expected content.
      * @param array  $expectedHeaders    The expected headers.
      * @param int    $expectedStatusCode The expected status code.
      */
-    public function testTypeHintActionParameterPages(string $url, string $expectedContent, array $expectedHeaders, int $expectedStatusCode)
+    public function testTypeHintActionParametersPagesRoute(string $url, string $expectedContent, array $expectedHeaders, int $expectedStatusCode)
     {
         $_SERVER['REQUEST_URI'] = '/typeHintActionParameters/' . $url;
 
@@ -1242,18 +839,18 @@ class BasicRoutingTest extends TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
+        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
+        self::assertSame($expectedHeaders, FakeHeaders::get());
         self::assertSame($expectedContent, $responseOutput);
         self::assertSame($expectedContent, $response->getContent());
-        self::assertSame($expectedHeaders, FakeHeaders::get());
-        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
     }
 
     /**
-     * Data provider for type hint action parameter pages tests.
+     * Data provider for testTypeHintActionParametersPagesRoute.
      *
-     * @return array The data.
+     * @return array
      */
-    public function typeHintActionParameterPagesDataProvider()
+    public function typeHintActionParametersPagesRouteDataProvider()
     {
         return [
             ['stringTypes', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
@@ -1396,6 +993,7 @@ class BasicRoutingTest extends TestCase
     public function tearDown()
     {
         $_COOKIE = [];
+        $_GET = [];
 
         FakeHeaders::disable();
         FakeFunctionExists::disable();
