@@ -328,16 +328,16 @@ abstract class AbstractRequest implements RequestInterface
         RequestCookieCollectionInterface $cookies,
         SessionItemCollectionInterface $sessionItems
     ) {
-        $this->setUrl($url);
-        $this->setMethod($method);
-        $this->setHeaders($headers);
-        $this->setQueryParameters($queryParameters);
-        $this->setFormParameters($formParameters);
-        $this->setUploadedFiles($uploadedFiles);
-        $this->setCookies($cookies);
-        $this->setSessionItems($sessionItems);
-        $this->setRawContent('');
-        $this->setClientIp(IPAddress::fromParts([0, 0, 0, 0]));
+        $this->url = $url;
+        $this->method = $method;
+        $this->headers = $headers;
+        $this->queryParameters = $queryParameters;
+        $this->formParameters = $formParameters;
+        $this->uploadedFiles = $uploadedFiles;
+        $this->cookies = $cookies;
+        $this->sessionItems = $sessionItems;
+        $this->rawContent = '';
+        $this->clientIp = IPAddress::fromParts([0, 0, 0, 0]);
     }
 
     /**
