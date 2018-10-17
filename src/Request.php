@@ -95,7 +95,7 @@ class Request extends AbstractRequest
         $hostAndPort = explode(':', $serverVars['HTTP_HOST'], 2);
 
         return Url::fromParts(
-            Scheme::parse('http' . (isset($serverVars['HTTPS']) && $serverVars['HTTPS'] !== '' ? 's' : '')),
+            Scheme::parse('http' . (isset($serverVars['HTTPS']) && $serverVars['HTTPS'] !== '' && $serverVars['HTTPS'] !== 'off' ? 's' : '')),
             Host::parse($hostAndPort[0]),
             count($hostAndPort) > 1 ? intval($hostAndPort[1]) : null,
             UrlPath::parse($uriAndQueryString[0]),
