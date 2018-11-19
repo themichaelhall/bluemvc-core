@@ -6,6 +6,7 @@ namespace BlueMvc\Core\Tests\Collections;
 
 use BlueMvc\Core\Collections\SessionItemCollection;
 use BlueMvc\Core\Interfaces\Collections\SessionItemCollectionInterface;
+use BlueMvc\Core\Tests\Helpers\Fakes\FakeIniGet;
 use BlueMvc\Core\Tests\Helpers\Fakes\FakeSession;
 use PHPUnit\Framework\TestCase;
 
@@ -134,7 +135,7 @@ class SessionItemCollectionTest extends TestCase
      */
     public function testGetForUsingOnlyCookiesDisabled()
     {
-        ini_set('session.use_only_cookies', '0');
+        FakeIniGet::set('session.use_only_cookies', '0');
 
         $sessionItemCollection = new SessionItemCollection();
 
@@ -148,10 +149,9 @@ class SessionItemCollectionTest extends TestCase
      */
     public function setUp()
     {
-        $this->originalUseOnlyCookiesSetting = ini_get('session.use_only_cookies');
-        ini_set('session.use_only_cookies', '1');
-
         FakeSession::enable();
+        FakeIniGet::enable();
+        FakeIniGet::set('session.use_only_cookies', '1');
     }
 
     /**
@@ -160,12 +160,6 @@ class SessionItemCollectionTest extends TestCase
     public function tearDown()
     {
         FakeSession::disable();
-
-        ini_set('session.use_only_cookies', $this->originalUseOnlyCookiesSetting);
+        FakeIniGet::disable();
     }
-
-    /**
-     * @var string The saved original settings for 'session.use_only_cookies'.
-     */
-    private $originalUseOnlyCookiesSetting;
 }
