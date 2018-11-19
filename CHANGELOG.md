@@ -6,6 +6,7 @@
 - Added UnauthorizedResult and UnauthorizedResultException.
 - Added ViewOrActionResultInterface.
 - Session cookie is marked as "secure" if request is secure (https).
+- Session cookie is not created when reading from an empty session.
 - Deprecated AbstractActionResult.
 
 ## [2.0.3] 2018-10-17

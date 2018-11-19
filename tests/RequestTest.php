@@ -588,10 +588,24 @@ class RequestTest extends TestCase
     }
 
     /**
+     * Test getSessionItems method with no session..
+     */
+    public function testGetSessionItemsWithNoSession()
+    {
+        $request = new Request();
+        $sessionItems = $request->getSessionItems();
+
+        self::assertSame([], iterator_to_array($sessionItems));
+        self::assertSame([], $_SESSION);
+    }
+
+    /**
      * Test getSessionItems method with no session items set.
      */
     public function testGetSessionItemsWithNoSessionItemsSet()
     {
+        $_COOKIE[session_name()] = 'ABCDE';
+
         $request = new Request();
         $sessionItems = $request->getSessionItems();
 
@@ -604,6 +618,7 @@ class RequestTest extends TestCase
      */
     public function testGetSessionItemsWithSessionItemsSet()
     {
+        $_COOKIE[session_name()] = 'ABCDE';
         $_SESSION = [
             'Foo' => 'Bar',
         ];
@@ -635,6 +650,7 @@ class RequestTest extends TestCase
      */
     public function testGetSessionItem()
     {
+        $_COOKIE[session_name()] = 'ABCDE';
         $_SESSION = [
             'Foo' => 'Bar',
             'Baz' => [true, false],

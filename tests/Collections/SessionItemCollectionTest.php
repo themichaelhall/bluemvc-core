@@ -23,6 +23,7 @@ class SessionItemCollectionTest extends TestCase
 
         self::assertInstanceOf(SessionItemCollectionInterface::class, $sessionItemCollection);
         self::assertSame(PHP_SESSION_NONE, FakeSession::getStatus());
+        self::assertFalse(isset($_SESSION));
     }
 
     /**
@@ -33,7 +34,8 @@ class SessionItemCollectionTest extends TestCase
         $sessionItemCollection = new SessionItemCollection();
 
         self::assertSame(0, count($sessionItemCollection));
-        self::assertSame(PHP_SESSION_ACTIVE, FakeSession::getStatus());
+        self::assertSame(PHP_SESSION_NONE, FakeSession::getStatus());
+        self::assertSame([], $_SESSION);
     }
 
     /**
@@ -44,7 +46,8 @@ class SessionItemCollectionTest extends TestCase
         $sessionItemCollection = new SessionItemCollection();
 
         self::assertNull($sessionItemCollection->get('Foo'));
-        self::assertSame(PHP_SESSION_ACTIVE, FakeSession::getStatus());
+        self::assertSame(PHP_SESSION_NONE, FakeSession::getStatus());
+        self::assertSame([], $_SESSION);
     }
 
     /**
@@ -64,6 +67,7 @@ class SessionItemCollectionTest extends TestCase
         self::assertSame(['One' => 1, 'Two' => 2], $sessionItemCollection->get('foo'));
         self::assertSame('2', $sessionItemCollection->get('1'));
         self::assertSame(PHP_SESSION_ACTIVE, FakeSession::getStatus());
+        self::assertSame(['Foo' => 'xxx', 'bar' => false, 'foo' => ['One' => 1, 'Two' => 2], 1 => '2'], $_SESSION);
     }
 
     /**
@@ -80,6 +84,7 @@ class SessionItemCollectionTest extends TestCase
 
         self::assertSame(['bar' => false], iterator_to_array($sessionItemCollection));
         self::assertSame(PHP_SESSION_ACTIVE, FakeSession::getStatus());
+        self::assertSame(['bar' => false], $_SESSION);
     }
 
     /**
@@ -89,10 +94,11 @@ class SessionItemCollectionTest extends TestCase
     {
         $sessionItemCollection = new SessionItemCollection();
 
-        $sessionItemArray = iterator_to_array($sessionItemCollection, true);
+        $sessionItemArray = iterator_to_array($sessionItemCollection);
 
         self::assertSame([], $sessionItemArray);
-        self::assertSame(PHP_SESSION_ACTIVE, FakeSession::getStatus());
+        self::assertSame(PHP_SESSION_NONE, FakeSession::getStatus());
+        self::assertSame([], $_SESSION);
     }
 
     /**
@@ -109,6 +115,7 @@ class SessionItemCollectionTest extends TestCase
 
         self::assertSame(['Foo' => false, 'Bar' => 'Baz', 1 => '2'], $sessionItemArray);
         self::assertSame(PHP_SESSION_ACTIVE, FakeSession::getStatus());
+        self::assertSame(['Foo' => false, 'Bar' => 'Baz', 1 => '2'], $_SESSION);
     }
 
     /**
@@ -123,10 +130,27 @@ class SessionItemCollectionTest extends TestCase
     }
 
     /**
+     * Test get session items for 'session.use_only_cookies' setting disabled.
+     */
+    public function testGetForUsingOnlyCookiesDisabled()
+    {
+        ini_set('session.use_only_cookies', '0');
+
+        $sessionItemCollection = new SessionItemCollection();
+
+        self::assertNull($sessionItemCollection->get('Foo'));
+        self::assertSame(PHP_SESSION_ACTIVE, FakeSession::getStatus());
+        self::assertSame([], $_SESSION);
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
     {
+        $this->originalUseOnlyCookiesSetting = ini_get('session.use_only_cookies');
+        ini_set('session.use_only_cookies', '1');
+
         FakeSession::enable();
     }
 
@@ -136,5 +160,12 @@ class SessionItemCollectionTest extends TestCase
     public function tearDown()
     {
         FakeSession::disable();
+
+        ini_set('session.use_only_cookies', $this->originalUseOnlyCookiesSetting);
     }
+
+    /**
+     * @var string The saved original settings for 'session.use_only_cookies'.
+     */
+    private $originalUseOnlyCookiesSetting;
 }
