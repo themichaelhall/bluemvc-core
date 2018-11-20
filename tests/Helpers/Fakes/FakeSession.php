@@ -18,6 +18,7 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
             self::$status = PHP_SESSION_NONE;
             self::$options = [];
             unset($_SESSION);
+            unset($_COOKIE[session_name()]);
         }
 
         /**
@@ -28,10 +29,8 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
             self::$isEnabled = true;
             self::$status = PHP_SESSION_NONE;
             self::$options = [];
-
-            if (!isset($_SESSION)) {
-                $_SESSION = [];
-            }
+            unset($_SESSION);
+            unset($_COOKIE[session_name()]);
         }
 
         /**
@@ -45,7 +44,7 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
         }
 
         /**
-         * @return bool True if fake cookies is enabled, false otherwise.
+         * @return bool True if fake session is enabled, false otherwise.
          */
         public static function isEnabled(): bool
         {
@@ -61,6 +60,11 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
         {
             self::$status = PHP_SESSION_ACTIVE;
             self::$options = $options;
+
+            $_COOKIE[session_name()] = 'ABCDE';
+            if (!isset($_SESSION)) {
+                $_SESSION = [];
+            }
         }
 
         /**

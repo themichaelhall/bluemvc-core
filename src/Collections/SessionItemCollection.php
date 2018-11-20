@@ -112,7 +112,7 @@ class SessionItemCollection implements SessionItemCollectionInterface
      */
     public function remove(string $name): void
     {
-        $this->doInit();
+        $this->doInit(true);
 
         unset($_SESSION[$name]);
     }
@@ -139,7 +139,7 @@ class SessionItemCollection implements SessionItemCollectionInterface
      */
     public function set(string $name, $value): void
     {
-        $this->doInit();
+        $this->doInit(true);
 
         $_SESSION[$name] = $value;
     }
@@ -160,12 +160,40 @@ class SessionItemCollection implements SessionItemCollectionInterface
 
     /**
      * Initializes session if it is not already initialized.
+     *
+     * @param bool $write If true, initialize for write, if false initialize for read-only.
      */
-    private function doInit(): void
+    private function doInit(bool $write = false): void
     {
+        if (!$write && $this->hasNoSession()) {
+            $_SESSION = [];
+
+            return;
+        }
+
         if (session_status() !== PHP_SESSION_ACTIVE) {
             session_start($this->options);
         }
+    }
+
+    /**
+     * Checks if there is no session available, without unnecessary creation of session cookie.
+     *
+     * @return bool True if there is no session, false otherwise.
+     */
+    private function hasNoSession(): bool
+    {
+        if (!boolval(ini_get('session.use_only_cookies'))) {
+            // Can't tell for sure, since only cookie is checked.
+            return false;
+        }
+
+        $sessionName = session_name();
+        if (isset($_COOKIE[$sessionName])) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
