@@ -27,6 +27,7 @@ class SessionItemCollection implements SessionItemCollectionInterface
     public function __construct(array $options = [])
     {
         $this->options = $options;
+        $this->isInitialized = false;
     }
 
     /**
@@ -112,6 +113,10 @@ class SessionItemCollection implements SessionItemCollectionInterface
      */
     public function remove(string $name): void
     {
+        if ($this->hasNoSession()) {
+            return;
+        }
+
         $this->doInit(true);
 
         unset($_SESSION[$name]);
@@ -165,6 +170,10 @@ class SessionItemCollection implements SessionItemCollectionInterface
      */
     private function doInit(bool $write = false): void
     {
+        if ($this->isInitialized) {
+            return;
+        }
+
         if (!$write && $this->hasNoSession()) {
             $_SESSION = [];
 
@@ -174,6 +183,8 @@ class SessionItemCollection implements SessionItemCollectionInterface
         if (session_status() !== PHP_SESSION_ACTIVE) {
             session_start($this->options);
         }
+
+        $this->isInitialized = true;
     }
 
     /**
@@ -183,13 +194,16 @@ class SessionItemCollection implements SessionItemCollectionInterface
      */
     private function hasNoSession(): bool
     {
+        if ($this->isInitialized) {
+            return false;
+        }
+
         if (!boolval(ini_get('session.use_only_cookies'))) {
             // Can't tell for sure, since only cookie is checked.
             return false;
         }
 
-        $sessionName = session_name();
-        if (isset($_COOKIE[$sessionName])) {
+        if (isset($_COOKIE[session_name()])) {
             return false;
         }
 
@@ -200,4 +214,9 @@ class SessionItemCollection implements SessionItemCollectionInterface
      * @var array The options to pass to session_start() method.
      */
     private $options;
+
+    /**
+     * @var bool True if session is initialized, false otherwise.
+     */
+    private $isInitialized;
 }

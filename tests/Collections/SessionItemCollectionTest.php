@@ -40,6 +40,20 @@ class SessionItemCollectionTest extends TestCase
     }
 
     /**
+     * Test count for previously initiated session.
+     */
+    public function testCountForPreviouslyInitiatedSession()
+    {
+        FakeSession::setPreviousSession(['Foo' => 'Bar']);
+
+        $sessionItemCollection = new SessionItemCollection();
+
+        self::assertSame(1, count($sessionItemCollection));
+        self::assertSame(PHP_SESSION_ACTIVE, FakeSession::getStatus());
+        self::assertSame(['Foo' => 'Bar'], $_SESSION);
+    }
+
+    /**
      * Test get method.
      */
     public function testGet()
@@ -49,6 +63,20 @@ class SessionItemCollectionTest extends TestCase
         self::assertNull($sessionItemCollection->get('Foo'));
         self::assertSame(PHP_SESSION_NONE, FakeSession::getStatus());
         self::assertSame([], $_SESSION);
+    }
+
+    /**
+     * Test get method for previously initiated session.
+     */
+    public function testGetForPreviouslyInitiatedSession()
+    {
+        FakeSession::setPreviousSession(['Foo' => 'Bar']);
+
+        $sessionItemCollection = new SessionItemCollection();
+
+        self::assertSame('Bar', $sessionItemCollection->get('Foo'));
+        self::assertSame(PHP_SESSION_ACTIVE, FakeSession::getStatus());
+        self::assertSame(['Foo' => 'Bar'], $_SESSION);
     }
 
     /**
@@ -89,6 +117,19 @@ class SessionItemCollectionTest extends TestCase
     }
 
     /**
+     * Test remove method for non initiated session.
+     */
+    public function testRemoveForNonInitiatedSession()
+    {
+        $sessionItemCollection = new SessionItemCollection();
+        $sessionItemCollection->remove('Foo');
+
+        self::assertSame([], iterator_to_array($sessionItemCollection));
+        self::assertSame(PHP_SESSION_NONE, FakeSession::getStatus());
+        self::assertSame([], $_SESSION);
+    }
+
+    /**
      * Test iterator functionality for empty collection.
      */
     public function testIteratorForEmptyCollection()
@@ -100,6 +141,22 @@ class SessionItemCollectionTest extends TestCase
         self::assertSame([], $sessionItemArray);
         self::assertSame(PHP_SESSION_NONE, FakeSession::getStatus());
         self::assertSame([], $_SESSION);
+    }
+
+    /**
+     * Test iterator functionality for previously initiated session.
+     */
+    public function testIteratorForPreviouslyInitiatedSession()
+    {
+        FakeSession::setPreviousSession(['Foo' => 'Bar']);
+
+        $sessionItemCollection = new SessionItemCollection();
+
+        $sessionItemArray = iterator_to_array($sessionItemCollection);
+
+        self::assertSame(['Foo' => 'Bar'], $sessionItemArray);
+        self::assertSame(PHP_SESSION_ACTIVE, FakeSession::getStatus());
+        self::assertSame(['Foo' => 'Bar'], $_SESSION);
     }
 
     /**
@@ -159,6 +216,7 @@ class SessionItemCollectionTest extends TestCase
      */
     public function tearDown()
     {
+        unset($_COOKIE[session_name()]);
         FakeSession::disable();
         FakeIniGet::disable();
     }

@@ -34,6 +34,17 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
         }
 
         /**
+         * Sets the session content for a simulated previous session.
+         *
+         * @param array $session The session content.
+         */
+        public static function setPreviousSession(array $session): void
+        {
+            $_SESSION = $session;
+            $_COOKIE[session_name()] = 'ABCDE';
+        }
+
+        /**
          * Returns the session status.
          *
          * @return int The session status.
@@ -61,7 +72,6 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
             self::$status = PHP_SESSION_ACTIVE;
             self::$options = $options;
 
-            $_COOKIE[session_name()] = 'ABCDE';
             if (!isset($_SESSION)) {
                 $_SESSION = [];
             }
