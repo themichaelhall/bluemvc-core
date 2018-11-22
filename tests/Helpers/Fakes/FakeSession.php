@@ -78,6 +78,14 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
         }
 
         /**
+         * Destroys the session.
+         */
+        public static function destroy(): void
+        {
+            self::$status = PHP_SESSION_NONE;
+        }
+
+        /**
          * Returns the options.
          *
          * @return array The options.
@@ -101,6 +109,41 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
          * @var array My options.
          */
         private static $options = [];
+    }
+}
+
+namespace BlueMvc\Core {
+
+    use BlueMvc\Core\Tests\Helpers\Fakes\FakeSession;
+
+    /**
+     * Fakes the session_status method.
+     *
+     * @return int The session status.
+     */
+    function session_status(): int
+    {
+        if (FakeSession::isEnabled()) {
+            return FakeSession::getStatus();
+        }
+
+        return \session_status();
+    }
+
+    /**
+     * Fakes the session_destroy method.
+     *
+     * @return bool The result.
+     */
+    function session_destroy(): bool
+    {
+        if (FakeSession::isEnabled()) {
+            FakeSession::destroy();
+
+            return true;
+        }
+
+        return \session_destroy();
     }
 }
 
