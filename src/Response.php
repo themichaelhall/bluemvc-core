@@ -37,12 +37,28 @@ class Response extends AbstractResponse
     {
         header('HTTP/1.1 ' . $this->getStatusCode());
 
-        // Output headers.
+        $this->outputHeaders();
+        $this->outputCookies();
+        $this->destroySessionIfEmpty();
+
+        echo $this->getContent();
+    }
+
+    /**
+     * Output the headers.
+     */
+    private function outputHeaders(): void
+    {
         foreach ($this->getHeaders() as $headerName => $headerValue) {
             header($headerName . ': ' . $headerValue);
         }
+    }
 
-        // Set cookies.
+    /**
+     * Output the cookies.
+     */
+    private function outputCookies(): void
+    {
         foreach ($this->getCookies() as $cookieName => $cookie) {
             /** @var ResponseCookieInterface $cookie */
             setcookie(
@@ -55,8 +71,36 @@ class Response extends AbstractResponse
                 $cookie->isHttpOnly()
             );
         }
+    }
 
-        // Output content.
-        echo $this->getContent();
+    /**
+     * Destroys an active session if it is empty.
+     */
+    private function destroySessionIfEmpty(): void
+    {
+        if (empty($_COOKIE[session_name()])) {
+            return;
+        }
+
+        if (!empty($_SESSION)) {
+            return;
+        }
+
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            return;
+        }
+
+        session_destroy();
+
+        $cookieParams = session_get_cookie_params();
+        setcookie(
+            session_name(),
+            '',
+            1,
+            $cookieParams['path'],
+            $cookieParams['domain'],
+            $cookieParams['secure'],
+            $cookieParams['httponly']
+        );
     }
 }

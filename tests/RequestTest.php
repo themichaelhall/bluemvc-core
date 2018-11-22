@@ -670,6 +670,7 @@ class RequestTest extends TestCase
      */
     public function testRemoveSessionItem()
     {
+        $_COOKIE[session_name()] = 'ABCDE';
         $_SESSION = [
             'Foo' => 'Bar',
             'Baz' => [true, false],

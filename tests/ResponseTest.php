@@ -11,6 +11,7 @@ use BlueMvc\Core\Response;
 use BlueMvc\Core\ResponseCookie;
 use BlueMvc\Core\Tests\Helpers\Fakes\FakeCookies;
 use BlueMvc\Core\Tests\Helpers\Fakes\FakeHeaders;
+use BlueMvc\Core\Tests\Helpers\Fakes\FakeSession;
 use DataTypes\Host;
 use DataTypes\UrlPath;
 use PHPUnit\Framework\TestCase;
@@ -325,12 +326,75 @@ class ResponseTest extends TestCase
     }
 
     /**
+     * Test session is destroyed if session is empty.
+     */
+    public function testSessionIsDestroyedIfSessionIsEmpty()
+    {
+        FakeSession::start([]);
+        FakeSession::setPreviousSession([]);
+
+        $response = new Response();
+
+        ob_start();
+        $response->output();
+        ob_end_clean();
+
+        $sessionCookies = FakeCookies::get();
+
+        self::assertSame(PHP_SESSION_NONE, FakeSession::getStatus());
+        self::assertSame(1, count($sessionCookies));
+        self::assertSame(session_name(), $sessionCookies[0]['name']);
+        self::assertSame('', $sessionCookies[0]['value']);
+        self::assertSame(1, $sessionCookies[0]['expire']);
+    }
+
+    /**
+     * Test session is not destroyed if session is not empty.
+     */
+    public function testSessionIsNotDestroyedIfSessionIsNotEmpty()
+    {
+        FakeSession::start([]);
+        FakeSession::setPreviousSession(['Foo' => 'Bar']);
+
+        $response = new Response();
+
+        ob_start();
+        $response->output();
+        ob_end_clean();
+
+        $sessionCookies = FakeCookies::get();
+
+        self::assertSame(PHP_SESSION_ACTIVE, FakeSession::getStatus());
+        self::assertEmpty($sessionCookies);
+    }
+
+    /**
+     * Test session is not destroyed if session is not active.
+     */
+    public function testSessionIsNotDestroyedIfSessionIsNotActive()
+    {
+        $_COOKIE[session_name()] = 'ABCDE';
+
+        $response = new Response();
+
+        ob_start();
+        $response->output();
+        ob_end_clean();
+
+        $sessionCookies = FakeCookies::get();
+
+        self::assertSame(PHP_SESSION_NONE, FakeSession::getStatus());
+        self::assertEmpty($sessionCookies);
+    }
+
+    /**
      * Set up.
      */
     public function setUp()
     {
         FakeHeaders::enable();
         FakeCookies::enable();
+        FakeSession::enable();
     }
 
     /**
@@ -340,5 +404,6 @@ class ResponseTest extends TestCase
     {
         FakeHeaders::disable();
         FakeCookies::disable();
+        FakeSession::disable();
     }
 }

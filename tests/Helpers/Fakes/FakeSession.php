@@ -34,6 +34,17 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
         }
 
         /**
+         * Sets the session content for a simulated previous session.
+         *
+         * @param array $session The session content.
+         */
+        public static function setPreviousSession(array $session): void
+        {
+            $_SESSION = $session;
+            $_COOKIE[session_name()] = 'ABCDE';
+        }
+
+        /**
          * Returns the session status.
          *
          * @return int The session status.
@@ -61,10 +72,17 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
             self::$status = PHP_SESSION_ACTIVE;
             self::$options = $options;
 
-            $_COOKIE[session_name()] = 'ABCDE';
             if (!isset($_SESSION)) {
                 $_SESSION = [];
             }
+        }
+
+        /**
+         * Destroys the session.
+         */
+        public static function destroy(): void
+        {
+            self::$status = PHP_SESSION_NONE;
         }
 
         /**
@@ -91,6 +109,41 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
          * @var array My options.
          */
         private static $options = [];
+    }
+}
+
+namespace BlueMvc\Core {
+
+    use BlueMvc\Core\Tests\Helpers\Fakes\FakeSession;
+
+    /**
+     * Fakes the session_status method.
+     *
+     * @return int The session status.
+     */
+    function session_status(): int
+    {
+        if (FakeSession::isEnabled()) {
+            return FakeSession::getStatus();
+        }
+
+        return \session_status();
+    }
+
+    /**
+     * Fakes the session_destroy method.
+     *
+     * @return bool The result.
+     */
+    function session_destroy(): bool
+    {
+        if (FakeSession::isEnabled()) {
+            FakeSession::destroy();
+
+            return true;
+        }
+
+        return \session_destroy();
     }
 }
 
