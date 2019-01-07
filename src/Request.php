@@ -88,7 +88,7 @@ class Request extends AbstractRequest
      */
     private static function parseUrl(array $serverVars): UrlInterface
     {
-        $uriAndQueryString = explode('?', $serverVars['REQUEST_URI'], 2);
+        $uriAndQueryString = explode('?', self::fixRequestUri($serverVars['REQUEST_URI']), 2);
         $hostAndPort = explode(':', $serverVars['HTTP_HOST'], 2);
 
         return Url::fromParts(
@@ -248,6 +248,20 @@ class Request extends AbstractRequest
         );
 
         return $result;
+    }
+
+    /**
+     * Fixes a request uri string to conform with RFC 3986.
+     *
+     * @param string $requestUri The original request uri.
+     *
+     * @return string The fixed request uri.
+     */
+    private static function fixRequestUri(string $requestUri): string
+    {
+        return preg_replace_callback('|[^a-zA-Z0-9-._~:/?[\\]@!$&\'()*+,;=%]|', function (array $matches) {
+            return '%' . sprintf('%02X', ord($matches[0]));
+        }, $requestUri);
     }
 
     /**
