@@ -1,18 +1,21 @@
-## [2.0.3] 2018-10-17
-- Fixed [#3](https://github.com/themichaelhall/bluemvc/issues/3) - Request url protocol is always https in IIS
+## [2.0.4] - 2019-01-07
+- Fixed [#4](https://github.com/themichaelhall/bluemvc/issues/4) - Exception thrown when using backslash in query string.
 
-## [2.0.2] 2018-09-25
-- Fixed [#2](https://github.com/themichaelhall/bluemvc/issues/2) - Header Authorization not present with Apache/2.4.7
+## [2.0.3] - 2018-10-17
+- Fixed [#3](https://github.com/themichaelhall/bluemvc/issues/3) - Request url protocol is always https in IIS.
 
-## [2.0.1] 2018-06-19
+## [2.0.2] - 2018-09-25
+- Fixed [#2](https://github.com/themichaelhall/bluemvc/issues/2) - Header Authorization not present with Apache/2.4.7.
+
+## [2.0.1] - 2018-06-19
 - Fixed [#1](https://github.com/themichaelhall/bluemvc/issues/1) - Empty action method parameter when "0" is last in url. 
 
-## [2.0.0] 2018-05-14
+## [2.0.0] - 2018-05-14
 - **Backward compatibility break**: Replaced getException/setException methods with getThrowable/setThrowable in ErrorController.
 - **Backward compatibility break**: Moved session handling from Application to Request.
 - Updated PHP requirement to 7.1.
 
-## [1.1.0] 2018-04-29
+## [1.1.0] - 2018-04-29
 - Added getClientIp method to Request.
 - Added getReferrer method to Request.
 - Added getCookieValue method to Request.
@@ -24,6 +27,7 @@
 ## 1.0.0 - 2018-02-03
 - First stable revision.
 
+[2.0.4]: https://github.com/themichaelhall/bluemvc-core/compare/v2.0.3...v2.0.4
 [2.0.3]: https://github.com/themichaelhall/bluemvc-core/compare/v2.0.2...v2.0.3
 [2.0.2]: https://github.com/themichaelhall/bluemvc-core/compare/v2.0.1...v2.0.2
 [2.0.1]: https://github.com/themichaelhall/bluemvc-core/compare/v2.0.0...v2.0.1
