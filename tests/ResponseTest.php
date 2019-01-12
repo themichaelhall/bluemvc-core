@@ -392,6 +392,8 @@ class ResponseTest extends TestCase
      */
     public function setUp()
     {
+        parent::setUp();
+
         FakeHeaders::enable();
         FakeCookies::enable();
         FakeSession::enable();
@@ -402,6 +404,8 @@ class ResponseTest extends TestCase
      */
     public function tearDown()
     {
+        parent::tearDown();
+
         FakeHeaders::disable();
         FakeCookies::disable();
         FakeSession::disable();

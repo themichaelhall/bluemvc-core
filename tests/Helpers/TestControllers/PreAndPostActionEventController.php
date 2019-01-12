@@ -41,6 +41,8 @@ class PreAndPostActionEventController extends Controller
      */
     protected function onPreActionEvent()
     {
+        parent::onPreActionEvent();
+
         if ($this->getRequest()->getUrl()->getPort() === 81) {
             return new NotFoundResult('This is a pre-action result');
         }
@@ -57,6 +59,8 @@ class PreAndPostActionEventController extends Controller
      */
     protected function onPostActionEvent()
     {
+        parent::onPostActionEvent();
+
         if ($this->getRequest()->getUrl()->getPort() === 82) {
             return 'This is a post-action result';
         }

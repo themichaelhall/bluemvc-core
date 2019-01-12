@@ -29,6 +29,8 @@ class Issue0002Test extends TestCase
      */
     public function setUp()
     {
+        parent::setUp();
+
         $this->originalServerArray = $_SERVER;
 
         $_SERVER = [
@@ -48,6 +50,8 @@ class Issue0002Test extends TestCase
      */
     public function tearDown()
     {
+        parent::tearDown();
+
         FakeFunctionExists::disable();
         FakeGetAllHeaders::disable();
 

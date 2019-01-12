@@ -486,6 +486,8 @@ class AbstractRequestTest extends TestCase
      */
     public function setUp()
     {
+        parent::setUp();
+
         $this->request = new BasicTestRequest(Url::parse('https://domain.com/foo/bar'), new Method('POST'));
     }
 
@@ -494,6 +496,8 @@ class AbstractRequestTest extends TestCase
      */
     public function tearDown()
     {
+        parent::tearDown();
+
         $this->request = null;
     }
 

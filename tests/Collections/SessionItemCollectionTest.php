@@ -206,6 +206,8 @@ class SessionItemCollectionTest extends TestCase
      */
     public function setUp()
     {
+        parent::setUp();
+
         FakeSession::enable();
         FakeIniGet::enable();
         FakeIniGet::set('session.use_only_cookies', '1');
@@ -216,6 +218,8 @@ class SessionItemCollectionTest extends TestCase
      */
     public function tearDown()
     {
+        parent::tearDown();
+
         unset($_COOKIE[session_name()]);
         FakeSession::disable();
         FakeIniGet::disable();

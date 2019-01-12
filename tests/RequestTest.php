@@ -742,6 +742,8 @@ class RequestTest extends TestCase
      */
     public function setUp()
     {
+        parent::setUp();
+
         $this->originalServerArray = $_SERVER;
         $_SERVER = [
             'HTTP_HOST'      => 'example.com',
@@ -761,6 +763,8 @@ class RequestTest extends TestCase
      */
     public function tearDown()
     {
+        parent::tearDown();
+
         FakeIsUploadedFile::disable();
         FakeFileGetContentsPhpInput::disable();
         FakeSession::disable();

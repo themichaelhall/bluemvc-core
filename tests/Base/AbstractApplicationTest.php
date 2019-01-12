@@ -380,6 +380,8 @@ class AbstractApplicationTest extends TestCase
      */
     public function setUp()
     {
+        parent::setUp();
+
         $DS = DIRECTORY_SEPARATOR;
 
         $this->application = new BasicTestApplication(FilePath::parse($DS . 'var' . $DS . 'www' . $DS));
@@ -393,6 +395,8 @@ class AbstractApplicationTest extends TestCase
      */
     public function tearDown()
     {
+        parent::tearDown();
+
         $this->application = null;
     }
 

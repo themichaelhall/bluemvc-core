@@ -315,6 +315,8 @@ class ApplicationTest extends TestCase
      */
     public function setUp()
     {
+        parent::setUp();
+
         $this->originalServerArray = $_SERVER;
 
         $DS = DIRECTORY_SEPARATOR;
@@ -336,6 +338,8 @@ class ApplicationTest extends TestCase
      */
     public function tearDown()
     {
+        parent::tearDown();
+
         $this->application = null;
 
         $_SERVER = $this->originalServerArray;

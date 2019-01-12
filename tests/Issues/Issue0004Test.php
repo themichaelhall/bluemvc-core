@@ -30,6 +30,8 @@ class Issue0004Test extends TestCase
      */
     public function setUp()
     {
+        parent::setUp();
+
         $this->originalServerArray = $_SERVER;
 
         $_SERVER = [
@@ -44,6 +46,8 @@ class Issue0004Test extends TestCase
      */
     public function tearDown()
     {
+        parent::tearDown();
+
         $_SERVER = $this->originalServerArray;
     }
 

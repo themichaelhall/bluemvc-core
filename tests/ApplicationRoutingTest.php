@@ -952,6 +952,8 @@ class ApplicationRoutingTest extends TestCase
      */
     public function setUp()
     {
+        parent::setUp();
+
         $this->originalServerArray = $_SERVER;
         $_SERVER = [
             'HTTP_HOST'      => 'example.com',
@@ -992,6 +994,8 @@ class ApplicationRoutingTest extends TestCase
      */
     public function tearDown()
     {
+        parent::tearDown();
+
         $_COOKIE = [];
         $_GET = [];
 

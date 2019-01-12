@@ -214,6 +214,8 @@ class PluginTest extends TestCase
      */
     public function setUp()
     {
+        parent::setUp();
+
         $DS = DIRECTORY_SEPARATOR;
 
         $this->application = new BasicTestApplication(FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS));
@@ -228,6 +230,8 @@ class PluginTest extends TestCase
      */
     public function tearDown()
     {
+        parent::tearDown();
+
         $this->application = null;
     }
 

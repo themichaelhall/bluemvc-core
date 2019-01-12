@@ -110,6 +110,8 @@ class ErrorHandlingTest extends TestCase
      */
     public function setUp()
     {
+        parent::setUp();
+
         $this->application = new BasicTestApplication(FilePath::parse(__DIR__ . DIRECTORY_SEPARATOR));
         $this->application->setViewPath(FilePath::parse('Helpers' . DIRECTORY_SEPARATOR . 'TestViews' . DIRECTORY_SEPARATOR));
         $this->application->addViewRenderer(new BasicTestViewRenderer());
@@ -124,6 +126,8 @@ class ErrorHandlingTest extends TestCase
      */
     public function tearDown()
     {
+        parent::tearDown();
+
         $this->application = null;
     }
 
