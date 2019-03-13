@@ -501,7 +501,7 @@ abstract class AbstractApplication implements ApplicationInterface
     private static function ensureDirectoryExists(FilePathInterface $directory): void
     {
         if (!is_dir($directory->__toString())) {
-            mkdir($directory->__toString(), 0700, true);
+            mkdir($directory->__toString(), 0777, true);
         }
     }
 
