@@ -9,6 +9,8 @@ use BlueMvc\Core\Http\Method;
 use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
 use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
 use BlueMvc\Core\Tests\Helpers\TestResponses\BasicTestResponse;
+use DataTypes\Exceptions\UrlInvalidArgumentException;
+use DataTypes\Exceptions\UrlPathLogicException;
 use DataTypes\FilePath;
 use DataTypes\Url;
 use PHPUnit\Framework\TestCase;
@@ -71,12 +73,12 @@ class PermanentRedirectResultTest extends TestCase
 
     /**
      * Test with invalid url parameter.
-     *
-     * @expectedException \DataTypes\Exceptions\UrlInvalidArgumentException
-     * @expectedExceptionMessage Url "foobar://localhost/" is invalid: Scheme "foobar" is invalid: Scheme must be "http" or "https".
      */
     public function testWithInvalidUrlParameter()
     {
+        self::expectException(UrlInvalidArgumentException::class);
+        self::expectExceptionMessage('Url "foobar://localhost/" is invalid: Scheme "foobar" is invalid: Scheme must be "http" or "https".');
+
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $request = new BasicTestRequest(Url::parse('https://www.example.com/foo/bar'), new Method('GET'));
         $response = new BasicTestResponse();
@@ -86,12 +88,12 @@ class PermanentRedirectResultTest extends TestCase
 
     /**
      * Test with invalid relative url parameter.
-     *
-     * @expectedException \DataTypes\Exceptions\UrlPathLogicException
-     * @expectedExceptionMessage Url path "/foo/bar" can not be combined with url path "../../baz": Absolute path is above root level.
      */
     public function testWithInvalidRelativeUrlParameter()
     {
+        self::expectException(UrlPathLogicException::class);
+        self::expectExceptionMessage('Url path "/foo/bar" can not be combined with url path "../../baz": Absolute path is above root level.');
+
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));
         $request = new BasicTestRequest(Url::parse('https://www.example.com/foo/bar'), new Method('GET'));
         $response = new BasicTestResponse();

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Tests;
 
+use BlueMvc\Core\Exceptions\InvalidResponseCookiePathException;
 use BlueMvc\Core\ResponseCookie;
 use DataTypes\Host;
 use DataTypes\UrlPath;
@@ -129,23 +130,23 @@ class ResponseCookieTest extends TestCase
 
     /**
      * Test constructor with non-absolute path parameter.
-     *
-     * @expectedException \BlueMvc\Core\Exceptions\InvalidResponseCookiePathException
-     * @expectedExceptionMessage Path "../foo/" is not an absolute path.
      */
     public function testConstructorWithNonAbsolutePathParameter()
     {
+        self::expectException(InvalidResponseCookiePathException::class);
+        self::expectExceptionMessage('Path "../foo/" is not an absolute path.');
+
         new ResponseCookie('foo', null, UrlPath::parse('../foo/'));
     }
 
     /**
      * Test constructor with non-directory path parameter.
-     *
-     * @expectedException \BlueMvc\Core\Exceptions\InvalidResponseCookiePathException
-     * @expectedExceptionMessage Path "/foo/bar" is not a directory.
      */
     public function testConstructorWithNonDirectoryPathParameter()
     {
+        self::expectException(InvalidResponseCookiePathException::class);
+        self::expectExceptionMessage('Path "/foo/bar" is not a directory.');
+
         new ResponseCookie('foo', null, UrlPath::parse('/foo/bar'));
     }
 

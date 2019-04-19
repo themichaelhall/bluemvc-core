@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Tests;
 
+use BlueMvc\Core\Exceptions\InvalidControllerClassException;
+use BlueMvc\Core\Exceptions\InvalidRoutePathException;
 use BlueMvc\Core\Http\Method;
 use BlueMvc\Core\Route;
 use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
@@ -18,45 +20,45 @@ class RouteTest extends TestCase
 {
     /**
      * Test path with invalid character.
-     *
-     * @expectedException \BlueMvc\Core\Exceptions\InvalidRoutePathException
-     * @expectedExceptionMessage Path "Foo*Bar" contains invalid character "*".
      */
     public function testPathWithInvalidCharacter()
     {
+        self::expectException(InvalidRoutePathException::class);
+        self::expectExceptionMessage('Path "Foo*Bar" contains invalid character "*".');
+
         new Route('Foo*Bar', BasicTestController::class);
     }
 
     /**
      * Test path with empty part.
-     *
-     * @expectedException \BlueMvc\Core\Exceptions\InvalidRoutePathException
-     * @expectedExceptionMessage Path "Foo//Bar" contains empty part.
      */
     public function testPathWithEmptyPart()
     {
+        self::expectException(InvalidRoutePathException::class);
+        self::expectExceptionMessage('Path "Foo//Bar" contains empty part.');
+
         new Route('Foo//Bar', BasicTestController::class);
     }
 
     /**
      * Test that setting an undefined controller class name throws exception.
-     *
-     * @expectedException \BlueMvc\Core\Exceptions\InvalidControllerClassException
-     * @expectedExceptionMessage "BlueMvc\Core\FooBar" is not a valid controller class.
      */
     public function testSetUndefinedControllerClassThrowsException()
     {
+        self::expectException(InvalidControllerClassException::class);
+        self::expectExceptionMessage('"BlueMvc\Core\FooBar" is not a valid controller class.');
+
         new Route('', 'BlueMvc\\Core\\FooBar');
     }
 
     /**
      * Test that setting an invalid controller class name throws exception.
-     *
-     * @expectedException \BlueMvc\Core\Exceptions\InvalidControllerClassException
-     * @expectedExceptionMessage "BlueMvc\Core\Request" is not a valid controller class.
      */
     public function testSetInvalidControllerClassThrowsException()
     {
+        self::expectException(InvalidControllerClassException::class);
+        self::expectExceptionMessage('"BlueMvc\Core\Request" is not a valid controller class.');
+
         new Route('', 'BlueMvc\\Core\\Request');
     }
 

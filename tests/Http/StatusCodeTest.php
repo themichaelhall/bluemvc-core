@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Tests\Http;
 
+use BlueMvc\Core\Exceptions\Http\InvalidStatusCodeException;
 use BlueMvc\Core\Http\StatusCode;
 use PHPUnit\Framework\TestCase;
 
@@ -109,12 +110,12 @@ class StatusCodeTest extends TestCase
 
     /**
      * Test that an invalid status code is invalid.
-     *
-     * @expectedException \BlueMvc\Core\Exceptions\Http\InvalidStatusCodeException
-     * @expectedExceptionMessage Status code 99 is invalid.
      */
     public function testInvalidStatusCodeIsInvalid()
     {
+        self::expectException(InvalidStatusCodeException::class);
+        self::expectExceptionMessage('Status code 99 is invalid.');
+
         new StatusCode(99);
     }
 

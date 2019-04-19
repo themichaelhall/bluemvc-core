@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BlueMvc\Core\Tests\ActionResults;
 
 use BlueMvc\Core\ActionResults\JsonResult;
+use BlueMvc\Core\Exceptions\InvalidActionResultContentException;
 use BlueMvc\Core\Http\Method;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
@@ -73,12 +74,12 @@ class JsonResultTest extends TestCase
 
     /**
      * Test with invalid json data class.
-     *
-     * @expectedException \BlueMvc\Core\Exceptions\InvalidActionResultContentException
-     * @expectedExceptionMessage Could not create JsonResult from content: Malformed UTF-8 characters, possibly incorrectly encoded
      */
     public function testWithInvalidJsonData()
     {
+        self::expectException(InvalidActionResultContentException::class);
+        self::expectExceptionMessage('Could not create JsonResult from content: Malformed UTF-8 characters, possibly incorrectly encoded');
+
         new JsonResult(chr(255));
     }
 }

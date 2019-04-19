@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Tests\Http;
 
+use BlueMvc\Core\Exceptions\Http\InvalidMethodNameException;
 use BlueMvc\Core\Http\Method;
 use PHPUnit\Framework\TestCase;
 
@@ -82,12 +83,12 @@ class MethodTest extends TestCase
 
     /**
      * Test that invalid character in method name is invalid.
-     *
-     * @expectedException \BlueMvc\Core\Exceptions\Http\InvalidMethodNameException
-     * @expectedExceptionMessage Method "FOO{BAR" contains invalid character "{".
      */
     public function testInvalidCharacterInMethodNameIsInvalid()
     {
+        self::expectException(InvalidMethodNameException::class);
+        self::expectExceptionMessage('Method "FOO{BAR" contains invalid character "{".');
+
         new Method('FOO{BAR');
     }
 }

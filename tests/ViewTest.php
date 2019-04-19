@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\Collections\ViewItemCollection;
+use BlueMvc\Core\Exceptions\InvalidViewFileException;
+use BlueMvc\Core\Exceptions\MissingViewRendererException;
 use BlueMvc\Core\Http\Method;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
@@ -128,12 +130,12 @@ class ViewTest extends TestCase
 
     /**
      * Test create a view with invalid view file.
-     *
-     * @expectedException \BlueMvc\Core\Exceptions\InvalidViewFileException
-     * @expectedExceptionMessage View file "foo$bar" contains invalid character "$".
      */
     public function testCreateWithInvalidViewFile()
     {
+        self::expectException(InvalidViewFileException::class);
+        self::expectExceptionMessage('View file "foo$bar" contains invalid character "$".');
+
         new View([], 'foo$bar');
     }
 
@@ -211,12 +213,12 @@ class ViewTest extends TestCase
 
     /**
      * Test update response method with no view renderer.
-     *
-     * @expectedException \BlueMvc\Core\Exceptions\MissingViewRendererException
-     * @expectedExceptionMessage No view renderer was added to application.
      */
     public function testUpdateViewWithNoViewRenderer()
     {
+        self::expectException(MissingViewRendererException::class);
+        self::expectExceptionMessage('No view renderer was added to application.');
+
         $DS = DIRECTORY_SEPARATOR;
 
         $application = new BasicTestApplication(FilePath::parse('/var/www/'));

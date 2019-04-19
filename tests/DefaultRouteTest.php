@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\DefaultRoute;
+use BlueMvc\Core\Exceptions\InvalidControllerClassException;
 use BlueMvc\Core\Http\Method;
 use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
 use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
@@ -28,23 +29,23 @@ class DefaultRouteTest extends TestCase
 
     /**
      * Test that setting an undefined controller class name throws exception.
-     *
-     * @expectedException \BlueMvc\Core\Exceptions\InvalidControllerClassException
-     * @expectedExceptionMessage "BlueMvc\Core\FooBar" is not a valid controller class.
      */
     public function testSetUndefinedControllerClassThrowsException()
     {
+        self::expectException(InvalidControllerClassException::class);
+        self::expectExceptionMessage('"BlueMvc\Core\FooBar" is not a valid controller class.');
+
         new DefaultRoute('BlueMvc\\Core\\FooBar');
     }
 
     /**
      * Test that setting an invalid controller class name throws exception.
-     *
-     * @expectedException \BlueMvc\Core\Exceptions\InvalidControllerClassException
-     * @expectedExceptionMessage "BlueMvc\Core\Request" is not a valid controller class.
      */
     public function testSetInvalidControllerClassThrowsException()
     {
+        self::expectException(InvalidControllerClassException::class);
+        self::expectExceptionMessage('"BlueMvc\Core\Request" is not a valid controller class.');
+
         new DefaultRoute('BlueMvc\\Core\\Request');
     }
 
