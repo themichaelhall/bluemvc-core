@@ -154,10 +154,10 @@ class ApplicationRoutingTest extends TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        self::assertContains('BlueMvc\Core\Exceptions\ViewFileNotFoundException', $responseOutput);
-        self::assertContains('Could not find view file &quot;' . $this->application->getViewPath() . 'ViewTest' . DIRECTORY_SEPARATOR . 'withnoviewfile.json&quot; or &quot;' . $this->application->getViewPath() . 'ViewTest' . DIRECTORY_SEPARATOR . 'withnoviewfile.view&quot;', $responseOutput);
-        self::assertContains('BlueMvc\Core\Exceptions\ViewFileNotFoundException', $response->getContent());
-        self::assertContains('Could not find view file &quot;' . $this->application->getViewPath() . 'ViewTest' . DIRECTORY_SEPARATOR . 'withnoviewfile.json&quot; or &quot;' . $this->application->getViewPath() . 'ViewTest' . DIRECTORY_SEPARATOR . 'withnoviewfile.view&quot;', $response->getContent());
+        self::assertStringContainsString('BlueMvc\Core\Exceptions\ViewFileNotFoundException', $responseOutput);
+        self::assertStringContainsString('Could not find view file &quot;' . $this->application->getViewPath() . 'ViewTest' . DIRECTORY_SEPARATOR . 'withnoviewfile.json&quot; or &quot;' . $this->application->getViewPath() . 'ViewTest' . DIRECTORY_SEPARATOR . 'withnoviewfile.view&quot;', $responseOutput);
+        self::assertStringContainsString('BlueMvc\Core\Exceptions\ViewFileNotFoundException', $response->getContent());
+        self::assertStringContainsString('Could not find view file &quot;' . $this->application->getViewPath() . 'ViewTest' . DIRECTORY_SEPARATOR . 'withnoviewfile.json&quot; or &quot;' . $this->application->getViewPath() . 'ViewTest' . DIRECTORY_SEPARATOR . 'withnoviewfile.view&quot;', $response->getContent());
         self::assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
         self::assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
     }
@@ -417,10 +417,10 @@ class ApplicationRoutingTest extends TestCase
         $responseOutput = ob_get_contents();
         ob_end_clean();
 
-        self::assertContains('Exception thrown from 403 action.', $responseOutput);
-        self::assertContains('Exception thrown from 403 action.', $response->getContent());
-        self::assertContains('RuntimeException', $responseOutput);
-        self::assertContains('RuntimeException', $response->getContent());
+        self::assertStringContainsString('Exception thrown from 403 action.', $responseOutput);
+        self::assertStringContainsString('Exception thrown from 403 action.', $response->getContent());
+        self::assertStringContainsString('RuntimeException', $responseOutput);
+        self::assertStringContainsString('RuntimeException', $response->getContent());
         self::assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
         self::assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
     }
@@ -950,7 +950,7 @@ class ApplicationRoutingTest extends TestCase
     /**
      * Set up.
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -992,7 +992,7 @@ class ApplicationRoutingTest extends TestCase
     /**
      * Tear down.
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 

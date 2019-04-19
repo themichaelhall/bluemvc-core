@@ -51,7 +51,7 @@ class ErrorHandlingTest extends TestCase
         if ($expectedContent === '') {
             self::assertSame('', $response->getContent());
         } else {
-            self::assertContains($expectedContent, $response->getContent());
+            self::assertStringContainsString($expectedContent, $response->getContent());
         }
 
         self::assertSame($expectedHeaders, iterator_to_array($response->getHeaders()));
@@ -108,7 +108,7 @@ class ErrorHandlingTest extends TestCase
     /**
      * Set up.
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -124,7 +124,7 @@ class ErrorHandlingTest extends TestCase
     /**
      * Tear down.
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 
