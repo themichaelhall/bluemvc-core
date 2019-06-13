@@ -1,4 +1,4 @@
-## Unreleased
+## [2.1.0] - 2019-06-13
 - Added ActionResult.
 - Added type hints functionality in action method parameters.
 - Added ActionResultException handling in action methods.
@@ -39,6 +39,7 @@
 ## 1.0.0 - 2018-02-03
 - First stable revision.
 
+[2.1.0]: https://github.com/themichaelhall/bluemvc-core/compare/v2.0.4...v2.1.0
 [2.0.4]: https://github.com/themichaelhall/bluemvc-core/compare/v2.0.3...v2.0.4
 [2.0.3]: https://github.com/themichaelhall/bluemvc-core/compare/v2.0.2...v2.0.3
 [2.0.2]: https://github.com/themichaelhall/bluemvc-core/compare/v2.0.1...v2.0.2
