@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Tests\Helpers\TestClasses;
 
+use JsonSerializable;
+
 /**
  * A basic test class that implements the JsonSerializable interface.
  */
-class JsonSerializableTestClass implements \JsonSerializable
+class JsonSerializableTestClass implements JsonSerializable
 {
     /**
      * JsonSerializableTestClass constructor.

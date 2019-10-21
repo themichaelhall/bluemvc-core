@@ -20,6 +20,9 @@ use BlueMvc\Core\Interfaces\ResponseInterface;
 use BlueMvc\Core\ResponseCookie;
 use DataTypes\Interfaces\HostInterface;
 use DataTypes\Interfaces\UrlPathInterface;
+use DateTimeImmutable;
+use DateTimeInterface;
+use DateTimeZone;
 
 /**
  * Abstract class representing a web response.
@@ -159,17 +162,17 @@ abstract class AbstractResponse implements ResponseInterface
      *
      * @since 1.1.0
      *
-     * @param string                  $name       The name.
-     * @param string                  $value      The value.
-     * @param \DateTimeInterface|null $expiry     The expiry time or null if no expiry time.
-     * @param UrlPathInterface|null   $path       The path or null if no path.
-     * @param HostInterface|null      $domain     The domain or null if no domain.
-     * @param bool                    $isSecure   True if cookie is secure, false otherwise.
-     * @param bool                    $isHttpOnly True if cookie is http only, false otherwise.
+     * @param string                 $name       The name.
+     * @param string                 $value      The value.
+     * @param DateTimeInterface|null $expiry     The expiry time or null if no expiry time.
+     * @param UrlPathInterface|null  $path       The path or null if no path.
+     * @param HostInterface|null     $domain     The domain or null if no domain.
+     * @param bool                   $isSecure   True if cookie is secure, false otherwise.
+     * @param bool                   $isHttpOnly True if cookie is http only, false otherwise.
      *
      * @throws InvalidResponseCookiePathException If the path is not a directory or an absolute path.
      */
-    public function setCookieValue(string $name, string $value, ?\DateTimeInterface $expiry = null, ?UrlPathInterface $path = null, ?HostInterface $domain = null, bool $isSecure = false, bool $isHttpOnly = false): void
+    public function setCookieValue(string $name, string $value, ?DateTimeInterface $expiry = null, ?UrlPathInterface $path = null, ?HostInterface $domain = null, bool $isSecure = false, bool $isHttpOnly = false): void
     {
         $this->cookies->set($name, new ResponseCookie($value, $expiry, $path, $domain, $isSecure, $isHttpOnly));
     }
@@ -179,15 +182,15 @@ abstract class AbstractResponse implements ResponseInterface
      *
      * @since 1.0.0
      *
-     * @param \DateTimeImmutable|null $expiry The expiry time or null for immediate expiry.
+     * @param DateTimeImmutable|null $expiry The expiry time or null for immediate expiry.
      */
-    public function setExpiry(?\DateTimeImmutable $expiry = null): void
+    public function setExpiry(?DateTimeImmutable $expiry = null): void
     {
-        $date = new \DateTimeImmutable();
+        $date = new DateTimeImmutable();
         $expiry = $expiry ?: $date;
 
-        $this->setHeader('Date', $date->setTimezone(new \DateTimeZone('UTC'))->format('D, d M Y H:i:s \G\M\T'));
-        $this->setHeader('Expires', $expiry->setTimezone(new \DateTimeZone('UTC'))->format('D, d M Y H:i:s \G\M\T'));
+        $this->setHeader('Date', $date->setTimezone(new DateTimeZone('UTC'))->format('D, d M Y H:i:s \G\M\T'));
+        $this->setHeader('Expires', $expiry->setTimezone(new DateTimeZone('UTC'))->format('D, d M Y H:i:s \G\M\T'));
 
         if ($expiry <= $date) {
             $this->setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');

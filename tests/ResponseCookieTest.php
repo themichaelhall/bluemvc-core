@@ -8,6 +8,7 @@ use BlueMvc\Core\Exceptions\InvalidResponseCookiePathException;
 use BlueMvc\Core\ResponseCookie;
 use DataTypes\Host;
 use DataTypes\UrlPath;
+use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -40,7 +41,7 @@ class ResponseCookieTest extends TestCase
      */
     public function testGetExpiryWithExpirySet()
     {
-        $expiry = new \DateTimeImmutable();
+        $expiry = new DateTimeImmutable();
         $responseCookie = new ResponseCookie('Foo', $expiry);
 
         self::assertSame($expiry, $responseCookie->getExpiry());

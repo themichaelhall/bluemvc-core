@@ -8,11 +8,13 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Exceptions;
 
+use Exception;
+
 /**
  * Exception used when passed invalid path argument in Route class.
  *
  * @since 1.0.0
  */
-class InvalidRoutePathException extends \Exception
+class InvalidRoutePathException extends Exception
 {
 }

@@ -8,11 +8,13 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Exceptions;
 
+use Exception;
+
 /**
  * Exception used when server or PHP environment is misconfigured or fails.
  *
  * @since 1.0.0
  */
-class ServerEnvironmentException extends \Exception
+class ServerEnvironmentException extends Exception
 {
 }

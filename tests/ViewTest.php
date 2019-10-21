@@ -17,6 +17,7 @@ use BlueMvc\Core\Tests\Helpers\TestViewRenderers\JsonTestViewRenderer;
 use BlueMvc\Core\View;
 use DataTypes\FilePath;
 use DataTypes\Url;
+use Exception;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -99,7 +100,7 @@ class ViewTest extends TestCase
 
         try {
             $view->updateResponse($application, $request, $response, 'ViewTest', 'withnoviewfile', $viewItems);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
         }
 
         self::assertSame('BlueMvc\Core\Exceptions\ViewFileNotFoundException', get_class($exception));

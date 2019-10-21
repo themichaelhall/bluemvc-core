@@ -13,6 +13,10 @@ use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\ControllerInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
+use ReflectionClass;
+use ReflectionException;
+use ReflectionMethod;
+use ReflectionParameter;
 
 /**
  * Abstract class representing a controller.
@@ -26,9 +30,9 @@ abstract class AbstractController implements ControllerInterface
      *
      * @since 1.0.0
      *
-     * @return \ReflectionMethod|null The method of the action being processed or null if no action is being processed.
+     * @return ReflectionMethod|null The method of the action being processed or null if no action is being processed.
      */
-    public function getActionMethod(): ?\ReflectionMethod
+    public function getActionMethod(): ?ReflectionMethod
     {
         return $this->actionMethod;
     }
@@ -157,7 +161,7 @@ abstract class AbstractController implements ControllerInterface
      */
     protected function tryInvokeActionMethod(string $action, array $parameters, bool $isCaseSensitive, &$result, ?bool &$hasFoundActionMethod = null): bool
     {
-        $reflectionClass = new \ReflectionClass($this);
+        $reflectionClass = new ReflectionClass($this);
 
         $actionMethod = self::findActionMethod($reflectionClass, $action, $isCaseSensitive);
         if ($actionMethod === null) {
@@ -182,13 +186,13 @@ abstract class AbstractController implements ControllerInterface
     /**
      * Try to find an action method by action.
      *
-     * @param \ReflectionClass $reflectionClass The ReflectionClass.
-     * @param string           $action          The action.
-     * @param bool             $isCaseSensitive True if action method is case sensitive, false otherwise.
+     * @param ReflectionClass $reflectionClass The ReflectionClass.
+     * @param string          $action          The action.
+     * @param bool            $isCaseSensitive True if action method is case sensitive, false otherwise.
      *
-     * @return \ReflectionMethod|null The action method or null if no action method was found.
+     * @return ReflectionMethod|null The action method or null if no action method was found.
      */
-    private static function findActionMethod(\ReflectionClass $reflectionClass, string $action, bool $isCaseSensitive): ?\ReflectionMethod
+    private static function findActionMethod(ReflectionClass $reflectionClass, string $action, bool $isCaseSensitive): ?ReflectionMethod
     {
         $actionMethod = null;
 
@@ -207,7 +211,7 @@ abstract class AbstractController implements ControllerInterface
             if (!$actionMethod->isPublic()) {
                 return null;
             }
-        } catch (\ReflectionException $e) {
+        } catch (ReflectionException $e) {
             return null;
         }
 
@@ -217,12 +221,12 @@ abstract class AbstractController implements ControllerInterface
     /**
      * Invoke action method.
      *
-     * @param \ReflectionMethod $actionMethod The action method.
-     * @param array             $parameters   The parameters.
+     * @param ReflectionMethod $actionMethod The action method.
+     * @param array            $parameters   The parameters.
      *
      * @return mixed|null The result.
      */
-    private function invokeActionMethod(\ReflectionMethod $actionMethod, array $parameters)
+    private function invokeActionMethod(ReflectionMethod $actionMethod, array $parameters)
     {
         $this->actionMethod = $actionMethod;
 
@@ -260,13 +264,13 @@ abstract class AbstractController implements ControllerInterface
     /**
      * Check if an action method matches an array of parameters.
      *
-     * @param \ReflectionMethod $reflectionMethod   The action method.
-     * @param array             $parameters         The parameters.
-     * @param array|null        $adjustedParameters The actual parameters, matching action methods actual signature or undefined if check failed.
+     * @param ReflectionMethod $reflectionMethod   The action method.
+     * @param array            $parameters         The parameters.
+     * @param array|null       $adjustedParameters The actual parameters, matching action methods actual signature or undefined if check failed.
      *
      * @return bool True if action method matches the parameters, false otherwise.
      */
-    private static function actionMethodMatchesParameters(\ReflectionMethod $reflectionMethod, array $parameters, array &$adjustedParameters = null): bool
+    private static function actionMethodMatchesParameters(ReflectionMethod $reflectionMethod, array $parameters, array &$adjustedParameters = null): bool
     {
         $parametersCount = count($parameters);
 
@@ -303,13 +307,13 @@ abstract class AbstractController implements ControllerInterface
     /**
      * Check if an action method parameter matches a parameter.
      *
-     * @param \ReflectionParameter $reflectionParameter The action method parameter.
-     * @param mixed                $parameter           The parameter.
-     * @param mixed|null           $adjustedParameter   The adjusted parameter.
+     * @param ReflectionParameter $reflectionParameter The action method parameter.
+     * @param mixed               $parameter           The parameter.
+     * @param mixed|null          $adjustedParameter   The adjusted parameter.
      *
      * @return bool True if parameter matches, false otherwise.
      */
-    private static function actionMethodParameterMatchesParameter(\ReflectionParameter $reflectionParameter, $parameter, &$adjustedParameter = null)
+    private static function actionMethodParameterMatchesParameter(ReflectionParameter $reflectionParameter, $parameter, &$adjustedParameter = null)
     {
         $adjustedParameter = $parameter;
 
@@ -374,7 +378,7 @@ abstract class AbstractController implements ControllerInterface
     private $response;
 
     /**
-     * @var \ReflectionMethod|null My action method.
+     * @var ReflectionMethod|null My action method.
      */
     private $actionMethod;
 }

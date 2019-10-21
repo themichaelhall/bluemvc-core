@@ -13,6 +13,7 @@ use BlueMvc\Core\Exceptions\InvalidResponseCookiePathException;
 use BlueMvc\Core\Interfaces\ResponseCookieInterface;
 use DataTypes\Interfaces\HostInterface;
 use DataTypes\Interfaces\UrlPathInterface;
+use DateTimeInterface;
 
 /**
  * Class representing a response cookie.
@@ -26,16 +27,16 @@ class ResponseCookie extends AbstractCookie implements ResponseCookieInterface
      *
      * @since 1.0.0
      *
-     * @param string                  $value      The value.
-     * @param \DateTimeInterface|null $expiry     The expiry time or null if no expiry time.
-     * @param UrlPathInterface|null   $path       The path or null if no path.
-     * @param HostInterface|null      $domain     The domain or null if no domain.
-     * @param bool                    $isSecure   True if cookie is secure, false otherwise.
-     * @param bool                    $isHttpOnly True if cookie is http only, false otherwise.
+     * @param string                 $value      The value.
+     * @param DateTimeInterface|null $expiry     The expiry time or null if no expiry time.
+     * @param UrlPathInterface|null  $path       The path or null if no path.
+     * @param HostInterface|null     $domain     The domain or null if no domain.
+     * @param bool                   $isSecure   True if cookie is secure, false otherwise.
+     * @param bool                   $isHttpOnly True if cookie is http only, false otherwise.
      *
      * @throws InvalidResponseCookiePathException If the path is not a directory or an absolute path.
      */
-    public function __construct(string $value, ?\DateTimeInterface $expiry = null, ?UrlPathInterface $path = null, ?HostInterface $domain = null, bool $isSecure = false, bool $isHttpOnly = false)
+    public function __construct(string $value, ?DateTimeInterface $expiry = null, ?UrlPathInterface $path = null, ?HostInterface $domain = null, bool $isSecure = false, bool $isHttpOnly = false)
     {
         parent::__construct($value);
 
@@ -73,9 +74,9 @@ class ResponseCookie extends AbstractCookie implements ResponseCookieInterface
      *
      * @since 1.0.0
      *
-     * @return \DateTimeInterface|null The expiry time or null if no expiry time.
+     * @return DateTimeInterface|null The expiry time or null if no expiry time.
      */
-    public function getExpiry(): ?\DateTimeInterface
+    public function getExpiry(): ?DateTimeInterface
     {
         return $this->expiry;
     }
@@ -117,7 +118,7 @@ class ResponseCookie extends AbstractCookie implements ResponseCookieInterface
     }
 
     /**
-     * @var \DateTimeInterface|null My expiry time or null if no expiry time.
+     * @var DateTimeInterface|null My expiry time or null if no expiry time.
      */
     private $expiry;
 

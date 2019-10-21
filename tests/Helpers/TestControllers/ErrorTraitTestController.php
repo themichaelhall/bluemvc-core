@@ -8,6 +8,9 @@ use BlueMvc\Core\Controller;
 use BlueMvc\Core\Interfaces\ErrorControllerInterface;
 use BlueMvc\Core\Traits\ErrorControllerTrait;
 use BlueMvc\Core\View;
+use DomainException;
+use ParseError;
+use RuntimeException;
 
 /**
  * Test controller that handles errors via ErrorControllerTrait.
@@ -22,7 +25,7 @@ class ErrorTraitTestController extends Controller implements ErrorControllerInte
     public function _403Action()
     {
         // This emulates the case when there is a bug in the error controller.
-        throw new \RuntimeException('Exception thrown from 403 action.');
+        throw new RuntimeException('Exception thrown from 403 action.');
     }
 
     /**
@@ -31,7 +34,7 @@ class ErrorTraitTestController extends Controller implements ErrorControllerInte
     public function _405Action()
     {
         // This emulates the case when there is a bug in the error controller that throws an error.
-        throw new \ParseError('Error thrown from 405 action.');
+        throw new ParseError('Error thrown from 405 action.');
     }
 
     /**
@@ -47,7 +50,7 @@ class ErrorTraitTestController extends Controller implements ErrorControllerInte
         $throwable = $this->getThrowable();
         if ($throwable !== null) {
             // Use standard error page for DomainException.
-            if ($throwable instanceof \DomainException) {
+            if ($throwable instanceof DomainException) {
                 return null;
             }
 

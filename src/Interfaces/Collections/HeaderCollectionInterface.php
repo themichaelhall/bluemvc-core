@@ -8,12 +8,15 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces\Collections;
 
+use Countable;
+use Iterator;
+
 /**
  * Interface for HeaderCollection class.
  *
  * @since 1.0.0
  */
-interface HeaderCollectionInterface extends \Countable, \Iterator
+interface HeaderCollectionInterface extends Countable, Iterator
 {
     /**
      * Adds a header value by header name.

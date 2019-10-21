@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\Tests\Helpers\TestControllers\ErrorTestController;
+use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -28,7 +29,7 @@ class ErrorControllerTest extends TestCase
     public function testSetException()
     {
         $errorController = new ErrorTestController();
-        $exception = new \OutOfBoundsException('Test Exception');
+        $exception = new OutOfBoundsException('Test Exception');
         $errorController->setThrowable($exception);
 
         self::assertSame($exception, $errorController->getThrowable());

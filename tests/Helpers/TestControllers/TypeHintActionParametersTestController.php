@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BlueMvc\Core\Tests\Helpers\TestControllers;
 
 use BlueMvc\Core\Controller;
+use stdClass;
 
 /**
  * Type hint action parameters test controller.
@@ -86,11 +87,11 @@ class TypeHintActionParametersTestController extends Controller
     /**
      * Object types action.
      *
-     * @param \stdClass $foo The object parameter.
+     * @param stdClass $foo The object parameter.
      *
      * @return string The result.
      */
-    public function objectTypesAction(\stdClass $foo): string
+    public function objectTypesAction(stdClass $foo): string
     {
         return 'ObjectTypesAction: Foo=[' . gettype($foo) . ':' . print_r($foo, true) . ']';
     }

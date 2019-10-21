@@ -8,11 +8,13 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Exceptions;
 
+use Exception;
+
 /**
  * Exception used if no suitable view file was found.
  *
  * @since 1.0.0
  */
-class ViewFileNotFoundException extends \Exception
+class ViewFileNotFoundException extends Exception
 {
 }

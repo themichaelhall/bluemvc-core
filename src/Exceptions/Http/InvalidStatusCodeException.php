@@ -8,11 +8,13 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Exceptions\Http;
 
+use Exception;
+
 /**
  * Exception used when passed an invalid status code argument.
  *
  * @since 1.0.0
  */
-class InvalidStatusCodeException extends \Exception
+class InvalidStatusCodeException extends Exception
 {
 }

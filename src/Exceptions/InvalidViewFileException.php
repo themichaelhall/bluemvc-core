@@ -8,11 +8,13 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Exceptions;
 
+use Exception;
+
 /**
  * Exception used when passed an invalid view file name.
  *
  * @since 1.0.0
  */
-class InvalidViewFileException extends \Exception
+class InvalidViewFileException extends Exception
 {
 }

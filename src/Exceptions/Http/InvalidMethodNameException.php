@@ -8,11 +8,13 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Exceptions\Http;
 
+use Exception;
+
 /**
  * Exception used when passed invalid method name argument.
  *
  * @since 1.0.0
  */
-class InvalidMethodNameException extends \Exception
+class InvalidMethodNameException extends Exception
 {
 }

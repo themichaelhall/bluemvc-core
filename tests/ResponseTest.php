@@ -14,6 +14,9 @@ use BlueMvc\Core\Tests\Helpers\Fakes\FakeHeaders;
 use BlueMvc\Core\Tests\Helpers\Fakes\FakeSession;
 use DataTypes\Host;
 use DataTypes\UrlPath;
+use DateInterval;
+use DateTimeImmutable;
+use DateTimeZone;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -207,10 +210,10 @@ class ResponseTest extends TestCase
     {
         $response = new Response();
 
-        $expiry = (new \DateTimeImmutable())->sub(new \DateInterval('PT24H'));
+        $expiry = (new DateTimeImmutable())->sub(new DateInterval('PT24H'));
         $response->setExpiry($expiry);
 
-        self::assertSame($expiry->setTimezone(new \DateTimeZone('UTC'))->format('D, d M Y H:i:s \G\M\T'), $response->getHeader('Expires'));
+        self::assertSame($expiry->setTimezone(new DateTimeZone('UTC'))->format('D, d M Y H:i:s \G\M\T'), $response->getHeader('Expires'));
         self::assertSame('no-cache, no-store, must-revalidate, max-age=0', $response->getHeader('Cache-Control'));
     }
 
@@ -221,10 +224,10 @@ class ResponseTest extends TestCase
     {
         $response = new Response();
 
-        $expiry = (new \DateTimeImmutable())->add(new \DateInterval('PT24H'));
+        $expiry = (new DateTimeImmutable())->add(new DateInterval('PT24H'));
         $response->setExpiry($expiry);
 
-        self::assertSame($expiry->setTimezone(new \DateTimeZone('UTC'))->format('D, d M Y H:i:s \G\M\T'), $response->getHeader('Expires'));
+        self::assertSame($expiry->setTimezone(new DateTimeZone('UTC'))->format('D, d M Y H:i:s \G\M\T'), $response->getHeader('Expires'));
         self::assertSame('public, max-age=86400', $response->getHeader('Cache-Control'));
     }
 
@@ -245,7 +248,7 @@ class ResponseTest extends TestCase
     {
         $response = new Response();
         $cookies = new ResponseCookieCollection();
-        $fooCookie = new ResponseCookie('Foo', new \DateTimeImmutable(), UrlPath::parse('/bar/'), Host::parse('example.com'), true, true);
+        $fooCookie = new ResponseCookie('Foo', new DateTimeImmutable(), UrlPath::parse('/bar/'), Host::parse('example.com'), true, true);
         $barCookie = new ResponseCookie('Bar');
         $cookies->set('foo', $fooCookie);
         $cookies->set('bar', $barCookie);
@@ -262,7 +265,7 @@ class ResponseTest extends TestCase
         $response = new Response();
         $response->setContent('Cookies are set.');
         $cookies = new ResponseCookieCollection();
-        $fooExpiry = (new \DateTimeImmutable())->add(new \DateInterval('P1D'));
+        $fooExpiry = (new DateTimeImmutable())->add(new DateInterval('P1D'));
         $fooCookie = new ResponseCookie('Foo', $fooExpiry, UrlPath::parse('/bar/'), Host::parse('example.com'), true, true);
         $barCookie = new ResponseCookie('Bar');
         $cookies->set('foo', $fooCookie);
@@ -314,7 +317,7 @@ class ResponseTest extends TestCase
     public function testSetCookieValue()
     {
         $response = new Response();
-        $response->setCookieValue('foo', 'bar', new \DateTimeImmutable('2030-01-02 03:04:05'), UrlPath::parse('/foo/'), Host::parse('example.com'), true, true);
+        $response->setCookieValue('foo', 'bar', new DateTimeImmutable('2030-01-02 03:04:05'), UrlPath::parse('/foo/'), Host::parse('example.com'), true, true);
         $cookie = $response->getCookie('foo');
 
         self::assertSame('bar', $cookie->getValue());

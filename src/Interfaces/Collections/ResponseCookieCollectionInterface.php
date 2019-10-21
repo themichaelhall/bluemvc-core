@@ -9,13 +9,15 @@ declare(strict_types=1);
 namespace BlueMvc\Core\Interfaces\Collections;
 
 use BlueMvc\Core\Interfaces\ResponseCookieInterface;
+use Countable;
+use Iterator;
 
 /**
  * Interface for ResponseCookieCollection class.
  *
  * @since 1.0.0
  */
-interface ResponseCookieCollectionInterface extends \Countable, \Iterator
+interface ResponseCookieCollectionInterface extends Countable, Iterator
 {
     /**
      * Returns the response cookie by name if it exists, null otherwise.

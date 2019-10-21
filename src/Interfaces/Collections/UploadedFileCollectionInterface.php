@@ -9,13 +9,15 @@ declare(strict_types=1);
 namespace BlueMvc\Core\Interfaces\Collections;
 
 use BlueMvc\Core\Interfaces\UploadedFileInterface;
+use Countable;
+use Iterator;
 
 /**
  * Interface for UploadedFileCollection class.
  *
  * @since 1.0.0
  */
-interface UploadedFileCollectionInterface extends \Countable, \Iterator
+interface UploadedFileCollectionInterface extends Countable, Iterator
 {
     /**
      * Returns the uploaded file by name if it exists, null otherwise.

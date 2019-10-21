@@ -8,12 +8,15 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces\Collections;
 
+use Countable;
+use Iterator;
+
 /**
  * Interface for SessionItemCollection class.
  *
  * @since 1.0.0
  */
-interface SessionItemCollectionInterface extends \Countable, \Iterator
+interface SessionItemCollectionInterface extends Countable, Iterator
 {
     /**
      * Returns the session item value by session item name if it exists, null otherwise.

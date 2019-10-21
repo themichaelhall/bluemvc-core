@@ -8,11 +8,13 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Exceptions;
 
+use Exception;
+
 /**
  * Exception used when passed invalid response cookie path argument.
  *
  * @since 1.0.0
  */
-class InvalidResponseCookiePathException extends \Exception
+class InvalidResponseCookiePathException extends Exception
 {
 }

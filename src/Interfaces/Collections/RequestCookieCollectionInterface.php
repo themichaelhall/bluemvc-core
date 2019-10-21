@@ -9,13 +9,15 @@ declare(strict_types=1);
 namespace BlueMvc\Core\Interfaces\Collections;
 
 use BlueMvc\Core\Interfaces\RequestCookieInterface;
+use Countable;
+use Iterator;
 
 /**
  * Interface for RequestCookieCollection class.
  *
  * @since 1.0.0
  */
-interface RequestCookieCollectionInterface extends \Countable, \Iterator
+interface RequestCookieCollectionInterface extends Countable, Iterator
 {
     /**
      * Returns the request cookie by name if it exists, null otherwise.

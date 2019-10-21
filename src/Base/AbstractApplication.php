@@ -25,6 +25,7 @@ use BlueMvc\Core\Interfaces\ViewRendererInterface;
 use DataTypes\Exceptions\FilePathLogicException;
 use DataTypes\FilePath;
 use DataTypes\Interfaces\FilePathInterface;
+use Throwable;
 
 /**
  * Abstract class representing a BlueMvc main application.
@@ -376,7 +377,7 @@ abstract class AbstractApplication implements ApplicationInterface
 
         try {
             $this->handleRequest($request, $response);
-        } catch (\Throwable $throwable) {
+        } catch (Throwable $throwable) {
             $this->throwableToResponse($throwable, $response);
         }
 
@@ -423,9 +424,9 @@ abstract class AbstractApplication implements ApplicationInterface
      *
      * @param RequestInterface  $request   The request.
      * @param ResponseInterface $response  The response.
-     * @param \Throwable|null   $throwable The throwable or null if no throwable.
+     * @param Throwable|null    $throwable The throwable or null if no throwable.
      */
-    private function handleError(RequestInterface $request, ResponseInterface $response, \Throwable $throwable = null): void
+    private function handleError(RequestInterface $request, ResponseInterface $response, Throwable $throwable = null): void
     {
         $errorControllerClass = $this->getErrorControllerClass();
 
@@ -438,7 +439,7 @@ abstract class AbstractApplication implements ApplicationInterface
 
             try {
                 $errorController->processRequest($this, $request, $response, strval($response->getStatusCode()->getCode()), []);
-            } catch (\Throwable $throwable) {
+            } catch (Throwable $throwable) {
                 $this->throwableToResponse($throwable, $response);
             }
         }
@@ -447,10 +448,10 @@ abstract class AbstractApplication implements ApplicationInterface
     /**
      * Outputs a throwable to a response.
      *
-     * @param \Throwable        $throwable The throwable.
+     * @param Throwable         $throwable The throwable.
      * @param ResponseInterface $response  The response.
      */
-    private function throwableToResponse(\Throwable $throwable, ResponseInterface $response): void
+    private function throwableToResponse(Throwable $throwable, ResponseInterface $response): void
     {
         $response->setStatusCode(new StatusCode(StatusCode::INTERNAL_SERVER_ERROR));
         $response->setHeaders(new HeaderCollection());
@@ -460,11 +461,11 @@ abstract class AbstractApplication implements ApplicationInterface
     /**
      * Converts a throwable to html.
      *
-     * @param \Throwable $throwable The throwable.
+     * @param Throwable $throwable The throwable.
      *
      * @return string The html.
      */
-    private function throwableToHtml(\Throwable $throwable): string
+    private function throwableToHtml(Throwable $throwable): string
     {
         if (!$this->isDebug) {
             return '';

@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Traits;
 
+use Throwable;
+
 /**
  * Trait for error controller functionality.
  *
@@ -20,9 +22,9 @@ trait ErrorControllerTrait
      *
      * @since 2.0.0
      *
-     * @return \Throwable|null The throwable or null if no throwable.
+     * @return Throwable|null The throwable or null if no throwable.
      */
-    public function getThrowable(): ?\Throwable
+    public function getThrowable(): ?Throwable
     {
         return $this->throwable;
     }
@@ -32,9 +34,9 @@ trait ErrorControllerTrait
      *
      * @since 2.0.0
      *
-     * @param \Throwable $throwable The throwable.
+     * @param Throwable $throwable The throwable.
      */
-    public function setThrowable(\Throwable $throwable): void
+    public function setThrowable(Throwable $throwable): void
     {
         $this->throwable = $throwable;
     }
@@ -64,7 +66,7 @@ trait ErrorControllerTrait
     }
 
     /**
-     * @var \Throwable|null My throwable or null if no throwable.
+     * @var Throwable|null My throwable or null if no throwable.
      */
     private $throwable = null;
 }

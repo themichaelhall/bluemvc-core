@@ -8,12 +8,14 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces\ActionResults;
 
+use Throwable;
+
 /**
  * Interface for ActionResultException class.
  *
  * @since 2.1.0
  */
-interface ActionResultExceptionInterface extends \Throwable
+interface ActionResultExceptionInterface extends Throwable
 {
     /**
      * Returns the action result.

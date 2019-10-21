@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces;
 
+use Throwable;
+
 /**
  * Interface for ErrorController class.
  *
@@ -20,16 +22,16 @@ interface ErrorControllerInterface extends ControllerInterface
      *
      * @since 2.0.0
      *
-     * @return \Throwable|null The throwable or null if no throwable.
+     * @return Throwable|null The throwable or null if no throwable.
      */
-    public function getThrowable(): ?\Throwable;
+    public function getThrowable(): ?Throwable;
 
     /**
      * Sets the throwable.
      *
      * @since 2.0.0
      *
-     * @param \Throwable $throwable The throwable.
+     * @param Throwable $throwable The throwable.
      */
-    public function setThrowable(\Throwable $throwable): void;
+    public function setThrowable(Throwable $throwable): void;
 }

@@ -8,12 +8,15 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces\Collections;
 
+use Countable;
+use Iterator;
+
 /**
  * Interface for ParameterCollection class.
  *
  * @since 1.0.0
  */
-interface ParameterCollectionInterface extends \Countable, \Iterator
+interface ParameterCollectionInterface extends Countable, Iterator
 {
     /**
      * Returns the parameter value by parameter name if it exists, null otherwise.

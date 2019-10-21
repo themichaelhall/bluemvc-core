@@ -13,6 +13,8 @@ use BlueMvc\Core\Interfaces\Collections\ResponseCookieCollectionInterface;
 use BlueMvc\Core\Interfaces\Http\StatusCodeInterface;
 use DataTypes\Interfaces\HostInterface;
 use DataTypes\Interfaces\UrlPathInterface;
+use DateTimeImmutable;
+use DateTimeInterface;
 
 /**
  * Interface for Response class.
@@ -122,24 +124,24 @@ interface ResponseInterface
      *
      * @since 1.1.0
      *
-     * @param string                  $name       The name.
-     * @param string                  $value      The value.
-     * @param \DateTimeInterface|null $expiry     The expiry time or null if no expiry time.
-     * @param UrlPathInterface|null   $path       The path or null if no path.
-     * @param HostInterface|null      $domain     The domain or null if no domain.
-     * @param bool                    $isSecure   True if cookie is secure, false otherwise.
-     * @param bool                    $isHttpOnly True if cookie is http only, false otherwise.
+     * @param string                 $name       The name.
+     * @param string                 $value      The value.
+     * @param DateTimeInterface|null $expiry     The expiry time or null if no expiry time.
+     * @param UrlPathInterface|null  $path       The path or null if no path.
+     * @param HostInterface|null     $domain     The domain or null if no domain.
+     * @param bool                   $isSecure   True if cookie is secure, false otherwise.
+     * @param bool                   $isHttpOnly True if cookie is http only, false otherwise.
      */
-    public function setCookieValue(string $name, string $value, ?\DateTimeInterface $expiry = null, ?UrlPathInterface $path = null, ?HostInterface $domain = null, bool $isSecure = false, bool $isHttpOnly = false): void;
+    public function setCookieValue(string $name, string $value, ?DateTimeInterface $expiry = null, ?UrlPathInterface $path = null, ?HostInterface $domain = null, bool $isSecure = false, bool $isHttpOnly = false): void;
 
     /**
      * Sets the expiry time.
      *
      * @since 1.0.0
      *
-     * @param \DateTimeImmutable|null $expiry The expiry time or null for immediate expiry.
+     * @param DateTimeImmutable|null $expiry The expiry time or null for immediate expiry.
      */
-    public function setExpiry(?\DateTimeImmutable $expiry = null): void;
+    public function setExpiry(?DateTimeImmutable $expiry = null): void;
 
     /**
      * Sets a header.

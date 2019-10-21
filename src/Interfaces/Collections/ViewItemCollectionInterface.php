@@ -8,12 +8,15 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces\Collections;
 
+use Countable;
+use Iterator;
+
 /**
  * Interface for ViewItemCollection class.
  *
  * @since 1.0.0
  */
-interface ViewItemCollectionInterface extends \Countable, \Iterator
+interface ViewItemCollectionInterface extends Countable, Iterator
 {
     /**
      * Returns the view item value by view item name if it exists, null otherwise.

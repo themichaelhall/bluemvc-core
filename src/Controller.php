@@ -17,6 +17,7 @@ use BlueMvc\Core\Interfaces\Collections\ViewItemCollectionInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
 use BlueMvc\Core\Interfaces\ViewInterface;
+use ReflectionClass;
 
 /**
  * Class representing a standard controller.
@@ -137,7 +138,7 @@ abstract class Controller extends AbstractController
      */
     protected function getViewPath(): string
     {
-        $result = (new \ReflectionClass($this))->getShortName();
+        $result = (new ReflectionClass($this))->getShortName();
         if (strlen($result) > 10 && substr(strtolower($result), -10) === 'controller') {
             $result = substr($result, 0, -10);
         }

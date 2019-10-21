@@ -8,12 +8,15 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces\Collections;
 
+use Countable;
+use Iterator;
+
 /**
  * Interface for CustomItemCollection class.
  *
  * @since 1.0.0
  */
-interface CustomItemCollectionInterface extends \Countable, \Iterator
+interface CustomItemCollectionInterface extends Countable, Iterator
 {
     /**
      * Returns the custom item value by custom item name if it exists, null otherwise.

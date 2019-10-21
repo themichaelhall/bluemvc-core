@@ -10,13 +10,14 @@ namespace BlueMvc\Core\ActionResults;
 
 use BlueMvc\Core\Interfaces\ActionResults\ActionResultExceptionInterface;
 use BlueMvc\Core\Interfaces\ActionResults\ActionResultInterface;
+use Exception;
 
 /**
  * Class representing a generic action result exception.
  *
  * @since 2.1.0
  */
-class ActionResultException extends \Exception implements ActionResultExceptionInterface
+class ActionResultException extends Exception implements ActionResultExceptionInterface
 {
     /**
      * Constructs the action result exception.

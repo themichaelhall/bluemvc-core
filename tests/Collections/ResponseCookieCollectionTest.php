@@ -8,6 +8,7 @@ use BlueMvc\Core\Collections\ResponseCookieCollection;
 use BlueMvc\Core\ResponseCookie;
 use DataTypes\Host;
 use DataTypes\UrlPath;
+use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -40,7 +41,7 @@ class ResponseCookieCollectionTest extends TestCase
      */
     public function testSet()
     {
-        $cookieFoo = new ResponseCookie('aaa', new \DateTimeImmutable(), UrlPath::parse('/foo/'), Host::parse('example.com'), true, true);
+        $cookieFoo = new ResponseCookie('aaa', new DateTimeImmutable(), UrlPath::parse('/foo/'), Host::parse('example.com'), true, true);
         $cookieBar = new ResponseCookie('bbb');
         $cookieBaz = new ResponseCookie('ccc');
 
@@ -73,7 +74,7 @@ class ResponseCookieCollectionTest extends TestCase
      */
     public function testIteratorForNonEmptyCollection()
     {
-        $cookieFoo = new ResponseCookie('aaa', new \DateTimeImmutable(), UrlPath::parse('/'), null, false, true);
+        $cookieFoo = new ResponseCookie('aaa', new DateTimeImmutable(), UrlPath::parse('/'), null, false, true);
         $cookieBar = new ResponseCookie('bbb');
         $cookieBaz = new ResponseCookie('ccc');
 
