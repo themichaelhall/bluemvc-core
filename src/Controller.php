@@ -8,15 +8,16 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core;
 
-use BlueMvc\Core\Base\AbstractController;
 use BlueMvc\Core\Collections\ViewItemCollection;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Interfaces\ActionResults\ActionResultInterface;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\Collections\ViewItemCollectionInterface;
+use BlueMvc\Core\Interfaces\ControllerInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
 use BlueMvc\Core\Interfaces\ViewInterface;
+use BlueMvc\Core\Traits\ControllerTrait;
 use ReflectionClass;
 
 /**
@@ -24,8 +25,10 @@ use ReflectionClass;
  *
  * @since 1.0.0
  */
-abstract class Controller extends AbstractController
+abstract class Controller implements ControllerInterface
 {
+    use ControllerTrait;
+
     /**
      * Constructs the controller.
      *
@@ -33,8 +36,6 @@ abstract class Controller extends AbstractController
      */
     public function __construct()
     {
-        parent::__construct();
-
         $this->viewItems = new ViewItemCollection();
     }
 
@@ -77,7 +78,7 @@ abstract class Controller extends AbstractController
      */
     public function processRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, string $action, array $parameters = []): void
     {
-        parent::processRequest($application, $request, $response, $action, $parameters);
+        $this->init($application, $request, $response);
 
         $isIndex = $action === '';
         $actionName = self::getActionName($action);

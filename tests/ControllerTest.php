@@ -14,6 +14,7 @@ use BlueMvc\Core\Tests\Helpers\TestControllers\ActionResultTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\CustomViewPathTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\DefaultActionTestController;
+use BlueMvc\Core\Tests\Helpers\TestControllers\DeprecatedTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\MultiLevelTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\PreAndPostActionEventController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\PreAndPostActionEventExceptionController;
@@ -745,6 +746,73 @@ class ControllerTest extends TestCase
             ['nonExistingAction', ['param1'], StatusCode::NOT_FOUND, ''],
             ['nonExistingAction', ['1234', 'param2'], StatusCode::NOT_FOUND, ''],
             ['nonExistingAction', ['param1', 'param2'], StatusCode::NOT_FOUND, ''],
+        ];
+    }
+
+    /**
+     * Test process DeprecatedTestController.
+     *
+     * @dataProvider processDeprecatedTestControllerDataProvider
+     *
+     * @param string      $action               The action.
+     * @param array       $parameters           The parameters.
+     * @param string|null $queryParameter       A query parameter to be set or null if no query parameter should be set.
+     * @param int         $expectedStatusCode   The expected status code.
+     * @param string      $expectedContent      The expected content.
+     * @param string|null $expectedActionMethod The expected used action method or null if none is expected.
+     */
+    public function testProcessDeprecatedTestController(string $action, array $parameters, ?string $queryParameter, int $expectedStatusCode, string $expectedContent, ?string $expectedActionMethod)
+    {
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
+        if ($queryParameter !== null) {
+            $request->setQueryParameter($queryParameter, '1');
+        }
+
+        $response = new BasicTestResponse();
+        $controller = new DeprecatedTestController();
+        $controller->processRequest($application, $request, $response, $action, $parameters);
+
+        self::assertSame($application, $controller->getApplication());
+        self::assertSame($request, $controller->getRequest());
+        self::assertSame($response, $controller->getResponse());
+        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
+        self::assertSame($expectedContent, $response->getContent());
+        self::assertSame($expectedActionMethod, $controller->getActionMethod() !== null ? $controller->getActionMethod()->getName() : null);
+    }
+
+    /**
+     * Data provider for testProcessDeprecatedTestController.
+     *
+     * @return array
+     */
+    public function processDeprecatedTestControllerDataProvider()
+    {
+        return [
+            ['', [], null, StatusCode::OK, 'Index Action', 'INDEXAction'],
+            ['not-found', [], null, StatusCode::NOT_FOUND, '', null],
+            ['foo', [], null, StatusCode::NOT_FOUND, '', null],
+            ['foo', ['bar'], null, StatusCode::OK, 'Foo Action (bar)', 'fooAction'],
+            ['123', [], null, StatusCode::OK, '123 Action', '_123Action'],
+            ['Foo', ['bar'], null, StatusCode::NOT_FOUND, '', null],
+            ['bar', [], null, StatusCode::NOT_FOUND, '', null],
+            ['', [], 'return-from-pre-action-event', StatusCode::OK, 'Return from Pre Action Event', 'INDEXAction'],
+            ['', [], 'throw-from-pre-action-event', StatusCode::OK, 'Throw from Pre Action Event', 'INDEXAction'],
+            ['', [], 'return-from-post-action-event', StatusCode::OK, 'Return from Post Action Event', 'INDEXAction'],
+            ['', [], 'throw-from-post-action-event', StatusCode::OK, 'Throw from Post Action Event', 'INDEXAction'],
+            ['parameters', [''], null, StatusCode::NOT_FOUND, '', null],
+            ['parameters', ['foo'], null, StatusCode::NOT_FOUND, '', null],
+            ['parameters', ['foo', '123'], null, StatusCode::NOT_FOUND, '', null],
+            ['parameters', ['foo', '123', '1.5'], null, StatusCode::OK, 'Parameters Action (foo,123,1.5,false,FooBar,null)', 'parametersAction'],
+            ['parameters', ['foo', '123', '1.5', 'true'], null, StatusCode::OK, 'Parameters Action (foo,123,1.5,true,FooBar,null)', 'parametersAction'],
+            ['parameters', ['foo', '123', '1.5', 'true', 'bar'], null, StatusCode::OK, 'Parameters Action (foo,123,1.5,true,bar,null)', 'parametersAction'],
+            ['parameters', ['foo', '123', '1.5', 'false', 'bar'], null, StatusCode::OK, 'Parameters Action (foo,123,1.5,false,bar,null)', 'parametersAction'],
+            ['parameters', ['foo', '123', '1.5', 'true', 'bar', 'baz'], null, StatusCode::NOT_FOUND, '', null],
+            ['parameters', ['foo', '123', '1.5', 'true', 'bar', 'baz', 'foo-bar'], null, StatusCode::NOT_FOUND, '', null],
+            ['parameters', ['foo', '*', '1.5', 'true', 'bar'], null, StatusCode::NOT_FOUND, '', null],
+            ['parameters', ['foo', '123', '*', 'true', 'bar'], null, StatusCode::NOT_FOUND, '', null],
+            ['parameters', ['foo', '123', '1E1000', 'true', 'bar'], null, StatusCode::NOT_FOUND, '', null],
+            ['parameters', ['foo', '123', '1.5', '*', 'bar'], null, StatusCode::NOT_FOUND, '', null],
         ];
     }
 }
