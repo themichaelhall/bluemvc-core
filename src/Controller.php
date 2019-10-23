@@ -83,8 +83,12 @@ abstract class Controller implements ControllerInterface
         $isIndex = $action === '';
         $actionName = self::getActionName($action);
 
+        $resultHandler = function ($result) use (&$actionName) {
+            $this->handleResult($result, $actionName);
+        };
+
         // Try to invoke the action, and if that failed, try to invoke the default action.
-        if (!$this->tryInvokeActionMethod($actionName, $parameters, !$isIndex, $result, $hasFoundActionMethod)) {
+        if (!$this->tryInvokeActionMethod($actionName, $parameters, !$isIndex, $resultHandler, $hasFoundActionMethod)) {
             if ($hasFoundActionMethod) {
                 // If action method was found, but something else failed (e.g. parameter mismatch),
                 // do not try to invoke default method.
@@ -95,14 +99,12 @@ abstract class Controller implements ControllerInterface
 
             $actionName = 'default';
 
-            if (!$this->tryInvokeActionMethod($actionName, array_merge([$action], $parameters), false, $result)) {
+            if (!$this->tryInvokeActionMethod($actionName, array_merge([$action], $parameters), false, $resultHandler)) {
                 $response->setStatusCode(new StatusCode(StatusCode::NOT_FOUND));
 
                 return;
             }
         }
-
-        $this->handleResult($result, $application, $request, $response, $actionName);
     }
 
     /**
@@ -150,16 +152,18 @@ abstract class Controller implements ControllerInterface
     /**
      * Handles the result.
      *
-     * @param mixed                $result      The result.
-     * @param ApplicationInterface $application The application.
-     * @param RequestInterface     $request     The request.
-     * @param ResponseInterface    $response    The response.
-     * @param string               $actionName  The action name.
+     * @param mixed  $result     The result.
+     * @param string $actionName The action name.
      */
-    private function handleResult($result, ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, string $actionName): void
+    private function handleResult($result, string $actionName): void
     {
+        $application = $this->getApplication();
+        $request = $this->getRequest();
+        $response = $this->getResponse();
+        $viewPath = $this->getViewPath();
+
         if ($result instanceof ViewInterface) {
-            $result->updateResponse($application, $request, $response, $this->getViewPath(), $actionName, $this->viewItems);
+            $result->updateResponse($application, $request, $response, $viewPath, $actionName, $this->viewItems);
 
             return;
         }

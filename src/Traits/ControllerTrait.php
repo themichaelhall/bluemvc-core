@@ -131,15 +131,15 @@ trait ControllerTrait
     /**
      * Try to invoke an action method.
      *
-     * @param string $action               The action.
-     * @param array  $parameters           The parameters.
-     * @param bool   $isCaseSensitive      True if action method is case sensitive, false otherwise.
-     * @param mixed  $result               The result.
-     * @param bool   $hasFoundActionMethod If true, action method was found, false otherwise.
+     * @param string   $action               The action.
+     * @param array    $parameters           The parameters.
+     * @param bool     $isCaseSensitive      True if action method is case sensitive, false otherwise.
+     * @param callable $resultHandler        A callable that takes the result (mixed) from the action method call as a parameter.
+     * @param bool     $hasFoundActionMethod If true, action method was found, false otherwise.
      *
      * @return bool True if action method was invoked successfully, false otherwise.
      */
-    private function tryInvokeActionMethod(string $action, array $parameters, bool $isCaseSensitive, &$result, ?bool &$hasFoundActionMethod = null): bool
+    private function tryInvokeActionMethod(string $action, array $parameters, bool $isCaseSensitive, callable $resultHandler, ?bool &$hasFoundActionMethod = null): bool
     {
         $reflectionClass = new ReflectionClass($this);
 
@@ -159,6 +159,7 @@ trait ControllerTrait
         }
 
         $result = $this->invokeActionMethod($actionMethod, $adjustedParameters);
+        $resultHandler($result);
 
         return true;
     }
