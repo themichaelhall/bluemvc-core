@@ -158,8 +158,7 @@ trait ControllerTrait
             return false;
         }
 
-        $result = $this->invokeActionMethod($actionMethod, $adjustedParameters);
-        $resultHandler($result);
+        $this->invokeActionMethod($actionMethod, $adjustedParameters, $resultHandler);
 
         return true;
     }
@@ -202,12 +201,11 @@ trait ControllerTrait
     /**
      * Invoke action method.
      *
-     * @param ReflectionMethod $actionMethod The action method.
-     * @param array            $parameters   The parameters.
-     *
-     * @return mixed|null The result.
+     * @param ReflectionMethod $actionMethod  The action method.
+     * @param array            $parameters    The parameters.
+     * @param callable         $resultHandler A callable that takes the result (mixed) from the action method call as a parameter.
      */
-    private function invokeActionMethod(ReflectionMethod $actionMethod, array $parameters)
+    private function invokeActionMethod(ReflectionMethod $actionMethod, array $parameters, callable $resultHandler): void
     {
         $this->actionMethod = $actionMethod;
 
@@ -220,7 +218,9 @@ trait ControllerTrait
         }
 
         if ($preActionResult !== null) {
-            return $preActionResult;
+            $resultHandler($preActionResult);
+
+            return;
         }
 
         // Handle action method.
@@ -230,6 +230,8 @@ trait ControllerTrait
             $result = $exception->getActionResult();
         }
 
+        $resultHandler($result);
+
         // Handle post-action event.
         try {
             /** @noinspection PhpVoidFunctionResultUsedInspection */
@@ -238,10 +240,8 @@ trait ControllerTrait
             $postActionResult = $exception->getActionResult();
         }
         if ($postActionResult !== null) {
-            return $postActionResult;
+            $resultHandler($postActionResult);
         }
-
-        return $result;
     }
 
     /**

@@ -11,6 +11,7 @@ use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ActionMethodVisibilityTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ActionResultExceptionTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ActionResultTestController;
+use BlueMvc\Core\Tests\Helpers\TestControllers\ActionResultWithPostActionEventTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\CustomViewPathTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\DefaultActionTestController;
@@ -813,6 +814,45 @@ class ControllerTest extends TestCase
             ['parameters', ['foo', '123', '*', 'true', 'bar'], null, StatusCode::NOT_FOUND, '', null],
             ['parameters', ['foo', '123', '1E1000', 'true', 'bar'], null, StatusCode::NOT_FOUND, '', null],
             ['parameters', ['foo', '123', '1.5', '*', 'bar'], null, StatusCode::NOT_FOUND, '', null],
+        ];
+    }
+
+    /**
+     * Test process ActionResultWithPostActionEventTestController.
+     *
+     * @dataProvider processActionResultWithPostActionEventTestControllerDataProvider
+     *
+     * @param string $action             The action.
+     * @param int    $expectedStatusCode The expected status code.
+     * @param string $expectedContent    The expected content.
+     */
+    public function testProcessActionResultWithPostActionEventTestController(string $action, int $expectedStatusCode, string $expectedContent)
+    {
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
+        $request = new BasicTestRequest(Url::parse('http://www.domain.com/'), new Method('GET'));
+        $response = new BasicTestResponse();
+        $controller = new ActionResultWithPostActionEventTestController();
+        $controller->processRequest($application, $request, $response, $action);
+
+        self::assertSame($application, $controller->getApplication());
+        self::assertSame($request, $controller->getRequest());
+        self::assertSame($response, $controller->getResponse());
+        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
+        self::assertSame($expectedContent, $response->getContent());
+    }
+
+    /**
+     * Data provider for testProcessActionResultWithPostActionEventTestController.
+     *
+     * @return array
+     */
+    public function processActionResultWithPostActionEventTestControllerDataProvider()
+    {
+        return [
+            ['', 200, 'Ok'],
+            ['foo', 200, 'Ok'],
+            ['bar', 404, 'Failed with status: 405 Method Not Allowed'],
+            ['baz', 404, 'Failed with status: 400 Bad Request'],
         ];
     }
 }
