@@ -6,11 +6,10 @@
  */
 declare(strict_types=1);
 
-namespace BlueMvc\Core\Base;
+namespace BlueMvc\Core\Traits;
 
 use BlueMvc\Core\Interfaces\ActionResults\ActionResultExceptionInterface;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
-use BlueMvc\Core\Interfaces\ControllerInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
 use ReflectionClass;
@@ -19,17 +18,16 @@ use ReflectionMethod;
 use ReflectionParameter;
 
 /**
- * Abstract class representing a controller.
+ * Trait for standard controller functionality.
  *
- * @since      1.0.0
- * @deprecated Use \BlueMvc\Core\Traits\ControllerTrait instead.
+ * @since 2.2.0
  */
-abstract class AbstractController implements ControllerInterface
+trait ControllerTrait
 {
     /**
      * Returns the method of the action being processed or null if no action is being processed.
      *
-     * @since 1.0.0
+     * @since 2.2.0
      *
      * @return ReflectionMethod|null The method of the action being processed or null if no action is being processed.
      */
@@ -41,7 +39,7 @@ abstract class AbstractController implements ControllerInterface
     /**
      * Returns the application if controller is processing, null otherwise.
      *
-     * @since 1.0.0
+     * @since 2.2.0
      *
      * @return ApplicationInterface|null The application if controller is processing, null otherwise.
      */
@@ -53,7 +51,7 @@ abstract class AbstractController implements ControllerInterface
     /**
      * Returns the request if controller is processing, null otherwise.
      *
-     * @since 1.0.0
+     * @since 2.2.0
      *
      * @return RequestInterface|null The request if controller is processing, null otherwise.
      */
@@ -65,7 +63,7 @@ abstract class AbstractController implements ControllerInterface
     /**
      * Returns the response if controller is processing, null otherwise.
      *
-     * @since 1.0.0
+     * @since 2.2.0
      *
      * @return ResponseInterface|null The response if controller is processing, null otherwise.
      */
@@ -75,40 +73,9 @@ abstract class AbstractController implements ControllerInterface
     }
 
     /**
-     * Processes a request.
-     *
-     * @since 1.0.0
-     *
-     * @param ApplicationInterface $application The application.
-     * @param RequestInterface     $request     The request.
-     * @param ResponseInterface    $response    The response.
-     * @param string               $action      The action.
-     * @param array                $parameters  The parameters.
-     */
-    public function processRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, string $action, array $parameters = []): void
-    {
-        $this->application = $application;
-        $this->request = $request;
-        $this->response = $response;
-    }
-
-    /**
-     * Constructs the controller.
-     *
-     * @since 1.0.0
-     */
-    protected function __construct()
-    {
-        $this->application = null;
-        $this->request = null;
-        $this->response = null;
-        $this->actionMethod = null;
-    }
-
-    /**
      * Returns true if post-action event is enabled, false otherwise.
      *
-     * @since 1.1.0
+     * @since 2.2.0
      *
      * @return bool True if post-action event is enabled, false otherwise.
      */
@@ -120,7 +87,7 @@ abstract class AbstractController implements ControllerInterface
     /**
      * Returns true if pre-action event is enabled, false otherwise.
      *
-     * @since 1.1.0
+     * @since 2.2.0
      *
      * @return bool True if pre-action event is enabled, false otherwise.
      */
@@ -132,7 +99,7 @@ abstract class AbstractController implements ControllerInterface
     /**
      * Post-action event.
      *
-     * @since 1.0.0
+     * @since 2.2.0
      */
     protected function onPostActionEvent()
     {
@@ -141,30 +108,41 @@ abstract class AbstractController implements ControllerInterface
     /**
      * Pre-action event.
      *
-     * @since 1.0.0
+     * @since 2.2.0
      */
     protected function onPreActionEvent()
     {
     }
 
     /**
+     * Initializes the controller.
+     *
+     * @param ApplicationInterface $application The application.
+     * @param RequestInterface     $request     The request.
+     * @param ResponseInterface    $response    The response.
+     */
+    private function init(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response): void
+    {
+        $this->application = $application;
+        $this->request = $request;
+        $this->response = $response;
+    }
+
+    /**
      * Try to invoke an action method.
      *
-     * @since 1.0.0
-     *
-     * @param string $action               The action.
-     * @param array  $parameters           The parameters.
-     * @param bool   $isCaseSensitive      True if action method is case sensitive, false otherwise.
-     * @param mixed  $result               The result.
-     * @param bool   $hasFoundActionMethod If true, action method was found, false otherwise.
+     * @param string   $action               The action.
+     * @param array    $parameters           The parameters.
+     * @param bool     $isCaseSensitive      True if action method is case sensitive, false otherwise.
+     * @param callable $resultHandler        A callable that takes the result (mixed) from the action method call as a parameter.
+     * @param bool     $hasFoundActionMethod If true, action method was found, false otherwise.
      *
      * @return bool True if action method was invoked successfully, false otherwise.
      */
-    protected function tryInvokeActionMethod(string $action, array $parameters, bool $isCaseSensitive, &$result, ?bool &$hasFoundActionMethod = null): bool
+    private function tryInvokeActionMethod(string $action, array $parameters, bool $isCaseSensitive, callable $resultHandler, ?bool &$hasFoundActionMethod = null): bool
     {
         $reflectionClass = new ReflectionClass($this);
 
-        /** @noinspection PhpDeprecationInspection */
         $actionMethod = self::findActionMethod($reflectionClass, $action, $isCaseSensitive);
         if ($actionMethod === null) {
             // Suitable action method not found.
@@ -175,13 +153,12 @@ abstract class AbstractController implements ControllerInterface
 
         $hasFoundActionMethod = true;
 
-        /** @noinspection PhpDeprecationInspection */
         if (!self::actionMethodMatchesParameters($actionMethod, $parameters, $adjustedParameters)) {
             // Action method found, but parameters did not match.
             return false;
         }
 
-        $result = $this->invokeActionMethod($actionMethod, $adjustedParameters);
+        $this->invokeActionMethod($actionMethod, $adjustedParameters, $resultHandler);
 
         return true;
     }
@@ -224,24 +201,26 @@ abstract class AbstractController implements ControllerInterface
     /**
      * Invoke action method.
      *
-     * @param ReflectionMethod $actionMethod The action method.
-     * @param array            $parameters   The parameters.
-     *
-     * @return mixed|null The result.
+     * @param ReflectionMethod $actionMethod  The action method.
+     * @param array            $parameters    The parameters.
+     * @param callable         $resultHandler A callable that takes the result (mixed) from the action method call as a parameter.
      */
-    private function invokeActionMethod(ReflectionMethod $actionMethod, array $parameters)
+    private function invokeActionMethod(ReflectionMethod $actionMethod, array $parameters, callable $resultHandler): void
     {
         $this->actionMethod = $actionMethod;
 
         // Handle pre-action event.
         try {
+            /** @noinspection PhpVoidFunctionResultUsedInspection */
             $preActionResult = $this->isPreActionEventEnabled() ? $this->onPreActionEvent() : null;
         } catch (ActionResultExceptionInterface $exception) {
             $preActionResult = $exception->getActionResult();
         }
 
         if ($preActionResult !== null) {
-            return $preActionResult;
+            $resultHandler($preActionResult);
+
+            return;
         }
 
         // Handle action method.
@@ -251,17 +230,18 @@ abstract class AbstractController implements ControllerInterface
             $result = $exception->getActionResult();
         }
 
+        $resultHandler($result);
+
         // Handle post-action event.
         try {
+            /** @noinspection PhpVoidFunctionResultUsedInspection */
             $postActionResult = $this->isPostActionEventEnabled() ? $this->onPostActionEvent() : null;
         } catch (ActionResultExceptionInterface $exception) {
             $postActionResult = $exception->getActionResult();
         }
         if ($postActionResult !== null) {
-            return $postActionResult;
+            $resultHandler($postActionResult);
         }
-
-        return $result;
     }
 
     /**
@@ -296,7 +276,6 @@ abstract class AbstractController implements ControllerInterface
             }
 
             $parameter = current($parameters);
-            /** @noinspection PhpDeprecationInspection */
             if (!self::actionMethodParameterMatchesParameter($reflectionParameter, $parameter, $adjustedParameter)) {
                 return false;
             }
@@ -369,20 +348,20 @@ abstract class AbstractController implements ControllerInterface
     /**
      * @var ApplicationInterface|null My application.
      */
-    private $application;
+    private $application = null;
 
     /**
      * @var RequestInterface|null My request.
      */
-    private $request;
+    private $request = null;
 
     /**
      * @var ResponseInterface|null My response.
      */
-    private $response;
+    private $response = null;
 
     /**
      * @var ReflectionMethod|null My action method.
      */
-    private $actionMethod;
+    private $actionMethod = null;
 }

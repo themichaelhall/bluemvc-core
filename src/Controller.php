@@ -8,15 +8,16 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core;
 
-use BlueMvc\Core\Base\AbstractController;
 use BlueMvc\Core\Collections\ViewItemCollection;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Interfaces\ActionResults\ActionResultInterface;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\Collections\ViewItemCollectionInterface;
+use BlueMvc\Core\Interfaces\ControllerInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
 use BlueMvc\Core\Interfaces\ViewInterface;
+use BlueMvc\Core\Traits\ControllerTrait;
 use ReflectionClass;
 
 /**
@@ -24,8 +25,10 @@ use ReflectionClass;
  *
  * @since 1.0.0
  */
-abstract class Controller extends AbstractController
+abstract class Controller implements ControllerInterface
 {
+    use ControllerTrait;
+
     /**
      * Constructs the controller.
      *
@@ -33,8 +36,6 @@ abstract class Controller extends AbstractController
      */
     public function __construct()
     {
-        parent::__construct();
-
         $this->viewItems = new ViewItemCollection();
     }
 
@@ -77,13 +78,17 @@ abstract class Controller extends AbstractController
      */
     public function processRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, string $action, array $parameters = []): void
     {
-        parent::processRequest($application, $request, $response, $action, $parameters);
+        $this->init($application, $request, $response);
 
         $isIndex = $action === '';
         $actionName = self::getActionName($action);
 
+        $resultHandler = function ($result) use (&$actionName) {
+            $this->handleResult($result, $actionName);
+        };
+
         // Try to invoke the action, and if that failed, try to invoke the default action.
-        if (!$this->tryInvokeActionMethod($actionName, $parameters, !$isIndex, $result, $hasFoundActionMethod)) {
+        if (!$this->tryInvokeActionMethod($actionName, $parameters, !$isIndex, $resultHandler, $hasFoundActionMethod)) {
             if ($hasFoundActionMethod) {
                 // If action method was found, but something else failed (e.g. parameter mismatch),
                 // do not try to invoke default method.
@@ -94,14 +99,12 @@ abstract class Controller extends AbstractController
 
             $actionName = 'default';
 
-            if (!$this->tryInvokeActionMethod($actionName, array_merge([$action], $parameters), false, $result)) {
+            if (!$this->tryInvokeActionMethod($actionName, array_merge([$action], $parameters), false, $resultHandler)) {
                 $response->setStatusCode(new StatusCode(StatusCode::NOT_FOUND));
 
                 return;
             }
         }
-
-        $this->handleResult($result, $application, $request, $response, $actionName);
     }
 
     /**
@@ -149,16 +152,18 @@ abstract class Controller extends AbstractController
     /**
      * Handles the result.
      *
-     * @param mixed                $result      The result.
-     * @param ApplicationInterface $application The application.
-     * @param RequestInterface     $request     The request.
-     * @param ResponseInterface    $response    The response.
-     * @param string               $actionName  The action name.
+     * @param mixed  $result     The result.
+     * @param string $actionName The action name.
      */
-    private function handleResult($result, ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, string $actionName): void
+    private function handleResult($result, string $actionName): void
     {
+        $application = $this->getApplication();
+        $request = $this->getRequest();
+        $response = $this->getResponse();
+        $viewPath = $this->getViewPath();
+
         if ($result instanceof ViewInterface) {
-            $result->updateResponse($application, $request, $response, $this->getViewPath(), $actionName, $this->viewItems);
+            $result->updateResponse($application, $request, $response, $viewPath, $actionName, $this->viewItems);
 
             return;
         }

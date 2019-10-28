@@ -15,6 +15,7 @@ use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ActionMethodVisibilityTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ActionResultExceptionTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ActionResultTestController;
+use BlueMvc\Core\Tests\Helpers\TestControllers\ActionResultWithPostActionEventTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\CookieTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\CustomViewPathTestController;
@@ -948,6 +949,46 @@ class ApplicationRoutingTest extends TestCase
     }
 
     /**
+     * Test action result with post action event pages route.
+     *
+     * @dataProvider actionResultWithPostActionEventPagesRouteDataProvider
+     *
+     * @param string $url                The (relative) url.
+     * @param string $expectedContent    The expected content.
+     * @param int    $expectedStatusCode The expected status code.
+     */
+    public function testActionResultWithPostActionEventPagesRoute(string $url, string $expectedContent, int $expectedStatusCode)
+    {
+        $_SERVER['REQUEST_URI'] = '/actionResultWithPostActionEvent/' . $url;
+
+        $request = new Request();
+        $response = new Response();
+        ob_start();
+        $this->application->run($request, $response);
+        $responseOutput = ob_get_contents();
+        ob_end_clean();
+
+        self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
+        self::assertSame($expectedContent, $responseOutput);
+        self::assertSame($expectedContent, $response->getContent());
+    }
+
+    /**
+     * Data provider for testActionResultWithPostActionEventPagesRoute.
+     *
+     * @return array
+     */
+    public function actionResultWithPostActionEventPagesRouteDataProvider(): array
+    {
+        return [
+            ['', 'Ok', 200],
+            ['foo', 'Ok', 200],
+            ['bar', 'Failed with status: 405 Method Not Allowed', 404],
+            ['baz', 'Failed with status: 400 Bad Request', 404],
+        ];
+    }
+
+    /**
      * Set up.
      */
     public function setUp(): void
@@ -987,6 +1028,7 @@ class ApplicationRoutingTest extends TestCase
         $this->application->addRoute(new Route('cookies', CookieTestController::class));
         $this->application->addRoute(new Route('multiple/level', MultiLevelTestController::class));
         $this->application->addRoute(new Route('typeHintActionParameters', TypeHintActionParametersTestController::class));
+        $this->application->addRoute(new Route('actionResultWithPostActionEvent', ActionResultWithPostActionEventTestController::class));
     }
 
     /**
