@@ -468,15 +468,75 @@ class StatusCode implements StatusCodeInterface
     }
 
     /**
-     * Returns true if this is an error code, false otherwise.
+     * Returns true if this is a 4xx client error code, false otherwise.
+     *
+     * @since 2.2.0
+     *
+     * @return bool True if this is a 4xx client error code, false otherwise.
+     */
+    public function isClientError(): bool
+    {
+        return $this->isStatusCodeClass(400);
+    }
+
+    /**
+     * Returns true if this is a 4xx or 5xx error code, false otherwise.
      *
      * @since 1.0.0
      *
-     * @return bool True if this is an error code, false otherwise.
+     * @return bool True if this is a 4xx or 5xx error code, false otherwise.
      */
     public function isError(): bool
     {
-        return $this->code >= 400;
+        return $this->isClientError() || $this->isServerError();
+    }
+
+    /**
+     * Returns true if this is a 1xx informational code, false otherwise.
+     *
+     * @since 2.2.0
+     *
+     * @return bool True if this is a 1xx informational code, false otherwise.
+     */
+    public function isInformational(): bool
+    {
+        return $this->isStatusCodeClass(100);
+    }
+
+    /**
+     * Returns true if this is a 3xx redirection code, false otherwise.
+     *
+     * @since 2.2.0
+     *
+     * @return bool True if this is a 3xx redirection code, false otherwise.
+     */
+    public function isRedirection(): bool
+    {
+        return $this->isStatusCodeClass(300);
+    }
+
+    /**
+     * Returns true if this is a 5xx server error code, false otherwise.
+     *
+     * @since 2.2.0
+     *
+     * @return bool True if this is a 5xx server error code, false otherwise.
+     */
+    public function isServerError(): bool
+    {
+        return $this->isStatusCodeClass(500);
+    }
+
+    /**
+     * Returns true if this is a 2xx successful code, false otherwise.
+     *
+     * @since 2.2.0
+     *
+     * @return bool True if this is a 2xx successful code, false otherwise.
+     */
+    public function isSuccessful(): bool
+    {
+        return $this->isStatusCodeClass(200);
     }
 
     /**
@@ -489,6 +549,18 @@ class StatusCode implements StatusCodeInterface
     public function __toString(): string
     {
         return $this->code . ' ' . $this->description;
+    }
+
+    /**
+     * Returns true of the status code belongs to the given status code class (100/200/300/400/500), false otherwise.
+     *
+     * @param int $statusCodeClass The status code class.
+     *
+     * @return bool True of the status code belongs to the given status code class, false otherwise.
+     */
+    private function isStatusCodeClass(int $statusCodeClass): bool
+    {
+        return $this->code >= $statusCodeClass && $this->code <= $statusCodeClass + 99;
     }
 
     /**
@@ -505,7 +577,6 @@ class StatusCode implements StatusCodeInterface
      * @var array My descriptions.
      */
     private static $descriptions = [
-
         self::CONTINUE_                       => 'Continue',
         self::SWITCHING_PROTOCOLS             => 'Switching Protocols',
         self::PROCESSING                      => 'Processing',

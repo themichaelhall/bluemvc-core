@@ -34,13 +34,58 @@ interface StatusCodeInterface
     public function getDescription(): string;
 
     /**
-     * Returns true if this is an error code, false otherwise.
+     * Returns true if this is a 4xx client error code, false otherwise.
+     *
+     * @since 2.2.0
+     *
+     * @return bool True if this is a 4xx client error code, false otherwise.
+     */
+    public function isClientError(): bool;
+
+    /**
+     * Returns true if this is a 4xx or 5xx error code, false otherwise.
      *
      * @since 1.0.0
      *
-     * @return bool True if this is an error code, false otherwise.
+     * @return bool True if this is a 4xx or 5xx error code, false otherwise.
      */
     public function isError(): bool;
+
+    /**
+     * Returns true if this is a 1xx informational code, false otherwise.
+     *
+     * @since 2.2.0
+     *
+     * @return bool True if this is a 1xx informational code, false otherwise.
+     */
+    public function isInformational(): bool;
+
+    /**
+     * Returns true if this is a 3xx redirection code, false otherwise.
+     *
+     * @since 2.2.0
+     *
+     * @return bool True if this is a 3xx redirection code, false otherwise.
+     */
+    public function isRedirection(): bool;
+
+    /**
+     * Returns true if this is a 5xx server error code, false otherwise.
+     *
+     * @since 2.2.0
+     *
+     * @return bool True if this is a 5xx server error code, false otherwise.
+     */
+    public function isServerError(): bool;
+
+    /**
+     * Returns true if this is a 2xx successful code, false otherwise.
+     *
+     * @since 2.2.0
+     *
+     * @return bool True if this is a 2xx successful code, false otherwise.
+     */
+    public function isSuccessful(): bool;
 
     /**
      * Returns the status code as as string.
