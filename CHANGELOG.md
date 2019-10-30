@@ -1,5 +1,6 @@
 ## Unreleased
 - Added ControllerTrait.
+- Added isClientError, isInformational, isRedirection, isServerError and isSuccessful methods to StatusCode.
 - Deprecated AbstractController.
 
 ## [2.1.0] - 2019-06-13
