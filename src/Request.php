@@ -134,7 +134,6 @@ class Request extends AbstractRequest
         $headersArray = [];
 
         if (function_exists('getallheaders')) {
-            /** @noinspection PhpComposerExtensionStubsInspection */
             return getallheaders();
         }
 

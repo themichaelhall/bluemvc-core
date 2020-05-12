@@ -51,7 +51,9 @@ class BasicTestViewRenderer extends AbstractViewRenderer
                 $request->getUrl()->__toString(),
                 $model !== null ? $model : '',
                 $viewItems !== null ? implode(',', iterator_to_array($viewItems)) : '',
-            ], $fileContent);
+            ],
+            $fileContent
+        );
 
         return $result;
     }

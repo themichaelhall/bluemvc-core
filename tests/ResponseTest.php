@@ -281,7 +281,9 @@ class ResponseTest extends TestCase
             [
                 ['name' => 'foo', 'value' => 'Foo', 'expire' => $fooExpiry->getTimestamp(), 'path' => '/bar/', 'domain' => 'example.com', 'secure' => true, 'httponly' => true],
                 ['name' => 'bar', 'value' => 'Bar', 'expire' => 0, 'path' => '', 'domain' => '', 'secure' => false, 'httponly' => false],
-            ], FakeCookies::get());
+            ],
+            FakeCookies::get()
+        );
         self::assertSame('Cookies are set.', $responseOutput);
     }
 
