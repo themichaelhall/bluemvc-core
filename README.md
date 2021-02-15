@@ -4,6 +4,7 @@
 
 # BlueMvc Core
 
+[![Tests](https://github.com/themichaelhall/bluemvc-core/workflows/tests/badge.svg?branch=master)](https://github.com/themichaelhall/bluemvc-core/actions)
 [![codecov.io](https://codecov.io/gh/themichaelhall/bluemvc-core/coverage.svg?branch=master)](https://codecov.io/gh/themichaelhall/bluemvc-core?branch=master)
 [![StyleCI](https://styleci.io/repos/61732117/shield?style=flat)](https://styleci.io/repos/61732117)
 [![License](https://poser.pugx.org/bluemvc/bluemvc-core/license)](https://packagist.org/packages/bluemvc/bluemvc-core)
