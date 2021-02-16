@@ -2,6 +2,7 @@
 - Added ControllerTrait.
 - Added isClientError, isInformational, isRedirection, isServerError and isSuccessful methods to StatusCode.
 - Deprecated AbstractController.
+- Changed required PHP version to >= 7.3.
 
 ## [2.1.0] - 2019-06-13
 - Added ActionResult.
