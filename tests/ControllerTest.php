@@ -216,7 +216,7 @@ class ControllerTest extends TestCase
      *
      * @return array
      */
-    public function processBasicTestControllerDataProvider()
+    public function processBasicTestControllerDataProvider(): array
     {
         return [
             ['', [], StatusCode::OK, 'Hello World!'],
@@ -261,7 +261,7 @@ class ControllerTest extends TestCase
      *
      * @return array
      */
-    public function processDefaultActionControllerDataProvider()
+    public function processDefaultActionControllerDataProvider(): array
     {
         return [
             ['foo', 'Foo Action'],
@@ -321,7 +321,7 @@ class ControllerTest extends TestCase
      *
      * @return array
      */
-    public function processActionResultTestControllerDataProvider()
+    public function processActionResultTestControllerDataProvider(): array
     {
         return [
             ['notFound', StatusCode::NOT_FOUND, [], 'Page was not found'],
@@ -367,7 +367,7 @@ class ControllerTest extends TestCase
      *
      * @return array
      */
-    public function processViewTestControllerDataProvider()
+    public function processViewTestControllerDataProvider(): array
     {
         return [
             ['', '<html><body><h1>Index</h1><span>' . DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR . 'www' . DIRECTORY_SEPARATOR . '</span><em>http://www.domain.com/</em></body></html>'],
@@ -451,7 +451,7 @@ class ControllerTest extends TestCase
      *
      * @return array The data.
      */
-    public function processPreAndPostActionEventControllerDataProvider()
+    public function processPreAndPostActionEventControllerDataProvider(): array
     {
         return [
             ['', 80, StatusCode::OK, ['X-Pre-Action' => 'true', 'X-Post-Action' => 'true'], 'Index action with pre- and post-action event'],
@@ -494,7 +494,7 @@ class ControllerTest extends TestCase
      *
      * @return array
      */
-    public function processUppercaseActionTestControllerDataProvider()
+    public function processUppercaseActionTestControllerDataProvider(): array
     {
         return [
             ['', 'INDEX action'],
@@ -531,7 +531,7 @@ class ControllerTest extends TestCase
      *
      * @return array
      */
-    public function processMultiLevelTestControllerDataProvider()
+    public function processMultiLevelTestControllerDataProvider(): array
     {
         return [
             ['noparams', [], StatusCode::OK, 'No Parameters'],
@@ -607,7 +607,7 @@ class ControllerTest extends TestCase
      *
      * @return array
      */
-    public function processActionMethodVisibilityTestControllerDataProvider()
+    public function processActionMethodVisibilityTestControllerDataProvider(): array
     {
         return [
             ['public', StatusCode::OK, 'Public action'],
@@ -645,7 +645,7 @@ class ControllerTest extends TestCase
      *
      * @return array
      */
-    public function processSpecialActionNameTestControllerDataProvider()
+    public function processSpecialActionNameTestControllerDataProvider(): array
     {
         return [
             ['index', StatusCode::OK, '_index action'],
@@ -684,7 +684,7 @@ class ControllerTest extends TestCase
      *
      * @return array
      */
-    public function processTypeHintActionParametersTestControllerDataProvider()
+    public function processTypeHintActionParametersTestControllerDataProvider(): array
     {
         return [
             ['stringTypes', [], StatusCode::NOT_FOUND, ''],
@@ -787,7 +787,7 @@ class ControllerTest extends TestCase
      *
      * @return array
      */
-    public function processDeprecatedTestControllerDataProvider()
+    public function processDeprecatedTestControllerDataProvider(): array
     {
         return [
             ['', [], null, StatusCode::OK, 'Index Action', 'INDEXAction'],
@@ -846,7 +846,7 @@ class ControllerTest extends TestCase
      *
      * @return array
      */
-    public function processActionResultWithPostActionEventTestControllerDataProvider()
+    public function processActionResultWithPostActionEventTestControllerDataProvider(): array
     {
         return [
             ['', 200, 'Ok'],

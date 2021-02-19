@@ -16,7 +16,7 @@ class ActionMethodVisibilityTestController extends Controller
      *
      * @return string The result.
      */
-    public function publicAction()
+    public function publicAction(): string
     {
         return 'Public action';
     }
@@ -26,7 +26,7 @@ class ActionMethodVisibilityTestController extends Controller
      *
      * @return string The result.
      */
-    protected function protectedAction()
+    protected function protectedAction(): string
     {
         return 'Protected action';
     }
@@ -38,7 +38,7 @@ class ActionMethodVisibilityTestController extends Controller
      *
      * @return string The result.
      */
-    private function privateAction()
+    private function privateAction(): string
     {
         return 'Private action';
     }
@@ -48,7 +48,7 @@ class ActionMethodVisibilityTestController extends Controller
      *
      * @return string The result.
      */
-    public static function publicStaticAction()
+    public static function publicStaticAction(): string
     {
         return 'Public static action';
     }
@@ -58,7 +58,7 @@ class ActionMethodVisibilityTestController extends Controller
      *
      * @return string The result.
      */
-    protected static function protectedStaticAction()
+    protected static function protectedStaticAction(): string
     {
         return 'Protected static action';
     }
@@ -70,7 +70,7 @@ class ActionMethodVisibilityTestController extends Controller
      *
      * @return string The result.
      */
-    private static function privateStaticAction()
+    private static function privateStaticAction(): string
     {
         return 'Private static action';
     }
@@ -82,7 +82,7 @@ class ActionMethodVisibilityTestController extends Controller
      *
      * @return string The result.
      */
-    public function defaultAction($action)
+    public function defaultAction($action): string
     {
         return 'Default action: Action=[' . $action . ']';
     }

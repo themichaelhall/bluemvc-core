@@ -36,7 +36,7 @@ class Issue0003Test extends TestCase
      *
      * @return array
      */
-    public function serverHttpsValueDataProvider()
+    public function serverHttpsValueDataProvider(): array
     {
         return [
             [null, 'http://example.com/foo/bar'],

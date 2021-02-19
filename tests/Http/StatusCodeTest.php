@@ -40,7 +40,8 @@ class StatusCodeTest extends TestCase
         bool $expectedIsRedirection,
         bool $expectedIsClientError,
         bool $expectedIsServerError
-    ) {
+    )
+    {
         $statusCode = new StatusCode($constant);
 
         self::assertSame($expectedCode, $statusCode->getCode());
@@ -70,7 +71,7 @@ class StatusCodeTest extends TestCase
      *
      * @return array The data.
      */
-    public function statusCodeProvider()
+    public function statusCodeProvider(): array
     {
         return [
             [StatusCode::CONTINUE_, 100, 'Continue', '100 Continue', false, true, false, false, false, false],

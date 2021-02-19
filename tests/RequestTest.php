@@ -368,7 +368,7 @@ class RequestTest extends TestCase
      *
      * @return array The data.
      */
-    public function errorInUploadedFilesDataProvider()
+    public function errorInUploadedFilesDataProvider(): array
     {
         return [
             [UPLOAD_ERR_INI_SIZE, null],

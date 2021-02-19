@@ -17,7 +17,7 @@ class ViewTestController extends Controller
      *
      * @return View The view.
      */
-    public function indexAction()
+    public function indexAction(): View
     {
         return new View();
     }
@@ -27,7 +27,7 @@ class ViewTestController extends Controller
      *
      * @return View The view;
      */
-    public function alternateAction()
+    public function alternateAction(): View
     {
         $this->setViewItem('Foo', 'Bar');
 
@@ -39,7 +39,7 @@ class ViewTestController extends Controller
      *
      * @return View The view.
      */
-    public function onlyjsonAction()
+    public function onlyjsonAction(): View
     {
         return new View('This is the model.');
     }
@@ -49,7 +49,7 @@ class ViewTestController extends Controller
      *
      * @return View The view.
      */
-    public function withmodelAction()
+    public function withmodelAction(): View
     {
         return new View('This is the model.');
     }
@@ -59,7 +59,7 @@ class ViewTestController extends Controller
      *
      * @return View The view.
      */
-    public function withviewdataAction()
+    public function withviewdataAction(): View
     {
         $this->setViewItem('Foo', 'This is the view data.');
 
@@ -71,7 +71,7 @@ class ViewTestController extends Controller
      *
      * @return View The view.
      */
-    public function withnoviewfileAction()
+    public function withnoviewfileAction(): View
     {
         return new View();
     }
@@ -81,7 +81,7 @@ class ViewTestController extends Controller
      *
      * @return View The view.
      */
-    public function withcustomviewfileAction()
+    public function withcustomviewfileAction(): View
     {
         return new View('This is the model.', 'custom');
     }

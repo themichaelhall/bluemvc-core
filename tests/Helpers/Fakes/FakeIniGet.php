@@ -80,7 +80,7 @@ namespace BlueMvc\Core\Collections {
      *
      * @return mixed The result.
      */
-    function ini_get(string $name)
+    function ini_get(string $name): string
     {
         if (FakeIniGet::isEnabled()) {
             return FakeIniGet::get($name);

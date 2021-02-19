@@ -72,7 +72,7 @@ class DefaultRouteTest extends TestCase
      *
      * @return array The data.
      */
-    public function matchesDataProvider()
+    public function matchesDataProvider(): array
     {
         return [
             ['/', '', []],

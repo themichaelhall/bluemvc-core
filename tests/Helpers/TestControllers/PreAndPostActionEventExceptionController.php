@@ -20,7 +20,7 @@ class PreAndPostActionEventExceptionController extends Controller
      *
      * @return string The result.
      */
-    public function indexAction()
+    public function indexAction(): string
     {
         return 'Index action with pre- and post-action event';
     }
@@ -32,7 +32,7 @@ class PreAndPostActionEventExceptionController extends Controller
      *
      * @return string The result.
      */
-    public function defaultAction($action)
+    public function defaultAction($action): string
     {
         return 'Default action "' . $action . '" with pre- and post-action event';
     }

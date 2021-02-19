@@ -16,7 +16,7 @@ class UppercaseActionTestController extends Controller
      *
      * @return string The result.
      */
-    public function INDEXACTION()
+    public function INDEXACTION(): string
     {
         return 'INDEX action';
     }
@@ -26,7 +26,7 @@ class UppercaseActionTestController extends Controller
      *
      * @return string The result.
      */
-    public function FOOACTION()
+    public function FOOACTION(): string
     {
         return 'FOO action';
     }
@@ -38,7 +38,7 @@ class UppercaseActionTestController extends Controller
      *
      * @return string The result.
      */
-    public function DEFAULTACTION($action)
+    public function DEFAULTACTION($action): string
     {
         return 'DEFAULT action "' . $action . '"';
     }

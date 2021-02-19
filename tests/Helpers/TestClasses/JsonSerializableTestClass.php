@@ -28,7 +28,7 @@ class JsonSerializableTestClass implements JsonSerializable
      *
      * @return mixed The content to json-serialize
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return ['text' => $this->stringVal];
     }

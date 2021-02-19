@@ -16,7 +16,7 @@ class MultiLevelTestController extends Controller
      *
      * @return string The result.
      */
-    public function noparamsAction()
+    public function noparamsAction(): string
     {
         return 'No Parameters';
     }
@@ -28,7 +28,7 @@ class MultiLevelTestController extends Controller
      *
      * @return string The result.
      */
-    public function fooAction($foo)
+    public function fooAction($foo): string
     {
         return 'FooAction: Foo=[' . $foo . ']';
     }
@@ -40,7 +40,7 @@ class MultiLevelTestController extends Controller
      *
      * @return string The result.
      */
-    public function foonullAction($foo = null)
+    public function foonullAction($foo = null): string
     {
         return 'FooNullAction: Foo=[' . ($foo !== null ? $foo : '*null*') . ']';
     }
@@ -53,7 +53,7 @@ class MultiLevelTestController extends Controller
      *
      * @return string The result.
      */
-    public function foobarAction($foo, $bar)
+    public function foobarAction($foo, $bar): string
     {
         return 'FooBarAction: Foo=[' . $foo . '], Bar=[' . $bar . ']';
     }
@@ -66,7 +66,7 @@ class MultiLevelTestController extends Controller
      *
      * @return string The result.
      */
-    public function foobarnullAction($foo, $bar = null)
+    public function foobarnullAction($foo, $bar = null): string
     {
         return 'FooBarNullAction: Foo=[' . $foo . '], Bar=[' . ($bar !== null ? $bar : '*null*') . ']';
     }
@@ -80,7 +80,7 @@ class MultiLevelTestController extends Controller
      *
      * @return string The result.
      */
-    public function foobarnullbaznullAction($foo, $bar = null, $baz = null)
+    public function foobarnullbaznullAction($foo, $bar = null, $baz = null): string
     {
         return 'FooBarNullBazNullAction: Foo=[' . $foo . '], Bar=[' . ($bar !== null ? $bar : '*null*') . '], Baz=[' . ($baz !== null ? $baz : '*null*') . ']';
     }
@@ -93,7 +93,7 @@ class MultiLevelTestController extends Controller
      *
      * @return string The result.
      */
-    public function foonullbarnullAction($foo = null, $bar = null)
+    public function foonullbarnullAction($foo = null, $bar = null): string
     {
         return 'FooNullBarNullAction: Foo=[' . ($foo !== null ? $foo : '*null*') . '], Bar=[' . ($bar !== null ? $bar : '*null*') . ']';
     }
@@ -107,7 +107,7 @@ class MultiLevelTestController extends Controller
      *
      * @return string The result.
      */
-    public function foobarbazAction($foo, $bar, $baz)
+    public function foobarbazAction($foo, $bar, $baz): string
     {
         return 'FooBarBazAction: Foo=[' . $foo . '], Bar=[' . $bar . '], Baz=[' . $baz . ']';
     }
@@ -121,7 +121,7 @@ class MultiLevelTestController extends Controller
      *
      * @return string The result.
      */
-    public function foobarbazstringAction($foo, $bar, $baz = 'default string')
+    public function foobarbazstringAction($foo, $bar, $baz = 'default string'): string
     {
         return 'FooBarBazStringAction: Foo=[' . $foo . '], Bar=[' . $bar . '], Baz=[' . $baz . ']';
     }
@@ -135,7 +135,7 @@ class MultiLevelTestController extends Controller
      *
      * @return string The result.
      */
-    public function foonullbarnullbaznullAction($foo = null, $bar = null, $baz = null)
+    public function foonullbarnullbaznullAction($foo = null, $bar = null, $baz = null): string
     {
         return 'FooNullBarNullBazNullAction: Foo=[' . ($foo !== null ? $foo : '*null*') . '], Bar=[' . ($bar !== null ? $bar : '*null*') . '], Baz=[' . ($baz !== null ? $baz : '*null*') . ']';
     }
@@ -149,7 +149,7 @@ class MultiLevelTestController extends Controller
      *
      * @return string The result.
      */
-    public function defaultAction($foo, $bar, $baz = null)
+    public function defaultAction($foo, $bar, $baz = null): string
     {
         return 'DefaultAction: Foo=[' . $foo . '], Bar=[' . $bar . '], Baz=[' . ($baz !== null ? $baz : '*null*') . ']';
     }

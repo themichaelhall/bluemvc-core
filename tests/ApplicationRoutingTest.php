@@ -76,7 +76,7 @@ class ApplicationRoutingTest extends TestCase
      *
      * @return array
      */
-    public function indexPagesRouteDataProvider()
+    public function indexPagesRouteDataProvider(): array
     {
         return [
             ['/', [], StatusCode::OK, ['HTTP/1.1 200 OK'], 'Hello World!'],
@@ -127,7 +127,7 @@ class ApplicationRoutingTest extends TestCase
      *
      * @return array
      */
-    public function viewPagesRouteDataProvider()
+    public function viewPagesRouteDataProvider(): array
     {
         return [
             ['/view/', '<html><body><h1>Index</h1><span>' . FilePath::parse(__DIR__ . DIRECTORY_SEPARATOR) . '</span><em>http://example.com/view/</em></body></html>'],
@@ -193,7 +193,7 @@ class ApplicationRoutingTest extends TestCase
      *
      * @return array
      */
-    public function defaultPagesRouteDataProvider()
+    public function defaultPagesRouteDataProvider(): array
     {
         return [
             ['/default/foo', 'Foo Action'],
@@ -261,7 +261,7 @@ class ApplicationRoutingTest extends TestCase
      *
      * @return array
      */
-    public function actionResultPagesRouteDataProvider()
+    public function actionResultPagesRouteDataProvider(): array
     {
         return [
             ['notFound', StatusCode::NOT_FOUND, ['HTTP/1.1 404 Not Found'], 'Page was not found'],
@@ -342,7 +342,7 @@ class ApplicationRoutingTest extends TestCase
      *
      * @return array The data.
      */
-    public function preAndPostActionEventPagesRouteDataProvider()
+    public function preAndPostActionEventPagesRouteDataProvider(): array
     {
         return [
             ['', 80, 200, ['HTTP/1.1 200 OK', 'X-Pre-Action: true', 'X-Post-Action: true'], 'Index action with pre- and post-action event'],
@@ -393,7 +393,7 @@ class ApplicationRoutingTest extends TestCase
      *
      * @return array
      */
-    public function errorHandlingWithErrorControllerDataProvider()
+    public function errorHandlingWithErrorControllerDataProvider(): array
     {
         return [
             ['/actionresult/notfound', StatusCode::NOT_FOUND, ['HTTP/1.1 404 Not Found', 'X-Error-PreActionEvent: 1', 'X-Error-PostActionEvent: 1'], '<html><body><h1>Request Failed: Error: 404</h1></body></html>'],
@@ -456,7 +456,7 @@ class ApplicationRoutingTest extends TestCase
      *
      * @return array
      */
-    public function uppercasePagesRouteDataProvider()
+    public function uppercasePagesRouteDataProvider(): array
     {
         return [
             ['', 'INDEX action'],
@@ -498,7 +498,7 @@ class ApplicationRoutingTest extends TestCase
      *
      * @return array
      */
-    public function multiLevelPagesRouteDataProvider()
+    public function multiLevelPagesRouteDataProvider(): array
     {
         return [
             ['noparams', 'No Parameters', ['HTTP/1.1 200 OK'], StatusCode::OK],
@@ -624,7 +624,7 @@ class ApplicationRoutingTest extends TestCase
      *
      * @return array
      */
-    public function actionMethodVisibilityPagesRouteDataProvider()
+    public function actionMethodVisibilityPagesRouteDataProvider(): array
     {
         return [
             ['public', 'Public action', ['HTTP/1.1 200 OK'], StatusCode::OK],
@@ -668,7 +668,7 @@ class ApplicationRoutingTest extends TestCase
      *
      * @return array
      */
-    public function specialActionNamePagesRouteDataProvider()
+    public function specialActionNamePagesRouteDataProvider(): array
     {
         return [
             ['index', '_index action', ['HTTP/1.1 200 OK'], StatusCode::OK],
@@ -711,7 +711,7 @@ class ApplicationRoutingTest extends TestCase
      *
      * @return array
      */
-    public function requestCookiePagesRouteDataProvider()
+    public function requestCookiePagesRouteDataProvider(): array
     {
         return [
             [[], ''],
@@ -752,7 +752,7 @@ class ApplicationRoutingTest extends TestCase
      *
      * @return array
      */
-    public function multiLevelPathPagesRouteDataProvider()
+    public function multiLevelPathPagesRouteDataProvider(): array
     {
         return [
             ['noparams', 'No Parameters', ['HTTP/1.1 200 OK'], 200],
@@ -805,7 +805,7 @@ class ApplicationRoutingTest extends TestCase
      *
      * @return array The data.
      */
-    public function pageWithPluginDataProvider()
+    public function pageWithPluginDataProvider(): array
     {
         return [
             [new SetHeaderTestPlugin(false, false), 'Hello World!', ['HTTP/1.1 200 OK', 'X-PluginOnPreRequest: 1', 'X-PluginOnPostRequest: 1'], 200],
@@ -851,7 +851,7 @@ class ApplicationRoutingTest extends TestCase
      *
      * @return array
      */
-    public function typeHintActionParametersPagesRouteDataProvider()
+    public function typeHintActionParametersPagesRouteDataProvider(): array
     {
         return [
             ['stringTypes', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],

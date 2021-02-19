@@ -44,7 +44,7 @@ class ErrorTraitTestController extends Controller implements ErrorControllerInte
      *
      * @return View The result.
      */
-    public function defaultAction(int $statusCode)
+    public function defaultAction(int $statusCode): ?View
     {
         $errorText = 'Error: ' . $statusCode;
         $throwable = $this->getThrowable();

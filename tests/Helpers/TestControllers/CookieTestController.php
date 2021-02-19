@@ -16,7 +16,7 @@ class CookieTestController extends Controller
      *
      * @return string The result.
      */
-    public function indexAction()
+    public function indexAction(): string
     {
         $result = [];
 

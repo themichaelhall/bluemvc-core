@@ -73,7 +73,7 @@ class DeprecatedTestController extends AbstractController
      *
      * @return mixed
      */
-    protected function onPreActionEvent()
+    protected function onPreActionEvent(): ?bool
     {
         parent::onPreActionEvent();
 
@@ -99,7 +99,7 @@ class DeprecatedTestController extends AbstractController
      *
      * @return mixed
      */
-    protected function onPostActionEvent()
+    protected function onPostActionEvent(): ?bool
     {
         parent::onPostActionEvent();
 
