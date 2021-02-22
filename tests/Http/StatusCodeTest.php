@@ -40,8 +40,7 @@ class StatusCodeTest extends TestCase
         bool $expectedIsRedirection,
         bool $expectedIsClientError,
         bool $expectedIsServerError
-    )
-    {
+    ) {
         $statusCode = new StatusCode($constant);
 
         self::assertSame($expectedCode, $statusCode->getCode());
