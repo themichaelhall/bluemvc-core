@@ -24,11 +24,11 @@ class MultiLevelTestController extends Controller
     /**
      * Action with one required parameter.
      *
-     * @param mixed $foo The parameter.
+     * @param string $foo The parameter.
      *
      * @return string The result.
      */
-    public function fooAction($foo): string
+    public function fooAction(string $foo): string
     {
         return 'FooAction: Foo=[' . $foo . ']';
     }
@@ -36,11 +36,11 @@ class MultiLevelTestController extends Controller
     /**
      * Action with one optional parameter.
      *
-     * @param mixed $foo The parameter.
+     * @param string|null $foo The parameter.
      *
      * @return string The result.
      */
-    public function foonullAction($foo = null): string
+    public function foonullAction(?string $foo = null): string
     {
         return 'FooNullAction: Foo=[' . ($foo !== null ? $foo : '*null*') . ']';
     }
@@ -48,12 +48,12 @@ class MultiLevelTestController extends Controller
     /**
      * Action with two required parameters.
      *
-     * @param mixed $foo The first parameter.
-     * @param mixed $bar The second parameter.
+     * @param string $foo The first parameter.
+     * @param string $bar The second parameter.
      *
      * @return string The result.
      */
-    public function foobarAction($foo, $bar): string
+    public function foobarAction(string $foo, string $bar): string
     {
         return 'FooBarAction: Foo=[' . $foo . '], Bar=[' . $bar . ']';
     }
@@ -61,12 +61,12 @@ class MultiLevelTestController extends Controller
     /**
      * Action with one required and one optional parameter.
      *
-     * @param mixed $foo The first parameter.
-     * @param mixed $bar The second parameter.
+     * @param string      $foo The first parameter.
+     * @param string|null $bar The second parameter.
      *
      * @return string The result.
      */
-    public function foobarnullAction($foo, $bar = null): string
+    public function foobarnullAction(string $foo, ?string $bar = null): string
     {
         return 'FooBarNullAction: Foo=[' . $foo . '], Bar=[' . ($bar !== null ? $bar : '*null*') . ']';
     }
@@ -74,13 +74,13 @@ class MultiLevelTestController extends Controller
     /**
      * Action with one required and two optional parameters.
      *
-     * @param mixed $foo The first parameter.
-     * @param mixed $bar The second parameter.
-     * @param mixed $baz The third parameter.
+     * @param string      $foo The first parameter.
+     * @param string|null $bar The second parameter.
+     * @param string|null $baz The third parameter.
      *
      * @return string The result.
      */
-    public function foobarnullbaznullAction($foo, $bar = null, $baz = null): string
+    public function foobarnullbaznullAction(string $foo, ?string $bar = null, ?string $baz = null): string
     {
         return 'FooBarNullBazNullAction: Foo=[' . $foo . '], Bar=[' . ($bar !== null ? $bar : '*null*') . '], Baz=[' . ($baz !== null ? $baz : '*null*') . ']';
     }
@@ -88,12 +88,12 @@ class MultiLevelTestController extends Controller
     /**
      * Action with two optional parameters.
      *
-     * @param mixed $foo The first parameter.
-     * @param mixed $bar The second parameter.
+     * @param string|null $foo The first parameter.
+     * @param string|null $bar The second parameter.
      *
      * @return string The result.
      */
-    public function foonullbarnullAction($foo = null, $bar = null): string
+    public function foonullbarnullAction(?string $foo = null, ?string $bar = null): string
     {
         return 'FooNullBarNullAction: Foo=[' . ($foo !== null ? $foo : '*null*') . '], Bar=[' . ($bar !== null ? $bar : '*null*') . ']';
     }
@@ -101,13 +101,13 @@ class MultiLevelTestController extends Controller
     /**
      * Action with three required parameters.
      *
-     * @param mixed $foo The first parameter.
-     * @param mixed $bar The second parameter.
-     * @param mixed $baz The third parameter.
+     * @param string $foo The first parameter.
+     * @param string $bar The second parameter.
+     * @param string $baz The third parameter.
      *
      * @return string The result.
      */
-    public function foobarbazAction($foo, $bar, $baz): string
+    public function foobarbazAction(string $foo, string $bar, string $baz): string
     {
         return 'FooBarBazAction: Foo=[' . $foo . '], Bar=[' . $bar . '], Baz=[' . $baz . ']';
     }
@@ -115,13 +115,13 @@ class MultiLevelTestController extends Controller
     /**
      * Action with two required parameters and one optional string default parameter.
      *
-     * @param mixed $foo The first parameter.
-     * @param mixed $bar The second parameter.
-     * @param mixed $baz The third parameter.
+     * @param string $foo The first parameter.
+     * @param string $bar The second parameter.
+     * @param string $baz The third parameter.
      *
      * @return string The result.
      */
-    public function foobarbazstringAction($foo, $bar, $baz = 'default string'): string
+    public function foobarbazstringAction(string $foo, string $bar, string $baz = 'default string'): string
     {
         return 'FooBarBazStringAction: Foo=[' . $foo . '], Bar=[' . $bar . '], Baz=[' . $baz . ']';
     }
@@ -129,13 +129,13 @@ class MultiLevelTestController extends Controller
     /**
      * Action with three optional parameters.
      *
-     * @param mixed $foo The first parameter.
-     * @param mixed $bar The second parameter.
-     * @param mixed $baz The third parameter.
+     * @param string|null $foo The first parameter.
+     * @param string|null $bar The second parameter.
+     * @param string|null $baz The third parameter.
      *
      * @return string The result.
      */
-    public function foonullbarnullbaznullAction($foo = null, $bar = null, $baz = null): string
+    public function foonullbarnullbaznullAction(?string $foo = null, ?string $bar = null, ?string $baz = null): string
     {
         return 'FooNullBarNullBazNullAction: Foo=[' . ($foo !== null ? $foo : '*null*') . '], Bar=[' . ($bar !== null ? $bar : '*null*') . '], Baz=[' . ($baz !== null ? $baz : '*null*') . ']';
     }
@@ -143,13 +143,13 @@ class MultiLevelTestController extends Controller
     /**
      * The default action.
      *
-     * @param mixed $foo The first parameter.
-     * @param mixed $bar The second parameter.
-     * @param mixed $baz The third parameter.
+     * @param string      $foo The first parameter.
+     * @param string      $bar The second parameter.
+     * @param string|null $baz The third parameter.
      *
      * @return string The result.
      */
-    public function defaultAction($foo, $bar, $baz = null): string
+    public function defaultAction(string $foo, string $bar, string $baz = null): string
     {
         return 'DefaultAction: Foo=[' . $foo . '], Bar=[' . $bar . '], Baz=[' . ($baz !== null ? $baz : '*null*') . ']';
     }

@@ -334,10 +334,10 @@ class RequestTest extends TestCase
      *
      * @dataProvider errorInUploadedFilesDataProvider
      *
-     * @param int    $error                    The file upload error.
-     * @param string $expectedExceptionMessage The expected exception message or null if no exception was thrown.
+     * @param int         $error                    The file upload error.
+     * @param string|null $expectedExceptionMessage The expected exception message or null if no exception was thrown.
      */
-    public function testErrorInUploadedFiles($error, $expectedExceptionMessage)
+    public function testErrorInUploadedFiles(int $error, ?string $expectedExceptionMessage)
     {
         $request = null;
         $exceptionMessage = null;

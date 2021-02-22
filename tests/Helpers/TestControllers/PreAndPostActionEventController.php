@@ -29,7 +29,7 @@ class PreAndPostActionEventController extends Controller
      *
      * @return string The result.
      */
-    public function defaultAction($action): string
+    public function defaultAction(string $action): string
     {
         return 'Default action "' . $action . '" with pre- and post-action event';
     }

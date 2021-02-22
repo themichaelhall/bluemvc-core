@@ -38,7 +38,7 @@ class UppercaseActionTestController extends Controller
      *
      * @return string The result.
      */
-    public function DEFAULTACTION($action): string
+    public function DEFAULTACTION(string $action): string
     {
         return 'DEFAULT action "' . $action . '"';
     }

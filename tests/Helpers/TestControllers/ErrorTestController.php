@@ -40,7 +40,7 @@ class ErrorTestController extends ErrorController
      *
      * @return View The result.
      */
-    public function defaultAction($statusCode): ?View
+    public function defaultAction(string $statusCode): ?View
     {
         $errorText = 'Error: ' . $statusCode;
         $throwable = $this->getThrowable();

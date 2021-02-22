@@ -82,7 +82,7 @@ class ActionMethodVisibilityTestController extends Controller
      *
      * @return string The result.
      */
-    public function defaultAction($action): string
+    public function defaultAction(string $action): string
     {
         return 'Default action: Action=[' . $action . ']';
     }
