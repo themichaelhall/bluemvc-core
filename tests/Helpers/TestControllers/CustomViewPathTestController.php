@@ -17,7 +17,7 @@ class CustomViewPathTestController extends Controller
      *
      * @return View The result.
      */
-    public function indexAction()
+    public function indexAction(): View
     {
         return new View();
     }

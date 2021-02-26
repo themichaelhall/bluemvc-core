@@ -216,7 +216,7 @@ class ControllerTest extends TestCase
      *
      * @return array
      */
-    public function processBasicTestControllerDataProvider()
+    public function processBasicTestControllerDataProvider(): array
     {
         return [
             ['', [], StatusCode::OK, 'Hello World!'],
@@ -261,7 +261,7 @@ class ControllerTest extends TestCase
      *
      * @return array
      */
-    public function processDefaultActionControllerDataProvider()
+    public function processDefaultActionControllerDataProvider(): array
     {
         return [
             ['foo', 'Foo Action'],
@@ -321,7 +321,7 @@ class ControllerTest extends TestCase
      *
      * @return array
      */
-    public function processActionResultTestControllerDataProvider()
+    public function processActionResultTestControllerDataProvider(): array
     {
         return [
             ['notFound', StatusCode::NOT_FOUND, [], 'Page was not found'],
@@ -367,7 +367,7 @@ class ControllerTest extends TestCase
      *
      * @return array
      */
-    public function processViewTestControllerDataProvider()
+    public function processViewTestControllerDataProvider(): array
     {
         return [
             ['', '<html><body><h1>Index</h1><span>' . DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR . 'www' . DIRECTORY_SEPARATOR . '</span><em>http://www.domain.com/</em></body></html>'],
@@ -451,7 +451,7 @@ class ControllerTest extends TestCase
      *
      * @return array The data.
      */
-    public function processPreAndPostActionEventControllerDataProvider()
+    public function processPreAndPostActionEventControllerDataProvider(): array
     {
         return [
             ['', 80, StatusCode::OK, ['X-Pre-Action' => 'true', 'X-Post-Action' => 'true'], 'Index action with pre- and post-action event'],
@@ -494,7 +494,7 @@ class ControllerTest extends TestCase
      *
      * @return array
      */
-    public function processUppercaseActionTestControllerDataProvider()
+    public function processUppercaseActionTestControllerDataProvider(): array
     {
         return [
             ['', 'INDEX action'],
@@ -531,7 +531,7 @@ class ControllerTest extends TestCase
      *
      * @return array
      */
-    public function processMultiLevelTestControllerDataProvider()
+    public function processMultiLevelTestControllerDataProvider(): array
     {
         return [
             ['noparams', [], StatusCode::OK, 'No Parameters'],
@@ -607,7 +607,7 @@ class ControllerTest extends TestCase
      *
      * @return array
      */
-    public function processActionMethodVisibilityTestControllerDataProvider()
+    public function processActionMethodVisibilityTestControllerDataProvider(): array
     {
         return [
             ['public', StatusCode::OK, 'Public action'],
@@ -645,7 +645,7 @@ class ControllerTest extends TestCase
      *
      * @return array
      */
-    public function processSpecialActionNameTestControllerDataProvider()
+    public function processSpecialActionNameTestControllerDataProvider(): array
     {
         return [
             ['index', StatusCode::OK, '_index action'],
@@ -684,9 +684,16 @@ class ControllerTest extends TestCase
      *
      * @return array
      */
-    public function processTypeHintActionParametersTestControllerDataProvider()
+    public function processTypeHintActionParametersTestControllerDataProvider(): array
     {
         return [
+            ['noTypes', [], StatusCode::NOT_FOUND, ''],
+            ['noTypes', ['param1'], StatusCode::NOT_FOUND, ''],
+            ['noTypes', ['param1', 'param2'], StatusCode::OK, 'NoTypesAction: Foo=[string:param1], Bar=[string:param2], Baz=[NULL:], FooBar=[integer:1234]'],
+            ['noTypes', ['param1', 'param2', 'param3'], StatusCode::OK, 'NoTypesAction: Foo=[string:param1], Bar=[string:param2], Baz=[string:param3], FooBar=[integer:1234]'],
+            ['noTypes', ['param1', 'param2', 'param3', 'param4'], StatusCode::OK, 'NoTypesAction: Foo=[string:param1], Bar=[string:param2], Baz=[string:param3], FooBar=[string:param4]'],
+            ['noTypes', ['param1', 'param2', 'param3', 'param4', 'param5'], StatusCode::NOT_FOUND, ''],
+            ['noTypes', ['10', '20.30', 'false', 'true'], StatusCode::OK, 'NoTypesAction: Foo=[string:10], Bar=[string:20.30], Baz=[string:false], FooBar=[string:true]'],
             ['stringTypes', [], StatusCode::NOT_FOUND, ''],
             ['stringTypes', ['param1'], StatusCode::NOT_FOUND, ''],
             ['stringTypes', ['param1', 'param2'], StatusCode::OK, 'StringTypesAction: Foo=[string:param1], Bar=[string:param2], Baz=[NULL:], FooBar=[string:Foo Bar]'],
@@ -736,11 +743,11 @@ class ControllerTest extends TestCase
             ['objectTypes', ['foo'], StatusCode::NOT_FOUND, ''],
             ['objectTypes', ['foo', 'bar'], StatusCode::NOT_FOUND, ''],
             ['mixedTypes', [], StatusCode::NOT_FOUND, ''],
-            ['mixedTypes', ['1.0', 'foo', 'bar'], StatusCode::NOT_FOUND, ''],
-            ['mixedTypes', ['1.0', '123', 'bar'], StatusCode::OK, 'MixedTypesAction: TypeFloat=[double:1], TypeInt=[integer:123], TypeString=[string:bar], TypeBool=[boolean:]'],
-            ['mixedTypes', ['1.0', 'foo', '456'], StatusCode::NOT_FOUND, ''],
+            ['mixedTypes', ['1.0', 'foo', 'bar'], StatusCode::OK, 'MixedTypesAction: TypeFloat=[double:1], TypeNon=[string:foo], TypeString=[string:bar], TypeBool=[boolean:]'],
+            ['mixedTypes', ['1.0', '123', 'bar'], StatusCode::OK, 'MixedTypesAction: TypeFloat=[double:1], TypeNon=[string:123], TypeString=[string:bar], TypeBool=[boolean:]'],
+            ['mixedTypes', ['1.0', 'foo', '456'], StatusCode::OK, 'MixedTypesAction: TypeFloat=[double:1], TypeNon=[string:foo], TypeString=[string:456], TypeBool=[boolean:]'],
             ['mixedTypes', ['baz', '123', 'bar'], StatusCode::NOT_FOUND, ''],
-            ['mixedTypes', ['1.0', '123', 'bar', 'true'], StatusCode::OK, 'MixedTypesAction: TypeFloat=[double:1], TypeInt=[integer:123], TypeString=[string:bar], TypeBool=[boolean:1]'],
+            ['mixedTypes', ['1.0', '123', 'bar', 'true'], StatusCode::OK, 'MixedTypesAction: TypeFloat=[double:1], TypeNon=[string:123], TypeString=[string:bar], TypeBool=[boolean:1]'],
             ['mixedTypes', ['1.0', '123', 'bar', 'baz'], StatusCode::NOT_FOUND, ''],
             ['nonExistingAction', [], StatusCode::OK, 'DefaultAction: Action=[string:nonExistingAction], Foo=[integer:-1]'],
             ['nonExistingAction', ['1234'], StatusCode::OK, 'DefaultAction: Action=[string:nonExistingAction], Foo=[integer:1234]'],
@@ -787,7 +794,7 @@ class ControllerTest extends TestCase
      *
      * @return array
      */
-    public function processDeprecatedTestControllerDataProvider()
+    public function processDeprecatedTestControllerDataProvider(): array
     {
         return [
             ['', [], null, StatusCode::OK, 'Index Action', 'INDEXAction'],
@@ -846,7 +853,7 @@ class ControllerTest extends TestCase
      *
      * @return array
      */
-    public function processActionResultWithPostActionEventTestControllerDataProvider()
+    public function processActionResultWithPostActionEventTestControllerDataProvider(): array
     {
         return [
             ['', 200, 'Ok'],

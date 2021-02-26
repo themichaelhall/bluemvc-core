@@ -80,7 +80,6 @@ namespace BlueMvc\Core {
             return FakeGetAllHeaders::getHeaders();
         }
 
-        /** @noinspection PhpComposerExtensionStubsInspection */
         return \getallheaders();
     }
 }

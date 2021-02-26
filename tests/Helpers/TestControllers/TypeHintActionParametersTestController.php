@@ -13,6 +13,21 @@ use stdClass;
 class TypeHintActionParametersTestController extends Controller
 {
     /**
+     * No types action.
+     *
+     * @param mixed $foo    The first parameter.
+     * @param mixed $bar    The second parameter.
+     * @param mixed $baz    The third parameter.
+     * @param mixed $fooBar The fourth parameter.
+     *
+     * @return string
+     */
+    public function noTypesAction($foo, $bar, $baz = null, $fooBar = 1234): string
+    {
+        return 'NoTypesAction: Foo=[' . gettype($foo) . ':' . $foo . '], Bar=[' . gettype($bar) . ':' . $bar . '], Baz=[' . gettype($baz) . ':' . $baz . '], FooBar=[' . gettype($fooBar) . ':' . $fooBar . ']';
+    }
+
+    /**
      * String types action.
      *
      * @param string      $foo    The first parameter.
@@ -100,15 +115,15 @@ class TypeHintActionParametersTestController extends Controller
      * Mixed types action.
      *
      * @param float  $typeFloat  The float parameter.
-     * @param int    $typeInt    The integer parameter.
+     * @param mixed  $typeNon    The non-typed parameter.
      * @param string $typeString The string parameter.
      * @param bool   $typeBool   The boolean parameter.
      *
      * @return string The result.
      */
-    public function mixedTypesAction(float $typeFloat, int $typeInt, string $typeString, bool $typeBool = false): string
+    public function mixedTypesAction(float $typeFloat, $typeNon, string $typeString, bool $typeBool = false): string
     {
-        return 'MixedTypesAction: TypeFloat=[' . gettype($typeFloat) . ':' . $typeFloat . '], TypeInt=[' . gettype($typeInt) . ':' . $typeInt . '], TypeString=[' . gettype($typeString) . ':' . $typeString . '], TypeBool=[' . gettype($typeBool) . ':' . $typeBool . ']';
+        return 'MixedTypesAction: TypeFloat=[' . gettype($typeFloat) . ':' . $typeFloat . '], TypeNon=[' . gettype($typeNon) . ':' . $typeNon . '], TypeString=[' . gettype($typeString) . ':' . $typeString . '], TypeBool=[' . gettype($typeBool) . ':' . $typeBool . ']';
     }
 
     /**

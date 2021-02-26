@@ -76,7 +76,7 @@ class ApplicationRoutingTest extends TestCase
      *
      * @return array
      */
-    public function indexPagesRouteDataProvider()
+    public function indexPagesRouteDataProvider(): array
     {
         return [
             ['/', [], StatusCode::OK, ['HTTP/1.1 200 OK'], 'Hello World!'],
@@ -127,7 +127,7 @@ class ApplicationRoutingTest extends TestCase
      *
      * @return array
      */
-    public function viewPagesRouteDataProvider()
+    public function viewPagesRouteDataProvider(): array
     {
         return [
             ['/view/', '<html><body><h1>Index</h1><span>' . FilePath::parse(__DIR__ . DIRECTORY_SEPARATOR) . '</span><em>http://example.com/view/</em></body></html>'],
@@ -193,7 +193,7 @@ class ApplicationRoutingTest extends TestCase
      *
      * @return array
      */
-    public function defaultPagesRouteDataProvider()
+    public function defaultPagesRouteDataProvider(): array
     {
         return [
             ['/default/foo', 'Foo Action'],
@@ -261,7 +261,7 @@ class ApplicationRoutingTest extends TestCase
      *
      * @return array
      */
-    public function actionResultPagesRouteDataProvider()
+    public function actionResultPagesRouteDataProvider(): array
     {
         return [
             ['notFound', StatusCode::NOT_FOUND, ['HTTP/1.1 404 Not Found'], 'Page was not found'],
@@ -342,7 +342,7 @@ class ApplicationRoutingTest extends TestCase
      *
      * @return array The data.
      */
-    public function preAndPostActionEventPagesRouteDataProvider()
+    public function preAndPostActionEventPagesRouteDataProvider(): array
     {
         return [
             ['', 80, 200, ['HTTP/1.1 200 OK', 'X-Pre-Action: true', 'X-Post-Action: true'], 'Index action with pre- and post-action event'],
@@ -393,7 +393,7 @@ class ApplicationRoutingTest extends TestCase
      *
      * @return array
      */
-    public function errorHandlingWithErrorControllerDataProvider()
+    public function errorHandlingWithErrorControllerDataProvider(): array
     {
         return [
             ['/actionresult/notfound', StatusCode::NOT_FOUND, ['HTTP/1.1 404 Not Found', 'X-Error-PreActionEvent: 1', 'X-Error-PostActionEvent: 1'], '<html><body><h1>Request Failed: Error: 404</h1></body></html>'],
@@ -456,7 +456,7 @@ class ApplicationRoutingTest extends TestCase
      *
      * @return array
      */
-    public function uppercasePagesRouteDataProvider()
+    public function uppercasePagesRouteDataProvider(): array
     {
         return [
             ['', 'INDEX action'],
@@ -498,7 +498,7 @@ class ApplicationRoutingTest extends TestCase
      *
      * @return array
      */
-    public function multiLevelPagesRouteDataProvider()
+    public function multiLevelPagesRouteDataProvider(): array
     {
         return [
             ['noparams', 'No Parameters', ['HTTP/1.1 200 OK'], StatusCode::OK],
@@ -624,7 +624,7 @@ class ApplicationRoutingTest extends TestCase
      *
      * @return array
      */
-    public function actionMethodVisibilityPagesRouteDataProvider()
+    public function actionMethodVisibilityPagesRouteDataProvider(): array
     {
         return [
             ['public', 'Public action', ['HTTP/1.1 200 OK'], StatusCode::OK],
@@ -668,7 +668,7 @@ class ApplicationRoutingTest extends TestCase
      *
      * @return array
      */
-    public function specialActionNamePagesRouteDataProvider()
+    public function specialActionNamePagesRouteDataProvider(): array
     {
         return [
             ['index', '_index action', ['HTTP/1.1 200 OK'], StatusCode::OK],
@@ -711,7 +711,7 @@ class ApplicationRoutingTest extends TestCase
      *
      * @return array
      */
-    public function requestCookiePagesRouteDataProvider()
+    public function requestCookiePagesRouteDataProvider(): array
     {
         return [
             [[], ''],
@@ -752,7 +752,7 @@ class ApplicationRoutingTest extends TestCase
      *
      * @return array
      */
-    public function multiLevelPathPagesRouteDataProvider()
+    public function multiLevelPathPagesRouteDataProvider(): array
     {
         return [
             ['noparams', 'No Parameters', ['HTTP/1.1 200 OK'], 200],
@@ -805,7 +805,7 @@ class ApplicationRoutingTest extends TestCase
      *
      * @return array The data.
      */
-    public function pageWithPluginDataProvider()
+    public function pageWithPluginDataProvider(): array
     {
         return [
             [new SetHeaderTestPlugin(false, false), 'Hello World!', ['HTTP/1.1 200 OK', 'X-PluginOnPreRequest: 1', 'X-PluginOnPostRequest: 1'], 200],
@@ -851,9 +851,21 @@ class ApplicationRoutingTest extends TestCase
      *
      * @return array
      */
-    public function typeHintActionParametersPagesRouteDataProvider()
+    public function typeHintActionParametersPagesRouteDataProvider(): array
     {
         return [
+            ['noTypes', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['noTypes/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['noTypes/param1', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['noTypes/param1/', 'NoTypesAction: Foo=[string:param1], Bar=[string:], Baz=[NULL:], FooBar=[integer:1234]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['noTypes/param1/param2', 'NoTypesAction: Foo=[string:param1], Bar=[string:param2], Baz=[NULL:], FooBar=[integer:1234]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['noTypes/param1/param2/', 'NoTypesAction: Foo=[string:param1], Bar=[string:param2], Baz=[string:], FooBar=[integer:1234]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['noTypes/param1/param2/param3', 'NoTypesAction: Foo=[string:param1], Bar=[string:param2], Baz=[string:param3], FooBar=[integer:1234]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['noTypes/param1/param2/param3/', 'NoTypesAction: Foo=[string:param1], Bar=[string:param2], Baz=[string:param3], FooBar=[string:]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['noTypes/param1/param2/param3/param4', 'NoTypesAction: Foo=[string:param1], Bar=[string:param2], Baz=[string:param3], FooBar=[string:param4]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['noTypes/param1/param2/param3/param4/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['noTypes/param1/param2/param3/param4/param5', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['noTypes/10/20.30/false/true', 'NoTypesAction: Foo=[string:10], Bar=[string:20.30], Baz=[string:false], FooBar=[string:true]', ['HTTP/1.1 200 OK'], StatusCode::OK],
             ['stringTypes', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
             ['stringTypes/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
             ['stringTypes/param1', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
@@ -922,19 +934,18 @@ class ApplicationRoutingTest extends TestCase
             ['objectTypes/foo/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
             ['objectTypes/foo/bar', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
             ['mixedTypes', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
-            ['mixedTypes/42/foo/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
-            ['mixedTypes/42/foo/bar', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['mixedTypes/42/foo/', 'MixedTypesAction: TypeFloat=[double:42], TypeNon=[string:foo], TypeString=[string:], TypeBool=[boolean:]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['mixedTypes/42/foo/bar', 'MixedTypesAction: TypeFloat=[double:42], TypeNon=[string:foo], TypeString=[string:bar], TypeBool=[boolean:]', ['HTTP/1.1 200 OK'], StatusCode::OK],
             ['mixedTypes/42/foo/bar/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
-            ['mixedTypes/42/foo/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
-            ['mixedTypes/42/foo/123', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
+            ['mixedTypes/42/foo/123', 'MixedTypesAction: TypeFloat=[double:42], TypeNon=[string:foo], TypeString=[string:123], TypeBool=[boolean:]', ['HTTP/1.1 200 OK'], StatusCode::OK],
             ['mixedTypes/42/foo/123/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
-            ['mixedTypes/42/123/', 'MixedTypesAction: TypeFloat=[double:42], TypeInt=[integer:123], TypeString=[string:], TypeBool=[boolean:]', ['HTTP/1.1 200 OK'], StatusCode::OK],
-            ['mixedTypes/42/123/bar', 'MixedTypesAction: TypeFloat=[double:42], TypeInt=[integer:123], TypeString=[string:bar], TypeBool=[boolean:]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['mixedTypes/42/123/', 'MixedTypesAction: TypeFloat=[double:42], TypeNon=[string:123], TypeString=[string:], TypeBool=[boolean:]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['mixedTypes/42/123/bar', 'MixedTypesAction: TypeFloat=[double:42], TypeNon=[string:123], TypeString=[string:bar], TypeBool=[boolean:]', ['HTTP/1.1 200 OK'], StatusCode::OK],
             ['mixedTypes/42/123/bar/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
             ['mixedTypes/baz/123/bar', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
             ['mixedTypes/baz/123/bar/', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
-            ['mixedTypes/42/123/bar/true', 'MixedTypesAction: TypeFloat=[double:42], TypeInt=[integer:123], TypeString=[string:bar], TypeBool=[boolean:1]', ['HTTP/1.1 200 OK'], StatusCode::OK],
-            ['mixedTypes/42/123/bar/false', 'MixedTypesAction: TypeFloat=[double:42], TypeInt=[integer:123], TypeString=[string:bar], TypeBool=[boolean:]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['mixedTypes/42/123/bar/true', 'MixedTypesAction: TypeFloat=[double:42], TypeNon=[string:123], TypeString=[string:bar], TypeBool=[boolean:1]', ['HTTP/1.1 200 OK'], StatusCode::OK],
+            ['mixedTypes/42/123/bar/false', 'MixedTypesAction: TypeFloat=[double:42], TypeNon=[string:123], TypeString=[string:bar], TypeBool=[boolean:]', ['HTTP/1.1 200 OK'], StatusCode::OK],
             ['mixedTypes/42/123/bar/baz', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
             ['mixedTypes/42/123/bar/true/false', '', ['HTTP/1.1 404 Not Found'], StatusCode::NOT_FOUND],
             ['nonExistingAction', 'DefaultAction: Action=[string:nonExistingAction], Foo=[integer:-1]', ['HTTP/1.1 200 OK'], StatusCode::OK],

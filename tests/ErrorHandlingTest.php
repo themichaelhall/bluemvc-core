@@ -63,7 +63,7 @@ class ErrorHandlingTest extends TestCase
      *
      * @return array The data.
      */
-    public function errorHandlingDataProvider()
+    public function errorHandlingDataProvider(): array
     {
         return [
             [true, '/exception/', null, [], '<title>Exception was thrown.</title>', StatusCode::INTERNAL_SERVER_ERROR],

@@ -19,7 +19,7 @@ class DefaultActionWithViewTestController extends Controller
      *
      * @return View The view.
      */
-    public function defaultAction($action)
+    public function defaultAction(string $action): View
     {
         return new View($action);
     }

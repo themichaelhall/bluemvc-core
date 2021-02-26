@@ -58,7 +58,7 @@ class PluginTest extends TestCase
      *
      * @return array The data.
      */
-    public function pluginHandlingDataProvider()
+    public function pluginHandlingDataProvider(): array
     {
         return [
             ['', [], 'Hello World!', [], StatusCode::OK],

@@ -70,7 +70,7 @@ class StatusCodeTest extends TestCase
      *
      * @return array The data.
      */
-    public function statusCodeProvider()
+    public function statusCodeProvider(): array
     {
         return [
             [StatusCode::CONTINUE_, 100, 'Continue', '100 Continue', false, true, false, false, false, false],

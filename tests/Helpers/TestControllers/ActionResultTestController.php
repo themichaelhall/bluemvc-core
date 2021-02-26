@@ -29,7 +29,7 @@ class ActionResultTestController extends Controller
      *
      * @return NotFoundResult The action result.
      */
-    public function notFoundAction()
+    public function notFoundAction(): NotFoundResult
     {
         return new NotFoundResult('Page was not found');
     }
@@ -39,7 +39,7 @@ class ActionResultTestController extends Controller
      *
      * @return RedirectResult The action result.
      */
-    public function redirectAction()
+    public function redirectAction(): RedirectResult
     {
         return new RedirectResult('/foo/bar');
     }
@@ -49,7 +49,7 @@ class ActionResultTestController extends Controller
      *
      * @return PermanentRedirectResult The action result.
      */
-    public function permanentRedirectAction()
+    public function permanentRedirectAction(): PermanentRedirectResult
     {
         return new PermanentRedirectResult('https://domain.com/');
     }
@@ -59,7 +59,7 @@ class ActionResultTestController extends Controller
      *
      * @return ForbiddenResult The action result.
      */
-    public function forbiddenAction()
+    public function forbiddenAction(): ForbiddenResult
     {
         return new ForbiddenResult('Page is forbidden');
     }
@@ -69,7 +69,7 @@ class ActionResultTestController extends Controller
      *
      * @return NoContentResult The action result.
      */
-    public function noContentAction()
+    public function noContentAction(): NoContentResult
     {
         return new NoContentResult();
     }
@@ -79,7 +79,7 @@ class ActionResultTestController extends Controller
      *
      * @return NotModifiedResult The action result.
      */
-    public function notModifiedAction()
+    public function notModifiedAction(): NotModifiedResult
     {
         return new NotModifiedResult();
     }
@@ -89,7 +89,7 @@ class ActionResultTestController extends Controller
      *
      * @return MethodNotAllowedResult The action result.
      */
-    public function methodNotAllowedAction()
+    public function methodNotAllowedAction(): MethodNotAllowedResult
     {
         return new MethodNotAllowedResult();
     }
@@ -99,7 +99,7 @@ class ActionResultTestController extends Controller
      *
      * @return JsonResult The action result.
      */
-    public function jsonAction()
+    public function jsonAction(): JsonResult
     {
         return new JsonResult(['Foo' => 1, 'Bar' => ['Baz' => 2]]);
     }
@@ -109,7 +109,7 @@ class ActionResultTestController extends Controller
      *
      * @return CreatedResult The action result.
      */
-    public function createdAction()
+    public function createdAction(): CreatedResult
     {
         return new CreatedResult('https://example.com/created');
     }
@@ -119,7 +119,7 @@ class ActionResultTestController extends Controller
      *
      * @return BadRequestResult The action result.
      */
-    public function badRequestAction()
+    public function badRequestAction(): BadRequestResult
     {
         return new BadRequestResult('The request was bad');
     }
@@ -129,7 +129,7 @@ class ActionResultTestController extends Controller
      *
      * @return UnauthorizedResult
      */
-    public function unauthorizedAction()
+    public function unauthorizedAction(): UnauthorizedResult
     {
         return new UnauthorizedResult('Basic realm="Foo"');
     }
@@ -139,7 +139,7 @@ class ActionResultTestController extends Controller
      *
      * @return ActionResult The action result.
      */
-    public function customAction()
+    public function customAction(): ActionResult
     {
         return new ActionResult('Custom action result', new StatusCode(StatusCode::MULTI_STATUS));
     }

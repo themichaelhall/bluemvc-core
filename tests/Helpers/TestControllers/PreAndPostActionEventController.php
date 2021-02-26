@@ -17,7 +17,7 @@ class PreAndPostActionEventController extends Controller
      *
      * @return string The result.
      */
-    public function indexAction()
+    public function indexAction(): string
     {
         return 'Index action with pre- and post-action event';
     }
@@ -29,7 +29,7 @@ class PreAndPostActionEventController extends Controller
      *
      * @return string The result.
      */
-    public function defaultAction($action)
+    public function defaultAction(string $action): string
     {
         return 'Default action "' . $action . '" with pre- and post-action event';
     }
@@ -39,7 +39,7 @@ class PreAndPostActionEventController extends Controller
      *
      * @return NotFoundResult|null The result.
      */
-    protected function onPreActionEvent()
+    protected function onPreActionEvent(): ?NotFoundResult
     {
         parent::onPreActionEvent();
 
@@ -57,7 +57,7 @@ class PreAndPostActionEventController extends Controller
      *
      * @return string|null The result.
      */
-    protected function onPostActionEvent()
+    protected function onPostActionEvent(): ?string
     {
         parent::onPostActionEvent();
 

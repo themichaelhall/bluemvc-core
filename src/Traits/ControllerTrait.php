@@ -15,6 +15,7 @@ use BlueMvc\Core\Interfaces\ResponseInterface;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
+use ReflectionNamedType;
 use ReflectionParameter;
 
 /**
@@ -296,15 +297,17 @@ trait ControllerTrait
      *
      * @return bool True if parameter matches, false otherwise.
      */
-    private static function actionMethodParameterMatchesParameter(ReflectionParameter $reflectionParameter, $parameter, &$adjustedParameter = null)
+    private static function actionMethodParameterMatchesParameter(ReflectionParameter $reflectionParameter, $parameter, &$adjustedParameter = null): bool
     {
         $adjustedParameter = $parameter;
 
-        if ($reflectionParameter->getType() === null) {
-            return true;
+        $reflectionParameterType = $reflectionParameter->getType();
+        if (!$reflectionParameterType instanceof ReflectionNamedType) {
+            // Union types will be handled correctly in next major version.
+            return $reflectionParameterType === null;
         }
 
-        switch ($reflectionParameter->getType()->getName()) {
+        switch ($reflectionParameterType->getName()) {
             case 'int':
                 $intVal = intval($parameter);
                 if (strval($intVal) !== $parameter) {

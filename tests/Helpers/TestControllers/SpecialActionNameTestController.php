@@ -16,7 +16,7 @@ class SpecialActionNameTestController extends Controller
      *
      * @return string The result.
      */
-    public function _indexAction()
+    public function _indexAction(): string
     {
         return '_index action';
     }
@@ -26,7 +26,7 @@ class SpecialActionNameTestController extends Controller
      *
      * @return string The result.
      */
-    public function _DefaultAction()
+    public function _DefaultAction(): string
     {
         return '_Default action';
     }
