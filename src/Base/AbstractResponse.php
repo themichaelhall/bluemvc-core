@@ -180,7 +180,8 @@ abstract class AbstractResponse implements ResponseInterface
     /**
      * Sets the expiry time.
      *
-     * @since 1.0.0
+     * @since      1.0.0
+     * @deprecated Use setExpiryDateTime instead.
      *
      * @param DateTimeImmutable|null $expiry The expiry time or null for immediate expiry.
      */
@@ -199,6 +200,31 @@ abstract class AbstractResponse implements ResponseInterface
         }
 
         $maxAge = $expiry->getTimestamp() - $date->getTimestamp();
+        $this->setHeader('Cache-Control', 'public, max-age=' . $maxAge);
+    }
+
+    /**
+     * Sets the expiry date time.
+     *
+     * @since 2.2.0
+     *
+     * @param DateTimeImmutable|null $expiryDateTime The expiry date time or null for immediate expiry.
+     */
+    public function setExpiryDateTime(?DateTimeImmutable $expiryDateTime): void
+    {
+        $now = new DateTimeImmutable();
+        $expiryDateTime = $expiryDateTime ?: $now;
+
+        $this->setHeader('Date', $now->setTimezone(new DateTimeZone('UTC'))->format('D, d M Y H:i:s \G\M\T'));
+        $this->setHeader('Expires', $expiryDateTime->setTimezone(new DateTimeZone('UTC'))->format('D, d M Y H:i:s \G\M\T'));
+
+        if ($expiryDateTime <= $now) {
+            $this->setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
+
+            return;
+        }
+
+        $maxAge = $expiryDateTime->getTimestamp() - $now->getTimestamp();
         $this->setHeader('Cache-Control', 'public, max-age=' . $maxAge);
     }
 
