@@ -1,7 +1,9 @@
 ## Unreleased
 - Added ControllerTrait.
 - Added isClientError, isInformational, isRedirection, isServerError and isSuccessful methods to StatusCode.
+- Added setExpiryDateTime method to Response.
 - Deprecated AbstractController.
+- Deprecated setExpiry method in Response.
 - Changed required PHP version to >= 7.3.
 
 ## [2.1.0] - 2019-06-13

@@ -137,11 +137,21 @@ interface ResponseInterface
     /**
      * Sets the expiry time.
      *
-     * @since 1.0.0
+     * @since      1.0.0
+     * @deprecated Use setExpiryDateTime instead.
      *
      * @param DateTimeImmutable|null $expiry The expiry time or null for immediate expiry.
      */
     public function setExpiry(?DateTimeImmutable $expiry = null): void;
+
+    /**
+     * Sets the expiry date time.
+     *
+     * @since 2.2.0
+     *
+     * @param DateTimeImmutable|null $expiryDateTime The expiry date time or null for immediate expiry.
+     */
+    public function setExpiryDateTime(?DateTimeImmutable $expiryDateTime): void;
 
     /**
      * Sets a header.

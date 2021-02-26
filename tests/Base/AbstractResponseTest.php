@@ -136,40 +136,40 @@ class AbstractResponseTest extends TestCase
     }
 
     /**
-     * Test setExpiry method with null expiry time value.
+     * Test setExpiryDateTime method with null expiry time value.
      */
-    public function testSetExpiryWithNullTime()
+    public function testSetExpiryDateTimeWithNullTime()
     {
         $response = new BasicTestResponse();
-        $response->setExpiry(null);
+        $response->setExpiryDateTime(null);
 
         self::assertSame($response->getHeader('Date'), $response->getHeader('Expires'));
         self::assertSame('no-cache, no-store, must-revalidate, max-age=0', $response->getHeader('Cache-Control'));
     }
 
     /**
-     * Test setExpiry method with past expiry time value.
+     * Test setExpiryDateTime method with past expiry time value.
      */
-    public function testSetExpiryWithPastTime()
+    public function testSetExpiryDateTimeWithPastTime()
     {
         $response = new BasicTestResponse();
 
         $expiry = (new DateTimeImmutable())->sub(new DateInterval('PT24H'));
-        $response->setExpiry($expiry);
+        $response->setExpiryDateTime($expiry);
 
         self::assertSame($expiry->setTimezone(new DateTimeZone('UTC'))->format('D, d M Y H:i:s \G\M\T'), $response->getHeader('Expires'));
         self::assertSame('no-cache, no-store, must-revalidate, max-age=0', $response->getHeader('Cache-Control'));
     }
 
     /**
-     * Test setExpiry method with future expiry time value.
+     * Test setExpiryDateTime method with future expiry time value.
      */
-    public function testSetExpiryWithFutureTime()
+    public function testSetExpiryDateTimeWithFutureTime()
     {
         $response = new BasicTestResponse();
 
         $expiry = (new DateTimeImmutable())->add(new DateInterval('PT24H'));
-        $response->setExpiry($expiry);
+        $response->setExpiryDateTime($expiry);
 
         self::assertSame($expiry->setTimezone(new DateTimeZone('UTC'))->format('D, d M Y H:i:s \G\M\T'), $response->getHeader('Expires'));
         self::assertSame('public, max-age=86400', $response->getHeader('Cache-Control'));
