@@ -14,7 +14,6 @@ use BlueMvc\Core\Exceptions\InvalidControllerClassException;
 use BlueMvc\Core\Exceptions\InvalidFilePathException;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
-use BlueMvc\Core\Interfaces\Collections\CustomItemCollectionInterface;
 use BlueMvc\Core\Interfaces\ControllerInterface;
 use BlueMvc\Core\Interfaces\ErrorControllerInterface;
 use BlueMvc\Core\Interfaces\PluginInterface;
@@ -22,6 +21,7 @@ use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
 use BlueMvc\Core\Interfaces\RouteInterface;
 use BlueMvc\Core\Interfaces\ViewRendererInterface;
+use BlueMvc\Core\Traits\CustomItemsTrait;
 use DataTypes\Exceptions\FilePathLogicException;
 use DataTypes\FilePath;
 use DataTypes\Interfaces\FilePathInterface;
@@ -34,6 +34,8 @@ use Throwable;
  */
 abstract class AbstractApplication implements ApplicationInterface
 {
+    use CustomItemsTrait;
+
     /**
      * Adds a plugin.
      *
@@ -68,32 +70,6 @@ abstract class AbstractApplication implements ApplicationInterface
     public function addViewRenderer(ViewRendererInterface $viewRenderer): void
     {
         $this->viewRenderers[] = $viewRenderer;
-    }
-
-    /**
-     * Returns a custom item by name if it exists, null otherwise.
-     *
-     * @since 1.0.0
-     *
-     * @param string $name The custom item name.
-     *
-     * @return mixed|null The custom item if it exists, null otherwise.
-     */
-    public function getCustomItem(string $name)
-    {
-        return $this->customItems->get($name);
-    }
-
-    /**
-     * Returns the custom items.
-     *
-     * @since 1.0.0
-     *
-     * @return CustomItemCollectionInterface The custom items.
-     */
-    public function getCustomItems(): CustomItemCollectionInterface
-    {
-        return $this->customItems;
     }
 
     /**
@@ -214,31 +190,6 @@ abstract class AbstractApplication implements ApplicationInterface
     {
         $this->doRun($request, $response);
         $response->output();
-    }
-
-    /**
-     * Sets a custom item.
-     *
-     * @since 1.0.0
-     *
-     * @param string $name  The custom item name.
-     * @param mixed  $value The custom item value.
-     */
-    public function setCustomItem(string $name, $value): void
-    {
-        $this->customItems->set($name, $value);
-    }
-
-    /**
-     * Sets the custom items.
-     *
-     * @since 1.0.0
-     *
-     * @param CustomItemCollectionInterface $customItems The custom items.
-     */
-    public function setCustomItems(CustomItemCollectionInterface $customItems): void
-    {
-        $this->customItems = $customItems;
     }
 
     /**
@@ -545,9 +496,4 @@ abstract class AbstractApplication implements ApplicationInterface
      * @var PluginInterface[] My plugins.
      */
     private $plugins;
-
-    /**
-     * @var CustomItemCollectionInterface My custom items.
-     */
-    private $customItems;
 }
