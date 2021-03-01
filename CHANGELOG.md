@@ -1,5 +1,6 @@
 ## Unreleased
 - Added ControllerTrait.
+- Added CustomItemsTrait.
 - Added isClientError, isInformational, isRedirection, isServerError and isSuccessful methods to StatusCode.
 - Added setExpiryDateTime method to Response.
 - Deprecated AbstractController.
