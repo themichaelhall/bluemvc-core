@@ -36,7 +36,7 @@ class ViewRendererTest extends TestCase
             FilePath::parse('ViewTest' . $DS . 'index.view')
         );
 
-        self::assertSame('<html><body><h1>Index</h1><span>' . $DS . 'var' . $DS . 'www' . $DS . '</span><em>http://localhost/foo</em></body></html>', $result);
+        self::assertSame('<html><body><h1>Index</h1><span>' . $DS . 'var' . $DS . 'www' . $DS . "</span><em>http://localhost/foo</em></body></html>\n", self::normalizeEndOfLine($result));
     }
 
     /**
@@ -58,7 +58,7 @@ class ViewRendererTest extends TestCase
             'This is the model.'
         );
 
-        self::assertSame('<html><body><h1>With model</h1><span>' . $DS . 'var' . $DS . 'www' . $DS . '</span><em>http://localhost/bar</em><p>This is the model.</p></body></html>', $result);
+        self::assertSame('<html><body><h1>With model</h1><span>' . $DS . 'var' . $DS . 'www' . $DS . "</span><em>http://localhost/bar</em><p>This is the model.</p></body></html>\n", self::normalizeEndOfLine($result));
     }
 
     /**
@@ -83,6 +83,18 @@ class ViewRendererTest extends TestCase
             $viewItems
         );
 
-        self::assertSame('<html><body><h1>With model and view data</h1><span>' . $DS . 'var' . $DS . 'www' . $DS . '</span><em>http://localhost/baz</em><p>This is the model.</p><i>This is the view data.</i></body></html>', $result);
+        self::assertSame('<html><body><h1>With model and view data</h1><span>' . $DS . 'var' . $DS . 'www' . $DS . "</span><em>http://localhost/baz</em><p>This is the model.</p><i>This is the view data.</i></body></html>\n", self::normalizeEndOfLine($result));
+    }
+
+    /**
+     * Normalizes the end of line character(s) to \n, so tests will pass even if the newline(s) in tests files are converted, e.g. by Git.
+     *
+     * @param string $s
+     *
+     * @return string
+     */
+    private static function normalizeEndOfLine(string $s): string
+    {
+        return str_replace("\r\n", "\n", $s);
     }
 }

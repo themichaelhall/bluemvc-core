@@ -67,8 +67,8 @@ class ApplicationRoutingTest extends TestCase
 
         self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
         self::assertSame($expectedHeaders, FakeHeaders::get());
-        self::assertSame($expectedContent, $responseOutput);
-        self::assertSame($expectedContent, $response->getContent());
+        self::assertSame($expectedContent, self::normalizeEndOfLine($responseOutput));
+        self::assertSame($expectedContent, self::normalizeEndOfLine($response->getContent()));
     }
 
     /**
@@ -91,8 +91,8 @@ class ApplicationRoutingTest extends TestCase
             ['/object', [], StatusCode::OK, ['HTTP/1.1 200 OK'], 'object'],
             ['/stringable', [], StatusCode::OK, ['HTTP/1.1 200 OK'], 'Text is "Bar"'],
             ['/actionResult', [], StatusCode::NOT_MODIFIED, ['HTTP/1.1 304 Not Modified'], ''],
-            ['/view', [], StatusCode::OK, ['HTTP/1.1 200 OK'], '<html><body><h1>viewAction</h1></body></html>'],
-            ['/viewOrActionResult', ['showView' => '1'], StatusCode::OK, ['HTTP/1.1 200 OK'], '<html><body><h1>viewOrActionResultAction</h1></body></html>'],
+            ['/view', [], StatusCode::OK, ['HTTP/1.1 200 OK'], "<html><body><h1>viewAction</h1></body></html>\n"],
+            ['/viewOrActionResult', ['showView' => '1'], StatusCode::OK, ['HTTP/1.1 200 OK'], "<html><body><h1>viewOrActionResultAction</h1></body></html>\n"],
             ['/viewOrActionResult', ['showView' => '0'], StatusCode::NO_CONTENT, ['HTTP/1.1 204 No Content'], ''],
         ];
     }
@@ -118,8 +118,8 @@ class ApplicationRoutingTest extends TestCase
 
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
         self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
-        self::assertSame($expectedContent, $responseOutput);
-        self::assertSame($expectedContent, $response->getContent());
+        self::assertSame($expectedContent, self::normalizeEndOfLine($responseOutput));
+        self::assertSame($expectedContent, self::normalizeEndOfLine($response->getContent()));
     }
 
     /**
@@ -130,13 +130,13 @@ class ApplicationRoutingTest extends TestCase
     public function viewPagesRouteDataProvider(): array
     {
         return [
-            ['/view/', '<html><body><h1>Index</h1><span>' . FilePath::parse(__DIR__ . DIRECTORY_SEPARATOR) . '</span><em>http://example.com/view/</em></body></html>'],
-            ['/view/withmodel', '<html><body><h1>With model</h1><span>' . FilePath::parse(__DIR__ . DIRECTORY_SEPARATOR) . '</span><em>http://example.com/view/withmodel</em><p>This is the model.</p></body></html>'],
-            ['/view/withviewdata', '<html><body><h1>With model and view data</h1><span>' . FilePath::parse(__DIR__ . DIRECTORY_SEPARATOR) . '</span><em>http://example.com/view/withviewdata</em><p>This is the model.</p><i>This is the view data.</i></body></html>'],
-            ['/view/withcustomviewfile', '<html><body><h1>Custom view file</h1><span>' . FilePath::parse(__DIR__ . DIRECTORY_SEPARATOR) . '</span><em>http://example.com/view/withcustomviewfile</em><p>This is the model.</p></body></html>'],
-            ['/view/alternate', '{"Model":"This is the model.","ViewItems":{"Foo":"Bar"}}'],
-            ['/view/onlyjson', '{"Model":"This is the model."}'],
-            ['/customViewPath/', '<html><body><h1>View in custom view path</h1></body></html>'],
+            ['/view/', '<html><body><h1>Index</h1><span>' . FilePath::parse(__DIR__ . DIRECTORY_SEPARATOR) . "</span><em>http://example.com/view/</em></body></html>\n"],
+            ['/view/withmodel', '<html><body><h1>With model</h1><span>' . FilePath::parse(__DIR__ . DIRECTORY_SEPARATOR) . "</span><em>http://example.com/view/withmodel</em><p>This is the model.</p></body></html>\n"],
+            ['/view/withviewdata', '<html><body><h1>With model and view data</h1><span>' . FilePath::parse(__DIR__ . DIRECTORY_SEPARATOR) . "</span><em>http://example.com/view/withviewdata</em><p>This is the model.</p><i>This is the view data.</i></body></html>\n"],
+            ['/view/withcustomviewfile', '<html><body><h1>Custom view file</h1><span>' . FilePath::parse(__DIR__ . DIRECTORY_SEPARATOR) . "</span><em>http://example.com/view/withcustomviewfile</em><p>This is the model.</p></body></html>\n"],
+            ['/view/alternate', "{\"Model\":\"This is the model.\",\"ViewItems\":{\"Foo\":\"Bar\"}}\n"],
+            ['/view/onlyjson', "{\"Model\":\"This is the model.\"}\n"],
+            ['/customViewPath/', "<html><body><h1>View in custom view path</h1></body></html>\n"],
         ];
     }
 
@@ -184,8 +184,8 @@ class ApplicationRoutingTest extends TestCase
 
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
         self::assertSame(['HTTP/1.1 200 OK'], FakeHeaders::get());
-        self::assertSame($expectedContent, $responseOutput);
-        self::assertSame($expectedContent, $response->getContent());
+        self::assertSame($expectedContent, self::normalizeEndOfLine($responseOutput));
+        self::assertSame($expectedContent, self::normalizeEndOfLine($response->getContent()));
     }
 
     /**
@@ -198,7 +198,7 @@ class ApplicationRoutingTest extends TestCase
         return [
             ['/default/foo', 'Foo Action'],
             ['/default/bar', 'Default Action bar'],
-            ['/defaultview/foo', '<html><body><h1>Default view for action foo</h1></body></html>'],
+            ['/defaultview/foo', "<html><body><h1>Default view for action foo</h1></body></html>\n"],
         ];
     }
 
@@ -384,8 +384,8 @@ class ApplicationRoutingTest extends TestCase
 
         self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
         self::assertSame($expectedHeaders, FakeHeaders::get());
-        self::assertSame($expectedContent, $responseOutput);
-        self::assertSame($expectedContent, $response->getContent());
+        self::assertSame($expectedContent, self::normalizeEndOfLine($responseOutput));
+        self::assertSame($expectedContent, self::normalizeEndOfLine($response->getContent()));
     }
 
     /**
@@ -396,8 +396,8 @@ class ApplicationRoutingTest extends TestCase
     public function errorHandlingWithErrorControllerDataProvider(): array
     {
         return [
-            ['/actionresult/notfound', StatusCode::NOT_FOUND, ['HTTP/1.1 404 Not Found', 'X-Error-PreActionEvent: 1', 'X-Error-PostActionEvent: 1'], '<html><body><h1>Request Failed: Error: 404</h1></body></html>'],
-            ['/exception/', StatusCode::INTERNAL_SERVER_ERROR, ['HTTP/1.1 500 Internal Server Error'], '<html><body><h1>Request Failed: Error: 500, Throwable: LogicException, ThrowableMessage: Exception was thrown.</h1></body></html>'],
+            ['/actionresult/notfound', StatusCode::NOT_FOUND, ['HTTP/1.1 404 Not Found', 'X-Error-PreActionEvent: 1', 'X-Error-PostActionEvent: 1'], "<html><body><h1>Request Failed: Error: 404</h1></body></html>\n"],
+            ['/exception/', StatusCode::INTERNAL_SERVER_ERROR, ['HTTP/1.1 500 Internal Server Error'], "<html><body><h1>Request Failed: Error: 500, Throwable: LogicException, ThrowableMessage: Exception was thrown.</h1></body></html>\n"],
             ['/actionresult/forbidden', StatusCode::INTERNAL_SERVER_ERROR, ['HTTP/1.1 500 Internal Server Error'], ''],
         ];
     }
@@ -1057,6 +1057,18 @@ class ApplicationRoutingTest extends TestCase
         $this->application = null;
 
         $_SERVER = $this->originalServerArray;
+    }
+
+    /**
+     * Normalizes the end of line character(s) to \n, so tests will pass even if the newline(s) in tests files are converted, e.g. by Git.
+     *
+     * @param string $s
+     *
+     * @return string
+     */
+    private static function normalizeEndOfLine(string $s): string
+    {
+        return str_replace("\r\n", "\n", $s);
     }
 
     /**

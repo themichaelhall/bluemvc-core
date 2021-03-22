@@ -48,7 +48,7 @@ class PluginTest extends TestCase
         $response = new BasicTestResponse();
         $this->application->run($request, $response);
 
-        self::assertSame($expectedContent, $response->getContent());
+        self::assertSame($expectedContent, self::normalizeEndOfLine($response->getContent()));
         self::assertSame($expectedHeaders, iterator_to_array($response->getHeaders()));
         self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
     }
@@ -102,21 +102,21 @@ class PluginTest extends TestCase
             ['', [new SetContentTestPlugin(true, true), new SetHeaderTestPlugin(false, true)], 'onPreRequest', [], StatusCode::OK],
             ['', [new SetContentTestPlugin(true, true), new SetHeaderTestPlugin(true, false)], 'onPreRequest', [], StatusCode::OK],
             ['', [new SetContentTestPlugin(true, true), new SetHeaderTestPlugin(true, true)], 'onPreRequest', [], StatusCode::OK],
-            ['actionResult/notfound', [], '<html><body><h1>Request Failed: Error: 404</h1></body></html>', ['X-Error-PreActionEvent' => '1', 'X-Error-PostActionEvent' => '1'], StatusCode::NOT_FOUND],
-            ['actionResult/notfound', [new SetHeaderTestPlugin(false, false)], '<html><body><h1>Request Failed: Error: 404</h1></body></html>', ['X-PluginOnPreRequest' => '1', 'X-Error-PreActionEvent' => '1', 'X-Error-PostActionEvent' => '1', 'X-PluginOnPostRequest' => '1'], StatusCode::NOT_FOUND],
-            ['actionResult/notfound', [new SetHeaderTestPlugin(false, true)], '<html><body><h1>Request Failed: Error: 404</h1></body></html>', ['X-PluginOnPreRequest' => '1', 'X-Error-PreActionEvent' => '1', 'X-Error-PostActionEvent' => '1', 'X-PluginOnPostRequest' => '1'], StatusCode::NOT_FOUND],
+            ['actionResult/notfound', [], "<html><body><h1>Request Failed: Error: 404</h1></body></html>\n", ['X-Error-PreActionEvent' => '1', 'X-Error-PostActionEvent' => '1'], StatusCode::NOT_FOUND],
+            ['actionResult/notfound', [new SetHeaderTestPlugin(false, false)], "<html><body><h1>Request Failed: Error: 404</h1></body></html>\n", ['X-PluginOnPreRequest' => '1', 'X-Error-PreActionEvent' => '1', 'X-Error-PostActionEvent' => '1', 'X-PluginOnPostRequest' => '1'], StatusCode::NOT_FOUND],
+            ['actionResult/notfound', [new SetHeaderTestPlugin(false, true)], "<html><body><h1>Request Failed: Error: 404</h1></body></html>\n", ['X-PluginOnPreRequest' => '1', 'X-Error-PreActionEvent' => '1', 'X-Error-PostActionEvent' => '1', 'X-PluginOnPostRequest' => '1'], StatusCode::NOT_FOUND],
             ['actionResult/notfound', [new SetHeaderTestPlugin(true, false)], '', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
             ['actionResult/notfound', [new SetHeaderTestPlugin(true, true)], '', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
-            ['actionResult/notfound', [new SetContentTestPlugin(false, false)], '<html><body><h1>Request Failed: Error: 404</h1></body></html>onPostRequest', ['X-Error-PreActionEvent' => '1', 'X-Error-PostActionEvent' => '1'], StatusCode::NOT_FOUND],
-            ['actionResult/notfound', [new SetContentTestPlugin(false, true)], '<html><body><h1>Request Failed: Error: 404</h1></body></html>onPostRequest', ['X-Error-PreActionEvent' => '1', 'X-Error-PostActionEvent' => '1'], StatusCode::NOT_FOUND],
+            ['actionResult/notfound', [new SetContentTestPlugin(false, false)], "<html><body><h1>Request Failed: Error: 404</h1></body></html>\nonPostRequest", ['X-Error-PreActionEvent' => '1', 'X-Error-PostActionEvent' => '1'], StatusCode::NOT_FOUND],
+            ['actionResult/notfound', [new SetContentTestPlugin(false, true)], "<html><body><h1>Request Failed: Error: 404</h1></body></html>\nonPostRequest", ['X-Error-PreActionEvent' => '1', 'X-Error-PostActionEvent' => '1'], StatusCode::NOT_FOUND],
             ['actionResult/notfound', [new SetContentTestPlugin(true, false)], 'onPreRequest', [], StatusCode::OK],
             ['actionResult/notfound', [new SetContentTestPlugin(true, true)], 'onPreRequest', [], StatusCode::OK],
-            ['actionResult/notfound', [new SetHeaderTestPlugin(false, false), new SetContentTestPlugin(false, false)], '<html><body><h1>Request Failed: Error: 404</h1></body></html>onPostRequest', ['X-PluginOnPreRequest' => '1', 'X-Error-PreActionEvent' => '1', 'X-Error-PostActionEvent' => '1', 'X-PluginOnPostRequest' => '1'], StatusCode::NOT_FOUND],
-            ['actionResult/notfound', [new SetHeaderTestPlugin(false, false), new SetContentTestPlugin(false, true)], '<html><body><h1>Request Failed: Error: 404</h1></body></html>onPostRequest', ['X-PluginOnPreRequest' => '1', 'X-Error-PreActionEvent' => '1', 'X-Error-PostActionEvent' => '1', 'X-PluginOnPostRequest' => '1'], StatusCode::NOT_FOUND],
+            ['actionResult/notfound', [new SetHeaderTestPlugin(false, false), new SetContentTestPlugin(false, false)], "<html><body><h1>Request Failed: Error: 404</h1></body></html>\nonPostRequest", ['X-PluginOnPreRequest' => '1', 'X-Error-PreActionEvent' => '1', 'X-Error-PostActionEvent' => '1', 'X-PluginOnPostRequest' => '1'], StatusCode::NOT_FOUND],
+            ['actionResult/notfound', [new SetHeaderTestPlugin(false, false), new SetContentTestPlugin(false, true)], "<html><body><h1>Request Failed: Error: 404</h1></body></html>\nonPostRequest", ['X-PluginOnPreRequest' => '1', 'X-Error-PreActionEvent' => '1', 'X-Error-PostActionEvent' => '1', 'X-PluginOnPostRequest' => '1'], StatusCode::NOT_FOUND],
             ['actionResult/notfound', [new SetHeaderTestPlugin(false, false), new SetContentTestPlugin(true, false)], 'onPreRequest', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
             ['actionResult/notfound', [new SetHeaderTestPlugin(false, false), new SetContentTestPlugin(true, true)], 'onPreRequest', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
-            ['actionResult/notfound', [new SetHeaderTestPlugin(false, true), new SetContentTestPlugin(false, false)], '<html><body><h1>Request Failed: Error: 404</h1></body></html>', ['X-PluginOnPreRequest' => '1', 'X-Error-PreActionEvent' => '1', 'X-Error-PostActionEvent' => '1', 'X-PluginOnPostRequest' => '1'], StatusCode::NOT_FOUND],
-            ['actionResult/notfound', [new SetHeaderTestPlugin(false, true), new SetContentTestPlugin(false, true)], '<html><body><h1>Request Failed: Error: 404</h1></body></html>', ['X-PluginOnPreRequest' => '1', 'X-Error-PreActionEvent' => '1', 'X-Error-PostActionEvent' => '1', 'X-PluginOnPostRequest' => '1'], StatusCode::NOT_FOUND],
+            ['actionResult/notfound', [new SetHeaderTestPlugin(false, true), new SetContentTestPlugin(false, false)], "<html><body><h1>Request Failed: Error: 404</h1></body></html>\n", ['X-PluginOnPreRequest' => '1', 'X-Error-PreActionEvent' => '1', 'X-Error-PostActionEvent' => '1', 'X-PluginOnPostRequest' => '1'], StatusCode::NOT_FOUND],
+            ['actionResult/notfound', [new SetHeaderTestPlugin(false, true), new SetContentTestPlugin(false, true)], "<html><body><h1>Request Failed: Error: 404</h1></body></html>\n", ['X-PluginOnPreRequest' => '1', 'X-Error-PreActionEvent' => '1', 'X-Error-PostActionEvent' => '1', 'X-PluginOnPostRequest' => '1'], StatusCode::NOT_FOUND],
             ['actionResult/notfound', [new SetHeaderTestPlugin(false, true), new SetContentTestPlugin(true, false)], 'onPreRequest', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
             ['actionResult/notfound', [new SetHeaderTestPlugin(false, true), new SetContentTestPlugin(true, true)], 'onPreRequest', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
             ['actionResult/notfound', [new SetHeaderTestPlugin(true, false), new SetContentTestPlugin(false, false)], '', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
@@ -127,12 +127,12 @@ class PluginTest extends TestCase
             ['actionResult/notfound', [new SetHeaderTestPlugin(true, true), new SetContentTestPlugin(false, true)], '', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
             ['actionResult/notfound', [new SetHeaderTestPlugin(true, true), new SetContentTestPlugin(true, false)], '', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
             ['actionResult/notfound', [new SetHeaderTestPlugin(true, true), new SetContentTestPlugin(true, true)], '', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
-            ['actionResult/notfound', [new SetContentTestPlugin(false, false), new SetHeaderTestPlugin(false, false)], '<html><body><h1>Request Failed: Error: 404</h1></body></html>onPostRequest', ['X-PluginOnPreRequest' => '1', 'X-Error-PreActionEvent' => '1', 'X-Error-PostActionEvent' => '1', 'X-PluginOnPostRequest' => '1'], StatusCode::NOT_FOUND],
-            ['actionResult/notfound', [new SetContentTestPlugin(false, false), new SetHeaderTestPlugin(false, true)], '<html><body><h1>Request Failed: Error: 404</h1></body></html>onPostRequest', ['X-PluginOnPreRequest' => '1', 'X-Error-PreActionEvent' => '1', 'X-Error-PostActionEvent' => '1', 'X-PluginOnPostRequest' => '1'], StatusCode::NOT_FOUND],
+            ['actionResult/notfound', [new SetContentTestPlugin(false, false), new SetHeaderTestPlugin(false, false)], "<html><body><h1>Request Failed: Error: 404</h1></body></html>\nonPostRequest", ['X-PluginOnPreRequest' => '1', 'X-Error-PreActionEvent' => '1', 'X-Error-PostActionEvent' => '1', 'X-PluginOnPostRequest' => '1'], StatusCode::NOT_FOUND],
+            ['actionResult/notfound', [new SetContentTestPlugin(false, false), new SetHeaderTestPlugin(false, true)], "<html><body><h1>Request Failed: Error: 404</h1></body></html>\nonPostRequest", ['X-PluginOnPreRequest' => '1', 'X-Error-PreActionEvent' => '1', 'X-Error-PostActionEvent' => '1', 'X-PluginOnPostRequest' => '1'], StatusCode::NOT_FOUND],
             ['actionResult/notfound', [new SetContentTestPlugin(false, false), new SetHeaderTestPlugin(true, false)], 'onPreRequest', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
             ['actionResult/notfound', [new SetContentTestPlugin(false, false), new SetHeaderTestPlugin(true, true)], 'onPreRequest', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
-            ['actionResult/notfound', [new SetContentTestPlugin(false, true), new SetHeaderTestPlugin(false, false)], '<html><body><h1>Request Failed: Error: 404</h1></body></html>onPostRequest', ['X-PluginOnPreRequest' => '1', 'X-Error-PreActionEvent' => '1', 'X-Error-PostActionEvent' => '1'], StatusCode::NOT_FOUND],
-            ['actionResult/notfound', [new SetContentTestPlugin(false, true), new SetHeaderTestPlugin(false, true)], '<html><body><h1>Request Failed: Error: 404</h1></body></html>onPostRequest', ['X-PluginOnPreRequest' => '1', 'X-Error-PreActionEvent' => '1', 'X-Error-PostActionEvent' => '1'], StatusCode::NOT_FOUND],
+            ['actionResult/notfound', [new SetContentTestPlugin(false, true), new SetHeaderTestPlugin(false, false)], "<html><body><h1>Request Failed: Error: 404</h1></body></html>\nonPostRequest", ['X-PluginOnPreRequest' => '1', 'X-Error-PreActionEvent' => '1', 'X-Error-PostActionEvent' => '1'], StatusCode::NOT_FOUND],
+            ['actionResult/notfound', [new SetContentTestPlugin(false, true), new SetHeaderTestPlugin(false, true)], "<html><body><h1>Request Failed: Error: 404</h1></body></html>\nonPostRequest", ['X-PluginOnPreRequest' => '1', 'X-Error-PreActionEvent' => '1', 'X-Error-PostActionEvent' => '1'], StatusCode::NOT_FOUND],
             ['actionResult/notfound', [new SetContentTestPlugin(false, true), new SetHeaderTestPlugin(true, false)], 'onPreRequest', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
             ['actionResult/notfound', [new SetContentTestPlugin(false, true), new SetHeaderTestPlugin(true, true)], 'onPreRequest', ['X-PluginOnPreRequest' => '1'], StatusCode::OK],
             ['actionResult/notfound', [new SetContentTestPlugin(true, false), new SetHeaderTestPlugin(false, false)], 'onPreRequest', [], StatusCode::OK],
@@ -233,6 +233,18 @@ class PluginTest extends TestCase
         parent::tearDown();
 
         $this->application = null;
+    }
+
+    /**
+     * Normalizes the end of line character(s) to \n, so tests will pass even if the newline(s) in tests files are converted, e.g. by Git.
+     *
+     * @param string $s
+     *
+     * @return string
+     */
+    private static function normalizeEndOfLine(string $s): string
+    {
+        return str_replace("\r\n", "\n", $s);
     }
 
     /**

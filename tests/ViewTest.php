@@ -77,7 +77,7 @@ class ViewTest extends TestCase
 
         $view->updateResponse($application, $request, $response, 'ViewTest', 'withviewdata', $viewItems);
 
-        self::assertSame('<html><body><h1>With model and view data</h1><span>' . $application->getDocumentRoot() . '</span><em>' . $request->getUrl() . '</em><p>The Model</p><i>The View Data</i></body></html>', $response->getContent());
+        self::assertSame('<html><body><h1>With model and view data</h1><span>' . $application->getDocumentRoot() . '</span><em>' . $request->getUrl() . "</em><p>The Model</p><i>The View Data</i></body></html>\n", self::normalizeEndOfLine($response->getContent()));
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
@@ -125,7 +125,7 @@ class ViewTest extends TestCase
 
         $view->updateResponse($application, $request, $response, 'ViewTest', 'index', $viewItems);
 
-        self::assertSame('<html><body><h1>Custom view file</h1><span>' . $application->getDocumentRoot() . '</span><em>https://example.com/</em><p>The Model</p></body></html>', $response->getContent());
+        self::assertSame('<html><body><h1>Custom view file</h1><span>' . $application->getDocumentRoot() . "</span><em>https://example.com/</em><p>The Model</p></body></html>\n", self::normalizeEndOfLine($response->getContent()));
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
@@ -160,7 +160,7 @@ class ViewTest extends TestCase
 
         $view->updateResponse($application, $request, $response, 'ViewTest', 'alternate', $viewItems);
 
-        self::assertSame('<html><body><h1>Alternate</h1><span>' . $application->getDocumentRoot() . '</span><em>' . $request->getUrl() . '</em><p>The Model</p><i>The View Data</i></body></html>', $response->getContent());
+        self::assertSame('<html><body><h1>Alternate</h1><span>' . $application->getDocumentRoot() . '</span><em>' . $request->getUrl() . "</em><p>The Model</p><i>The View Data</i></body></html>\n", self::normalizeEndOfLine($response->getContent()));
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
@@ -184,7 +184,7 @@ class ViewTest extends TestCase
 
         $view->updateResponse($application, $request, $response, 'ViewTest', 'alternate', $viewItems);
 
-        self::assertSame('{"Model":"The Model","ViewItems":{"Foo":"The View Data"}}', $response->getContent());
+        self::assertSame("{\"Model\":\"The Model\",\"ViewItems\":{\"Foo\":\"The View Data\"}}\n", self::normalizeEndOfLine($response->getContent()));
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
@@ -208,7 +208,7 @@ class ViewTest extends TestCase
 
         $view->updateResponse($application, $request, $response, 'ViewTest', 'onlyjson', $viewItems);
 
-        self::assertSame('{"Model":"The Model"}', $response->getContent());
+        self::assertSame("{\"Model\":\"The Model\"}\n", self::normalizeEndOfLine($response->getContent()));
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
@@ -231,5 +231,17 @@ class ViewTest extends TestCase
         $viewItems = new ViewItemCollection();
 
         $view->updateResponse($application, $request, $response, 'ViewTest', 'index', $viewItems);
+    }
+
+    /**
+     * Normalizes the end of line character(s) to \n, so tests will pass even if the newline(s) in tests files are converted, e.g. by Git.
+     *
+     * @param string $s
+     *
+     * @return string
+     */
+    private static function normalizeEndOfLine(string $s): string
+    {
+        return str_replace("\r\n", "\n", $s);
     }
 }

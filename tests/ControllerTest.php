@@ -208,7 +208,7 @@ class ControllerTest extends TestCase
         $controller->processRequest($application, $request, $response, $path);
 
         self::assertSame($expectedStatusCode, $response->getStatusCode()->getCode());
-        self::assertSame($expectedContent, $response->getContent());
+        self::assertSame($expectedContent, self::normalizeEndOfLine($response->getContent()));
     }
 
     /**
@@ -230,8 +230,8 @@ class ControllerTest extends TestCase
             ['object', [], StatusCode::OK, 'object'],
             ['stringable', [], StatusCode::OK, 'Text is "Bar"'],
             ['actionResult', [], StatusCode::NOT_MODIFIED, ''],
-            ['view', [], StatusCode::OK, '<html><body><h1>viewAction</h1></body></html>'],
-            ['viewOrActionResult', ['showView' => '1'], StatusCode::OK, '<html><body><h1>viewOrActionResultAction</h1></body></html>'],
+            ['view', [], StatusCode::OK, "<html><body><h1>viewAction</h1></body></html>\n"],
+            ['viewOrActionResult', ['showView' => '1'], StatusCode::OK, "<html><body><h1>viewOrActionResultAction</h1></body></html>\n"],
             ['viewOrActionResult', ['showView' => '0'], StatusCode::NO_CONTENT, ''],
         ];
     }
@@ -358,7 +358,7 @@ class ControllerTest extends TestCase
         $controller = new ViewTestController();
         $controller->processRequest($application, $request, $response, $path);
 
-        self::assertSame($expectedContent, $response->getContent());
+        self::assertSame($expectedContent, self::normalizeEndOfLine($response->getContent()));
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
@@ -370,13 +370,13 @@ class ControllerTest extends TestCase
     public function processViewTestControllerDataProvider(): array
     {
         return [
-            ['', '<html><body><h1>Index</h1><span>' . DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR . 'www' . DIRECTORY_SEPARATOR . '</span><em>http://www.domain.com/</em></body></html>'],
-            ['alternate', '{"Model":"This is the model.","ViewItems":{"Foo":"Bar"}}'],
-            ['onlyjson', '{"Model":"This is the model."}'],
-            ['withmodel', '<html><body><h1>With model</h1><span>' . DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR . 'www' . DIRECTORY_SEPARATOR . '</span><em>http://www.domain.com/</em><p>This is the model.</p></body></html>'],
-            ['withviewdata', '<html><body><h1>With model and view data</h1><span>' . DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR . 'www' . DIRECTORY_SEPARATOR . '</span><em>http://www.domain.com/</em><p>This is the model.</p><i>This is the view data.</i></body></html>'],
+            ['', '<html><body><h1>Index</h1><span>' . DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR . 'www' . DIRECTORY_SEPARATOR . "</span><em>http://www.domain.com/</em></body></html>\n"],
+            ['alternate', "{\"Model\":\"This is the model.\",\"ViewItems\":{\"Foo\":\"Bar\"}}\n"],
+            ['onlyjson', "{\"Model\":\"This is the model.\"}\n"],
+            ['withmodel', '<html><body><h1>With model</h1><span>' . DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR . 'www' . DIRECTORY_SEPARATOR . "</span><em>http://www.domain.com/</em><p>This is the model.</p></body></html>\n"],
+            ['withviewdata', '<html><body><h1>With model and view data</h1><span>' . DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR . 'www' . DIRECTORY_SEPARATOR . "</span><em>http://www.domain.com/</em><p>This is the model.</p><i>This is the view data.</i></body></html>\n"],
             // Skipped 'withnoviewfile' intentionally here.
-            ['withcustomviewfile', '<html><body><h1>Custom view file</h1><span>' . DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR . 'www' . DIRECTORY_SEPARATOR . '</span><em>http://www.domain.com/</em><p>This is the model.</p></body></html>'],
+            ['withcustomviewfile', '<html><body><h1>Custom view file</h1><span>' . DIRECTORY_SEPARATOR . 'var' . DIRECTORY_SEPARATOR . 'www' . DIRECTORY_SEPARATOR . "</span><em>http://www.domain.com/</em><p>This is the model.</p></body></html>\n"],
         ];
     }
 
@@ -394,7 +394,7 @@ class ControllerTest extends TestCase
         $controller = new CustomViewPathTestController();
         $controller->processRequest($application, $request, $response, '');
 
-        self::assertSame('<html><body><h1>View in custom view path</h1></body></html>', $response->getContent());
+        self::assertSame("<html><body><h1>View in custom view path</h1></body></html>\n", self::normalizeEndOfLine($response->getContent()));
         self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
     }
 
@@ -861,5 +861,17 @@ class ControllerTest extends TestCase
             ['bar', 404, 'Failed with status: 405 Method Not Allowed'],
             ['baz', 404, 'Failed with status: 400 Bad Request'],
         ];
+    }
+
+    /**
+     * Normalizes the end of line character(s) to \n, so tests will pass even if the newline(s) in tests files are converted, e.g. by Git.
+     *
+     * @param string $s
+     *
+     * @return string
+     */
+    private static function normalizeEndOfLine(string $s): string
+    {
+        return str_replace("\r\n", "\n", $s);
     }
 }
