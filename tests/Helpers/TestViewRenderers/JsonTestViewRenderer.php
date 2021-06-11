@@ -46,7 +46,7 @@ class JsonTestViewRenderer extends AbstractViewRenderer
             ],
             [
                 json_encode($model),
-                $viewItems = json_encode(iterator_to_array($viewItems)),
+                json_encode(iterator_to_array($viewItems)),
             ],
             $fileContent
         );

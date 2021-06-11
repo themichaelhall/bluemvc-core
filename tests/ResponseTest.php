@@ -199,7 +199,7 @@ class ResponseTest extends TestCase
     public function testSetExpiryWithNullTime()
     {
         $response = new Response();
-        $response->setExpiry(null);
+        $response->setExpiry();
 
         self::assertSame($response->getHeader('Date'), $response->getHeader('Expires'));
         self::assertSame('no-cache, no-store, must-revalidate, max-age=0', $response->getHeader('Cache-Control'));

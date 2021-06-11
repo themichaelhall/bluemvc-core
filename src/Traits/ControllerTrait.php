@@ -177,8 +177,6 @@ trait ControllerTrait
      */
     private static function findActionMethod(ReflectionClass $reflectionClass, string $action, bool $isCaseSensitive): ?ReflectionMethod
     {
-        $actionMethod = null;
-
         // Methods can not begin with a digit, prepend underscore to make it possible.
         if (strlen($action) > 0 && ctype_digit($action[0])) {
             $action = '_' . $action;
@@ -194,11 +192,11 @@ trait ControllerTrait
             if (!$actionMethod->isPublic()) {
                 return null;
             }
+
+            return $actionMethod;
         } catch (ReflectionException $e) {
             return null;
         }
-
-        return $actionMethod;
     }
 
     /**

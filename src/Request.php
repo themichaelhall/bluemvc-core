@@ -59,7 +59,7 @@ class Request extends AbstractRequest
             self::createSessionItems($url)
         );
 
-        $clientIp = IPAddress::tryParse(isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '');
+        $clientIp = IPAddress::tryParse($_SERVER['REMOTE_ADDR'] ?? '');
         if ($clientIp !== null) {
             $this->setClientIp($clientIp);
         }

@@ -22,5 +22,5 @@ class SimpleTestClass
     /**
      * @var string My text.
      */
-    private $text;
+    public $text;
 }
