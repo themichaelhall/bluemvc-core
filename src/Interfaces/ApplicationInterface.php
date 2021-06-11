@@ -12,7 +12,7 @@ namespace BlueMvc\Core\Interfaces;
 
 use BlueMvc\Core\Exceptions\InvalidFilePathException;
 use BlueMvc\Core\Interfaces\Collections\CustomItemCollectionInterface;
-use DataTypes\Interfaces\FilePathInterface;
+use DataTypes\System\FilePathInterface;
 
 /**
  * Interface for Application class.

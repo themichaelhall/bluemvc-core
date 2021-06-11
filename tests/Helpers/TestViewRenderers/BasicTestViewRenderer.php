@@ -8,7 +8,7 @@ use BlueMvc\Core\Base\AbstractViewRenderer;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\Collections\ViewItemCollectionInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
-use DataTypes\Interfaces\FilePathInterface;
+use DataTypes\System\FilePathInterface;
 
 /**
  * A basic test view renderer.

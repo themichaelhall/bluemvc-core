@@ -24,13 +24,13 @@ use BlueMvc\Core\Interfaces\Collections\RequestCookieCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\SessionItemCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\UploadedFileCollectionInterface;
 use BlueMvc\Core\Interfaces\UploadedFileInterface;
-use DataTypes\FilePath;
-use DataTypes\Host;
-use DataTypes\Interfaces\UrlInterface;
-use DataTypes\IPAddress;
-use DataTypes\Scheme;
-use DataTypes\Url;
-use DataTypes\UrlPath;
+use DataTypes\Net\Host;
+use DataTypes\Net\IPAddress;
+use DataTypes\Net\Scheme;
+use DataTypes\Net\Url;
+use DataTypes\Net\UrlInterface;
+use DataTypes\Net\UrlPath;
+use DataTypes\System\FilePath;
 
 /**
  * Class representing a web request.

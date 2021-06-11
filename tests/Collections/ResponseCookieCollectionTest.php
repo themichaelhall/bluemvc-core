@@ -6,8 +6,8 @@ namespace BlueMvc\Core\Tests\Collections;
 
 use BlueMvc\Core\Collections\ResponseCookieCollection;
 use BlueMvc\Core\ResponseCookie;
-use DataTypes\Host;
-use DataTypes\UrlPath;
+use DataTypes\Net\Host;
+use DataTypes\Net\UrlPath;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 

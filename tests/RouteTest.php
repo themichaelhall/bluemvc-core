@@ -10,7 +10,7 @@ use BlueMvc\Core\Http\Method;
 use BlueMvc\Core\Route;
 use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
 use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
-use DataTypes\Url;
+use DataTypes\Net\Url;
 use PHPUnit\Framework\TestCase;
 
 /**

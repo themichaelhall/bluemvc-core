@@ -18,8 +18,8 @@ use BlueMvc\Core\Interfaces\Http\MethodInterface;
 use BlueMvc\Core\Interfaces\RequestCookieInterface;
 use BlueMvc\Core\Interfaces\UploadedFileInterface;
 use BlueMvc\Core\Tests\Helpers\TestCollections\BasicTestSessionItemCollection;
-use DataTypes\Interfaces\IPAddressInterface;
-use DataTypes\Interfaces\UrlInterface;
+use DataTypes\Net\IPAddressInterface;
+use DataTypes\Net\UrlInterface;
 
 /**
  * Basic test request class.

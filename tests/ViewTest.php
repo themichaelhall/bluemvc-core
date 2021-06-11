@@ -15,8 +15,8 @@ use BlueMvc\Core\Tests\Helpers\TestResponses\BasicTestResponse;
 use BlueMvc\Core\Tests\Helpers\TestViewRenderers\BasicTestViewRenderer;
 use BlueMvc\Core\Tests\Helpers\TestViewRenderers\JsonTestViewRenderer;
 use BlueMvc\Core\View;
-use DataTypes\FilePath;
-use DataTypes\Url;
+use DataTypes\Net\Url;
+use DataTypes\System\FilePath;
 use Exception;
 use PHPUnit\Framework\TestCase;
 

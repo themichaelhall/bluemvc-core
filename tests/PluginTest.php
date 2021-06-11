@@ -18,8 +18,8 @@ use BlueMvc\Core\Tests\Helpers\TestPlugins\SetHeaderTestPlugin;
 use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
 use BlueMvc\Core\Tests\Helpers\TestResponses\BasicTestResponse;
 use BlueMvc\Core\Tests\Helpers\TestViewRenderers\BasicTestViewRenderer;
-use DataTypes\FilePath;
-use DataTypes\Url;
+use DataTypes\Net\Url;
+use DataTypes\System\FilePath;
 use PHPUnit\Framework\TestCase;
 
 /**

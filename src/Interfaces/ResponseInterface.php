@@ -13,8 +13,8 @@ namespace BlueMvc\Core\Interfaces;
 use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\ResponseCookieCollectionInterface;
 use BlueMvc\Core\Interfaces\Http\StatusCodeInterface;
-use DataTypes\Interfaces\HostInterface;
-use DataTypes\Interfaces\UrlPathInterface;
+use DataTypes\Net\HostInterface;
+use DataTypes\Net\UrlPathInterface;
 use DateTimeImmutable;
 use DateTimeInterface;
 

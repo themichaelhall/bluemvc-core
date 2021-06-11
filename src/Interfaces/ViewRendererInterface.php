@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace BlueMvc\Core\Interfaces;
 
 use BlueMvc\Core\Interfaces\Collections\ViewItemCollectionInterface;
-use DataTypes\Interfaces\FilePathInterface;
+use DataTypes\System\FilePathInterface;
 
 /**
  * Interface for ViewRenderer class.

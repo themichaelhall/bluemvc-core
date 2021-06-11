@@ -13,7 +13,7 @@ use BlueMvc\Core\Tests\Helpers\TestControllers\BasicTestController;
 use BlueMvc\Core\Tests\Helpers\TestControllers\ErrorTestController;
 use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
 use BlueMvc\Core\Tests\Helpers\TestViewRenderers\BasicTestViewRenderer;
-use DataTypes\FilePath;
+use DataTypes\System\FilePath;
 use PHPUnit\Framework\TestCase;
 
 /**

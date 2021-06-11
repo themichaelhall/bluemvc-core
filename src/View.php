@@ -18,7 +18,7 @@ use BlueMvc\Core\Interfaces\Collections\ViewItemCollectionInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
 use BlueMvc\Core\Interfaces\ViewInterface;
-use DataTypes\FilePath;
+use DataTypes\System\FilePath;
 
 /**
  * Class representing a view.

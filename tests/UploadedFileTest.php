@@ -6,7 +6,7 @@ namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\Exceptions\InvalidFilePathException;
 use BlueMvc\Core\UploadedFile;
-use DataTypes\FilePath;
+use DataTypes\System\FilePath;
 use PHPUnit\Framework\TestCase;
 
 /**

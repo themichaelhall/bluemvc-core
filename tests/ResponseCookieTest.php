@@ -6,8 +6,8 @@ namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\Exceptions\InvalidResponseCookiePathException;
 use BlueMvc\Core\ResponseCookie;
-use DataTypes\Host;
-use DataTypes\UrlPath;
+use DataTypes\Net\Host;
+use DataTypes\Net\UrlPath;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 

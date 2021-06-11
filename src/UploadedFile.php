@@ -12,7 +12,7 @@ namespace BlueMvc\Core;
 
 use BlueMvc\Core\Exceptions\InvalidFilePathException;
 use BlueMvc\Core\Interfaces\UploadedFileInterface;
-use DataTypes\Interfaces\FilePathInterface;
+use DataTypes\System\FilePathInterface;
 
 /**
  * Class representing an uploaded file.

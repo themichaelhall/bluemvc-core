@@ -34,7 +34,7 @@ use BlueMvc\Core\Tests\Helpers\TestPlugins\SetContentTestPlugin;
 use BlueMvc\Core\Tests\Helpers\TestPlugins\SetHeaderTestPlugin;
 use BlueMvc\Core\Tests\Helpers\TestViewRenderers\BasicTestViewRenderer;
 use BlueMvc\Core\Tests\Helpers\TestViewRenderers\JsonTestViewRenderer;
-use DataTypes\FilePath;
+use DataTypes\System\FilePath;
 use PHPUnit\Framework\TestCase;
 
 /**

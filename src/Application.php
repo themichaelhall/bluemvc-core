@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace BlueMvc\Core;
 
 use BlueMvc\Core\Base\AbstractApplication;
-use DataTypes\FilePath;
+use DataTypes\System\FilePath;
 
 /**
  * Class representing a BlueMvc main application.

@@ -15,7 +15,7 @@ use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\Collections\ViewItemCollectionInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ViewRendererInterface;
-use DataTypes\Interfaces\FilePathInterface;
+use DataTypes\System\FilePathInterface;
 
 /**
  * Abstract class representing a view renderer.

@@ -10,8 +10,8 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces;
 
-use DataTypes\Interfaces\HostInterface;
-use DataTypes\Interfaces\UrlPathInterface;
+use DataTypes\Net\HostInterface;
+use DataTypes\Net\UrlPathInterface;
 use DateTimeInterface;
 
 /**

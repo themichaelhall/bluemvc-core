@@ -9,10 +9,10 @@ use BlueMvc\Core\Http\Method;
 use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
 use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
 use BlueMvc\Core\Tests\Helpers\TestResponses\BasicTestResponse;
-use DataTypes\Exceptions\UrlInvalidArgumentException;
-use DataTypes\Exceptions\UrlPathLogicException;
-use DataTypes\FilePath;
-use DataTypes\Url;
+use DataTypes\Net\Exceptions\UrlInvalidArgumentException;
+use DataTypes\Net\Exceptions\UrlPathLogicException;
+use DataTypes\Net\Url;
+use DataTypes\System\FilePath;
 use PHPUnit\Framework\TestCase;
 
 /**

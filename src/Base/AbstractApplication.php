@@ -24,9 +24,9 @@ use BlueMvc\Core\Interfaces\ResponseInterface;
 use BlueMvc\Core\Interfaces\RouteInterface;
 use BlueMvc\Core\Interfaces\ViewRendererInterface;
 use BlueMvc\Core\Traits\CustomItemsTrait;
-use DataTypes\Exceptions\FilePathLogicException;
-use DataTypes\FilePath;
-use DataTypes\Interfaces\FilePathInterface;
+use DataTypes\System\Exceptions\FilePathLogicException;
+use DataTypes\System\FilePath;
+use DataTypes\System\FilePathInterface;
 use Throwable;
 
 /**

@@ -6,7 +6,7 @@ namespace BlueMvc\Core\Tests\Collections;
 
 use BlueMvc\Core\Collections\UploadedFileCollection;
 use BlueMvc\Core\UploadedFile;
-use DataTypes\FilePath;
+use DataTypes\System\FilePath;
 use PHPUnit\Framework\TestCase;
 
 /**

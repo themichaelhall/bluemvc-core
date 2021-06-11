@@ -16,8 +16,8 @@ use BlueMvc\Core\Interfaces\Collections\ParameterCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\SessionItemCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\UploadedFileCollectionInterface;
 use BlueMvc\Core\Interfaces\Http\MethodInterface;
-use DataTypes\Interfaces\IPAddressInterface;
-use DataTypes\Interfaces\UrlInterface;
+use DataTypes\Net\IPAddressInterface;
+use DataTypes\Net\UrlInterface;
 
 /**
  * Interface for Request class.

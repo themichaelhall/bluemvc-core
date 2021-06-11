@@ -7,7 +7,7 @@ namespace BlueMvc\Core\Tests\Helpers\TestApplications;
 use BlueMvc\Core\Base\AbstractApplication;
 use BlueMvc\Core\Interfaces\RouteInterface;
 use BlueMvc\Core\Interfaces\ViewRendererInterface;
-use DataTypes\Interfaces\FilePathInterface;
+use DataTypes\System\FilePathInterface;
 
 /**
  * A basic test application.

@@ -20,10 +20,10 @@ use BlueMvc\Core\Interfaces\Http\MethodInterface;
 use BlueMvc\Core\Interfaces\RequestCookieInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\UploadedFileInterface;
-use DataTypes\Interfaces\IPAddressInterface;
-use DataTypes\Interfaces\UrlInterface;
-use DataTypes\IPAddress;
-use DataTypes\Url;
+use DataTypes\Net\IPAddress;
+use DataTypes\Net\IPAddressInterface;
+use DataTypes\Net\Url;
+use DataTypes\Net\UrlInterface;
 
 /**
  * Abstract class representing a web request.

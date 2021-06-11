@@ -13,8 +13,8 @@ namespace BlueMvc\Core;
 use BlueMvc\Core\Base\AbstractCookie;
 use BlueMvc\Core\Exceptions\InvalidResponseCookiePathException;
 use BlueMvc\Core\Interfaces\ResponseCookieInterface;
-use DataTypes\Interfaces\HostInterface;
-use DataTypes\Interfaces\UrlPathInterface;
+use DataTypes\Net\HostInterface;
+use DataTypes\Net\UrlPathInterface;
 use DateTimeInterface;
 
 /**

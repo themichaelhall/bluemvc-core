@@ -15,7 +15,7 @@ use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\Http\StatusCodeInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
 use BlueMvc\Core\Interfaces\ResponseInterface;
-use DataTypes\Url;
+use DataTypes\Net\Url;
 
 /**
  * Abstract class representing an action result with a location.

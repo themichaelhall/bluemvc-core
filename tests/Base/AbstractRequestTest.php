@@ -13,9 +13,9 @@ use BlueMvc\Core\RequestCookie;
 use BlueMvc\Core\Tests\Helpers\TestCollections\BasicTestSessionItemCollection;
 use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
 use BlueMvc\Core\UploadedFile;
-use DataTypes\FilePath;
-use DataTypes\IPAddress;
-use DataTypes\Url;
+use DataTypes\Net\IPAddress;
+use DataTypes\Net\Url;
+use DataTypes\System\FilePath;
 use PHPUnit\Framework\TestCase;
 
 /**

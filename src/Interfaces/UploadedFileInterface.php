@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces;
 
-use DataTypes\Interfaces\FilePathInterface;
+use DataTypes\System\FilePathInterface;
 
 /**
  * Interface for UploadedFile class.
