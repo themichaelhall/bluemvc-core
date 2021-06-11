@@ -1,9 +1,11 @@
 <?php
+
 /**
  * This file is a part of the bluemvc-core package.
  *
  * Read more at https://bluemvc.com/
  */
+
 declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces\ActionResults;
