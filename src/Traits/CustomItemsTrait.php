@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Traits;
 
+use BlueMvc\Core\Collections\CustomItemCollection;
 use BlueMvc\Core\Interfaces\Collections\CustomItemCollectionInterface;
 
 /**
@@ -30,7 +31,7 @@ trait CustomItemsTrait
      */
     public function getCustomItem(string $name)
     {
-        return $this->customItems->get($name);
+        return $this->getOrCreateCustomItems()->get($name);
     }
 
     /**
@@ -42,7 +43,7 @@ trait CustomItemsTrait
      */
     public function getCustomItems(): CustomItemCollectionInterface
     {
-        return $this->customItems;
+        return $this->getOrCreateCustomItems();
     }
 
     /**
@@ -55,7 +56,7 @@ trait CustomItemsTrait
      */
     public function setCustomItem(string $name, $value): void
     {
-        $this->customItems->set($name, $value);
+        $this->getOrCreateCustomItems()->set($name, $value);
     }
 
     /**
@@ -71,7 +72,21 @@ trait CustomItemsTrait
     }
 
     /**
-     * @var CustomItemCollectionInterface My custom items.
+     * Returns the internal custom items collection and creates it beforehand if needed.
+     *
+     * @return CustomItemCollectionInterface The custom items collection.
      */
-    private $customItems;
+    private function getOrCreateCustomItems(): CustomItemCollectionInterface
+    {
+        if ($this->customItems === null) {
+            $this->customItems = new CustomItemCollection();
+        }
+
+        return $this->customItems;
+    }
+
+    /**
+     * @var CustomItemCollectionInterface|null My custom items or null if no custom items is set.
+     */
+    private $customItems = null;
 }

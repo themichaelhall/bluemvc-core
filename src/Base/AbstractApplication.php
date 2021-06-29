@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Base;
 
-use BlueMvc\Core\Collections\CustomItemCollection;
 use BlueMvc\Core\Collections\HeaderCollection;
 use BlueMvc\Core\Exceptions\InvalidControllerClassException;
 use BlueMvc\Core\Exceptions\InvalidFilePathException;
@@ -275,7 +274,6 @@ abstract class AbstractApplication implements ApplicationInterface
         $this->isDebug = false;
         $this->errorControllerClass = null;
         $this->plugins = [];
-        $this->customItems = new CustomItemCollection();
     }
 
     /**
