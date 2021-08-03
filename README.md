@@ -1,4 +1,4 @@
-<p style="text-align: center;">
+<p align="center">
    <img src="https://cdn.bluemvc.net/img/logo-320x50.png" width="320" height="50" alt="BlueMvc logo">
 </p>
 
