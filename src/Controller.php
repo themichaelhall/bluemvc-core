@@ -89,23 +89,22 @@ abstract class Controller implements ControllerInterface
             $this->handleResult($result, $actionName);
         };
 
-        // Try to invoke the action, and if that failed, try to invoke the default action.
-        if (!$this->tryInvokeActionMethod($actionName, $parameters, !$isIndex, $resultHandler, $hasFoundActionMethod)) {
-            if ($hasFoundActionMethod) {
-                // If action method was found, but something else failed (e.g. parameter mismatch),
-                // do not try to invoke default method.
-                $response->setStatusCode(new StatusCode(StatusCode::NOT_FOUND));
+        if ($this->tryInvokeActionMethod($actionName, $parameters, !$isIndex, $resultHandler, $hasFoundActionMethod)) {
+            return;
+        }
 
-                return;
-            }
+        if ($hasFoundActionMethod) {
+            // If action method was found, but something else failed (e.g. parameter mismatch),
+            // do not try to invoke default method.
+            $response->setStatusCode(new StatusCode(StatusCode::NOT_FOUND));
 
-            $actionName = 'default';
+            return;
+        }
 
-            if (!$this->tryInvokeActionMethod($actionName, array_merge([$action], $parameters), false, $resultHandler)) {
-                $response->setStatusCode(new StatusCode(StatusCode::NOT_FOUND));
+        $actionName = 'default';
 
-                return;
-            }
+        if (!$this->tryInvokeActionMethod($actionName, array_merge([$action], $parameters), false, $resultHandler)) {
+            $response->setStatusCode(new StatusCode(StatusCode::NOT_FOUND));
         }
     }
 
