@@ -28,7 +28,7 @@ interface UploadedFileCollectionInterface extends Countable, Iterator
      *
      * @param string $name The name.
      *
-     * @return UploadedFileInterface|null The the uploaded file by name if it exists, null otherwise.
+     * @return UploadedFileInterface|null The uploaded file by name if it exists, null otherwise.
      */
     public function get(string $name): ?UploadedFileInterface;
 

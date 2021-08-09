@@ -542,7 +542,7 @@ class StatusCode implements StatusCodeInterface
     }
 
     /**
-     * Returns the status code as as string.
+     * Returns the status code as string.
      *
      * @since 1.0.0
      *

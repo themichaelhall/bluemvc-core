@@ -61,7 +61,7 @@ class UploadedFileCollection implements UploadedFileCollectionInterface
      *
      * @param string $name The name.
      *
-     * @return UploadedFileInterface|null The the uploaded file by name if it exists, null otherwise.
+     * @return UploadedFileInterface|null The uploaded file by name if it exists, null otherwise.
      */
     public function get(string $name): ?UploadedFileInterface
     {
@@ -95,7 +95,7 @@ class UploadedFileCollection implements UploadedFileCollectionInterface
     }
 
     /**
-     * Rewinds the uploaded file collection to to first element.
+     * Rewinds the uploaded file collection to first element.
      *
      * @since 1.0.0
      */

@@ -90,7 +90,7 @@ interface StatusCodeInterface
     public function isSuccessful(): bool;
 
     /**
-     * Returns the status code as as string.
+     * Returns the status code as string.
      *
      * @since 1.0.0
      *

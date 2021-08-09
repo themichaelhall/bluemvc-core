@@ -232,7 +232,7 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
-     * Returns a uploaded file by name if it exists, null otherwise.
+     * Returns an uploaded file by name if it exists, null otherwise.
      *
      * @since 1.0.0
      *

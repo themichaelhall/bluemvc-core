@@ -94,7 +94,7 @@ class CustomItemCollection implements CustomItemCollectionInterface
     }
 
     /**
-     * Rewinds the custom item collection to to first element.
+     * Rewinds the custom item collection to first element.
      *
      * @since 1.0.0
      */

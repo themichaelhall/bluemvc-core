@@ -107,7 +107,7 @@ class ParameterCollection implements ParameterCollectionInterface
     }
 
     /**
-     * Rewinds the parameter collection to to first element.
+     * Rewinds the parameter collection to first element.
      *
      * @since 1.0.0
      */

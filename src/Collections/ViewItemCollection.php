@@ -94,7 +94,7 @@ class ViewItemCollection implements ViewItemCollectionInterface
     }
 
     /**
-     * Rewinds the view item collection to to first element.
+     * Rewinds the view item collection to first element.
      *
      * @since 1.0.0
      */

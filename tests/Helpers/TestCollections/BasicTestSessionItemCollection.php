@@ -84,7 +84,7 @@ class BasicTestSessionItemCollection implements SessionItemCollectionInterface
     }
 
     /**
-     * Rewinds the session item collection to to first element.
+     * Rewinds the session item collection to first element.
      */
     public function rewind(): void
     {

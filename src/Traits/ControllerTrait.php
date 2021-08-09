@@ -136,7 +136,7 @@ trait ControllerTrait
      *
      * @param string   $action               The action.
      * @param array    $parameters           The parameters.
-     * @param bool     $isCaseSensitive      True if action method is case sensitive, false otherwise.
+     * @param bool     $isCaseSensitive      True if action method is case-sensitive, false otherwise.
      * @param callable $resultHandler        A callable that takes the result (mixed) from the action method call as a parameter.
      * @param bool     $hasFoundActionMethod If true, action method was found, false otherwise.
      *
@@ -171,7 +171,7 @@ trait ControllerTrait
      *
      * @param ReflectionClass $reflectionClass The ReflectionClass.
      * @param string          $action          The action.
-     * @param bool            $isCaseSensitive True if action method is case sensitive, false otherwise.
+     * @param bool            $isCaseSensitive True if action method is case-sensitive, false otherwise.
      *
      * @return ReflectionMethod|null The action method or null if no action method was found.
      */

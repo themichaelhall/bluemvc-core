@@ -115,7 +115,7 @@ class HeaderCollection implements HeaderCollectionInterface
     }
 
     /**
-     * Rewinds the header collection to to first element.
+     * Rewinds the header collection to first element.
      *
      * @since 1.0.0
      */

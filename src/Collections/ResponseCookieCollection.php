@@ -95,7 +95,7 @@ class ResponseCookieCollection implements ResponseCookieCollectionInterface
     }
 
     /**
-     * Rewinds the response cookie collection to to first element.
+     * Rewinds the response cookie collection to first element.
      *
      * @since 1.0.0
      */
