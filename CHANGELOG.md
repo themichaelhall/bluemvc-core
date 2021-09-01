@@ -1,4 +1,4 @@
-## Unreleased
+## [2.2.0] - 2021-09-01
 - Added ControllerTrait.
 - Added CustomItemsTrait.
 - Added isClientError, isInformational, isRedirection, isServerError and isSuccessful methods to StatusCode.
@@ -48,6 +48,7 @@
 ## 1.0.0 - 2018-02-03
 - First stable revision.
 
+[2.2.0]: https://github.com/themichaelhall/bluemvc-core/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/themichaelhall/bluemvc-core/compare/v2.0.4...v2.1.0
 [2.0.4]: https://github.com/themichaelhall/bluemvc-core/compare/v2.0.3...v2.0.4
 [2.0.3]: https://github.com/themichaelhall/bluemvc-core/compare/v2.0.2...v2.0.3
