@@ -20,7 +20,7 @@
   "require": {
     "php": ">=7.3",
     "ext-json": "*",
-    "datatypes/datatypes": "^2.4@dev"
+    "datatypes/datatypes": "^2.4"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.0"
@@ -33,11 +33,6 @@
   "autoload-dev": {
     "psr-4": {
       "BlueMvc\\Core\\Tests\\": "tests"
-    }
-  },
-  "extra": {
-    "branch-alias": {
-      "dev-develop": "2.2-dev"
     }
   }
 }
