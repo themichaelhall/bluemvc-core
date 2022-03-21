@@ -1,5 +1,6 @@
 ## Unreleased
 - Changed required PHP version to >= 8.0.
+- Changed required datatypes version to 3.0.
 
 ## [2.2.0] - 2021-09-01
 - Added ControllerTrait.

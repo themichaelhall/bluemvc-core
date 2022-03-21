@@ -20,7 +20,7 @@
   "require": {
     "php": ">=8.0",
     "ext-json": "*",
-    "datatypes/datatypes": "^2.4"
+    "datatypes/datatypes": "^3.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.0"
