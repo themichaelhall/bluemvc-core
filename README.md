@@ -14,7 +14,7 @@ Core functionality for the [BlueMvc PHP framework](https://github.com/themichael
 
 ## Requirements
 
-- PHP >= 7.3
+- PHP >= 8.0
 
 ## Install with Composer
 
