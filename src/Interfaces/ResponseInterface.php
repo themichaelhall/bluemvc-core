@@ -137,16 +137,6 @@ interface ResponseInterface
     public function setCookieValue(string $name, string $value, ?DateTimeInterface $expiry = null, ?UrlPathInterface $path = null, ?HostInterface $domain = null, bool $isSecure = false, bool $isHttpOnly = false): void;
 
     /**
-     * Sets the expiry time.
-     *
-     * @since      1.0.0
-     * @deprecated Use setExpiryDateTime instead.
-     *
-     * @param DateTimeImmutable|null $expiry The expiry time or null for immediate expiry.
-     */
-    public function setExpiry(?DateTimeImmutable $expiry = null): void;
-
-    /**
      * Sets the expiry date time.
      *
      * @since 2.2.0

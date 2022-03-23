@@ -1,6 +1,8 @@
 ## Unreleased
 - Changed required PHP version to >= 8.0.
 - Changed required datatypes version to 3.0.
+- Removed deprecated AbstractController and AbstractActionResult classes.
+- Removed deprecated setExpiry method in Response.
 
 ## [2.2.0] - 2021-09-01
 - Added ControllerTrait.

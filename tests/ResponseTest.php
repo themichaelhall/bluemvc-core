@@ -192,52 +192,6 @@ class ResponseTest extends TestCase
     }
 
     /**
-     * Test setExpiry method with null expiry time value.
-     *
-     * @noinspection PhpDeprecationInspection
-     */
-    public function testSetExpiryWithNullTime()
-    {
-        $response = new Response();
-        $response->setExpiry();
-
-        self::assertSame($response->getHeader('Date'), $response->getHeader('Expires'));
-        self::assertSame('no-cache, no-store, must-revalidate, max-age=0', $response->getHeader('Cache-Control'));
-    }
-
-    /**
-     * Test setExpiry method with past expiry time value.
-     *
-     * @noinspection PhpDeprecationInspection
-     */
-    public function testSetExpiryWithPastTime()
-    {
-        $response = new Response();
-
-        $expiry = (new DateTimeImmutable())->sub(new DateInterval('PT24H'));
-        $response->setExpiry($expiry);
-
-        self::assertSame($expiry->setTimezone(new DateTimeZone('UTC'))->format('D, d M Y H:i:s \G\M\T'), $response->getHeader('Expires'));
-        self::assertSame('no-cache, no-store, must-revalidate, max-age=0', $response->getHeader('Cache-Control'));
-    }
-
-    /**
-     * Test setExpiry method with future expiry time value.
-     *
-     * @noinspection PhpDeprecationInspection
-     */
-    public function testSetExpiryWithFutureTime()
-    {
-        $response = new Response();
-
-        $expiry = (new DateTimeImmutable())->add(new DateInterval('PT24H'));
-        $response->setExpiry($expiry);
-
-        self::assertSame($expiry->setTimezone(new DateTimeZone('UTC'))->format('D, d M Y H:i:s \G\M\T'), $response->getHeader('Expires'));
-        self::assertSame('public, max-age=86400', $response->getHeader('Cache-Control'));
-    }
-
-    /**
      * Test setExpiryDateTime method with null expiry time value.
      */
     public function testSetExpiryDateTimeWithNullTime()
