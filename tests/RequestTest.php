@@ -588,7 +588,7 @@ class RequestTest extends TestCase
     }
 
     /**
-     * Test getSessionItems method with no session..
+     * Test getSessionItems method with no session.
      */
     public function testGetSessionItemsWithNoSession()
     {

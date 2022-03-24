@@ -28,6 +28,8 @@ class StatusCodeTest extends TestCase
      * @param bool   $expectedIsServerError   The expected result from isServerError method.
      *
      * @dataProvider statusCodeProvider
+     *
+     * @noinspection PhpTooManyParametersInspection
      */
     public function testStatusCodes(
         int $constant,

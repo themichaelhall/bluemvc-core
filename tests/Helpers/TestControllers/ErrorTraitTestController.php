@@ -42,7 +42,7 @@ class ErrorTraitTestController extends Controller implements ErrorControllerInte
      *
      * @param int $statusCode The status code as a string.
      *
-     * @return View The result.
+     * @return View|null The result.
      */
     public function defaultAction(int $statusCode): ?View
     {

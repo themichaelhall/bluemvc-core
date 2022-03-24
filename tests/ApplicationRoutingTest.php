@@ -593,7 +593,7 @@ class ApplicationRoutingTest extends TestCase
     }
 
     /**
-     * Test test action method visibility pages route.
+     * Test action method visibility pages route.
      *
      * @dataProvider actionMethodVisibilityPagesRouteDataProvider
      *

@@ -189,11 +189,11 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
-     * Returns the referrer or null if request has no or invalid referrer.
+     * Returns the referrer or null if request has no referrer or invalid referrer.
      *
      * @since 1.1.0
      *
-     * @return UrlInterface|null The referrer or null if request has no or invalid referrer.
+     * @return UrlInterface|null The referrer or null if request has no referrer or invalid referrer.
      */
     public function getReferrer(): ?UrlInterface
     {

@@ -90,7 +90,7 @@ class ResponseCookieTest extends TestCase
     }
 
     /**
-     * Test isSecure method with no is secure set.
+     * Test isSecure method with is secure not set.
      */
     public function testIsSecureWithNoIsSecureSet()
     {

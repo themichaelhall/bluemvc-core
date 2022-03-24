@@ -38,7 +38,7 @@ class ErrorTestController extends ErrorController
      *
      * @param string $statusCode The status code as a string.
      *
-     * @return View The result.
+     * @return View|null The result.
      */
     public function defaultAction(string $statusCode): ?View
     {
