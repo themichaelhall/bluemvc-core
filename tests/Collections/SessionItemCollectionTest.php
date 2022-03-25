@@ -204,7 +204,7 @@ class SessionItemCollectionTest extends TestCase
     /**
      * Set up.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -216,7 +216,7 @@ class SessionItemCollectionTest extends TestCase
     /**
      * Tear down.
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
 

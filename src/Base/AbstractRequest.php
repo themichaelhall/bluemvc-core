@@ -33,6 +33,42 @@ use DataTypes\Net\UrlInterface;
 abstract class AbstractRequest implements RequestInterface
 {
     /**
+     * Constructs the request.
+     *
+     * @since 1.0.0
+     *
+     * @param UrlInterface                     $url             The url.
+     * @param MethodInterface                  $method          The method.
+     * @param HeaderCollectionInterface        $headers         The headers.
+     * @param ParameterCollectionInterface     $queryParameters The query parameters.
+     * @param ParameterCollectionInterface     $formParameters  The form parameters.
+     * @param UploadedFileCollectionInterface  $uploadedFiles   The uploaded files.
+     * @param RequestCookieCollectionInterface $cookies         The cookies.
+     * @param SessionItemCollectionInterface   $sessionItems    The session items.
+     */
+    public function __construct(
+        UrlInterface $url,
+        MethodInterface $method,
+        HeaderCollectionInterface $headers,
+        ParameterCollectionInterface $queryParameters,
+        ParameterCollectionInterface $formParameters,
+        UploadedFileCollectionInterface $uploadedFiles,
+        RequestCookieCollectionInterface $cookies,
+        SessionItemCollectionInterface $sessionItems
+    ) {
+        $this->url = $url;
+        $this->method = $method;
+        $this->headers = $headers;
+        $this->queryParameters = $queryParameters;
+        $this->formParameters = $formParameters;
+        $this->uploadedFiles = $uploadedFiles;
+        $this->cookies = $cookies;
+        $this->sessionItems = $sessionItems;
+        $this->rawContent = '';
+        $this->clientIp = IPAddress::fromParts([0, 0, 0, 0]);
+    }
+
+    /**
      * Returns the client IP address.
      *
      * @since 1.1.0
@@ -304,42 +340,6 @@ abstract class AbstractRequest implements RequestInterface
     public function setSessionItem(string $name, $value): void
     {
         $this->sessionItems->set($name, $value);
-    }
-
-    /**
-     * Constructs the request.
-     *
-     * @since 1.0.0
-     *
-     * @param UrlInterface                     $url             The url.
-     * @param MethodInterface                  $method          The method.
-     * @param HeaderCollectionInterface        $headers         The headers.
-     * @param ParameterCollectionInterface     $queryParameters The query parameters.
-     * @param ParameterCollectionInterface     $formParameters  The form parameters.
-     * @param UploadedFileCollectionInterface  $uploadedFiles   The uploaded files.
-     * @param RequestCookieCollectionInterface $cookies         The cookies.
-     * @param SessionItemCollectionInterface   $sessionItems    The session items.
-     */
-    protected function __construct(
-        UrlInterface $url,
-        MethodInterface $method,
-        HeaderCollectionInterface $headers,
-        ParameterCollectionInterface $queryParameters,
-        ParameterCollectionInterface $formParameters,
-        UploadedFileCollectionInterface $uploadedFiles,
-        RequestCookieCollectionInterface $cookies,
-        SessionItemCollectionInterface $sessionItems
-    ) {
-        $this->url = $url;
-        $this->method = $method;
-        $this->headers = $headers;
-        $this->queryParameters = $queryParameters;
-        $this->formParameters = $formParameters;
-        $this->uploadedFiles = $uploadedFiles;
-        $this->cookies = $cookies;
-        $this->sessionItems = $sessionItems;
-        $this->rawContent = '';
-        $this->clientIp = IPAddress::fromParts([0, 0, 0, 0]);
     }
 
     /**

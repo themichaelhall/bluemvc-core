@@ -51,6 +51,8 @@ class BasicTestRequest extends AbstractRequest
      *
      * @param string $name  The name.
      * @param string $value The value.
+     *
+     * @noinspection PhpOverridingMethodVisibilityInspection
      */
     public function addHeader(string $name, string $value): void
     {
@@ -61,6 +63,8 @@ class BasicTestRequest extends AbstractRequest
      * Sets the client IP address.
      *
      * @param IPAddressInterface $clientIp The client IP address.
+     *
+     * @noinspection PhpOverridingMethodVisibilityInspection
      */
     public function setClientIp(IPAddressInterface $clientIp): void
     {
@@ -72,6 +76,8 @@ class BasicTestRequest extends AbstractRequest
      *
      * @param string                 $name   The cookie name.
      * @param RequestCookieInterface $cookie The cookie.
+     *
+     * @noinspection PhpOverridingMethodVisibilityInspection
      */
     public function setCookie(string $name, RequestCookieInterface $cookie): void
     {
@@ -82,6 +88,8 @@ class BasicTestRequest extends AbstractRequest
      * Sets the cookies.
      *
      * @param RequestCookieCollectionInterface $cookies The cookies.
+     *
+     * @noinspection PhpOverridingMethodVisibilityInspection
      */
     public function setCookies(RequestCookieCollectionInterface $cookies): void
     {
@@ -93,6 +101,8 @@ class BasicTestRequest extends AbstractRequest
      *
      * @param string $name  The form parameter name.
      * @param string $value The form parameter value.
+     *
+     * @noinspection PhpOverridingMethodVisibilityInspection
      */
     public function setFormParameter(string $name, string $value): void
     {
@@ -103,6 +113,8 @@ class BasicTestRequest extends AbstractRequest
      * Sets the form parameters.
      *
      * @param ParameterCollectionInterface $parameters The form parameters.
+     *
+     * @noinspection PhpOverridingMethodVisibilityInspection
      */
     public function setFormParameters(ParameterCollectionInterface $parameters): void
     {
@@ -114,6 +126,8 @@ class BasicTestRequest extends AbstractRequest
      *
      * @param string $name  The name.
      * @param string $value The value.
+     *
+     * @noinspection PhpOverridingMethodVisibilityInspection
      */
     public function setHeader(string $name, string $value): void
     {
@@ -124,6 +138,8 @@ class BasicTestRequest extends AbstractRequest
      * Sets the headers.
      *
      * @param HeaderCollectionInterface $headers The headers.
+     *
+     * @noinspection PhpOverridingMethodVisibilityInspection
      */
     public function setHeaders(HeaderCollectionInterface $headers): void
     {
@@ -134,6 +150,8 @@ class BasicTestRequest extends AbstractRequest
      * Sets the http method.
      *
      * @param MethodInterface $method The http method.
+     *
+     * @noinspection PhpOverridingMethodVisibilityInspection
      */
     public function setMethod(MethodInterface $method): void
     {
@@ -145,6 +163,8 @@ class BasicTestRequest extends AbstractRequest
      *
      * @param string $name  The query parameter name.
      * @param string $value The query parameter value.
+     *
+     * @noinspection PhpOverridingMethodVisibilityInspection
      */
     public function setQueryParameter(string $name, string $value): void
     {
@@ -155,6 +175,8 @@ class BasicTestRequest extends AbstractRequest
      * Sets the query parameters.
      *
      * @param ParameterCollectionInterface $parameters The query parameters.
+     *
+     * @noinspection PhpOverridingMethodVisibilityInspection
      */
     public function setQueryParameters(ParameterCollectionInterface $parameters): void
     {
@@ -165,6 +187,8 @@ class BasicTestRequest extends AbstractRequest
      * Sets the raw content.
      *
      * @param string $content The raw content.
+     *
+     * @noinspection PhpOverridingMethodVisibilityInspection
      */
     public function setRawContent(string $content): void
     {
@@ -175,6 +199,8 @@ class BasicTestRequest extends AbstractRequest
      * Sets the session items.
      *
      * @param SessionItemCollectionInterface $sessionItems The session items.
+     *
+     * @noinspection PhpOverridingMethodVisibilityInspection
      */
     public function setSessionItems(SessionItemCollectionInterface $sessionItems): void
     {
@@ -186,6 +212,8 @@ class BasicTestRequest extends AbstractRequest
      *
      * @param string                $name         The uploaded file name.
      * @param UploadedFileInterface $uploadedFile The uploaded file.
+     *
+     * @noinspection PhpOverridingMethodVisibilityInspection
      */
     public function setUploadedFile(string $name, UploadedFileInterface $uploadedFile): void
     {
@@ -196,6 +224,8 @@ class BasicTestRequest extends AbstractRequest
      * Sets the uploaded files.
      *
      * @param UploadedFileCollectionInterface $uploadedFiles The uploaded files.
+     *
+     * @noinspection PhpOverridingMethodVisibilityInspection
      */
     public function setUploadedFiles(UploadedFileCollectionInterface $uploadedFiles): void
     {
@@ -206,6 +236,8 @@ class BasicTestRequest extends AbstractRequest
      * Sets the url.
      *
      * @param UrlInterface $url The url.
+     *
+     * @noinspection PhpOverridingMethodVisibilityInspection
      */
     public function setUrl(UrlInterface $url): void
     {

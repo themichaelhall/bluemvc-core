@@ -1002,7 +1002,7 @@ class ApplicationRoutingTest extends TestCase
     /**
      * Set up.
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -1045,7 +1045,7 @@ class ApplicationRoutingTest extends TestCase
     /**
      * Tear down.
      */
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         parent::tearDown();
 

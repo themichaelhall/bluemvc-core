@@ -18,6 +18,18 @@ namespace BlueMvc\Core\Base;
 abstract class AbstractCookie
 {
     /**
+     * Constructs a cookie.
+     *
+     * @since 1.0.0
+     *
+     * @param string $value The value.
+     */
+    public function __construct(string $value)
+    {
+        $this->value = $value;
+    }
+
+    /**
      * Returns the value.
      *
      * @since 1.0.0
@@ -39,18 +51,6 @@ abstract class AbstractCookie
     public function __toString(): string
     {
         return $this->value;
-    }
-
-    /**
-     * Constructs a cookie.
-     *
-     * @since 1.0.0
-     *
-     * @param string $value The value.
-     */
-    protected function __construct(string $value)
-    {
-        $this->value = $value;
     }
 
     /**

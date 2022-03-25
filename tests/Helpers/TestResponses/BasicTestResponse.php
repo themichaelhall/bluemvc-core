@@ -12,14 +12,6 @@ use BlueMvc\Core\Base\AbstractResponse;
 class BasicTestResponse extends AbstractResponse
 {
     /**
-     * Constructs the test response.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Does nothing.
      */
     public function output(): void

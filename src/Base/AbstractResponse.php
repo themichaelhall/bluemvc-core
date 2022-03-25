@@ -34,6 +34,19 @@ use DateTimeZone;
 abstract class AbstractResponse implements ResponseInterface
 {
     /**
+     * Constructs a response.
+     *
+     * @since 1.0.0
+     */
+    public function __construct()
+    {
+        $this->setContent('');
+        $this->setHeaders(new HeaderCollection());
+        $this->setStatusCode(new StatusCode(StatusCode::OK));
+        $this->setCookies(new ResponseCookieCollection());
+    }
+
+    /**
      * Adds a header.
      *
      * @since 1.0.0
@@ -247,19 +260,6 @@ abstract class AbstractResponse implements ResponseInterface
      * @since 1.0.0
      */
     abstract public function output(): void;
-
-    /**
-     * Constructs a response.
-     *
-     * @since 1.0.0
-     */
-    protected function __construct()
-    {
-        $this->setContent('');
-        $this->setHeaders(new HeaderCollection());
-        $this->setStatusCode(new StatusCode(StatusCode::OK));
-        $this->setCookies(new ResponseCookieCollection());
-    }
 
     /**
      * @var string My content.

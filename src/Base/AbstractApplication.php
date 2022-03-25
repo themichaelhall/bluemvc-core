@@ -38,6 +38,27 @@ abstract class AbstractApplication implements ApplicationInterface
     use CustomItemsTrait;
 
     /**
+     * Constructs the application.
+     *
+     * @since 1.0.0
+     *
+     * @param FilePathInterface $documentRoot The document root.
+     *
+     * @throws InvalidFilePathException If the $documentRoot parameter is invalid.
+     */
+    public function __construct(FilePathInterface $documentRoot)
+    {
+        $this->setDocumentRoot($documentRoot);
+        $this->routes = [];
+        $this->tempPath = null;
+        $this->viewRenderers = [];
+        $this->viewPath = null;
+        $this->isDebug = false;
+        $this->errorControllerClass = null;
+        $this->plugins = [];
+    }
+
+    /**
      * Adds a plugin.
      *
      * @since 1.0.0
@@ -253,27 +274,6 @@ abstract class AbstractApplication implements ApplicationInterface
         } catch (FilePathLogicException $e) {
             throw new InvalidFilePathException($e->getMessage());
         }
-    }
-
-    /**
-     * Constructs the application.
-     *
-     * @since 1.0.0
-     *
-     * @param FilePathInterface $documentRoot The document root.
-     *
-     * @throws InvalidFilePathException If the $documentRoot parameter is invalid.
-     */
-    protected function __construct(FilePathInterface $documentRoot)
-    {
-        $this->setDocumentRoot($documentRoot);
-        $this->routes = [];
-        $this->tempPath = null;
-        $this->viewRenderers = [];
-        $this->viewPath = null;
-        $this->isDebug = false;
-        $this->errorControllerClass = null;
-        $this->plugins = [];
     }
 
     /**

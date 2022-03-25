@@ -15,16 +15,6 @@ use DataTypes\System\FilePathInterface;
 class BasicTestApplication extends AbstractApplication
 {
     /**
-     * Constructs the application.
-     *
-     * @param FilePathInterface $documentRoot The document root.
-     */
-    public function __construct(FilePathInterface $documentRoot)
-    {
-        parent::__construct($documentRoot);
-    }
-
-    /**
      * Adds a route.
      *
      * @param RouteInterface $route The route.
@@ -58,6 +48,8 @@ class BasicTestApplication extends AbstractApplication
      * Sets the debug mode.
      *
      * @param bool $isDebug The debug mode.
+     *
+     * @noinspection PhpOverridingMethodVisibilityInspection
      */
     public function setDebug(bool $isDebug): void
     {
@@ -68,6 +60,8 @@ class BasicTestApplication extends AbstractApplication
      * Sets the document root.
      *
      * @param FilePathInterface $documentRoot The document root.
+     *
+     * @noinspection PhpOverridingMethodVisibilityInspection
      */
     public function setDocumentRoot(FilePathInterface $documentRoot): void
     {

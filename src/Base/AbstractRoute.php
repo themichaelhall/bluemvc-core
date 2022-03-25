@@ -24,6 +24,24 @@ use BlueMvc\Core\Interfaces\RouteMatchInterface;
 abstract class AbstractRoute implements RouteInterface
 {
     /**
+     * Constructs a route.
+     *
+     * @since 1.0.0
+     *
+     * @param string $controllerClassName The controller class name.
+     *
+     * @throws InvalidControllerClassException If the controller class name is invalid.
+     */
+    public function __construct(string $controllerClassName)
+    {
+        if (!is_a($controllerClassName, ControllerInterface::class, true)) {
+            throw new InvalidControllerClassException('"' . $controllerClassName . '" is not a valid controller class.');
+        }
+
+        $this->controllerClassName = $controllerClassName;
+    }
+
+    /**
      * Returns the controller class name.
      *
      * @since 1.0.0
@@ -45,24 +63,6 @@ abstract class AbstractRoute implements RouteInterface
      * @return RouteMatchInterface|null The route match if rout matches request, null otherwise.
      */
     abstract public function matches(RequestInterface $request): ?RouteMatchInterface;
-
-    /**
-     * Constructs a route.
-     *
-     * @since 1.0.0
-     *
-     * @param string $controllerClassName The controller class name.
-     *
-     * @throws InvalidControllerClassException If the controller class name is invalid.
-     */
-    protected function __construct(string $controllerClassName)
-    {
-        if (!is_a($controllerClassName, ControllerInterface::class, true)) {
-            throw new InvalidControllerClassException('"' . $controllerClassName . '" is not a valid controller class.');
-        }
-
-        $this->controllerClassName = $controllerClassName;
-    }
 
     /**
      * @var string My controller class name.
