@@ -54,7 +54,7 @@ namespace BlueMvc\Core {
     function is_uploaded_file(string $filename): bool
     {
         if (FakeIsUploadedFile::isEnabled()) {
-            return substr($filename, -13) !== '.not-uploaded';
+            return !str_ends_with($filename, '.not-uploaded');
         }
 
         return \is_uploaded_file($filename);

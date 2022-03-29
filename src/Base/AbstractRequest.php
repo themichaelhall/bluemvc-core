@@ -119,7 +119,7 @@ abstract class AbstractRequest implements RequestInterface
     {
         $cookie = $this->cookies->get($name);
 
-        return $cookie !== null ? $cookie->getValue() : null;
+        return $cookie?->getValue();
     }
 
     /**

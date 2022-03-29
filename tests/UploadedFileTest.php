@@ -63,15 +63,12 @@ class UploadedFileTest extends TestCase
      */
     public function testCreateWithDirectoryAsPath()
     {
-        $exception = null;
         $DS = DIRECTORY_SEPARATOR;
 
-        try {
-            new UploadedFile(FilePath::parse('/foo/bar/'));
-        } catch (InvalidFilePathException $exception) {
-        }
+        self::expectException(InvalidFilePathException::class);
+        self::expectExceptionMessage('Path "' . $DS . 'foo' . $DS . 'bar' . $DS . '" is not a file.');
 
-        self::assertSame('Path "' . $DS . 'foo' . $DS . 'bar' . $DS . '" is not a file.', $exception->getMessage());
+        new UploadedFile(FilePath::parse('/foo/bar/'));
     }
 
     /**
@@ -79,14 +76,11 @@ class UploadedFileTest extends TestCase
      */
     public function testCreateWithRelativePath()
     {
-        $exception = null;
         $DS = DIRECTORY_SEPARATOR;
 
-        try {
-            new UploadedFile(FilePath::parse('./foo/bar.txt'));
-        } catch (InvalidFilePathException $exception) {
-        }
+        self::expectException(InvalidFilePathException::class);
+        self::expectExceptionMessage('Path "foo' . $DS . 'bar.txt" is not an absolute path.');
 
-        self::assertSame('Path "foo' . $DS . 'bar.txt" is not an absolute path.', $exception->getMessage());
+        new UploadedFile(FilePath::parse('./foo/bar.txt'));
     }
 }

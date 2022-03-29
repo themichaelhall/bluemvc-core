@@ -28,7 +28,7 @@ class Application extends AbstractApplication
     public function __construct()
     {
         parent::__construct(
-            FilePath::parse($_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR)
+            FilePath::parseAsDirectory($_SERVER['DOCUMENT_ROOT'])
         );
 
         $this->setDebug(isset($_SERVER['BLUEMVC_DEBUG']));

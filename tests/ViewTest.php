@@ -7,6 +7,7 @@ namespace BlueMvc\Core\Tests;
 use BlueMvc\Core\Collections\ViewItemCollection;
 use BlueMvc\Core\Exceptions\InvalidViewFileException;
 use BlueMvc\Core\Exceptions\MissingViewRendererException;
+use BlueMvc\Core\Exceptions\ViewFileNotFoundException;
 use BlueMvc\Core\Http\Method;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
@@ -17,7 +18,6 @@ use BlueMvc\Core\Tests\Helpers\TestViewRenderers\JsonTestViewRenderer;
 use BlueMvc\Core\View;
 use DataTypes\Net\Url;
 use DataTypes\System\FilePath;
-use Exception;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -96,15 +96,11 @@ class ViewTest extends TestCase
         $response = new BasicTestResponse();
         $view = new View('The Model');
         $viewItems = new ViewItemCollection();
-        $exception = null;
 
-        try {
-            $view->updateResponse($application, $request, $response, 'ViewTest', 'withnoviewfile', $viewItems);
-        } catch (Exception $exception) {
-        }
+        self::expectException(ViewFileNotFoundException::class);
+        self::expectExceptionMessage('Could not find view file "' . $application->getViewPath() . 'ViewTest' . $DS . 'withnoviewfile.view"');
 
-        self::assertSame('BlueMvc\Core\Exceptions\ViewFileNotFoundException', get_class($exception));
-        self::assertSame('Could not find view file "' . $application->getViewPath() . 'ViewTest' . $DS . 'withnoviewfile.view"', $exception->getMessage());
+        $view->updateResponse($application, $request, $response, 'ViewTest', 'withnoviewfile', $viewItems);
     }
 
     /**

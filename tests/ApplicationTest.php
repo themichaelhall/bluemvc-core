@@ -68,19 +68,15 @@ class ApplicationTest extends TestCase
     public function testCreateWithRelativePathAsDocumentRootThrowsException()
     {
         $DS = DIRECTORY_SEPARATOR;
-        $exceptionMessage = '';
 
         $_SERVER = [
             'DOCUMENT_ROOT' => 'var' . $DS . 'www',
         ];
 
-        try {
-            new Application();
-        } catch (InvalidFilePathException $e) {
-            $exceptionMessage = $e->getMessage();
-        }
+        self::expectException(InvalidFilePathException::class);
+        self::expectExceptionMessage('Document root "var' . $DS . 'www' . $DS . '" is not an absolute path.');
 
-        self::assertSame('Document root "var' . $DS . 'www' . $DS . '" is not an absolute path.', $exceptionMessage);
+        new Application();
     }
 
     /**
@@ -89,15 +85,11 @@ class ApplicationTest extends TestCase
     public function testSetViewPathWithFileAsViewPathThrowsException()
     {
         $DS = DIRECTORY_SEPARATOR;
-        $exceptionMessage = '';
 
-        try {
-            $this->application->setViewPath(FilePath::parse($DS . 'views' . $DS . 'file.txt'));
-        } catch (InvalidFilePathException $e) {
-            $exceptionMessage = $e->getMessage();
-        }
+        self::expectException(InvalidFilePathException::class);
+        self::expectExceptionMessage('View path "' . $DS . 'views' . $DS . 'file.txt" is not a directory.');
 
-        self::assertSame('View path "' . $DS . 'views' . $DS . 'file.txt" is not a directory.', $exceptionMessage);
+        $this->application->setViewPath(FilePath::parse($DS . 'views' . $DS . 'file.txt'));
     }
 
     /**
@@ -106,15 +98,11 @@ class ApplicationTest extends TestCase
     public function testSetViewPathWithViewPathThatCanNotBeCombinedWithDocumentRootThrowsException()
     {
         $DS = DIRECTORY_SEPARATOR;
-        $exceptionMessage = '';
 
-        try {
-            $this->application->setViewPath(FilePath::parse('..' . $DS . '..' . $DS . '..' . $DS . 'views' . $DS));
-        } catch (InvalidFilePathException $e) {
-            $exceptionMessage = $e->getMessage();
-        }
+        self::expectException(InvalidFilePathException::class);
+        self::expectExceptionMessage('File path "' . $DS . 'var' . $DS . 'www' . $DS . '" can not be combined with file path "..' . $DS . '..' . $DS . '..' . $DS . 'views' . $DS . '": Absolute path is above root level.');
 
-        self::assertSame('File path "' . $DS . 'var' . $DS . 'www' . $DS . '" can not be combined with file path "..' . $DS . '..' . $DS . '..' . $DS . 'views' . $DS . '": Absolute path is above root level.', $exceptionMessage);
+        $this->application->setViewPath(FilePath::parse('..' . $DS . '..' . $DS . '..' . $DS . 'views' . $DS));
     }
 
     /**
@@ -157,15 +145,11 @@ class ApplicationTest extends TestCase
     public function testSetTempPathWithFileAsTempPathThrowsException()
     {
         $DS = DIRECTORY_SEPARATOR;
-        $exceptionMessage = '';
 
-        try {
-            $this->application->setTempPath(FilePath::parse($DS . 'tmp' . $DS . 'file.txt'));
-        } catch (InvalidFilePathException $e) {
-            $exceptionMessage = $e->getMessage();
-        }
+        self::expectException(InvalidFilePathException::class);
+        self::expectExceptionMessage('Temp path "' . $DS . 'tmp' . $DS . 'file.txt" is not a directory.');
 
-        self::assertSame('Temp path "' . $DS . 'tmp' . $DS . 'file.txt" is not a directory.', $exceptionMessage);
+        $this->application->setTempPath(FilePath::parse($DS . 'tmp' . $DS . 'file.txt'));
     }
 
     /**
@@ -174,15 +158,11 @@ class ApplicationTest extends TestCase
     public function testSetTempPathWithTempPathThatCanNotBeCombinedWithDocumentRootThrowsException()
     {
         $DS = DIRECTORY_SEPARATOR;
-        $exceptionMessage = '';
 
-        try {
-            $this->application->setTempPath(FilePath::parse('..' . $DS . '..' . $DS . '..' . $DS . 'tmp' . $DS));
-        } catch (InvalidFilePathException $e) {
-            $exceptionMessage = $e->getMessage();
-        }
+        self::expectException(InvalidFilePathException::class);
+        self::expectExceptionMessage('File path "' . $DS . 'var' . $DS . 'www' . $DS . '" can not be combined with file path "..' . $DS . '..' . $DS . '..' . $DS . 'tmp' . $DS . '": Absolute path is above root level.');
 
-        self::assertSame('File path "' . $DS . 'var' . $DS . 'www' . $DS . '" can not be combined with file path "..' . $DS . '..' . $DS . '..' . $DS . 'tmp' . $DS . '": Absolute path is above root level.', $exceptionMessage);
+        $this->application->setTempPath(FilePath::parse('..' . $DS . '..' . $DS . '..' . $DS . 'tmp' . $DS));
     }
 
     /**

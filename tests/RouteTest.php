@@ -89,8 +89,8 @@ class RouteTest extends TestCase
         $routeMatch = $route->matches(new BasicTestRequest(Url::parse('https://example.com' . $urlPath), new Method('GET')));
 
         self::assertSame($expectedMatch, $routeMatch !== null);
-        self::assertSame($expectedAction, $routeMatch !== null ? $routeMatch->getAction() : null);
-        self::assertSame($expectedParameters, $routeMatch !== null ? $routeMatch->getParameters() : null);
+        self::assertSame($expectedAction, $routeMatch?->getAction());
+        self::assertSame($expectedParameters, $routeMatch?->getParameters());
     }
 
     /**

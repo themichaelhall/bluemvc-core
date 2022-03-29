@@ -185,7 +185,7 @@ trait ControllerTrait
         try {
             $actionMethod = $reflectionClass->getMethod($action . 'Action');
 
-            if ($isCaseSensitive && $action !== substr($actionMethod->getName(), 0, strlen($action))) {
+            if ($isCaseSensitive && !str_starts_with($actionMethod->getName(), $action)) {
                 return null;
             }
 
@@ -194,7 +194,7 @@ trait ControllerTrait
             }
 
             return $actionMethod;
-        } catch (ReflectionException $e) {
+        } catch (ReflectionException) {
             return null;
         }
     }

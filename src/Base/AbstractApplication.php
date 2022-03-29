@@ -153,7 +153,7 @@ abstract class AbstractApplication implements ApplicationInterface
     {
         if ($this->tempPath === null) {
             // Generate a default temporary directory by document root.
-            $this->tempPath = FilePath::parse(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'bluemvc' . DIRECTORY_SEPARATOR . sha1($this->documentRoot->__toString()) . DIRECTORY_SEPARATOR);
+            $this->tempPath = FilePath::parseAsDirectory(sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'bluemvc' . DIRECTORY_SEPARATOR . sha1($this->documentRoot->__toString()));
             self::ensureDirectoryExists($this->tempPath);
         }
 

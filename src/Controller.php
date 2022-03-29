@@ -21,6 +21,7 @@ use BlueMvc\Core\Interfaces\ResponseInterface;
 use BlueMvc\Core\Interfaces\ViewInterface;
 use BlueMvc\Core\Traits\ControllerTrait;
 use ReflectionClass;
+use Stringable;
 
 /**
  * Class representing a standard controller.
@@ -143,7 +144,7 @@ abstract class Controller implements ControllerInterface
     protected function getViewPath(): string
     {
         $result = (new ReflectionClass($this))->getShortName();
-        if (strlen($result) > 10 && substr(strtolower($result), -10) === 'controller') {
+        if (str_ends_with(strtolower($result), 'controller')) {
             $result = substr($result, 0, -10);
         }
 
@@ -181,8 +182,8 @@ abstract class Controller implements ControllerInterface
             return;
         }
 
-        if (is_scalar($result) || (is_object($result) && method_exists($result, '__toString'))) {
-            $response->setContent((string) $result);
+        if (is_scalar($result) || $result instanceof Stringable) {
+            $response->setContent(strval($result));
 
             return;
         }

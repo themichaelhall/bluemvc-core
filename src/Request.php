@@ -140,7 +140,7 @@ class Request extends AbstractRequest
         }
 
         foreach ($serverVars as $name => $value) {
-            if (substr($name, 0, 5) === 'HTTP_') {
+            if (str_starts_with($name, 'HTTP_')) {
                 $headersArray[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
             }
         }
