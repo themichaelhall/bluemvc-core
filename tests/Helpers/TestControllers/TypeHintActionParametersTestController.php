@@ -21,6 +21,8 @@ class TypeHintActionParametersTestController extends Controller
      * @param mixed $fooBar The fourth parameter.
      *
      * @return string
+     *
+     * @noinspection PhpMissingParamTypeInspection
      */
     public function noTypesAction($foo, $bar, $baz = null, $fooBar = 1234): string
     {
@@ -120,6 +122,8 @@ class TypeHintActionParametersTestController extends Controller
      * @param bool   $typeBool   The boolean parameter.
      *
      * @return string The result.
+     *
+     * @noinspection PhpMissingParamTypeInspection
      */
     public function mixedTypesAction(float $typeFloat, $typeNon, string $typeString, bool $typeBool = false): string
     {

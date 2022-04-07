@@ -129,7 +129,7 @@ class ParameterCollection implements ParameterCollectionInterface
     }
 
     /**
-     * @var array My parameters.
+     * @var array The parameters.
      */
-    private $parameters;
+    private array $parameters;
 }

@@ -437,12 +437,12 @@ class StatusCode implements StatusCodeInterface
      */
     public function __construct(int $code)
     {
-        if (!isset(self::$descriptions[$code])) {
+        if (!isset(self::DESCRIPTIONS[$code])) {
             throw new InvalidStatusCodeException('Status code ' . $code . ' is invalid.');
         }
 
         $this->code = $code;
-        $this->description = self::$descriptions[$code];
+        $this->description = self::DESCRIPTIONS[$code];
     }
 
     /**
@@ -566,19 +566,19 @@ class StatusCode implements StatusCodeInterface
     }
 
     /**
-     * @var int My code.
+     * @var int The code.
      */
-    private $code;
+    private int $code;
 
     /**
-     * @var string My description.
+     * @var string The description.
      */
-    private $description;
+    private string $description;
 
     /**
-     * @var array My descriptions.
+     * @var array The descriptions.
      */
-    private static $descriptions = [
+    private const DESCRIPTIONS = [
         self::CONTINUE_                       => 'Continue',
         self::SWITCHING_PROTOCOLS             => 'Switching Protocols',
         self::PROCESSING                      => 'Processing',

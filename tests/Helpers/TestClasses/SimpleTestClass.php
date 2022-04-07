@@ -20,7 +20,7 @@ class SimpleTestClass
     }
 
     /**
-     * @var string My text.
+     * @var string The text.
      */
-    public $text;
+    public string $text;
 }

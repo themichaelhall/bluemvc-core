@@ -53,12 +53,12 @@ class ActionResult implements ActionResultInterface
     }
 
     /**
-     * @var StatusCodeInterface My status code.
+     * @var StatusCodeInterface The status code.
      */
-    private $statusCode;
+    private StatusCodeInterface $statusCode;
 
     /**
-     * @var string My content.
+     * @var string The content.
      */
-    private $content;
+    private string $content;
 }

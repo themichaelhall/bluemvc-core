@@ -67,14 +67,14 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
         }
 
         /**
-         * @var array My cookies.
+         * @var array The cookies.
          */
-        private static $cookies = [];
+        private static array $cookies = [];
 
         /**
          * @var bool True if fake cookies is enabled, false otherwise.
          */
-        private static $isEnabled = false;
+        private static bool $isEnabled = false;
     }
 }
 

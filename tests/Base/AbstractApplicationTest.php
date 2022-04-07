@@ -360,17 +360,7 @@ class AbstractApplicationTest extends TestCase
     }
 
     /**
-     * Tear down.
+     * @var BasicTestApplication The application.
      */
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        $this->application = null;
-    }
-
-    /**
-     * @var BasicTestApplication My application.
-     */
-    private $application;
+    private BasicTestApplication $application;
 }

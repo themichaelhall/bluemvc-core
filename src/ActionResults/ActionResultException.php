@@ -48,7 +48,7 @@ class ActionResultException extends Exception implements ActionResultExceptionIn
     }
 
     /**
-     * @var ActionResultInterface My action result.
+     * @var ActionResultInterface The action result.
      */
-    private $actionResult;
+    private ActionResultInterface $actionResult;
 }

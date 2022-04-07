@@ -1054,7 +1054,6 @@ class ApplicationRoutingTest extends TestCase
 
         FakeHeaders::disable();
         FakeFunctionExists::disable();
-        $this->application = null;
 
         $_SERVER = $this->originalServerArray;
     }
@@ -1072,12 +1071,12 @@ class ApplicationRoutingTest extends TestCase
     }
 
     /**
-     * @var BasicTestApplication My application.
+     * @var BasicTestApplication The application.
      */
-    private $application;
+    private BasicTestApplication $application;
 
     /**
      * @var array The original server array.
      */
-    private $originalServerArray;
+    private array $originalServerArray;
 }

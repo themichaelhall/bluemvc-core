@@ -53,14 +53,14 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
         }
 
         /**
-         * @var string[] My headers.
+         * @var string[] The headers.
          */
-        private static $headers = [];
+        private static array $headers = [];
 
         /**
          * @var bool True if fake headers is enabled, false otherwise.
          */
-        private static $isEnabled = false;
+        private static bool $isEnabled = false;
     }
 }
 

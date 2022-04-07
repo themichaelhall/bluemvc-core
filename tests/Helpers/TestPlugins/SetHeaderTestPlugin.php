@@ -65,10 +65,10 @@ class SetHeaderTestPlugin extends AbstractPlugin
     /**
      * @var bool If true, request should stop processing after pre-request, false otherwise.
      */
-    private $stopAfterPreRequest;
+    private bool $stopAfterPreRequest;
 
     /**
      * @var bool If true, request should stop processing after post-request, false otherwise.
      */
-    private $stopAfterPostRequest;
+    private bool $stopAfterPostRequest;
 }

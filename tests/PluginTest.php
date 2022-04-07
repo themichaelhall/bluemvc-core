@@ -6,7 +6,6 @@ namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\Http\Method;
 use BlueMvc\Core\Http\StatusCode;
-use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\PluginInterface;
 use BlueMvc\Core\Route;
 use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
@@ -226,16 +225,6 @@ class PluginTest extends TestCase
     }
 
     /**
-     * Tear down.
-     */
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        $this->application = null;
-    }
-
-    /**
      * Normalizes the end of line character(s) to \n, so tests will pass even if the newline(s) in tests files are converted, e.g. by Git.
      *
      * @param string $s
@@ -248,7 +237,7 @@ class PluginTest extends TestCase
     }
 
     /**
-     * @var ApplicationInterface My application.
+     * @var BasicTestApplication The application.
      */
-    private $application;
+    private BasicTestApplication $application;
 }

@@ -34,12 +34,12 @@ class JsonSerializableTestClass implements JsonSerializable
     }
 
     /**
-     * @var int My integer value.
+     * @var int The integer value.
      */
-    public $intVal;
+    public int $intVal;
 
     /**
-     * @var string My string value.
+     * @var string The string value.
      */
-    public $stringVal;
+    public string $stringVal;
 }

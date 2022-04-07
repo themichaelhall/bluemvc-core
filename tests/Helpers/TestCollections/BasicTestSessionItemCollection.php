@@ -34,7 +34,7 @@ class BasicTestSessionItemCollection implements SessionItemCollectionInterface
      *
      * @return mixed The current session item value.
      */
-    public function current()
+    public function current(): mixed
     {
         return current($this->items);
     }
@@ -44,9 +44,9 @@ class BasicTestSessionItemCollection implements SessionItemCollectionInterface
      *
      * @param string $name The session item name.
      *
-     * @return mixed|null The session item value by session item name if it exists, null otherwise.
+     * @return mixed The session item value by session item name if it exists, null otherwise.
      */
-    public function get(string $name)
+    public function get(string $name): mixed
     {
         if (!isset($this->items[$name])) {
             return null;
@@ -97,7 +97,7 @@ class BasicTestSessionItemCollection implements SessionItemCollectionInterface
      * @param string $name  The session item name.
      * @param mixed  $value The session item value.
      */
-    public function set(string $name, $value): void
+    public function set(string $name, mixed $value): void
     {
         $this->items[$name] = $value;
     }
@@ -113,7 +113,7 @@ class BasicTestSessionItemCollection implements SessionItemCollectionInterface
     }
 
     /**
-     * @var array My session items.
+     * @var array The session items.
      */
-    private $items;
+    private array $items;
 }

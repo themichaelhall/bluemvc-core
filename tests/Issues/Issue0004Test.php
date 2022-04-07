@@ -54,5 +54,5 @@ class Issue0004Test extends TestCase
     /**
      * @var array The original server array.
      */
-    private $originalServerArray;
+    private array $originalServerArray;
 }

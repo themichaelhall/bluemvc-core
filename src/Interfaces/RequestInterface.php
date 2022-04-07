@@ -10,9 +10,9 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces;
 
-use BlueMvc\Core\Collections\RequestCookieCollection;
 use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\ParameterCollectionInterface;
+use BlueMvc\Core\Interfaces\Collections\RequestCookieCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\SessionItemCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\UploadedFileCollectionInterface;
 use BlueMvc\Core\Interfaces\Http\MethodInterface;
@@ -51,9 +51,9 @@ interface RequestInterface
      *
      * @since 1.0.0
      *
-     * @return RequestCookieCollection The cookies.
+     * @return RequestCookieCollectionInterface The cookies.
      */
-    public function getCookies(): RequestCookieCollection;
+    public function getCookies(): RequestCookieCollectionInterface;
 
     /**
      * Returns the cookie value by cookie name if it exists, null otherwise.
@@ -160,9 +160,9 @@ interface RequestInterface
      *
      * @param string $name The session item name.
      *
-     * @return mixed|null The session item if it exists, null otherwise.
+     * @return mixed The session item if it exists, null otherwise.
      */
-    public function getSessionItem(string $name);
+    public function getSessionItem(string $name): mixed;
 
     /**
      * Returns the session items.
@@ -228,5 +228,5 @@ interface RequestInterface
      * @param string $name  The session item name.
      * @param mixed  $value The session item value.
      */
-    public function setSessionItem(string $name, $value): void;
+    public function setSessionItem(string $name, mixed $value): void;
 }

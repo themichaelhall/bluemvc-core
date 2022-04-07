@@ -53,7 +53,7 @@ class SessionItemCollection implements SessionItemCollectionInterface
      *
      * @return mixed The current session item value.
      */
-    public function current()
+    public function current(): mixed
     {
         $this->doInit();
 
@@ -67,9 +67,9 @@ class SessionItemCollection implements SessionItemCollectionInterface
      *
      * @param string $name The session item name.
      *
-     * @return mixed|null The session item value by session item name if it exists, null otherwise.
+     * @return mixed The session item value by session item name if it exists, null otherwise.
      */
-    public function get(string $name)
+    public function get(string $name): mixed
     {
         $this->doInit();
 
@@ -144,7 +144,7 @@ class SessionItemCollection implements SessionItemCollectionInterface
      * @param string $name  The session item name.
      * @param mixed  $value The session item value.
      */
-    public function set(string $name, $value): void
+    public function set(string $name, mixed $value): void
     {
         $this->doInit(true);
 
@@ -215,10 +215,10 @@ class SessionItemCollection implements SessionItemCollectionInterface
     /**
      * @var array The options to pass to session_start() method.
      */
-    private $options;
+    private array $options;
 
     /**
      * @var bool True if session is initialized, false otherwise.
      */
-    private $isInitialized;
+    private bool $isInitialized;
 }

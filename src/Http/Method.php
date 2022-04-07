@@ -111,7 +111,7 @@ class Method implements MethodInterface
     }
 
     /**
-     * @var string My method name.
+     * @var string The method name.
      */
-    private $name;
+    private string $name;
 }

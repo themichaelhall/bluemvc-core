@@ -60,12 +60,12 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
         /**
          * @var bool True if fake ini_get is enabled, false otherwise.
          */
-        private static $isEnabled = false;
+        private static bool $isEnabled = false;
 
         /**
-         * @var array My settings.
+         * @var array The settings.
          */
-        private static $settings = [];
+        private static array $settings = [];
     }
 }
 

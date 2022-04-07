@@ -72,17 +72,17 @@ class RouteMatch implements RouteMatchInterface
     }
 
     /**
-     * @var string My action.
+     * @var string The action.
      */
-    private $action;
+    private string $action;
 
     /**
-     * @var string My controller class name.
+     * @var string The controller class name.
      */
-    private $controllerClassName;
+    private string $controllerClassName;
 
     /**
-     * @var string[] My parameters.
+     * @var string[] The parameters.
      */
-    private $parameters;
+    private array $parameters;
 }

@@ -130,7 +130,7 @@ class UploadedFileCollection implements UploadedFileCollectionInterface
     }
 
     /**
-     * @var UploadedFileInterface[] My uploaded files.
+     * @var UploadedFileInterface[] The uploaded files.
      */
-    private $uploadedFiles;
+    private array $uploadedFiles;
 }

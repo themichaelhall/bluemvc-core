@@ -65,7 +65,7 @@ abstract class AbstractRoute implements RouteInterface
     abstract public function matches(RequestInterface $request): ?RouteMatchInterface;
 
     /**
-     * @var string My controller class name.
+     * @var string The controller class name.
      */
-    private $controllerClassName;
+    private string $controllerClassName;
 }

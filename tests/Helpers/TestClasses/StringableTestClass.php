@@ -30,7 +30,7 @@ class StringableTestClass
     }
 
     /**
-     * @var string My text.
+     * @var string The text.
      */
-    private $text;
+    private string $text;
 }

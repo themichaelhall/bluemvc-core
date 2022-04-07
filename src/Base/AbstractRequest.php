@@ -10,7 +10,6 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Base;
 
-use BlueMvc\Core\Collections\RequestCookieCollection;
 use BlueMvc\Core\Interfaces\Collections\HeaderCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\ParameterCollectionInterface;
 use BlueMvc\Core\Interfaces\Collections\RequestCookieCollectionInterface;
@@ -99,9 +98,9 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @since 1.0.0
      *
-     * @return RequestCookieCollection The cookies.
+     * @return RequestCookieCollectionInterface The cookies.
      */
-    public function getCookies(): RequestCookieCollection
+    public function getCookies(): RequestCookieCollectionInterface
     {
         return $this->cookies;
     }
@@ -248,9 +247,9 @@ abstract class AbstractRequest implements RequestInterface
      *
      * @param string $name The name.
      *
-     * @return mixed|null The session item if it exists, null otherwise.
+     * @return mixed The session item if it exists, null otherwise.
      */
-    public function getSessionItem(string $name)
+    public function getSessionItem(string $name): mixed
     {
         return $this->sessionItems->get($name);
     }
@@ -337,7 +336,7 @@ abstract class AbstractRequest implements RequestInterface
      * @param string $name  The session item name.
      * @param mixed  $value The session item value.
      */
-    public function setSessionItem(string $name, $value): void
+    public function setSessionItem(string $name, mixed $value): void
     {
         $this->sessionItems->set($name, $value);
     }
@@ -541,52 +540,52 @@ abstract class AbstractRequest implements RequestInterface
     }
 
     /**
-     * @var RequestCookieCollection My cookies.
+     * @var RequestCookieCollectionInterface The cookies.
      */
-    private $cookies;
+    private RequestCookieCollectionInterface $cookies;
 
     /**
-     * @var ParameterCollectionInterface My form parameters.
+     * @var ParameterCollectionInterface The form parameters.
      */
-    private $formParameters;
+    private ParameterCollectionInterface $formParameters;
 
     /**
-     * @var HeaderCollectionInterface My headers.
+     * @var HeaderCollectionInterface The headers.
      */
-    private $headers;
+    private HeaderCollectionInterface $headers;
 
     /**
-     * @var MethodInterface My method.
+     * @var MethodInterface The method.
      */
-    private $method;
+    private MethodInterface $method;
 
     /**
-     * @var ParameterCollectionInterface My query parameters.
+     * @var ParameterCollectionInterface The query parameters.
      */
-    private $queryParameters;
+    private ParameterCollectionInterface $queryParameters;
 
     /**
-     * @var string My raw content.
+     * @var string The raw content.
      */
-    private $rawContent;
+    private string $rawContent;
 
     /**
-     * @var UploadedFileCollectionInterface My uploaded files.
+     * @var UploadedFileCollectionInterface The uploaded files.
      */
-    private $uploadedFiles;
+    private UploadedFileCollectionInterface $uploadedFiles;
 
     /**
-     * @var UrlInterface My url.
+     * @var UrlInterface The url.
      */
-    private $url;
+    private UrlInterface $url;
 
     /**
-     * @var IPAddressInterface My client ip address.
+     * @var IPAddressInterface The client ip address.
      */
-    private $clientIp;
+    private IPAddressInterface $clientIp;
 
     /**
-     * @var SessionItemCollectionInterface My session items.
+     * @var SessionItemCollectionInterface The session items.
      */
-    private $sessionItems;
+    private SessionItemCollectionInterface $sessionItems;
 }

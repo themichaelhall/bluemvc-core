@@ -27,9 +27,9 @@ trait CustomItemsTrait
      *
      * @param string $name The custom item name.
      *
-     * @return mixed|null The custom item if it exists, null otherwise.
+     * @return mixed The custom item if it exists, null otherwise.
      */
-    public function getCustomItem(string $name)
+    public function getCustomItem(string $name): mixed
     {
         return $this->getOrCreateCustomItems()->get($name);
     }
@@ -54,7 +54,7 @@ trait CustomItemsTrait
      * @param string $name  The custom item name.
      * @param mixed  $value The custom item value.
      */
-    public function setCustomItem(string $name, $value): void
+    public function setCustomItem(string $name, mixed $value): void
     {
         $this->getOrCreateCustomItems()->set($name, $value);
     }
@@ -86,7 +86,7 @@ trait CustomItemsTrait
     }
 
     /**
-     * @var CustomItemCollectionInterface|null My custom items or null if no custom items is set.
+     * @var CustomItemCollectionInterface|null The custom items or null if no custom items is set.
      */
-    private $customItems = null;
+    private ?CustomItemCollectionInterface $customItems = null;
 }

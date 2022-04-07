@@ -62,15 +62,15 @@ abstract class AbstractViewRenderer implements ViewRendererInterface
      * @param ApplicationInterface             $application The application.
      * @param RequestInterface                 $request     The request.
      * @param FilePathInterface                $viewFile    The view file.
-     * @param mixed|null                       $model       The model or null if there is no model.
+     * @param mixed                            $model       The model or null if there is no model.
      * @param ViewItemCollectionInterface|null $viewItems   The view items or null if there is no view items.
      *
      * @return string The rendered view.
      */
-    abstract public function renderView(ApplicationInterface $application, RequestInterface $request, FilePathInterface $viewFile, $model = null, ?ViewItemCollectionInterface $viewItems = null): string;
+    abstract public function renderView(ApplicationInterface $application, RequestInterface $request, FilePathInterface $viewFile, mixed $model = null, ?ViewItemCollectionInterface $viewItems = null): string;
 
     /**
-     * @var string My file extension for views compatible with this renderer.
+     * @var string The file extension for views compatible with this renderer.
      */
-    private $viewFileExtension;
+    private string $viewFileExtension;
 }

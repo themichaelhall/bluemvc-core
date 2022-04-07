@@ -130,7 +130,7 @@ class ResponseCookieCollection implements ResponseCookieCollectionInterface
     }
 
     /**
-     * @var ResponseCookieInterface[] My response cookies.
+     * @var ResponseCookieInterface[] The response cookies.
      */
-    private $responseCookies;
+    private array $responseCookies;
 }

@@ -98,17 +98,17 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
         /**
          * @var bool True if fake session is enabled, false otherwise.
          */
-        private static $isEnabled = false;
+        private static bool $isEnabled = false;
 
         /**
-         * @var int My current session status.
+         * @var int The current session status.
          */
-        private static $status = PHP_SESSION_NONE;
+        private static int $status = PHP_SESSION_NONE;
 
         /**
-         * @var array My options.
+         * @var array The options.
          */
-        private static $options = [];
+        private static array $options = [];
     }
 }
 

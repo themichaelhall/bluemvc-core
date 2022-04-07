@@ -48,7 +48,7 @@ class ViewItemCollection implements ViewItemCollectionInterface
      *
      * @return mixed The current view item value.
      */
-    public function current()
+    public function current(): mixed
     {
         return current($this->items);
     }
@@ -60,9 +60,9 @@ class ViewItemCollection implements ViewItemCollectionInterface
      *
      * @param string $name The view item name.
      *
-     * @return mixed|null The view item value by view item name if it exists, null otherwise.
+     * @return mixed The view item value by view item name if it exists, null otherwise.
      */
-    public function get(string $name)
+    public function get(string $name): mixed
     {
         if (!isset($this->items[$name])) {
             return null;
@@ -111,7 +111,7 @@ class ViewItemCollection implements ViewItemCollectionInterface
      * @param string $name  The view item name.
      * @param mixed  $value The view item value.
      */
-    public function set(string $name, $value): void
+    public function set(string $name, mixed $value): void
     {
         $this->items[$name] = $value;
     }
@@ -129,7 +129,7 @@ class ViewItemCollection implements ViewItemCollectionInterface
     }
 
     /**
-     * @var array My view items.
+     * @var array The view items.
      */
-    private $items;
+    private array $items;
 }

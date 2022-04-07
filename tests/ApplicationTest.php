@@ -321,18 +321,16 @@ class ApplicationTest extends TestCase
     {
         parent::tearDown();
 
-        $this->application = null;
-
         $_SERVER = $this->originalServerArray;
     }
 
     /**
-     * @var Application My application.
+     * @var Application The application.
      */
-    private $application;
+    private Application $application;
 
     /**
      * @var array The original server array.
      */
-    private $originalServerArray;
+    private array $originalServerArray;
 }

@@ -130,7 +130,7 @@ class RequestCookieCollection implements RequestCookieCollectionInterface
     }
 
     /**
-     * @var RequestCookieInterface[] My request cookies.
+     * @var RequestCookieInterface[] The request cookies.
      */
-    private $requestCookies;
+    private array $requestCookies;
 }

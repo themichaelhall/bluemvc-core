@@ -84,17 +84,17 @@ class UploadedFile implements UploadedFileInterface
     }
 
     /**
-     * @var FilePathInterface My path to the file.
+     * @var FilePathInterface The path to the file.
      */
-    private $path;
+    private FilePathInterface $path;
 
     /**
-     * @var string My original name of the file.
+     * @var string The original name of the file.
      */
-    private $originalName;
+    private string $originalName;
 
     /**
-     * @var int My size of the file.
+     * @var int The size of the file.
      */
-    private $size;
+    private int $size;
 }

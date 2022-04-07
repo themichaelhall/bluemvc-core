@@ -55,12 +55,12 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
         /**
          * @var bool True if fake file_get_content('php://input') method is enabled, false otherwise.
          */
-        private static $isEnabled = false;
+        private static bool $isEnabled = false;
 
         /**
-         * @var string My content.
+         * @var string The content.
          */
-        private static $content = '';
+        private static string $content = '';
     }
 }
 

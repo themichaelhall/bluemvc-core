@@ -54,7 +54,7 @@ abstract class AbstractCookie
     }
 
     /**
-     * @var string My value.
+     * @var string The value.
      */
-    private $value;
+    private string $value;
 }

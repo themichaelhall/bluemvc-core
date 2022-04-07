@@ -53,7 +53,7 @@ class UnauthorizedResult extends ActionResult
     }
 
     /**
-     * @var string My WWW-Authenticate header.
+     * @var string The WWW-Authenticate header.
      */
-    private $wwwAuthenticate;
+    private string $wwwAuthenticate;
 }

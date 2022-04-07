@@ -230,8 +230,8 @@ class Request extends AbstractRequest
         $error = intval($error);
 
         if ($error !== 0) {
-            if (isset(self::$fileUploadErrors[$error])) {
-                throw new ServerEnvironmentException('File upload failed: ' . self::$fileUploadErrors[$error]);
+            if (isset(self::FILE_UPLOAD_ERRORS[$error])) {
+                throw new ServerEnvironmentException('File upload failed: ' . self::FILE_UPLOAD_ERRORS[$error]);
             }
 
             return null;
@@ -290,9 +290,9 @@ class Request extends AbstractRequest
     }
 
     /**
-     * @var array My file upload errors that should result in an exception.
+     * @var array The file upload errors that should result in an exception.
      */
-    private static $fileUploadErrors = [
+    private const FILE_UPLOAD_ERRORS = [
         UPLOAD_ERR_NO_TMP_DIR => 'Missing a temporary folder (UPLOAD_ERR_NO_TMP_DIR).',
         UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk (UPLOAD_ERR_CANT_WRITE).',
         UPLOAD_ERR_EXTENSION  => 'File upload stopped by extension (UPLOAD_ERR_EXTENSION).',
@@ -301,5 +301,5 @@ class Request extends AbstractRequest
     /**
      * @var bool True if raw content is fetched, false otherwise.
      */
-    private $rawContentIsFetched;
+    private bool $rawContentIsFetched;
 }

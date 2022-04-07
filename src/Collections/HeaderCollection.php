@@ -151,7 +151,7 @@ class HeaderCollection implements HeaderCollectionInterface
     }
 
     /**
-     * @var array My headers.
+     * @var array The headers.
      */
-    private $headers;
+    private array $headers;
 }

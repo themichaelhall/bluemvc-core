@@ -127,12 +127,10 @@ class ErrorHandlingTest extends TestCase
     protected function tearDown(): void
     {
         parent::tearDown();
-
-        $this->application = null;
     }
 
     /**
-     * @var BasicTestApplication My application.
+     * @var BasicTestApplication The application.
      */
-    private $application;
+    private BasicTestApplication $application;
 }

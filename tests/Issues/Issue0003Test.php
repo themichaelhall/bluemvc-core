@@ -76,5 +76,5 @@ class Issue0003Test extends TestCase
     /**
      * @var array The original server array.
      */
-    private $originalServerArray;
+    private array $originalServerArray;
 }

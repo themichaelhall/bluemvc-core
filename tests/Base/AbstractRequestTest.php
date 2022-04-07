@@ -492,17 +492,7 @@ class AbstractRequestTest extends TestCase
     }
 
     /**
-     * Tear down.
+     * @var BasicTestRequest The test request.
      */
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        $this->request = null;
-    }
-
-    /**
-     * @var BasicTestRequest My test request.
-     */
-    private $request;
+    private BasicTestRequest $request;
 }

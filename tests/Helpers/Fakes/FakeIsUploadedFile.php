@@ -36,7 +36,7 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
         /**
          * @var bool True if fake is_uploaded_file method is enabled, false otherwise.
          */
-        private static $isEnabled = false;
+        private static bool $isEnabled = false;
     }
 }
 

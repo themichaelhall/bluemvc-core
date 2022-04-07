@@ -55,12 +55,12 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
         /**
          * @var bool True if fake function_exists method is enabled, false otherwise.
          */
-        private static $isEnabled = false;
+        private static bool $isEnabled = false;
 
         /**
-         * @var string[] My disabled functions.
+         * @var string[] The disabled functions.
          */
-        private static $disabledFunctions = [];
+        private static array $disabledFunctions = [];
     }
 }
 

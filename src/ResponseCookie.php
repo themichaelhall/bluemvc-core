@@ -120,27 +120,27 @@ class ResponseCookie extends AbstractCookie implements ResponseCookieInterface
     }
 
     /**
-     * @var DateTimeInterface|null My expiry time or null if no expiry time.
+     * @var DateTimeInterface|null The expiry time or null if no expiry time.
      */
-    private $expiry;
+    private ?DateTimeInterface $expiry;
 
     /**
-     * @var UrlPathInterface|null My path or null if no path.
+     * @var UrlPathInterface|null The path or null if no path.
      */
-    private $path;
+    private ?UrlPathInterface $path;
 
     /**
-     * @var HostInterface|null My domain or null if no domain.
+     * @var HostInterface|null The domain or null if no domain.
      */
-    private $domain;
+    private ?HostInterface $domain;
 
     /**
      * @var bool True if cookie is secure, false otherwise.
      */
-    private $isSecure;
+    private bool $isSecure;
 
     /**
      * @var bool True if cookie is http only, false otherwise.
      */
-    private $isHttpOnly;
+    private bool $isHttpOnly;
 }

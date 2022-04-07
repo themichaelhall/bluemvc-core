@@ -123,7 +123,7 @@ class Route extends AbstractRoute
     }
 
     /**
-     * @var string[] My path.
+     * @var string[] The path.
      */
-    private $path;
+    private array $path;
 }

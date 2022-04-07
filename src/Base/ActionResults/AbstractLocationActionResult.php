@@ -57,7 +57,7 @@ class AbstractLocationActionResult extends ActionResult
     }
 
     /**
-     * @var string My url.
+     * @var string The url.
      */
-    private $location;
+    private string $location;
 }

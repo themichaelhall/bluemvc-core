@@ -68,7 +68,7 @@ trait ErrorControllerTrait
     }
 
     /**
-     * @var Throwable|null My throwable or null if no throwable.
+     * @var Throwable|null The throwable or null if no throwable.
      */
-    private $throwable = null;
+    private ?Throwable $throwable = null;
 }

@@ -458,42 +458,42 @@ abstract class AbstractApplication implements ApplicationInterface
     }
 
     /**
-     * @var FilePathInterface My document root.
+     * @var FilePathInterface The document root.
      */
-    private $documentRoot;
+    private FilePathInterface $documentRoot;
 
     /**
      * @var bool True if in debug mode, false otherwise.
      */
-    private $isDebug;
+    private bool $isDebug;
 
     /**
-     * @var RouteInterface[] My routes.
+     * @var RouteInterface[] The routes.
      */
-    private $routes;
+    private array $routes;
 
     /**
-     * @var FilePathInterface Path to the application-specific temporary directory.
+     * @var FilePathInterface|null The path to the application-specific temporary directory or null if not yet initialized.
      */
-    private $tempPath;
+    private ?FilePathInterface $tempPath;
 
     /**
-     * @var FilePathInterface My view files path.
+     * @var FilePathInterface|null The view files path or null if not yet initialized.
      */
-    private $viewPath;
+    private ?FilePathInterface $viewPath;
 
     /**
-     * @var ViewRendererInterface[] My view renderers.
+     * @var ViewRendererInterface[] The view renderers.
      */
-    private $viewRenderers;
+    private array $viewRenderers;
 
     /**
-     * @var string|null My error controller class name.
+     * @var string|null The error controller class name.
      */
-    private $errorControllerClass;
+    private ?string $errorControllerClass;
 
     /**
-     * @var PluginInterface[] My plugins.
+     * @var PluginInterface[] The plugins.
      */
-    private $plugins;
+    private array $plugins;
 }

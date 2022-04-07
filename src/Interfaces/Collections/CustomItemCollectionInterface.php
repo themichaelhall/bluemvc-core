@@ -27,9 +27,9 @@ interface CustomItemCollectionInterface extends Countable, Iterator
      *
      * @param string $name The custom item name.
      *
-     * @return mixed|null The custom item value by custom item name if it exists, null otherwise.
+     * @return mixed The custom item value by custom item name if it exists, null otherwise.
      */
-    public function get(string $name);
+    public function get(string $name): mixed;
 
     /**
      * Sets a custom item value by custom item name.
@@ -39,5 +39,5 @@ interface CustomItemCollectionInterface extends Countable, Iterator
      * @param string $name  The custom item name.
      * @param mixed  $value The custom item value.
      */
-    public function set(string $name, $value): void;
+    public function set(string $name, mixed $value): void;
 }

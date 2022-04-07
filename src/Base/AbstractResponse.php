@@ -262,22 +262,22 @@ abstract class AbstractResponse implements ResponseInterface
     abstract public function output(): void;
 
     /**
-     * @var string My content.
+     * @var string The content.
      */
-    private $content;
+    private string $content;
 
     /**
-     * @var ResponseCookieCollectionInterface My cookies.
+     * @var ResponseCookieCollectionInterface The cookies.
      */
-    private $cookies;
+    private ResponseCookieCollectionInterface $cookies;
 
     /**
-     * @var HeaderCollectionInterface My headers.
+     * @var HeaderCollectionInterface The headers.
      */
-    private $headers;
+    private HeaderCollectionInterface $headers;
 
     /**
-     * @var StatusCodeInterface My status code.
+     * @var StatusCodeInterface The status code.
      */
-    private $statusCode;
+    private StatusCodeInterface $statusCode;
 }

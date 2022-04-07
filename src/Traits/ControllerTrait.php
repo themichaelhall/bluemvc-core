@@ -293,11 +293,11 @@ trait ControllerTrait
      *
      * @param ReflectionParameter $reflectionParameter The action method parameter.
      * @param mixed               $parameter           The parameter.
-     * @param mixed|null          $adjustedParameter   The adjusted parameter.
+     * @param mixed               $adjustedParameter   The adjusted parameter.
      *
      * @return bool True if parameter matches, false otherwise.
      */
-    private static function actionMethodParameterMatchesParameter(ReflectionParameter $reflectionParameter, $parameter, &$adjustedParameter = null): bool
+    private static function actionMethodParameterMatchesParameter(ReflectionParameter $reflectionParameter, mixed $parameter, mixed &$adjustedParameter = null): bool
     {
         $adjustedParameter = $parameter;
 
@@ -349,22 +349,22 @@ trait ControllerTrait
     }
 
     /**
-     * @var ApplicationInterface|null My application.
+     * @var ApplicationInterface|null The application.
      */
-    private $application = null;
+    private ?ApplicationInterface $application = null;
 
     /**
-     * @var RequestInterface|null My request.
+     * @var RequestInterface|null The request.
      */
-    private $request = null;
+    private ?RequestInterface $request = null;
 
     /**
-     * @var ResponseInterface|null My response.
+     * @var ResponseInterface|null The response.
      */
-    private $response = null;
+    private ?ResponseInterface $response = null;
 
     /**
-     * @var ReflectionMethod|null My action method.
+     * @var ReflectionMethod|null The action method.
      */
-    private $actionMethod = null;
+    private ?ReflectionMethod $actionMethod = null;
 }

@@ -33,7 +33,7 @@ interface ViewRendererInterface
      *
      * @return string The rendered view.
      */
-    public function renderView(ApplicationInterface $application, RequestInterface $request, FilePathInterface $viewFile, $model = null, ?ViewItemCollectionInterface $viewItems = null): string;
+    public function renderView(ApplicationInterface $application, RequestInterface $request, FilePathInterface $viewFile, mixed $model = null, ?ViewItemCollectionInterface $viewItems = null): string;
 
     /**
      * Returns the file extension for views compatible with this renderer.

@@ -27,9 +27,9 @@ interface SessionItemCollectionInterface extends Countable, Iterator
      *
      * @param string $name The session item name.
      *
-     * @return mixed|null The session item value by session item name if it exists, null otherwise.
+     * @return mixed The session item value by session item name if it exists, null otherwise.
      */
-    public function get(string $name);
+    public function get(string $name): mixed;
 
     /**
      * Sets a session item value by session item name.
@@ -39,7 +39,7 @@ interface SessionItemCollectionInterface extends Countable, Iterator
      * @param string $name  The session item name.
      * @param mixed  $value The session item value.
      */
-    public function set(string $name, $value): void;
+    public function set(string $name, mixed $value): void;
 
     /**
      * Removes a session item by session item name.

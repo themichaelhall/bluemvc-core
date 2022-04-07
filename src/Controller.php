@@ -49,9 +49,9 @@ abstract class Controller implements ControllerInterface
      *
      * @param string $name The view item name.
      *
-     * @return mixed|null The view item value by view item name if it exists, null otherwise.
+     * @return mixed The view item value by view item name if it exists, null otherwise.
      */
-    public function getViewItem(string $name)
+    public function getViewItem(string $name): mixed
     {
         return $this->viewItems->get($name);
     }
@@ -117,7 +117,7 @@ abstract class Controller implements ControllerInterface
      * @param string $name  The view item name.
      * @param mixed  $value The view item value.
      */
-    public function setViewItem(string $name, $value): void
+    public function setViewItem(string $name, mixed $value): void
     {
         $this->viewItems->set($name, $value);
     }
@@ -157,7 +157,7 @@ abstract class Controller implements ControllerInterface
      * @param mixed  $result     The result.
      * @param string $actionName The action name.
      */
-    private function handleResult($result, string $actionName): void
+    private function handleResult(mixed $result, string $actionName): void
     {
         $application = $this->getApplication();
         $request = $this->getRequest();
@@ -206,7 +206,7 @@ abstract class Controller implements ControllerInterface
             return 'index';
         }
 
-        if (in_array(strtolower($action), self::$magicActionMethods)) {
+        if (in_array(strtolower($action), self::MAGIC_ACTION_METHODS)) {
             return '_' . $action;
         }
 
@@ -214,12 +214,12 @@ abstract class Controller implements ControllerInterface
     }
 
     /**
-     * @var ViewItemCollectionInterface My view items.
+     * @var ViewItemCollectionInterface The view items.
      */
-    private $viewItems;
+    private ViewItemCollectionInterface $viewItems;
 
     /**
-     * @var array My magic action methods.
+     * @var array The magic action methods.
      */
-    private static $magicActionMethods = ['index', 'default'];
+    private const MAGIC_ACTION_METHODS = ['index', 'default'];
 }

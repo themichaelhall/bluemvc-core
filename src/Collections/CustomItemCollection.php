@@ -48,7 +48,7 @@ class CustomItemCollection implements CustomItemCollectionInterface
      *
      * @return mixed The current custom item value.
      */
-    public function current()
+    public function current(): mixed
     {
         return current($this->items);
     }
@@ -60,9 +60,9 @@ class CustomItemCollection implements CustomItemCollectionInterface
      *
      * @param string $name The custom item name.
      *
-     * @return mixed|null The custom item value by custom item name if it exists, null otherwise.
+     * @return mixed The custom item value by custom item name if it exists, null otherwise.
      */
-    public function get(string $name)
+    public function get(string $name): mixed
     {
         if (!isset($this->items[$name])) {
             return null;
@@ -111,7 +111,7 @@ class CustomItemCollection implements CustomItemCollectionInterface
      * @param string $name  The custom item name.
      * @param mixed  $value The custom item value.
      */
-    public function set(string $name, $value): void
+    public function set(string $name, mixed $value): void
     {
         $this->items[$name] = $value;
     }
@@ -129,7 +129,7 @@ class CustomItemCollection implements CustomItemCollectionInterface
     }
 
     /**
-     * @var array My custom items.
+     * @var array The custom items.
      */
-    private $items;
+    private array $items;
 }

@@ -37,7 +37,7 @@ class View implements ViewInterface
      *
      * @throws InvalidViewFileException If the file is invalid.
      */
-    public function __construct($model = null, ?string $file = null)
+    public function __construct(mixed $model = null, ?string $file = null)
     {
         if ($file !== null && preg_match('/[^a-zA-Z0-9._-]/', $file, $matches)) {
             throw new InvalidViewFileException('View file "' . $file . '" contains invalid character "' . $matches[0] . '".');
@@ -64,9 +64,9 @@ class View implements ViewInterface
      *
      * @since 1.0.0
      *
-     * @return mixed|null The model.
+     * @return mixed The model.
      */
-    public function getModel()
+    public function getModel(): mixed
     {
         return $this->model;
     }
@@ -112,12 +112,12 @@ class View implements ViewInterface
     }
 
     /**
-     * @var mixed My model.
+     * @var mixed The model.
      */
-    private $model;
+    private mixed $model;
 
     /**
-     * @var string|null My file.
+     * @var string|null The file.
      */
-    private $file;
+    private ?string $file;
 }
