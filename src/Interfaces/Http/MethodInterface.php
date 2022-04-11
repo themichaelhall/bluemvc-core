@@ -10,12 +10,14 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces\Http;
 
+use Stringable;
+
 /**
  * Interface for Method class.
  *
  * @since 1.0.0
  */
-interface MethodInterface
+interface MethodInterface extends Stringable
 {
     /**
      * Returns the method name.
@@ -61,13 +63,4 @@ interface MethodInterface
      * @return bool True if this is a PUT method, false otherwise.
      */
     public function isPut(): bool;
-
-    /**
-     * Returns the method as a string.
-     *
-     * @since 1.0.0
-     *
-     * @return string The method as a string.
-     */
-    public function __toString(): string;
 }

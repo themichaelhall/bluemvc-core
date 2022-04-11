@@ -10,12 +10,14 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces;
 
+use Stringable;
+
 /**
  * Interface for RequestCookie class.
  *
  * @since 1.0.0
  */
-interface RequestCookieInterface
+interface RequestCookieInterface extends Stringable
 {
     /**
      * Returns the cookie value.
@@ -25,13 +27,4 @@ interface RequestCookieInterface
      * @return string The cookie value.
      */
     public function getValue(): string;
-
-    /**
-     * Returns the cookie value.
-     *
-     * @since 1.0.0
-     *
-     * @return string The cookie value.
-     */
-    public function __toString(): string;
 }

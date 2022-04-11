@@ -13,13 +13,14 @@ namespace BlueMvc\Core\Interfaces;
 use DataTypes\Net\HostInterface;
 use DataTypes\Net\UrlPathInterface;
 use DateTimeInterface;
+use Stringable;
 
 /**
  * Interface for ResponseCookie class.
  *
  * @since 1.0.0
  */
-interface ResponseCookieInterface
+interface ResponseCookieInterface extends Stringable
 {
     /**
      * Returns the domain or null if no domain.
@@ -74,13 +75,4 @@ interface ResponseCookieInterface
      * @return bool True if cookie is secure, false otherwise.
      */
     public function isSecure(): bool;
-
-    /**
-     * Returns the value.
-     *
-     * @since 1.0.0
-     *
-     * @return string The value.
-     */
-    public function __toString(): string;
 }

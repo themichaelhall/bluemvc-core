@@ -10,12 +10,14 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Interfaces\Http;
 
+use Stringable;
+
 /**
  * Interface for StatusCode class.
  *
  * @since 1.0.0
  */
-interface StatusCodeInterface
+interface StatusCodeInterface extends Stringable
 {
     /**
      * Returns the code.
@@ -88,13 +90,4 @@ interface StatusCodeInterface
      * @return bool True if this is a 2xx successful code, false otherwise.
      */
     public function isSuccessful(): bool;
-
-    /**
-     * Returns the status code as string.
-     *
-     * @since 1.0.0
-     *
-     * @return string The status code as a string.
-     */
-    public function __toString(): string;
 }

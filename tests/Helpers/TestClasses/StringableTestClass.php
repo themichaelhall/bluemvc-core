@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Tests\Helpers\TestClasses;
 
+use Stringable;
+
 /**
  * A stringable test class.
  */
-class StringableTestClass
+class StringableTestClass implements Stringable
 {
     /**
      * StringableTestClass constructor.
