@@ -34,5 +34,10 @@
     "psr-4": {
       "BlueMvc\\Core\\Tests\\": "tests"
     }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-develop": "3.0-dev"
+    }
   }
 }
