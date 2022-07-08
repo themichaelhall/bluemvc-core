@@ -116,6 +116,20 @@ class TypeHintActionParametersTestController extends Controller
     /**
      * Mixed types action.
      *
+     * @param mixed $foo    The first parameter.
+     * @param mixed $bar    The second parameter.
+     * @param mixed $fooBar The third parameter.
+     *
+     * @return string The result.
+     */
+    public function mixedTypesAction(mixed $foo, mixed $bar = false, mixed $fooBar = 2.5): string
+    {
+        return 'MixedTypesAction: Foo=[' . gettype($foo) . ':' . $foo . '], Bar=[' . gettype($bar) . ':' . $bar . '], FooBar=[' . gettype($fooBar) . ':' . $fooBar . ']';
+    }
+
+    /**
+     * Blended types action.
+     *
      * @param float  $typeFloat  The float parameter.
      * @param mixed  $typeNon    The non-typed parameter.
      * @param string $typeString The string parameter.
@@ -125,9 +139,9 @@ class TypeHintActionParametersTestController extends Controller
      *
      * @noinspection PhpMissingParamTypeInspection
      */
-    public function mixedTypesAction(float $typeFloat, $typeNon, string $typeString, bool $typeBool = false): string
+    public function blendedTypesAction(float $typeFloat, $typeNon, string $typeString, bool $typeBool = false): string
     {
-        return 'MixedTypesAction: TypeFloat=[' . gettype($typeFloat) . ':' . $typeFloat . '], TypeNon=[' . gettype($typeNon) . ':' . $typeNon . '], TypeString=[' . gettype($typeString) . ':' . $typeString . '], TypeBool=[' . gettype($typeBool) . ':' . $typeBool . ']';
+        return 'BlendedTypesAction: TypeFloat=[' . gettype($typeFloat) . ':' . $typeFloat . '], TypeNon=[' . gettype($typeNon) . ':' . $typeNon . '], TypeString=[' . gettype($typeString) . ':' . $typeString . '], TypeBool=[' . gettype($typeBool) . ':' . $typeBool . ']';
     }
 
     /**

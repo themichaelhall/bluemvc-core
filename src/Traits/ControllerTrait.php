@@ -341,6 +341,8 @@ trait ControllerTrait
             case 'string':
                 $adjustedParameter = strval($parameter);
                 break;
+            case 'mixed':
+                break;
             default:
                 return false;
         }
