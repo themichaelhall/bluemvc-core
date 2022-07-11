@@ -128,6 +128,19 @@ class TypeHintActionParametersTestController extends Controller
     }
 
     /**
+     * Union types action.
+     *
+     * @param bool|int             $typeBoolInt         The bool or int parameter.
+     * @param string|stdClass|null $typeStringClassNull The sting, sdtClass or null parameter.
+     *
+     * @return string The result.
+     */
+    public function unionTypesAction(bool|int $typeBoolInt, string|stdClass|null $typeStringClassNull = null): string
+    {
+        return 'UnionTypesAction: TypeBoolInt=[' . gettype($typeBoolInt) . ':' . $typeBoolInt . '], TypeStringClassNull=[' . gettype($typeStringClassNull) . ':' . $typeStringClassNull . ']';
+    }
+
+    /**
      * Blended types action.
      *
      * @param float  $typeFloat  The float parameter.

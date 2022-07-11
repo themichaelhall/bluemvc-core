@@ -19,6 +19,7 @@ use ReflectionException;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
+use ReflectionUnionType;
 
 /**
  * Trait for standard controller functionality.
@@ -302,52 +303,67 @@ trait ControllerTrait
         $adjustedParameter = $parameter;
 
         $reflectionParameterType = $reflectionParameter->getType();
-        if (!$reflectionParameterType instanceof ReflectionNamedType) {
-            // Union types will be handled correctly in next major version.
-            return $reflectionParameterType === null;
+        if ($reflectionParameterType === null) {
+            return true;
         }
 
-        switch ($reflectionParameterType->getName()) {
-            case 'int':
-                $intVal = intval($parameter);
-                if (strval($intVal) !== $parameter) {
-                    return false;
-                }
-
-                $adjustedParameter = $intVal;
-                break;
-            case 'float':
-                if (!is_numeric($parameter)) {
-                    return false;
-                }
-
-                $floatVal = floatval($parameter);
-                if (is_infinite($floatVal) || is_nan($floatVal)) {
-                    return false;
-                }
-
-                $adjustedParameter = $floatVal;
-                break;
-            case 'bool':
-                if ($parameter === 'true') {
-                    $adjustedParameter = true;
-                } elseif ($parameter === 'false') {
-                    $adjustedParameter = false;
-                } else {
-                    return false;
-                }
-
-                break;
-            case 'string':
-                $adjustedParameter = strval($parameter);
-                break;
-            case 'mixed':
-                break;
-            default:
-                return false;
+        $typesToMatch = [];
+        if ($reflectionParameterType instanceof ReflectionNamedType) {
+            $typesToMatch[] = $reflectionParameterType;
+        } elseif ($reflectionParameterType instanceof ReflectionUnionType) {
+            $typesToMatch = $reflectionParameterType->getTypes();
         }
 
-        return true;
+        foreach ($typesToMatch as $typeToMatch) {
+            switch ($typeToMatch->getName()) {
+                case 'int':
+                    $intVal = intval($parameter);
+                    if (strval($intVal) !== $parameter) {
+                        break;
+                    }
+
+                    $adjustedParameter = $intVal;
+
+                    return true;
+
+                case 'float':
+                    if (!is_numeric($parameter)) {
+                        break;
+                    }
+
+                    $floatVal = floatval($parameter);
+                    if (is_infinite($floatVal) || is_nan($floatVal)) {
+                        break;
+                    }
+
+                    $adjustedParameter = $floatVal;
+
+                    return true;
+
+                case 'bool':
+                    if ($parameter === 'true') {
+                        $adjustedParameter = true;
+
+                        return true;
+                    } elseif ($parameter === 'false') {
+                        $adjustedParameter = false;
+
+                        return true;
+                    }
+
+                    break;
+
+                case 'string':
+                    $adjustedParameter = strval($parameter);
+
+                    return true;
+
+                case 'mixed':
+                    return true;
+            }
+        }
+
+        return false;
     }
 
     /**
