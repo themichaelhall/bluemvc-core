@@ -53,6 +53,19 @@ class AbstractApplicationTest extends TestCase
     }
 
     /**
+     * Test getViewPaths method.
+     */
+    public function testGetViewPaths()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+
+        $viewPaths = $this->application->getViewPaths();
+
+        self::assertCount(1, $viewPaths);
+        self::assertSame($DS . 'var' . $DS . 'www' . $DS, $this->application->getViewPaths()[0]->__toString());
+    }
+
+    /**
      * Test getRoutes method.
      */
     public function testGetRoutes()
@@ -84,6 +97,27 @@ class AbstractApplicationTest extends TestCase
         $this->application->setViewPath(FilePath::parse('..' . $DS . 'bluemvc' . $DS . 'html' . $DS));
 
         self::assertSame($DS . 'var' . $DS . 'bluemvc' . $DS . 'html' . $DS, $this->application->getViewPath()->__toString());
+    }
+
+    /**
+     * Test setViewPaths method.
+     */
+    public function testSetViewPaths()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+
+        $this->application->setViewPaths(
+            [
+                FilePath::parse($DS . 'bluemvc' . $DS . 'html' . $DS),
+                FilePath::parse('..' . $DS . 'bluemvc' . $DS . 'html' . $DS),
+            ]
+        );
+
+        $viewPaths = $this->application->getViewPaths();
+
+        self::assertCount(2, $viewPaths);
+        self::assertSame($DS . 'bluemvc' . $DS . 'html' . $DS, $this->application->getViewPaths()[0]->__toString());
+        self::assertSame($DS . 'var' . $DS . 'bluemvc' . $DS . 'html' . $DS, $this->application->getViewPaths()[1]->__toString());
     }
 
     /**
@@ -162,6 +196,32 @@ class AbstractApplicationTest extends TestCase
         self::expectExceptionMessage('File path "' . $DS . 'var' . $DS . 'www' . $DS . '" can not be combined with file path "..' . $DS . '..' . $DS . '..' . $DS . 'views' . $DS . '": Absolute path is above root level.');
 
         $this->application->setViewPath(FilePath::parse('..' . $DS . '..' . $DS . '..' . $DS . 'views' . $DS));
+    }
+
+    /**
+     * Test that calling setViewPaths with a path to file throws exception.
+     */
+    public function testSetViewPathsWithFileAsViewPathThrowsException()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+
+        self::expectException(InvalidFilePathException::class);
+        self::expectExceptionMessage('View path "' . $DS . 'views' . $DS . 'file.txt" is not a directory.');
+
+        $this->application->setViewPaths([FilePath::parse($DS . 'views' . $DS . 'file.txt')]);
+    }
+
+    /**
+     * Test that calling setViewPaths with a path that can not be combined with document root throws exception.
+     */
+    public function testSetViewPathsWithViewPathThatCanNotBeCombinedWithDocumentRootThrowsException()
+    {
+        $DS = DIRECTORY_SEPARATOR;
+
+        self::expectException(InvalidFilePathException::class);
+        self::expectExceptionMessage('File path "' . $DS . 'var' . $DS . 'www' . $DS . '" can not be combined with file path "..' . $DS . '..' . $DS . '..' . $DS . 'views' . $DS . '": Absolute path is above root level.');
+
+        $this->application->setViewPaths([FilePath::parse('..' . $DS . '..' . $DS . '..' . $DS . 'views' . $DS)]);
     }
 
     /**

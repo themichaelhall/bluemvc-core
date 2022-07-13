@@ -1,5 +1,6 @@
 ## Unreleased
 - Added support for mixed and union type hints in action method parameters.
+- Added getViewPaths and setViewPaths methods to Application.
 - Changed required PHP version to >= 8.0.
 - Changed required datatypes version to 3.0.
 - Removed deprecated AbstractController and AbstractActionResult classes.

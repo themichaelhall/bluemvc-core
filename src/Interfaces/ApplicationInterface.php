@@ -123,6 +123,15 @@ interface ApplicationInterface
     public function getViewPath(): FilePathInterface;
 
     /**
+     * Returns the view files paths.
+     *
+     * @since 3.0.0
+     *
+     * @return FilePathInterface[] The view files paths.
+     */
+    public function getViewPaths(): array;
+
+    /**
      * Returns the view renderers.
      *
      * @since 1.0.0
@@ -199,4 +208,15 @@ interface ApplicationInterface
      * @throws InvalidFilePathException If the $viewPath parameter is invalid.
      */
     public function setViewPath(FilePathInterface $viewPath): void;
+
+    /**
+     * Sets the view files paths.
+     *
+     * @since 3.0.0
+     *
+     * @param FilePathInterface[] $viewPaths The view files paths.
+     *
+     * @throws InvalidFilePathException If the $viewPaths parameter is invalid.
+     */
+    public function setViewPaths(array $viewPaths): void;
 }

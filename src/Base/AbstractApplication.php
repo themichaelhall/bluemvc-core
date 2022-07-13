@@ -52,7 +52,7 @@ abstract class AbstractApplication implements ApplicationInterface
         $this->routes = [];
         $this->tempPath = null;
         $this->viewRenderers = [];
-        $this->viewPath = null;
+        $this->viewPaths = [];
         $this->isDebug = false;
         $this->errorControllerClass = null;
         $this->plugins = [];
@@ -169,11 +169,27 @@ abstract class AbstractApplication implements ApplicationInterface
      */
     public function getViewPath(): FilePathInterface
     {
-        if ($this->viewPath === null) {
+        if (count($this->viewPaths) === 0) {
             return $this->documentRoot;
         }
 
-        return $this->viewPath;
+        return $this->viewPaths[0];
+    }
+
+    /**
+     * Returns the view files paths.
+     *
+     * @since 3.0.0
+     *
+     * @return FilePathInterface[] The view files paths.
+     */
+    public function getViewPaths(): array
+    {
+        if (count($this->viewPaths) === 0) {
+            return [$this->documentRoot];
+        }
+
+        return $this->viewPaths;
     }
 
     /**
@@ -265,14 +281,24 @@ abstract class AbstractApplication implements ApplicationInterface
      */
     public function setViewPath(FilePathInterface $viewPath): void
     {
-        if (!$viewPath->isDirectory()) {
-            throw new InvalidFilePathException('View path "' . $viewPath . '" is not a directory.');
-        }
+        $this->viewPaths = [];
+        $this->addViewPath($viewPath);
+    }
 
-        try {
-            $this->viewPath = $this->documentRoot->withFilePath($viewPath);
-        } catch (FilePathLogicException $e) {
-            throw new InvalidFilePathException($e->getMessage());
+    /**
+     * Sets the view files paths.
+     *
+     * @since 3.0.0
+     *
+     * @param FilePathInterface[] $viewPaths The view files paths.
+     *
+     * @throws InvalidFilePathException If the $viewPaths parameter is invalid.
+     */
+    public function setViewPaths(array $viewPaths): void
+    {
+        $this->viewPaths = [];
+        foreach ($viewPaths as $viewPath) {
+            $this->addViewPath($viewPath);
         }
     }
 
@@ -308,6 +334,26 @@ abstract class AbstractApplication implements ApplicationInterface
         }
 
         $this->documentRoot = $documentRoot;
+    }
+
+    /**
+     * Adds a view file path to tha list of view file paths.
+     *
+     * @param FilePathInterface $viewPath The view file path.
+     *
+     * @throws InvalidFilePathException If the $viewPath parameter is invalid.
+     */
+    private function addViewPath(FilePathInterface $viewPath): void
+    {
+        if (!$viewPath->isDirectory()) {
+            throw new InvalidFilePathException('View path "' . $viewPath . '" is not a directory.');
+        }
+
+        try {
+            $this->viewPaths[] = $this->documentRoot->withFilePath($viewPath);
+        } catch (FilePathLogicException $e) {
+            throw new InvalidFilePathException($e->getMessage());
+        }
     }
 
     /**
@@ -478,9 +524,9 @@ abstract class AbstractApplication implements ApplicationInterface
     private ?FilePathInterface $tempPath;
 
     /**
-     * @var FilePathInterface|null The view files path or null if not yet initialized.
+     * @var FilePathInterface[] The view files paths.
      */
-    private ?FilePathInterface $viewPath;
+    private array $viewPaths;
 
     /**
      * @var ViewRendererInterface[] The view renderers.
