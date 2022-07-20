@@ -10,6 +10,7 @@ use BlueMvc\Core\Exceptions\MissingViewRendererException;
 use BlueMvc\Core\Exceptions\ViewFileNotFoundException;
 use BlueMvc\Core\Http\Method;
 use BlueMvc\Core\Http\StatusCode;
+use BlueMvc\Core\Interfaces\ViewRendererInterface;
 use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
 use BlueMvc\Core\Tests\Helpers\TestRequests\BasicTestRequest;
 use BlueMvc\Core\Tests\Helpers\TestResponses\BasicTestResponse;
@@ -227,6 +228,123 @@ class ViewTest extends TestCase
         $viewItems = new ViewItemCollection();
 
         $view->updateResponse($application, $request, $response, 'ViewTest', 'index', $viewItems);
+    }
+
+    /**
+     * Test updateResponse method with multiple view paths for existing view files.
+     *
+     * @dataProvider updateViewWithMultipleViewPathsForExistingViewFilesDataProvider
+     *
+     * @param ViewRendererInterface[] $viewRenderers   The view renderers to use.
+     * @param string                  $urlPath         The path of the Url to use in request.
+     * @param string                  $expectedContent The expected result content.
+     */
+    public function testUpdateViewWithMultipleViewPathsForExistingViewFiles(array $viewRenderers, string $urlPath, string $expectedContent)
+    {
+        $DS = DIRECTORY_SEPARATOR;
+
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
+        $application->setViewPaths(
+            [
+                FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews2' . $DS),
+                FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS),
+            ]
+        );
+
+        foreach ($viewRenderers as $viewRenderer) {
+            $application->addViewRenderer($viewRenderer);
+        }
+
+        $request = new BasicTestRequest(Url::parse('https://example.com/' . $urlPath), new Method('GET'));
+        $response = new BasicTestResponse();
+
+        $viewItems = new ViewItemCollection();
+        $viewItems->set('Foo', 'The View Data');
+
+        $view = new View('The Model');
+        $view->updateResponse($application, $request, $response, 'ViewTest', $urlPath === '' ? 'index' : $urlPath, $viewItems);
+
+        self::assertSame($expectedContent, self::normalizeEndOfLine($response->getContent()));
+        self::assertSame(StatusCode::OK, $response->getStatusCode()->getCode());
+    }
+
+    /**
+     * Data provider for testUpdateViewWithMultipleViewPathsForExistingViewFiles method.
+     *
+     * @return array[]
+     */
+    public function updateViewWithMultipleViewPathsForExistingViewFilesDataProvider(): array
+    {
+        return [
+            [[new BasicTestViewRenderer()], '', "<html><body><h1>Index 2</h1><span>/var/www/</span><em>https://example.com/</em></body></html>\n"],
+            [[new BasicTestViewRenderer(), new JsonTestViewRenderer()], '', "<html><body><h1>Index 2</h1><span>/var/www/</span><em>https://example.com/</em></body></html>\n"],
+            [[new JsonTestViewRenderer(), new BasicTestViewRenderer()], '', "<html><body><h1>Index 2</h1><span>/var/www/</span><em>https://example.com/</em></body></html>\n"],
+            [[new BasicTestViewRenderer()], 'alternate', "<html><body><h1>Alternate</h1><span>/var/www/</span><em>https://example.com/alternate</em><p>The Model</p><i>The View Data</i></body></html>\n"],
+            [[new JsonTestViewRenderer()], 'alternate', "{\"Model2\":\"The Model\"}\n"],
+            [[new BasicTestViewRenderer(), new JsonTestViewRenderer()], 'alternate', "<html><body><h1>Alternate</h1><span>/var/www/</span><em>https://example.com/alternate</em><p>The Model</p><i>The View Data</i></body></html>\n"],
+            [[new JsonTestViewRenderer(), new BasicTestViewRenderer()], 'alternate', "{\"Model2\":\"The Model\"}\n"],
+            [[new JsonTestViewRenderer()], 'onlyjson', "{\"Model\":\"The Model\"}\n"],
+            [[new BasicTestViewRenderer(), new JsonTestViewRenderer()], 'onlyjson', "{\"Model\":\"The Model\"}\n"],
+            [[new JsonTestViewRenderer(), new BasicTestViewRenderer()], 'onlyjson', "{\"Model\":\"The Model\"}\n"],
+
+        ];
+    }
+
+    /**
+     * Test updateResponse method with multiple view paths for non-existing view files.
+     *
+     * @dataProvider updateViewWithMultipleViewPathsForNonExistingViewFilesDataProvider
+     *
+     * @param ViewRendererInterface[] $viewRenderers            The view renderers to use.
+     * @param string                  $urlPath                  The path of the Url to use in request.
+     * @param string                  $expectedExceptionMessage The expected exception message.
+     */
+    public function testUpdateViewWithMultipleViewPathsForNonExistingViewFiles(array $viewRenderers, string $urlPath, string $expectedExceptionMessage)
+    {
+        self::expectException(ViewFileNotFoundException::class);
+        self::expectDeprecationMessage($expectedExceptionMessage);
+
+        $DS = DIRECTORY_SEPARATOR;
+
+        $application = new BasicTestApplication(FilePath::parse('/var/www/'));
+        $application->setViewPaths(
+            [
+                FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews2' . $DS),
+                FilePath::parse(__DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS),
+            ]
+        );
+
+        foreach ($viewRenderers as $viewRenderer) {
+            $application->addViewRenderer($viewRenderer);
+        }
+
+        $request = new BasicTestRequest(Url::parse('https://example.com/' . $urlPath), new Method('GET'));
+        $response = new BasicTestResponse();
+
+        $viewItems = new ViewItemCollection();
+        $viewItems->set('Foo', 'The View Data');
+
+        $view = new View('The Model');
+        $view->updateResponse($application, $request, $response, 'ViewTest', $urlPath === '' ? 'index' : $urlPath, $viewItems);
+    }
+
+    /**
+     * Data provider for testUpdateViewWithMultipleViewPathsForNonExistingViewFiles method.
+     *
+     * @return array[]
+     */
+    public function updateViewWithMultipleViewPathsForNonExistingViewFilesDataProvider(): array
+    {
+        $DS = DIRECTORY_SEPARATOR;
+
+        return [
+            [[new JsonTestViewRenderer()], '', 'Could not find view file "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews2' . $DS . 'ViewTest/index.json" or "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS . 'ViewTest/index.json"'],
+            [[new BasicTestViewRenderer()], 'onlyjson', 'Could not find view file "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews2' . $DS . 'ViewTest/onlyjson.view" or "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS . 'ViewTest/onlyjson.view"'],
+            [[new BasicTestViewRenderer()], 'non-existing', 'Could not find view file "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews2' . $DS . 'ViewTest/non-existing.view" or "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS . 'ViewTest/non-existing.view"'],
+            [[new JsonTestViewRenderer()], 'non-existing', 'Could not find view file "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews2' . $DS . 'ViewTest/non-existing.json" or "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS . 'ViewTest/non-existing.json"'],
+            [[new BasicTestViewRenderer(), new JsonTestViewRenderer()], 'non-existing', 'Could not find view file "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews2' . $DS . 'ViewTest/non-existing.view" or "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS . 'ViewTest/non-existing.view" or "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews2' . $DS . 'ViewTest/non-existing.json" or "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS . 'ViewTest/non-existing.json"'],
+            [[new JsonTestViewRenderer(), new BasicTestViewRenderer()], 'non-existing', 'Could not find view file "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews2' . $DS . 'ViewTest/non-existing.json" or "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS . 'ViewTest/non-existing.json" or "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews2' . $DS . 'ViewTest/non-existing.view" or "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS . 'ViewTest/non-existing.view"'],
+        ];
     }
 
     /**

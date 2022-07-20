@@ -93,19 +93,24 @@ class View implements ViewInterface
             throw new MissingViewRendererException('No view renderer was added to application.');
         }
 
+        $viewPathsToCheck = $application->getViewPaths();
+
         // Try the view renderers until a match is found.
         $testedViewFiles = [];
+
         foreach ($viewRenderers as $viewRenderer) {
-            $viewFile = FilePath::parse($viewPath . DIRECTORY_SEPARATOR . ($this->getFile() ?: $action) . '.' . $viewRenderer->getViewFileExtension());
-            $fullViewFile = $application->getViewPath()->withFilePath($viewFile);
+            foreach ($viewPathsToCheck as $viewPathToCheck) {
+                $viewFile = FilePath::parse($viewPath . DIRECTORY_SEPARATOR . ($this->getFile() ?: $action) . '.' . $viewRenderer->getViewFileExtension());
+                $fullViewFile = $viewPathToCheck->withFilePath($viewFile);
 
-            if (file_exists($fullViewFile->__toString())) {
-                $response->setContent($viewRenderer->renderView($application, $request, $viewFile, $this->getModel(), $viewItems));
+                if (file_exists($fullViewFile->__toString())) {
+                    $response->setContent($viewRenderer->renderView($application, $request, $viewFile, $this->getModel(), $viewItems));
 
-                return;
+                    return;
+                }
+
+                $testedViewFiles[] = '"' . $fullViewFile->__toString() . '"';
             }
-
-            $testedViewFiles[] = '"' . $fullViewFile->__toString() . '"';
         }
 
         throw new ViewFileNotFoundException('Could not find view file ' . implode(' or ', $testedViewFiles));
