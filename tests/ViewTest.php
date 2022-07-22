@@ -275,18 +275,19 @@ class ViewTest extends TestCase
      */
     public function updateViewWithMultipleViewPathsForExistingViewFilesDataProvider(): array
     {
+        $DS = DIRECTORY_SEPARATOR;
+
         return [
-            [[new BasicTestViewRenderer()], '', "<html><body><h1>Index 2</h1><span>/var/www/</span><em>https://example.com/</em></body></html>\n"],
-            [[new BasicTestViewRenderer(), new JsonTestViewRenderer()], '', "<html><body><h1>Index 2</h1><span>/var/www/</span><em>https://example.com/</em></body></html>\n"],
-            [[new JsonTestViewRenderer(), new BasicTestViewRenderer()], '', "<html><body><h1>Index 2</h1><span>/var/www/</span><em>https://example.com/</em></body></html>\n"],
-            [[new BasicTestViewRenderer()], 'alternate', "<html><body><h1>Alternate</h1><span>/var/www/</span><em>https://example.com/alternate</em><p>The Model</p><i>The View Data</i></body></html>\n"],
+            [[new BasicTestViewRenderer()], '', "<html><body><h1>Index 2</h1><span>{$DS}var{$DS}www{$DS}</span><em>https://example.com/</em></body></html>\n"],
+            [[new BasicTestViewRenderer(), new JsonTestViewRenderer()], '', "<html><body><h1>Index 2</h1><span>{$DS}var{$DS}www{$DS}</span><em>https://example.com/</em></body></html>\n"],
+            [[new JsonTestViewRenderer(), new BasicTestViewRenderer()], '', "<html><body><h1>Index 2</h1><span>{$DS}var{$DS}www{$DS}</span><em>https://example.com/</em></body></html>\n"],
+            [[new BasicTestViewRenderer()], 'alternate', "<html><body><h1>Alternate</h1><span>{$DS}var{$DS}www{$DS}</span><em>https://example.com/alternate</em><p>The Model</p><i>The View Data</i></body></html>\n"],
             [[new JsonTestViewRenderer()], 'alternate', "{\"Model2\":\"The Model\"}\n"],
-            [[new BasicTestViewRenderer(), new JsonTestViewRenderer()], 'alternate', "<html><body><h1>Alternate</h1><span>/var/www/</span><em>https://example.com/alternate</em><p>The Model</p><i>The View Data</i></body></html>\n"],
+            [[new BasicTestViewRenderer(), new JsonTestViewRenderer()], 'alternate', "<html><body><h1>Alternate</h1><span>{$DS}var{$DS}www{$DS}</span><em>https://example.com/alternate</em><p>The Model</p><i>The View Data</i></body></html>\n"],
             [[new JsonTestViewRenderer(), new BasicTestViewRenderer()], 'alternate', "{\"Model2\":\"The Model\"}\n"],
             [[new JsonTestViewRenderer()], 'onlyjson', "{\"Model\":\"The Model\"}\n"],
             [[new BasicTestViewRenderer(), new JsonTestViewRenderer()], 'onlyjson', "{\"Model\":\"The Model\"}\n"],
             [[new JsonTestViewRenderer(), new BasicTestViewRenderer()], 'onlyjson', "{\"Model\":\"The Model\"}\n"],
-
         ];
     }
 
@@ -338,12 +339,12 @@ class ViewTest extends TestCase
         $DS = DIRECTORY_SEPARATOR;
 
         return [
-            [[new JsonTestViewRenderer()], '', 'Could not find view file "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews2' . $DS . 'ViewTest/index.json" or "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS . 'ViewTest/index.json"'],
-            [[new BasicTestViewRenderer()], 'onlyjson', 'Could not find view file "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews2' . $DS . 'ViewTest/onlyjson.view" or "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS . 'ViewTest/onlyjson.view"'],
-            [[new BasicTestViewRenderer()], 'non-existing', 'Could not find view file "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews2' . $DS . 'ViewTest/non-existing.view" or "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS . 'ViewTest/non-existing.view"'],
-            [[new JsonTestViewRenderer()], 'non-existing', 'Could not find view file "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews2' . $DS . 'ViewTest/non-existing.json" or "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS . 'ViewTest/non-existing.json"'],
-            [[new BasicTestViewRenderer(), new JsonTestViewRenderer()], 'non-existing', 'Could not find view file "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews2' . $DS . 'ViewTest/non-existing.view" or "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS . 'ViewTest/non-existing.view" or "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews2' . $DS . 'ViewTest/non-existing.json" or "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS . 'ViewTest/non-existing.json"'],
-            [[new JsonTestViewRenderer(), new BasicTestViewRenderer()], 'non-existing', 'Could not find view file "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews2' . $DS . 'ViewTest/non-existing.json" or "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS . 'ViewTest/non-existing.json" or "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews2' . $DS . 'ViewTest/non-existing.view" or "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS . 'ViewTest/non-existing.view"'],
+            [[new JsonTestViewRenderer()], '', 'Could not find view file "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews2' . $DS . 'ViewTest' . $DS . 'index.json" or "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS . 'ViewTest' . $DS . 'index.json"'],
+            [[new BasicTestViewRenderer()], 'onlyjson', 'Could not find view file "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews2' . $DS . 'ViewTest' . $DS . 'onlyjson.view" or "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS . 'ViewTest' . $DS . 'onlyjson.view"'],
+            [[new BasicTestViewRenderer()], 'non-existing', 'Could not find view file "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews2' . $DS . 'ViewTest' . $DS . 'non-existing.view" or "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS . 'ViewTest' . $DS . 'non-existing.view"'],
+            [[new JsonTestViewRenderer()], 'non-existing', 'Could not find view file "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews2' . $DS . 'ViewTest' . $DS . 'non-existing.json" or "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS . 'ViewTest' . $DS . 'non-existing.json"'],
+            [[new BasicTestViewRenderer(), new JsonTestViewRenderer()], 'non-existing', 'Could not find view file "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews2' . $DS . 'ViewTest' . $DS . 'non-existing.view" or "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS . 'ViewTest' . $DS . 'non-existing.view" or "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews2' . $DS . 'ViewTest' . $DS . 'non-existing.json" or "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS . 'ViewTest' . $DS . 'non-existing.json"'],
+            [[new JsonTestViewRenderer(), new BasicTestViewRenderer()], 'non-existing', 'Could not find view file "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews2' . $DS . 'ViewTest' . $DS . 'non-existing.json" or "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS . 'ViewTest' . $DS . 'non-existing.json" or "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews2' . $DS . 'ViewTest' . $DS . 'non-existing.view" or "' . __DIR__ . $DS . 'Helpers' . $DS . 'TestViews' . $DS . 'ViewTest' . $DS . 'non-existing.view"'],
         ];
     }
 
