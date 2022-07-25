@@ -44,6 +44,8 @@ class ApplicationTest extends TestCase
 
     /**
      * Test getViewPath method.
+     *
+     * @noinspection PhpDeprecationInspection
      */
     public function testGetViewPath()
     {

@@ -163,7 +163,8 @@ abstract class AbstractApplication implements ApplicationInterface
     /**
      * Returns The view files path.
      *
-     * @since 1.0.0
+     * @since      1.0.0
+     * @deprecated Use getViewPaths instead.
      *
      * @return FilePathInterface The view files path.
      */

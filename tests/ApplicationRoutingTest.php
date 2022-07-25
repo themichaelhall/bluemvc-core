@@ -156,9 +156,9 @@ class ApplicationRoutingTest extends TestCase
         ob_end_clean();
 
         self::assertStringContainsString('BlueMvc\Core\Exceptions\ViewFileNotFoundException', $responseOutput);
-        self::assertStringContainsString('Could not find view file &quot;' . $this->application->getViewPath() . 'ViewTest' . DIRECTORY_SEPARATOR . 'withnoviewfile.json&quot; or &quot;' . $this->application->getViewPath() . 'ViewTest' . DIRECTORY_SEPARATOR . 'withnoviewfile.view&quot;', $responseOutput);
+        self::assertStringContainsString('Could not find view file &quot;' . $this->application->getViewPaths()[0] . 'ViewTest' . DIRECTORY_SEPARATOR . 'withnoviewfile.json&quot; or &quot;' . $this->application->getViewPaths()[0] . 'ViewTest' . DIRECTORY_SEPARATOR . 'withnoviewfile.view&quot;', $responseOutput);
         self::assertStringContainsString('BlueMvc\Core\Exceptions\ViewFileNotFoundException', $response->getContent());
-        self::assertStringContainsString('Could not find view file &quot;' . $this->application->getViewPath() . 'ViewTest' . DIRECTORY_SEPARATOR . 'withnoviewfile.json&quot; or &quot;' . $this->application->getViewPath() . 'ViewTest' . DIRECTORY_SEPARATOR . 'withnoviewfile.view&quot;', $response->getContent());
+        self::assertStringContainsString('Could not find view file &quot;' . $this->application->getViewPaths()[0] . 'ViewTest' . DIRECTORY_SEPARATOR . 'withnoviewfile.json&quot; or &quot;' . $this->application->getViewPaths()[0] . 'ViewTest' . DIRECTORY_SEPARATOR . 'withnoviewfile.view&quot;', $response->getContent());
         self::assertSame(['HTTP/1.1 500 Internal Server Error'], FakeHeaders::get());
         self::assertSame(StatusCode::INTERNAL_SERVER_ERROR, $response->getStatusCode()->getCode());
     }

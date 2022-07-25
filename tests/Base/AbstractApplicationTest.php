@@ -44,6 +44,8 @@ class AbstractApplicationTest extends TestCase
 
     /**
      * Test getViewPath method.
+     *
+     * @noinspection PhpDeprecationInspection
      */
     public function testGetViewPath()
     {
@@ -84,7 +86,8 @@ class AbstractApplicationTest extends TestCase
 
         $this->application->setViewPath(FilePath::parse($DS . 'bluemvc' . $DS . 'html' . $DS));
 
-        self::assertSame($DS . 'bluemvc' . $DS . 'html' . $DS, $this->application->getViewPath()->__toString());
+        self::assertCount(1, $this->application->getViewPaths());
+        self::assertSame($DS . 'bluemvc' . $DS . 'html' . $DS, $this->application->getViewPaths()[0]->__toString());
     }
 
     /**
@@ -96,7 +99,8 @@ class AbstractApplicationTest extends TestCase
 
         $this->application->setViewPath(FilePath::parse('..' . $DS . 'bluemvc' . $DS . 'html' . $DS));
 
-        self::assertSame($DS . 'var' . $DS . 'bluemvc' . $DS . 'html' . $DS, $this->application->getViewPath()->__toString());
+        self::assertCount(1, $this->application->getViewPaths());
+        self::assertSame($DS . 'var' . $DS . 'bluemvc' . $DS . 'html' . $DS, $this->application->getViewPaths()[0]->__toString());
     }
 
     /**

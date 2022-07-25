@@ -99,7 +99,7 @@ class ViewTest extends TestCase
         $viewItems = new ViewItemCollection();
 
         self::expectException(ViewFileNotFoundException::class);
-        self::expectExceptionMessage('Could not find view file "' . $application->getViewPath() . 'ViewTest' . $DS . 'withnoviewfile.view"');
+        self::expectExceptionMessage('Could not find view file "' . $application->getViewPaths()[0] . 'ViewTest' . $DS . 'withnoviewfile.view"');
 
         $view->updateResponse($application, $request, $response, 'ViewTest', 'withnoviewfile', $viewItems);
     }
