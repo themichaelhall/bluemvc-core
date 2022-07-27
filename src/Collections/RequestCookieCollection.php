@@ -47,9 +47,9 @@ class RequestCookieCollection implements RequestCookieCollectionInterface
      *
      * @since 1.0.0
      *
-     * @return RequestCookieInterface The current request cookie value.
+     * @return RequestCookieInterface|false The current request cookie value.
      */
-    public function current(): RequestCookieInterface
+    public function current(): RequestCookieInterface|false
     {
         return current($this->requestCookies);
     }

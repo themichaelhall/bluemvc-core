@@ -77,7 +77,7 @@ abstract class Controller implements ControllerInterface
      * @param RequestInterface     $request     The request.
      * @param ResponseInterface    $response    The response.
      * @param string               $action      The action.
-     * @param array                $parameters  The parameters.
+     * @param string[]             $parameters  The parameters.
      */
     public function processRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, string $action, array $parameters = []): void
     {
@@ -219,7 +219,7 @@ abstract class Controller implements ControllerInterface
     private ViewItemCollectionInterface $viewItems;
 
     /**
-     * @var array The magic action methods.
+     * @var string[] The magic action methods.
      */
     private const MAGIC_ACTION_METHODS = ['index', 'default'];
 }

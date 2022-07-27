@@ -26,7 +26,7 @@ interface ControllerInterface
      * @param RequestInterface     $request     The request.
      * @param ResponseInterface    $response    The response.
      * @param string               $action      The action.
-     * @param array                $parameters  The parameters.
+     * @param string[]             $parameters  The parameters.
      */
     public function processRequest(ApplicationInterface $application, RequestInterface $request, ResponseInterface $response, string $action, array $parameters = []): void;
 }

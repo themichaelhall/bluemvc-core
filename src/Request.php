@@ -87,14 +87,14 @@ class Request extends AbstractRequest
     /**
      * Parses an array with server variables into a url.
      *
-     * @param array $serverVars The server variables.
+     * @param array<string|int, mixed> $serverVars The server variables.
      *
      * @return UrlInterface The url
      */
     private static function parseUrl(array $serverVars): UrlInterface
     {
-        $uriAndQueryString = explode('?', self::fixRequestUri($serverVars['REQUEST_URI']), 2);
-        $hostAndPort = explode(':', $serverVars['HTTP_HOST'], 2);
+        $uriAndQueryString = explode('?', self::fixRequestUri(strval($serverVars['REQUEST_URI'])), 2);
+        $hostAndPort = explode(':', strval($serverVars['HTTP_HOST']), 2);
 
         return Url::fromParts(
             Scheme::parse('http' . (isset($serverVars['HTTPS']) && $serverVars['HTTPS'] !== '' && $serverVars['HTTPS'] !== 'off' ? 's' : '')),
@@ -108,7 +108,7 @@ class Request extends AbstractRequest
     /**
      * Parses an array with headers into a header collection.
      *
-     * @param array $serverVars The server array.
+     * @param array<string|int, mixed> $serverVars The server array.
      *
      * @return HeaderCollectionInterface The header collection.
      */
@@ -127,9 +127,9 @@ class Request extends AbstractRequest
     /**
      * Returns all headers as an array.
      *
-     * @param array $serverVars The server array.
+     * @param array<string|int, mixed> $serverVars The server array.
      *
-     * @return array The headers as an array.
+     * @return array<string|int, string> The headers as an array.
      */
     private static function getHeadersArray(array $serverVars): array
     {
@@ -140,8 +140,9 @@ class Request extends AbstractRequest
         }
 
         foreach ($serverVars as $name => $value) {
+            $name = strval($name);
             if (str_starts_with($name, 'HTTP_')) {
-                $headersArray[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
+                $headersArray[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = strval($value);
             }
         }
 
@@ -151,7 +152,7 @@ class Request extends AbstractRequest
     /**
      * Parses an array with parameters into a parameter collection.
      *
-     * @param array $parametersArray The parameters array.
+     * @param array<string|int, mixed> $parametersArray The parameters array.
      *
      * @return ParameterCollectionInterface The parameter collection.
      */
@@ -172,7 +173,7 @@ class Request extends AbstractRequest
     /**
      * Parses an array with cookies into a cookie collection.
      *
-     * @param array $cookiesArray The cookies array.
+     * @param array<string|int, mixed> $cookiesArray The cookies array.
      *
      * @return RequestCookieCollectionInterface The cookie collection.
      */
@@ -193,7 +194,7 @@ class Request extends AbstractRequest
     /**
      * Parses an array with files info an uploaded files collection.
      *
-     * @param array $filesArray The files array.
+     * @param array<string|int, array<string, mixed>> $filesArray The files array.
      *
      * @throws ServerEnvironmentException If file upload failed due to server error or misconfiguration.
      *
@@ -218,7 +219,7 @@ class Request extends AbstractRequest
     /**
      * Parses an array with file info into an uploaded file.
      *
-     * @param array $uploadedFileInfo The file info.
+     * @param array<string, mixed> $uploadedFileInfo The file info.
      *
      * @throws ServerEnvironmentException If file upload failed due to server error or misconfiguration.
      *
@@ -290,7 +291,7 @@ class Request extends AbstractRequest
     }
 
     /**
-     * @var array The file upload errors that should result in an exception.
+     * @var array<int, string> The file upload errors that should result in an exception.
      */
     private const FILE_UPLOAD_ERRORS = [
         UPLOAD_ERR_NO_TMP_DIR => 'Missing a temporary folder (UPLOAD_ERR_NO_TMP_DIR).',

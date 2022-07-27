@@ -129,7 +129,7 @@ class ViewItemCollection implements ViewItemCollectionInterface
     }
 
     /**
-     * @var array The view items.
+     * @var array<string, mixed> The view items.
      */
     private array $items;
 }

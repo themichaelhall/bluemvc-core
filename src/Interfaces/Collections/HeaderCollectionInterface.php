@@ -17,6 +17,8 @@ use Iterator;
  * Interface for HeaderCollection class.
  *
  * @since 1.0.0
+ *
+ * @extends Iterator<string, string>
  */
 interface HeaderCollectionInterface extends Countable, Iterator
 {

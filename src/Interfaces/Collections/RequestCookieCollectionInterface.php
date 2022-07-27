@@ -18,6 +18,8 @@ use Iterator;
  * Interface for RequestCookieCollection class.
  *
  * @since 1.0.0
+ *
+ * @extends Iterator<string, RequestCookieInterface>
  */
 interface RequestCookieCollectionInterface extends Countable, Iterator
 {

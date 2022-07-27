@@ -576,7 +576,7 @@ class StatusCode implements StatusCodeInterface
     private string $description;
 
     /**
-     * @var array The descriptions.
+     * @var array<int, string> The descriptions.
      */
     private const DESCRIPTIONS = [
         self::CONTINUE_                       => 'Continue',

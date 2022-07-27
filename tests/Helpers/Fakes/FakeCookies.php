@@ -92,13 +92,17 @@ namespace BlueMvc\Core {
      * @param string $domain   The domain.
      * @param bool   $secure   True if cookie should only be used on secure connection, false otherwise.
      * @param bool   $httponly True if cookie should only be accessible through the http protocol, false otherwise.
+     *
+     * @return bool
      */
-    function setcookie(string $name, string $value = '', int $expire = 0, string $path = '', string $domain = '', bool $secure = false, bool $httponly = false)
+    function setcookie(string $name, string $value = '', int $expire = 0, string $path = '', string $domain = '', bool $secure = false, bool $httponly = false): bool
     {
         if (FakeCookies::isEnabled()) {
             FakeCookies::add($name, $value, $expire, $path, $domain, $secure, $httponly);
+
+            return true;
         } else {
-            \setcookie($name, $value, $expire, $path, $domain, $secure, $httponly);
+            return \setcookie($name, $value, $expire, $path, $domain, $secure, $httponly);
         }
     }
 }

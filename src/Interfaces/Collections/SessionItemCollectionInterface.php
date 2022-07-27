@@ -17,6 +17,8 @@ use Iterator;
  * Interface for SessionItemCollection class.
  *
  * @since 1.0.0
+ *
+ * @extends Iterator<string, mixed>
  */
 interface SessionItemCollectionInterface extends Countable, Iterator
 {

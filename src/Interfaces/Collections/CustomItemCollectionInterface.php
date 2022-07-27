@@ -17,6 +17,8 @@ use Iterator;
  * Interface for CustomItemCollection class.
  *
  * @since 1.0.0
+ *
+ * @extends Iterator<string, mixed>
  */
 interface CustomItemCollectionInterface extends Countable, Iterator
 {

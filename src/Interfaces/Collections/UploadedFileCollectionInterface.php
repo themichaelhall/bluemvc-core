@@ -18,6 +18,8 @@ use Iterator;
  * Interface for UploadedFileCollection class.
  *
  * @since 1.0.0
+ *
+ * @extends Iterator<string, UploadedFileInterface>
  */
 interface UploadedFileCollectionInterface extends Countable, Iterator
 {

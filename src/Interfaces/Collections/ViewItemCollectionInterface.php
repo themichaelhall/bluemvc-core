@@ -17,6 +17,8 @@ use Iterator;
  * Interface for ViewItemCollection class.
  *
  * @since 1.0.0
+ *
+ * @extends Iterator<string, mixed>
  */
 interface ViewItemCollectionInterface extends Countable, Iterator
 {

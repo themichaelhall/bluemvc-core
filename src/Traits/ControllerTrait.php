@@ -136,7 +136,7 @@ trait ControllerTrait
      * Try to invoke an action method.
      *
      * @param string   $action               The action.
-     * @param array    $parameters           The parameters.
+     * @param string[] $parameters           The parameters.
      * @param bool     $isCaseSensitive      True if action method is case-sensitive, false otherwise.
      * @param callable $resultHandler        A callable that takes the result (mixed) from the action method call as a parameter.
      * @param bool     $hasFoundActionMethod If true, action method was found, false otherwise.
@@ -170,9 +170,9 @@ trait ControllerTrait
     /**
      * Try to find an action method by action.
      *
-     * @param ReflectionClass $reflectionClass The ReflectionClass.
-     * @param string          $action          The action.
-     * @param bool            $isCaseSensitive True if action method is case-sensitive, false otherwise.
+     * @param ReflectionClass<self> $reflectionClass The ReflectionClass.
+     * @param string                $action          The action.
+     * @param bool                  $isCaseSensitive True if action method is case-sensitive, false otherwise.
      *
      * @return ReflectionMethod|null The action method or null if no action method was found.
      */
@@ -204,7 +204,7 @@ trait ControllerTrait
      * Invoke action method.
      *
      * @param ReflectionMethod $actionMethod  The action method.
-     * @param array            $parameters    The parameters.
+     * @param string[]         $parameters    The parameters.
      * @param callable         $resultHandler A callable that takes the result (mixed) from the action method call as a parameter.
      */
     private function invokeActionMethod(ReflectionMethod $actionMethod, array $parameters, callable $resultHandler): void
@@ -250,8 +250,8 @@ trait ControllerTrait
      * Check if an action method matches an array of parameters.
      *
      * @param ReflectionMethod $reflectionMethod   The action method.
-     * @param array            $parameters         The parameters.
-     * @param array|null       $adjustedParameters The actual parameters, matching action methods actual signature or undefined if check failed.
+     * @param string[]         $parameters         The parameters.
+     * @param mixed[]|null     $adjustedParameters The actual parameters, matching action methods actual signature or undefined if check failed.
      *
      * @return bool True if action method matches the parameters, false otherwise.
      */
@@ -293,12 +293,12 @@ trait ControllerTrait
      * Check if an action method parameter matches a parameter.
      *
      * @param ReflectionParameter $reflectionParameter The action method parameter.
-     * @param mixed               $parameter           The parameter.
+     * @param string              $parameter           The parameter.
      * @param mixed               $adjustedParameter   The adjusted parameter.
      *
      * @return bool True if parameter matches, false otherwise.
      */
-    private static function actionMethodParameterMatchesParameter(ReflectionParameter $reflectionParameter, mixed $parameter, mixed &$adjustedParameter = null): bool
+    private static function actionMethodParameterMatchesParameter(ReflectionParameter $reflectionParameter, string $parameter, mixed &$adjustedParameter = null): bool
     {
         $adjustedParameter = $parameter;
 

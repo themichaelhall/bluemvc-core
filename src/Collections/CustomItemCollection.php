@@ -129,7 +129,7 @@ class CustomItemCollection implements CustomItemCollectionInterface
     }
 
     /**
-     * @var array The custom items.
+     * @var array<string, mixed> The custom items.
      */
     private array $items;
 }

@@ -24,7 +24,7 @@ class SessionItemCollection implements SessionItemCollectionInterface
      *
      * @since 2.1.0
      *
-     * @param array $options The options to pass to session_start() method.
+     * @param array<string, mixed> $options The options to pass to session_start() method.
      */
     public function __construct(array $options = [])
     {
@@ -213,7 +213,7 @@ class SessionItemCollection implements SessionItemCollectionInterface
     }
 
     /**
-     * @var array The options to pass to session_start() method.
+     * @var array<string, mixed> The options to pass to session_start() method.
      */
     private array $options;
 

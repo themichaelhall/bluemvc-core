@@ -66,11 +66,13 @@ class HeaderCollection implements HeaderCollectionInterface
      *
      * @since 1.0.0
      *
-     * @return string The current header value.
+     * @return string|false The current header value.
      */
-    public function current(): string
+    public function current(): string|false
     {
-        return current($this->headers)[1];
+        $current = current($this->headers);
+
+        return $current !== false ? $current[1] : false;
     }
 
     /**
@@ -97,11 +99,13 @@ class HeaderCollection implements HeaderCollectionInterface
      *
      * @since 1.0.0
      *
-     * @return string The current header name.
+     * @return string|null The current header name.
      */
-    public function key(): string
+    public function key(): ?string
     {
-        return current($this->headers)[0];
+        $current = current($this->headers);
+
+        return $current !== false ? $current[0] : null;
     }
 
     /**
@@ -151,7 +155,7 @@ class HeaderCollection implements HeaderCollectionInterface
     }
 
     /**
-     * @var array The headers.
+     * @var array<string, array{string, string}> The headers.
      */
     private array $headers;
 }

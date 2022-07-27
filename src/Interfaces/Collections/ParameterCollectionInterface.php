@@ -17,6 +17,8 @@ use Iterator;
  * Interface for ParameterCollection class.
  *
  * @since 1.0.0
+ *
+ * @extends Iterator<string, string>
  */
 interface ParameterCollectionInterface extends Countable, Iterator
 {

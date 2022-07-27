@@ -47,9 +47,9 @@ class ResponseCookieCollection implements ResponseCookieCollectionInterface
      *
      * @since 1.0.0
      *
-     * @return ResponseCookieInterface The current response cookie value.
+     * @return ResponseCookieInterface|false The current response cookie value.
      */
-    public function current(): ResponseCookieInterface
+    public function current(): ResponseCookieInterface|false
     {
         return current($this->responseCookies);
     }

@@ -46,9 +46,9 @@ class ParameterCollection implements ParameterCollectionInterface
      *
      * @since 1.0.0
      *
-     * @return string The current parameter value.
+     * @return string|false The current parameter value.
      */
-    public function current(): string
+    public function current(): string|false
     {
         return current($this->parameters);
     }
@@ -129,7 +129,7 @@ class ParameterCollection implements ParameterCollectionInterface
     }
 
     /**
-     * @var array The parameters.
+     * @var array<string, string> The parameters.
      */
     private array $parameters;
 }

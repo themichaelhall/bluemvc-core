@@ -47,9 +47,9 @@ class UploadedFileCollection implements UploadedFileCollectionInterface
      *
      * @since 1.0.0
      *
-     * @return UploadedFileInterface The current uploaded file value.
+     * @return UploadedFileInterface|false The current uploaded file value.
      */
-    public function current(): UploadedFileInterface
+    public function current(): UploadedFileInterface|false
     {
         return current($this->uploadedFiles);
     }
