@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace BlueMvc\Core\Traits;
 
+use BlueMvc\Core\Exceptions\ControllerNotInitializedException;
 use BlueMvc\Core\Interfaces\ActionResults\ActionResultExceptionInterface;
 use BlueMvc\Core\Interfaces\ApplicationInterface;
 use BlueMvc\Core\Interfaces\RequestInterface;
@@ -41,38 +42,56 @@ trait ControllerTrait
     }
 
     /**
-     * Returns the application if controller is processing, null otherwise.
+     * Returns the application.
      *
      * @since 2.2.0
      *
-     * @return ApplicationInterface|null The application if controller is processing, null otherwise.
+     * @throws ControllerNotInitializedException If the controller is not initialized.
+     *
+     * @return ApplicationInterface The application.
      */
-    public function getApplication(): ?ApplicationInterface
+    public function getApplication(): ApplicationInterface
     {
+        if ($this->application === null) {
+            throw new ControllerNotInitializedException('Method getApplication() was called for an uninitialized controller.');
+        }
+
         return $this->application;
     }
 
     /**
-     * Returns the request if controller is processing, null otherwise.
+     * Returns the request.
      *
      * @since 2.2.0
      *
-     * @return RequestInterface|null The request if controller is processing, null otherwise.
+     * @throws ControllerNotInitializedException If the controller is not initialized.
+     *
+     * @return RequestInterface The request.
      */
-    public function getRequest(): ?RequestInterface
+    public function getRequest(): RequestInterface
     {
+        if ($this->request === null) {
+            throw new ControllerNotInitializedException('Method getRequest() was called for an uninitialized controller.');
+        }
+
         return $this->request;
     }
 
     /**
-     * Returns the response if controller is processing, null otherwise.
+     * Returns the response.
      *
      * @since 2.2.0
      *
-     * @return ResponseInterface|null The response if controller is processing, null otherwise.
+     * @throws ControllerNotInitializedException If the controller is not initialized.
+     *
+     * @return ResponseInterface The response.
      */
-    public function getResponse(): ?ResponseInterface
+    public function getResponse(): ResponseInterface
     {
+        if ($this->response === null) {
+            throw new ControllerNotInitializedException('Method getResponse() was called for an uninitialized controller.');
+        }
+
         return $this->response;
     }
 

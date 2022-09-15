@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BlueMvc\Core\Tests;
 
 use BlueMvc\Core\Collections\ViewItemCollection;
+use BlueMvc\Core\Exceptions\ControllerNotInitializedException;
 use BlueMvc\Core\Http\Method;
 use BlueMvc\Core\Http\StatusCode;
 use BlueMvc\Core\Tests\Helpers\TestApplications\BasicTestApplication;
@@ -50,6 +51,18 @@ class ControllerTest extends TestCase
     }
 
     /**
+     * Test getApplication method for an uninitialized controller.
+     */
+    public function testGetApplicationForUnInitializedController()
+    {
+        self::expectException(ControllerNotInitializedException::class);
+        self::expectExceptionMessage('Method getApplication() was called for an uninitialized controller.');
+
+        $controller = new BasicTestController();
+        $controller->getApplication();
+    }
+
+    /**
      * Test getRequest method.
      */
     public function testGetRequest()
@@ -64,6 +77,18 @@ class ControllerTest extends TestCase
     }
 
     /**
+     * Test getRequest method for an uninitialized controller.
+     */
+    public function testGetRequestForUnInitializedController()
+    {
+        self::expectException(ControllerNotInitializedException::class);
+        self::expectExceptionMessage('Method getRequest() was called for an uninitialized controller.');
+
+        $controller = new BasicTestController();
+        $controller->getRequest();
+    }
+
+    /**
      * Test getResponse method.
      */
     public function testGetResponse()
@@ -75,6 +100,18 @@ class ControllerTest extends TestCase
         $controller->processRequest($application, $request, $response, '');
 
         self::assertSame($response, $controller->getResponse());
+    }
+
+    /**
+     * Test getResponse method for an uninitialized controller.
+     */
+    public function testGetResponseForUnInitializedController()
+    {
+        self::expectException(ControllerNotInitializedException::class);
+        self::expectExceptionMessage('Method getResponse() was called for an uninitialized controller.');
+
+        $controller = new BasicTestController();
+        $controller->getResponse();
     }
 
     /**
