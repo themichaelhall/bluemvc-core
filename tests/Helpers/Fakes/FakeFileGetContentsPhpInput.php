@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 namespace BlueMvc\Core\Tests\Helpers\Fakes {
-
     /**
      * Helpers for fake file_get_content('php://input') method.
      */
@@ -65,7 +64,6 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
 }
 
 namespace BlueMvc\Core {
-
     use BlueMvc\Core\Tests\Helpers\Fakes\FakeFileGetContentsPhpInput;
 
     /**

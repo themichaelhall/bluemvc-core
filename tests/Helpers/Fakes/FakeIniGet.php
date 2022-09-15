@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 namespace BlueMvc\Core\Tests\Helpers\Fakes {
-
     /**
      * Helper for fake ini_get method.
      */
@@ -70,7 +69,6 @@ namespace BlueMvc\Core\Tests\Helpers\Fakes {
 }
 
 namespace BlueMvc\Core\Collections {
-
     use BlueMvc\Core\Tests\Helpers\Fakes\FakeIniGet;
 
     /**
