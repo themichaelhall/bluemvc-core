@@ -1,3 +1,5 @@
+## Unreleased
+
 ## [3.0.0] - 2022-10-03
 - Added support for mixed and union type hints in action method parameters.
 - Added getViewPaths and setViewPaths methods to Application.
