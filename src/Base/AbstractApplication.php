@@ -424,7 +424,7 @@ abstract class AbstractApplication implements ApplicationInterface
      * @param ResponseInterface $response  The response.
      * @param Throwable|null    $throwable The throwable or null if no throwable.
      */
-    private function handleError(RequestInterface $request, ResponseInterface $response, Throwable $throwable = null): void
+    private function handleError(RequestInterface $request, ResponseInterface $response, ?Throwable $throwable = null): void
     {
         $errorControllerClass = $this->getErrorControllerClass();
 

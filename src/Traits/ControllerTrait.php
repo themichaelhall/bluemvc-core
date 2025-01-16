@@ -274,7 +274,7 @@ trait ControllerTrait
      *
      * @return bool True if action method matches the parameters, false otherwise.
      */
-    private static function actionMethodMatchesParameters(ReflectionMethod $reflectionMethod, array $parameters, array &$adjustedParameters = null): bool
+    private static function actionMethodMatchesParameters(ReflectionMethod $reflectionMethod, array $parameters, ?array &$adjustedParameters = null): bool
     {
         $parametersCount = count($parameters);
 

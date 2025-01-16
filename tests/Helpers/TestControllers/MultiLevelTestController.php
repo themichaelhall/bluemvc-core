@@ -149,7 +149,7 @@ class MultiLevelTestController extends Controller
      *
      * @return string The result.
      */
-    public function defaultAction(string $foo, string $bar, string $baz = null): string
+    public function defaultAction(string $foo, string $bar, ?string $baz = null): string
     {
         return 'DefaultAction: Foo=[' . $foo . '], Bar=[' . $bar . '], Baz=[' . ($baz !== null ? $baz : '*null*') . ']';
     }
