@@ -303,7 +303,7 @@ class ViewTest extends TestCase
     public function testUpdateViewWithMultipleViewPathsForNonExistingViewFiles(array $viewRenderers, string $urlPath, string $expectedExceptionMessage)
     {
         self::expectException(ViewFileNotFoundException::class);
-        self::expectDeprecationMessage($expectedExceptionMessage);
+        self::expectExceptionMessage($expectedExceptionMessage);
 
         $DS = DIRECTORY_SEPARATOR;
 
