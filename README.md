@@ -5,7 +5,7 @@
 [![Latest Stable Version](https://poser.pugx.org/bluemvc/bluemvc-core/v/stable)](https://packagist.org/packages/bluemvc/bluemvc-core)
 [![Total Downloads](https://poser.pugx.org/bluemvc/bluemvc-core/downloads)](https://packagist.org/packages/bluemvc/bluemvc-core)
 
-Core functionality for the [BlueMvc PHP framework](https://github.com/themichaelhall/bluemvc).
+Core functionality for the [BlueMvc PHP framework](https://bluemvc.com/).
 
 ## Requirements
 
